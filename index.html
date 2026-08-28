@@ -40,7 +40,7 @@
                 <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
                 <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
-            <!-- Language Switcher with sliding background -->
+            <!-- Language Switcher -->
             <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
                 <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
                 <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
@@ -207,7 +207,7 @@
                 subSpecialization: "Stomatolog-Ortodont",
                 experience: 25, 
                 rating: 5.0, 
-                photo: "image_2.png", // Sizning yuborgan haqiqiy suratingiz
+                photo: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150&h=150&fit=crop&crop=faces", 
                 description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha oliy toifali mutaxassis. 25 yillik tajribaga ega.", 
                 clinic: "Binafsha shifo", 
                 price: 0, 
@@ -447,7 +447,7 @@
                         <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-2">${t.similarLabel}</h5>
                         <div class="space-y-2">
                             ${similarDocs.map(sim => `
-                                <div onclick="openDoctorDetail(mockDoctors.find(d => d.id === ${sim.id}))" class="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl cursor-pointer hover:bg-sky-50 transition">
+                                <div onclick="openDoctorDetail(mockDoctors.find(function(d) { return d.id === ${sim.id}; }))" class="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl cursor-pointer hover:bg-sky-50 transition">
                                     <img src="${sim.photo}" class="w-10 h-10 rounded-lg object-cover">
                                     <div class="flex-1 min-w-0">
                                         <p class="text-xs font-bold text-slate-800 truncate">${sim.name}</p>
@@ -462,15 +462,19 @@
             }
 
             let directionsHtml = doc.directions.map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
-            let reviewsHtml = doc.reviews.map(rev => `
-                <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
-                    <div class="flex justify-between font-bold text-slate-700">
-                        <span>${rev.user}</span>
-                        <span class="text-amber-500">{'★'.repeat(rev.rating)}</span>
+            
+            let reviewsHtml = doc.reviews.map(rev => {
+                let stars = '★'.repeat(rev.rating);
+                return `
+                    <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
+                        <div class="flex justify-between font-bold text-slate-700">
+                            <span>${rev.user}</span>
+                            <span class="text-amber-500">${stars}</span>
+                        </div>
+                        <p class="text-slate-600">${rev.text}</p>
                     </div>
-                    <p class="text-slate-600">${rev.text}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             document.getElementById('modalBody').innerHTML = `
                 <div class="flex items-center space-x-3 bg-sky-50 p-3 rounded-2xl">
@@ -522,19 +526,23 @@
             document.getElementById('modalTitle').textContent = clinic.name;
 
             let directionsHtml = clinic.directions.map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
-            let reviewsHtml = clinic.reviews.map(rev => `
-                <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
-                    <div class="flex justify-between font-bold text-slate-700">
-                        <span>${rev.user}</span>
-                        <span class="text-amber-500">★ ${rev.rating}</span>
+            
+            let reviewsHtml = clinic.reviews.map(rev => {
+                let stars = '★'.repeat(rev.rating);
+                return `
+                    <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
+                        <div class="flex justify-between font-bold text-slate-700">
+                            <span>${rev.user}</span>
+                            <span class="text-amber-500">${stars}</span>
+                        </div>
+                        <p class="text-slate-600">${rev.text}</p>
                     </div>
-                    <p class="text-slate-600">${rev.text}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             let clinicDoctors = mockDoctors.filter(d => d.clinic === clinic.name);
             let doctorsHtml = clinicDoctors.map(doc => `
-                <div onclick="openDoctorDetail(mockDoctors.find(d => d.id === ${doc.id}))" class="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl cursor-pointer hover:bg-sky-50 transition">
+                <div onclick="openDoctorDetail(mockDoctors.find(function(d) { return d.id === ${doc.id}; }))" class="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl cursor-pointer hover:bg-sky-50 transition">
                     <img src="${doc.photo}" class="w-10 h-10 rounded-lg object-cover">
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate">${doc.name}</p>
