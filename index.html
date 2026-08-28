@@ -87,50 +87,8 @@
         .info-row { font-size: 13px; color: #555; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; }
         .price { font-weight: bold; color: #27ae60; }
         .free-price { font-weight: bold; color: #e67e22; }
-        
-        .map-link {
-            color: #2481cc;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-            background: #eaf3fa;
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
 
-        .reviews-container {
-            margin-top: 10px;
-            border-top: 1px solid #eee;
-            padding-top: 8px;
-        }
-        .review-item {
-            font-size: 12px;
-            background: #f9f9f9;
-            padding: 6px 10px;
-            border-radius: 6px;
-            margin-top: 6px;
-        }
-        .review-author { font-weight: bold; color: #333; }
-
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .action-btn {
-            flex: 1;
-            padding: 10px;
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #fff);
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        .review-btn { background: #f39c12; }
-
-        /* Модал ойналар созламаси */
+        /* Батафсил ойна стиллари */
         .modal {
             display: none;
             position: fixed;
@@ -145,24 +103,45 @@
             background: #fff;
             padding: 20px;
             border-radius: 12px;
-            width: 85%;
-            max-width: 340px;
+            width: 88%;
+            max-width: 350px;
             max-height: 85vh;
             overflow-y: auto;
         }
-        .modal-content h3 { margin-top: 0; font-size: 18px; color: #222; }
-        .modal-content select, .modal-content textarea, .modal-content input {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 13px;
-            box-sizing: border-box;
-        }
-        .modal-content textarea { height: 60px; resize: none; }
         .detail-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px auto; }
-        .detail-text { font-size: 13px; color: #444; line-height: 1.5; margin-bottom: 10px; }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+        .detail-box {
+            background: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+        .detail-box span { font-size: 11px; color: #777; display: block; }
+        .detail-box strong { font-size: 13px; color: #333; }
+
+        .detail-text { font-size: 13px; color: #444; line-height: 1.4; margin-bottom: 8px; }
+        .action-btn {
+            width: 100%;
+            padding: 11px;
+            background: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -182,14 +161,12 @@
         <div class="filter-group">
             <button class="filter-btn active" onclick="filterDoctors('all')">Барчаси</button>
             <button class="filter-btn" onclick="filterDoctors('stomatolog')">Стоматолог</button>
-            <button class="filter-btn" onclick="filterDoctors('terapevt')">Терапевт</button>
-            <button class="filter-btn" onclick="filterDoctors('xirurg')">Хирург</button>
             <button class="filter-btn" onclick="filterDoctors('kardiolog')">Кардиолог</button>
         </div>
 
         <div id="doctorCardsList">
-            <!-- Др. Низамов Қаҳрамон Маманиязович -->
-            <div class="card doc-card" data-category="stomatolog" onclick="openDetailModal('doctor', 'Др. Низамов Қаҳрамон', 'IMG_0555.jpeg', 'Стоматолог-Ортодонт • 25 йил тажриба', '⭐ 5.0', 'Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис. 25 йиллик тажрибага эга.', 'Binafsha shifo (Мирзо Улуғбек т., TTZ-4)', '+998 90 123-45-67', 'Душанба - Шанба: 9:00 - 19:00', 'Бепул')">
+            <!-- Др. Низамов Қаҳрамон (Янги рақам билан) -->
+            <div class="card doc-card" data-category="stomatolog" onclick="openDetailModal('doctor', 'Др. Низамов Қаҳрамон', 'IMG_0555.jpeg', 'Стоматолог-Ортодонт', '⭐ 5.0 (Рекорд баҳо)', 'Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.', '25 йил', 'Бепул', 'Binafsha shifo (ТТЗ-4)', '+998 94 622 15 22', 'Душ-Шан: 9:00 - 19:00')">
                 <div class="card-header">
                     <img src="IMG_0555.jpeg" alt="Др. Низамов Қаҳрамон">
                     <div>
@@ -204,7 +181,7 @@
             </div>
 
             <!-- Др. Алиев Жавлон -->
-            <div class="card doc-card" data-category="kardiolog" onclick="openDetailModal('doctor', 'Др. Алиев Жавлон', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150', 'Кардиолог • 10 йил тажриба', '⭐ 4.9', 'Юрак қон-томир касалликларини даволаш, ЭКГ таҳлили ва юрак уриши ритмини текшириш бўйича мутахассис.', 'Akfa Medline Hospital (Чилонзор тумани)', '+998 71 203-00-00', 'Душанба - Жума: 8:00 - 17:00', '150 000 сўм')">
+            <div class="card doc-card" data-category="kardiolog" onclick="openDetailModal('doctor', 'Др. Алиев Жавлон', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150', 'Кардиолог', '⭐ 4.9', 'Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили бўйича эксперт.', '10 йил', '150 000 сўм', 'Akfa Medline (Чилонзор)', '+998 71 203-00-00', 'Душ-Жума: 8:00 - 17:00')">
                 <div class="card-header">
                     <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" alt="Доктор">
                     <div>
@@ -222,15 +199,8 @@
 
     <!-- ШИФОХОНАЛАР БЎЛИМИ -->
     <div id="hospitals" class="content-section">
-        <div class="filter-group">
-            <button class="filter-btn active" onclick="filterDistrict('all')">Барча туманлар</button>
-            <button class="filter-btn" onclick="filterDistrict('mirzo-ulugbek')">Мирзо Улуғбек</button>
-            <button class="filter-btn" onclick="filterDistrict('chilonzor')">Чилонзор</button>
-        </div>
-
         <div id="hospitalCardsList">
-            <!-- Binafsha shifo -->
-            <div class="card hosp-card" data-district="mirzo-ulugbek" onclick="openDetailModal('hospital', 'Binafsha shifo', 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150', 'Оилавий тиббиёт корхонаси', '⭐ 5.0', 'Бош шифокор: Др. Низамов Қаҳрамон Маманиязович. Замонавий жиҳозланган оилавий шифохона.', 'Мирзо Улуғбек т., TTZ-4, 11-дом, 16-хонадон', '+998 90 123-45-67', 'Душанба - Шанба: 9:00 - 19:00', 'Йўқ')">
+            <div class="card hosp-card" onclick="openDetailModal('hospital', 'Binafsha shifo', 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150', 'Оилавий тиббиёт корхонаси', '⭐ 5.0', 'Замонавий тиббий жиҳозлар ва малакали шифокорлар хизмати.', 'Манзил бўйича', 'Келишилган ҳолда', 'Мирзо Улуғбек т., TTZ-4', '+998 94 622 15 22', 'Душ-Шан: 9:00 - 19:00')">
                 <div class="card-header hospital-header">
                     <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150" alt="Клиника">
                     <div>
@@ -239,57 +209,47 @@
                         <div class="rating">⭐ 5.0</div>
                     </div>
                 </div>
-                <p class="description">Бош шифокор: Др. Низамов Қаҳрамон Маманиязович (Ортодонт, терапевт, хирург).</p>
-                <div class="info-row"><span>📍 Мирзо Улуғбек т., TTZ-4</span></div>
-            </div>
-
-            <!-- Akfa Medline -->
-            <div class="card hosp-card" data-district="chilonzor" onclick="openDetailModal('hospital', 'Akfa Medline Hospital', 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150', 'Кўп тармоqli тиббиёт маркази', '⭐ 4.9', 'Энг сўнгги русумдаги тиббий жиҳозлар, юқори малакали шифокорлар жамоаси ва қулай стационар хизматлари мавжуд.', 'Чилонзор тумани, Беруний кўчаси', '+998 71 203-00-00', 'Ҳафтанинг 7 куни: 24 соат', 'Йўқ')">
-                <div class="card-header hospital-header">
-                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
-                    <div>
-                        <h3 class="card-title">Akfa Medline Hospital</h3>
-                        <p class="card-sub">Кўп тармоqli тиббиёт маркази</p>
-                        <div class="rating">⭐ 4.9</div>
-                    </div>
-                </div>
-                <p class="description">Энг сўнгги русумдаги тиббий жиҳозлар ва стационар хизмати.</p>
-                <div class="info-row"><span>📍 Чилонзор тумани</span></div>
+                <p class="description">Бош шифокор: Др. Низамов Қаҳрамон Маманиязович.</p>
+                <div class="info-row"><span>📍 ТТЗ-4, 11-дом</span></div>
             </div>
         </div>
     </div>
 
-    <!-- БАТАФСИЛ МАЪЛУМОТ МОДАЛ ОЙНАСИ -->
+    <!-- БАТАФСИЛ МАЪЛУМОТ ОЙНАСИ (Модал) -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <img id="detailImg" class="detail-img" src="" alt="">
-            <h3 id="detailTitle" style="text-align: center; margin-bottom: 5px;"></h3>
-            <p id="detailSub" style="text-align: center; color: #666; font-size: 12px; margin-top: 0;"></p>
-            <div id="detailRating" style="text-align: center; margin-bottom: 10px;"></div>
+            <h3 id="detailTitle" style="text-align: center; margin: 0 0 4px 0;"></h3>
+            <p id="detailSub" style="text-align: center; color: #666; font-size: 12px; margin: 0 0 8px 0;"></p>
+            <div id="detailRating" style="text-align: center; color: #f39c12; font-size: 13px; margin-bottom: 10px;"></div>
             
-            <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
-            
-            <div class="detail-text">
-                <strong>📜 Батафсил маълумот:</strong><br>
-                <span id="detailDesc"></span>
-            </div>
-            <div class="detail-text">
-                <strong>📍 Манзил:</strong> <span id="detailAddress"></span>
-            </div>
-            <div class="detail-text">
-                <strong>📞 Телефон:</strong> <a id="detailPhoneLink" href="" style="color:#2481cc; font-weight:bold; text-decoration:none;"><span id="detailPhone"></span></a>
-            </div>
-            <div class="detail-text">
-                <strong>⏰ Иш вақти:</strong> <span id="detailHours"></span>
-            </div>
-            <div class="detail-text" id="priceRow">
-                <strong id="priceLabel">💰 Қабул нархи:</strong> <span id="detailPrice"></span>
+            <p id="detailDesc" class="detail-text" style="background: #f4f6f9; padding: 10px; border-radius: 8px;"></p>
+
+            <div class="details-grid">
+                <div class="detail-box">
+                    <span>Тажриба</span>
+                    <strong id="detailExperience"></strong>
+                </div>
+                <div class="detail-box">
+                    <span>Нархи</span>
+                    <strong id="detailPrice" style="color: #27ae60;"></strong>
+                </div>
+                <div class="detail-box" style="grid-column: span 2;">
+                    <span>Манзил</span>
+                    <strong id="detailAddress" style="color: #2481cc;"></strong>
+                </div>
+                <div class="detail-box" style="grid-column: span 2;">
+                    <span>Иш вақти</span>
+                    <strong id="detailHours"></strong>
+                </div>
             </div>
 
-            <div style="display: flex; gap: 8px; margin-top: 15px;">
-                <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Қабулга ёзилиш</button>
-                <button class="action-btn" style="background:#e0e0e0; color:#333;" onclick="closeDetailModal()">Ёпиш</button>
+            <div class="detail-text" style="text-align: center; margin-bottom: 12px;">
+                📞 Телефон: <a id="detailPhoneLink" href="" style="color:#2481cc; font-weight:bold; text-decoration:none;"><span id="detailPhone"></span></a>
             </div>
+
+            <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Қабулга ёзилиш</button>
+            <button class="action-btn" style="background:#e0e0e0; color:#333; margin-top:6px;" onclick="closeDetailModal()">Ёпиш</button>
         </div>
     </div>
 
@@ -304,7 +264,6 @@
         function filterDoctors(category) {
             document.querySelectorAll('#doctors .filter-btn').forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
-            
             let cards = document.querySelectorAll('.doc-card');
             cards.forEach(card => {
                 if(category === 'all' || card.getAttribute('data-category') === category) {
@@ -315,38 +274,18 @@
             });
         }
 
-        function filterDistrict(district) {
-            document.querySelectorAll('#hospitals .filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            let cards = document.querySelectorAll('.hosp-card');
-            cards.forEach(card => {
-                if(district === 'all' || card.getAttribute('data-district') === district) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        /* Батафсил ойнани очиш */
-        function openDetailModal(type, title, img, sub, rating, desc, address, phone, hours, price) {
+        function openDetailModal(type, title, img, sub, rating, desc, experience, price, address, phone, hours) {
             document.getElementById('detailImg').src = img;
             document.getElementById('detailTitle').innerText = title;
             document.getElementById('detailSub').innerText = sub;
             document.getElementById('detailRating').innerText = rating;
             document.getElementById('detailDesc').innerText = desc;
+            document.getElementById('detailExperience').innerText = experience;
+            document.getElementById('detailPrice').innerText = price;
             document.getElementById('detailAddress').innerText = address;
             document.getElementById('detailPhone').innerText = phone;
             document.getElementById('detailPhoneLink').href = 'tel:' + phone;
             document.getElementById('detailHours').innerText = hours;
-            
-            if(type === 'doctor') {
-                document.getElementById('priceLabel').innerText = "💰 Консультация нархи:";
-            } else {
-                document.getElementById('priceLabel').innerText = "💰 Стационар / Маълумот:";
-            }
-            document.getElementById('detailPrice').innerText = price;
 
             document.getElementById('detailModal').classList.add('active');
         }
