@@ -130,6 +130,39 @@
         .detail-box strong { font-size: 13px; color: #333; }
 
         .detail-text { font-size: 13px; color: #444; line-height: 1.4; margin-bottom: 8px; }
+        
+        /* Ўхшаш шифокорлар блоги */
+        .similar-section {
+            margin-top: 15px;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        .similar-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 8px;
+        }
+        .similar-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+        .similar-card img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .similar-info h4 { font-size: 12px; margin: 0 0 2px 0; color: #222; }
+        .similar-info p { font-size: 11px; margin: 0; color: #666; }
+
         .action-btn {
             width: 100%;
             padding: 11px;
@@ -165,7 +198,7 @@
         </div>
 
         <div id="doctorCardsList">
-            <!-- Др. Низамов Қаҳрамон (Янги рақам билан) -->
+            <!-- Др. Низамов Қаҳрамон -->
             <div class="card doc-card" data-category="stomatolog" onclick="openDetailModal('doctor', 'Др. Низамов Қаҳрамон', 'IMG_0555.jpeg', 'Стоматолог-Ортодонт', '⭐ 5.0 (Рекорд баҳо)', 'Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.', '25 йил', 'Бепул', 'Binafsha shifo (ТТЗ-4)', '+998 94 622 15 22', 'Душ-Шан: 9:00 - 19:00')">
                 <div class="card-header">
                     <img src="IMG_0555.jpeg" alt="Др. Низамов Қаҳрамон">
@@ -244,8 +277,20 @@
                 </div>
             </div>
 
-            <div class="detail-text" style="text-align: center; margin-bottom: 12px;">
+            <div class="detail-text" style="text-align: center; margin-bottom: 10px;">
                 📞 Телефон: <a id="detailPhoneLink" href="" style="color:#2481cc; font-weight:bold; text-decoration:none;"><span id="detailPhone"></span></a>
+            </div>
+
+            <!-- Ўхшаш шифокорлар тавсияси блоги -->
+            <div class="similar-section">
+                <div class="similar-title">🔗 Ўхшаш мутахассислар:</div>
+                <div class="similar-card" onclick="openDetailModal('doctor', 'Др. Алиев Жавлон', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150', 'Кардиолог', '⭐ 4.9', 'Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили бўйича эксперт.', '10 йил', '150 000 сўм', 'Akfa Medline (Чилонзор)', '+998 71 203-00-00', 'Душ-Жума: 8:00 - 17:00')">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" alt="Шифокор">
+                    <div class="similar-info">
+                        <h4>Др. Алиев Жавлон</h4>
+                        <p>Кардиолог • 10 йил тажриба</p>
+                    </div>
+                </div>
             </div>
 
             <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Қабулга ёзилиш</button>
