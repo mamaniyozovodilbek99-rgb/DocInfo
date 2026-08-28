@@ -24,7 +24,6 @@
     }">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
@@ -38,14 +37,14 @@
     <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
         <div class="flex items-center justify-between mb-3">
             <div>
-                <h1 id="appTitle" class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
+                <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
                 <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
             <!-- Language Switcher -->
             <div class="flex items-center space-x-1 bg-white/20 p-1 rounded-xl backdrop-blur-sm">
-                <button onclick="changeLang('uz')" id="btnUz" class="px-2 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition">UZ</button>
-                <button onclick="changeLang('ru')" id="btnRu" class="px-2 py-1 text-xs font-bold rounded-lg text-white transition">RU</button>
-                <button onclick="changeLang('en')" id="btnEn" class="px-2 py-1 text-xs font-bold rounded-lg text-white transition">EN</button>
+                <button onclick="changeLang('uz')" id="btnUz" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition">UZ</button>
+                <button onclick="changeLang('ru')" id="btnRu" class="px-2.5 py-1 text-xs font-bold rounded-lg text-white transition">RU</button>
+                <button onclick="changeLang('en')" id="btnEn" class="px-2.5 py-1 text-xs font-bold rounded-lg text-white transition">EN</button>
             </div>
         </div>
 
@@ -68,11 +67,11 @@
 
     <!-- Category Filters -->
     <div id="categoryFilters" class="bg-white py-2 px-4 border-b border-slate-100 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10">
-        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition" data-cat="all">Барчаси</button>
-        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Stomatolog">Стоматолог</button>
-        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Kardiolog">Кардиолог</button>
-        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Terapevt">Терапевт</button>
-        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Xirurg">Хирург</button>
+        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition" data-cat="all">Barchasi</button>
+        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Stomatolog">Stomatolog</button>
+        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Kardiolog">Kardiolog</button>
+        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Terapevt">Terapevt</button>
+        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Xirurg">Xirurg</button>
     </div>
 
     <!-- Main Content Container -->
@@ -87,7 +86,7 @@
             <div class="flex justify-between items-start mb-4">
                 <h3 id="modalTitle" class="text-lg font-bold text-slate-800"></h3>
                 <button onclick="closeModal()" class="p-1 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
-                    <svg class="z-50 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div id="modalBody" class="space-y-4 text-sm"></div>
@@ -95,14 +94,13 @@
     </div>
 
     <script>
-        // Translations Dictionary
         const translations = {
             uz: {
                 subtitle: "Shifokorlar va klinikalar katalogi",
                 searchPlaceholder: "Shifokor yoki mutaxassislikni izlash...",
                 tabDoctors: "Shifokorlar",
                 tabClinics: "Shifoxonalar",
-                allCat: "Барчаси",
+                allCat: "Barchasi",
                 experience: "yil tajriba",
                 free: "Bepul",
                 clinicLabel: "Klinika",
@@ -126,7 +124,7 @@
                 bookBtn: "Записаться на прием",
                 callBtn: "Позвонить",
                 hoursLabel: "Время работы",
-                bookedAlert: "Вы успешно записались на прием к! Скоро с вами свяжутся операторы.",
+                bookedAlert: "Вы успешно записались на прием! Скоро с вами свяжутся операторы.",
                 notFound: "Ничего не найдено"
             },
             en: {
@@ -142,38 +140,37 @@
                 bookBtn: "Book Appointment",
                 callBtn: "Call",
                 hoursLabel: "Working hours",
-                bookedAlert: "You have successfully booked an appointment with! Operators will contact you soon.",
+                bookedAlert: "You have successfully booked an appointment! Operators will contact you soon.",
                 notFound: "No information found"
             }
         };
 
-        let currentLang = localStorage.getItem('app_lang') || 'uz';
+        let currentLang = 'uz';
 
         function changeLang(lang) {
             currentLang = lang;
-            localStorage.setItem('app_lang', lang);
             
-            // Update buttons style
             ['uz', 'ru', 'en'].forEach(l => {
                 const btn = document.getElementById('btn' + l.toUpperCase());
-                if (l === lang) {
-                    btn.className = "px-2 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition";
-                } else {
-                    btn.className = "px-2 py-1 text-xs font-bold rounded-lg text-white transition";
+                if (btn) {
+                    if (l === lang) {
+                        btn.className = "px-2.5 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition";
+                    } else {
+                        btn.className = "px-2.5 py-1 text-xs font-bold rounded-lg text-white transition";
+                    }
                 }
             });
 
-            updateTexts();
-            renderContent();
-        }
-
-        function updateTexts() {
             const t = translations[currentLang];
             document.getElementById('appSubtitle').textContent = t.subtitle;
             document.getElementById('searchInput').placeholder = t.searchPlaceholder;
             document.getElementById('tabDoctors').textContent = t.tabDoctors;
             document.getElementById('tabClinics').textContent = t.tabClinics;
-            document.querySelector('.cat-btn[data-cat="all"]').textContent = t.allCat;
+            
+            const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
+            if (allBtn) allBtn.textContent = t.allCat;
+
+            renderContent();
         }
 
         let tg = window.Telegram?.WebApp;
@@ -183,9 +180,9 @@
         }
 
         const mockDoctors = [
-            { id: 1, name: "Dr. Nizamov Qahramon", specialization: "Стоматолог-Ортодонт", experience: 25, rating: 5.0, description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha yuqori malakali mutaxassis.", clinic: "Binafsha shifo", price: 0, category: "Stomatolog" },
-            { id: 2, name: "Dr. Aliyev Javlon", specialization: "Кардиолог", experience: 10, rating: 4.9, description: "Yurak qon-tomir kasalliklarini davolash va EKG tahlili.", clinic: "Akfa Medline", price: "150 000 so'm", category: "Kardiolog" },
-            { id: 3, name: "Dr. Karimova Dildora", specialization: "Терапевт", experience: 14, rating: 4.8, description: "Kattalar va o'smirlar sog'ligini tekshirish, zamonaviy davolash usullari.", clinic: "Shifo Nur", price: "100 000 so'm", category: "Terapevt" }
+            { id: 1, name: "Dr. Nizamov Qahramon", specialization: "Stomatolog-Ortodont", experience: 25, rating: 5.0, description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha yuqori malakali mutaxassis.", clinic: "Binafsha shifo", price: 0, category: "Stomatolog" },
+            { id: 2, name: "Dr. Aliyev Javlon", specialization: "Kardiolog", experience: 10, rating: 4.9, description: "Yurak qon-tomir kasalliklarini davolash va EKG tahlili.", clinic: "Akfa Medline", price: "150 000 so'm", category: "Kardiolog" },
+            { id: 3, name: "Dr. Karimova Dildora", specialization: "Terapevt", experience: 14, rating: 4.8, description: "Kattalar va o'smirlar sog'ligini tekshirish, zamonaviy davolash usullari.", clinic: "Shifo Nur", price: "100 000 so'm", category: "Terapevt" }
         ];
 
         const mockClinics = [
@@ -257,7 +254,7 @@
                     card.innerHTML = `
                         <h4 class="font-bold text-slate-800 text-sm">${clinic.name}</h4>
                         <p class="text-xs text-slate-500 mt-1">📍 ${clinic.address}</p>
-                        <p class="text-xs text-slate-500 mt-0.5">🕒 ${t.hoursInfo || 'Ish vaqti'}: ${clinic.hours}</p>
+                        <p class="text-xs text-slate-500 mt-0.5">🕒 ${t.hoursLabel}: ${clinic.hours}</p>
                         <div class="mt-3 pt-2 border-t border-slate-50 flex justify-between items-center text-xs">
                             <span class="text-sky-600 font-medium">${clinic.phone}</span>
                             <a href="tel:${clinic.phone}" class="bg-sky-50 text-sky-600 px-3 py-1 rounded-lg font-semibold">${t.callBtn}</a>
@@ -340,8 +337,8 @@
             closeModal();
         }
 
-        // Initialize language on load
-        changeLang(currentLang);
+        // Initialize default language
+        changeLang('uz');
     </script>
 </body>
 </html>
