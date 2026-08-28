@@ -83,6 +83,7 @@
         .description { font-size: 13px; color: #444; margin: 8px 0; line-height: 1.4; }
         .info-row { font-size: 13px; color: #555; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; }
         .price { font-weight: bold; color: #27ae60; }
+        .free-price { font-weight: bold; color: #e67e22; }
         
         .map-link {
             color: #2481cc;
@@ -94,7 +95,6 @@
             border-radius: 6px;
         }
 
-        /* Отзывлар блоги карточка ичида */
         .reviews-container {
             margin-top: 10px;
             border-top: 1px solid #eee;
@@ -127,7 +127,6 @@
         }
         .review-btn { background: #f39c12; }
 
-        /* Modal oyna */
         .modal {
             display: none;
             position: fixed;
@@ -171,7 +170,6 @@
 
     <!-- ШИФОКОРЛАР БЎЛИМИ -->
     <div id="doctors" class="content-section active">
-        <!-- Шифокорлар учун фильтрлар -->
         <div class="filter-group">
             <button class="filter-btn active" onclick="filterDoctors('all')">Барчаси</button>
             <button class="filter-btn" onclick="filterDoctors('stomatolog')">Стоматолог</button>
@@ -181,7 +179,32 @@
         </div>
 
         <div id="doctorCardsList">
-            <!-- Др. Алиев (Кардиолог) -->
+            <!-- Др. Низамов Қаҳрамон Маманиязович -->
+            <div class="card doc-card" data-category="stomatolog">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Доктор">
+                    <div>
+                        <h3 class="card-title">Др. Низамов Қаҳрамон</h3>
+                        <p class="card-sub">Стоматолог-Ортодонт • 25 йил тажриба</p>
+                        <div class="rating">⭐ 5.0</div>
+                    </div>
+                </div>
+                <p class="description">Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.</p>
+                <div class="info-row"><span>📍 Шифохона: Binafsha shifo</span></div>
+                <div class="info-row"><span>⏰ Иш вақти:</span><span>Душ-Шан: 9:00 - 19:00</span></div>
+                <div class="info-row"><span>Консультация:</span><span class="free-price">Бепул</span></div>
+                
+                <div class="reviews-container" id="reviews-doc-qahramon">
+                    <div class="review-item"><span class="review-author">Uмида:</span> 25 йиллик тажриба ўз сўзини айтади, жуда зўр шифокор! ⭐5</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
+                    <button class="action-btn review-btn" onclick="openReviewModal('doc-qahramon', 'Др. Низамов Қаҳрамон')">⭐ Отзыв ёзиш</button>
+                </div>
+            </div>
+
+            <!-- Бошқа шифокорлар -->
             <div class="card doc-card" data-category="kardiolog">
                 <div class="card-header">
                     <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Доктор">
@@ -196,7 +219,7 @@
                 <div class="info-row"><span>Қабул нархи:</span><span class="price">150 000 сўм</span></div>
                 
                 <div class="reviews-container" id="reviews-doc-1">
-                    <div class="review-item"><span class="review-author">Aziz:</span> Зўр шифокор, маслаҳатлари учун раҳмат! ⭐5</div>
+                    <div class="review-item"><span class="review-author">Aziz:</span> Юқори малакали шифокор! ⭐5</div>
                 </div>
 
                 <div class="btn-group">
@@ -204,52 +227,47 @@
                     <button class="action-btn review-btn" onclick="openReviewModal('doc-1', 'Др. Алиев Жавлон')">⭐ Отзыв ёзиш</button>
                 </div>
             </div>
-
-            <!-- Др. Каримова (Стоматолог) -->
-            <div class="card doc-card" data-category="stomatolog">
-                <div class="card-header">
-                    <img src="https://images.unsplash.com/photo-1594824813567-4bb5962d3a6c?w=150" alt="Доктор">
-                    <div>
-                        <h3 class="card-title">Др. Каримова Нигора</h3>
-                        <p class="card-sub">Стоматолог • 8 йил тажриба</p>
-                        <div class="rating">⭐ 4.8</div>
-                    </div>
-                </div>
-                <p class="description">Тишларни davolash, протезлаш ва оғриқсиз даволаш.</p>
-                <div class="info-row"><span>📍 Клиника: Stoma Dental</span></div>
-                <div class="info-row"><span>Қабул нархи:</span><span class="price">120 000 сўм</span></div>
-                
-                <div class="reviews-container" id="reviews-doc-2">
-                    <div class="review-item"><span class="review-author">Malika:</span> Ишининг устаси экан, оғриқ сезмадим. ⭐5</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
-                    <button class="action-btn review-btn" onclick="openReviewModal('doc-2', 'Др. Каримова Нигора')">⭐ Отзыв ёзиш</button>
-                </div>
-            </div>
         </div>
     </div>
 
     <!-- ШИФОХОНАЛАР БЎЛИМИ -->
     <div id="hospitals" class="content-section">
-        <!-- Вилоятлар фильтри -->
         <div class="filter-group">
-            <button class="filter-btn active" onclick="filterRegion('tashkent-city')">Тошкент ш.</button>
-            <button class="filter-btn" onclick="filterRegion('tashkent-vil')">Тошкент вил.</button>
-            <button class="filter-btn" onclick="filterRegion('samarkand')">Самарқанд</button>
-        </div>
-        <!-- Туманлар фильтри -->
-        <div class="filter-group" style="background:#eef4f8; padding:6px; border-radius:8px;">
             <button class="filter-btn active" onclick="filterDistrict('all')">Барча туманлар</button>
-            <button class="filter-btn" onclick="filterDistrict('chilonzor')">Чилонзор</button>
-            <button class="filter-btn" onclick="filterDistrict('yunusobod')">Юнусобод</button>
             <button class="filter-btn" onclick="filterDistrict('mirzo-ulugbek')">Мирзо Улуғбек</button>
+            <button class="filter-btn" onclick="filterDistrict('chilonzor')">Чилонзор</button>
         </div>
 
         <div id="hospitalCardsList">
+            <!-- Binafsha shifo -->
+            <div class="card hosp-card" data-district="mirzo-ulugbek">
+                <div class="card-header hospital-header">
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150" alt="Клиника">
+                    <div>
+                        <h3 class="card-title">Binafsha shifo</h3>
+                        <p class="card-sub">Оилавий тиббиёт корхонаси</p>
+                        <div class="rating">⭐ 5.0</div>
+                    </div>
+                </div>
+                <p class="description">Бош шифокор: Др. Низамов Қаҳрамон Маманиязович (Ортодонт, терапевт, хирург).</p>
+                <div class="info-row">
+                    <span>📍 Мирзо Улуғбек т., TTZ-4, 11-дом, 16-хонадон</span>
+                    <a href="https://yandex.uz/maps/?text=Tashkent%20Mirzo%20Ulugbek%20TTZ%204" target="_blank" class="map-link">🗺️ Карта</a>
+                </div>
+                <div class="info-row"><span>⏰ Иш вақти:</span><span>Душанба - Шанба: 9:00 - 19:00</span></div>
+                
+                <div class="reviews-container" id="reviews-hosp-binafsha">
+                    <div class="review-item"><span class="review-author">Dilshod:</span> Жума баҳоси аъло, шароитлар яхши. ⭐5</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
+                    <button class="action-btn review-btn" onclick="openReviewModal('hosp-binafsha', 'Binafsha shifo')">⭐ Отзыв ёзиш</button>
+                </div>
+            </div>
+
             <!-- Akfa Medline -->
-            <div class="card hosp-card" data-region="tashkent-city" data-district="chilonzor">
+            <div class="card hosp-card" data-district="chilonzor">
                 <div class="card-header hospital-header">
                     <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
                     <div>
@@ -265,7 +283,7 @@
                 </div>
                 
                 <div class="reviews-container" id="reviews-hosp-1">
-                    <div class="review-item"><span class="review-author">Sardor:</span> Шароитлар юқори даражада. ⭐5</div>
+                    <div class="review-item"><span class="review-author">Sardor:</span> Шароитлар зўр. ⭐5</div>
                 </div>
 
                 <div class="btn-group">
@@ -280,8 +298,8 @@
     <div id="reviewModal" class="modal">
         <div class="modal-content">
             <h3 id="modalTitle">Отзыв қолдириш</h3>
-            <label style="font-size:12px; color:#555;">Исмingiz:</label>
-            <input type="text" id="reviewerName" placeholder="Исмingizni kiriting">
+            <label style="font-size:12px; color:#555;">Исмингiz:</label>
+            <input type="text" id="reviewerName" placeholder="Исмингizni kiriting">
             <label style="font-size:12px; color:#555;">Баҳоingiz:</label>
             <select id="ratingSelect">
                 <option value="⭐5">⭐⭐⭐⭐⭐ (5 - Аъло)</option>
@@ -307,7 +325,6 @@
             event.currentTarget.classList.add('active');
         }
 
-        // Шифокорлар мутахассислиги бўйича фильтр
         function filterDoctors(category) {
             document.querySelectorAll('#doctors .filter-btn').forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
@@ -322,16 +339,8 @@
             });
         }
 
-        // Шифохоналар вилоят бўйича фильтр
-        function filterRegion(region) {
-            document.querySelectorAll('#hospitals .filter-group:first-of-type .filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            // Бу ерда келгусида вилоят кесимида кенгайтириш мумкин
-        }
-
-        // Шифохоналар туман бўйича фильтр
         function filterDistrict(district) {
-            document.querySelectorAll('#hospitals .filter-group:nth-of-type(2) .filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('#hospitals .filter-btn').forEach(btn => btn.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
             let cards = document.querySelectorAll('.hosp-card');
@@ -357,9 +366,8 @@
             document.getElementById('reviewerName').value = '';
         }
 
-        // Отзывни жўнатиб, экранга чиқариш
         function submitReview() {
-            let name = document.getElementById('reviewerName').value.trim();
+            let name = document.getElementById('reviewerName.value' || 'reviewerName').value.trim();
             let text = document.getElementById('reviewText').value.trim();
             let rating = document.getElementById('ratingSelect').value;
 
@@ -374,7 +382,7 @@
             newReview.innerHTML = `<span class="review-author">${name}:</span> ${text} ${rating}`;
             container.appendChild(newReview);
 
-            alert("Раҳмат! Отзивингиз муваффақиятли қўшилди ва бошқаларга кўринди.");
+            alert("Раҳмат! Отзивингиз муваффақиятли қўшилди.");
             closeReviewModal();
         }
     </script>
