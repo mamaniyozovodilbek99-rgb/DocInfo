@@ -439,7 +439,6 @@
             document.getElementById('modalTitle').textContent = doc.name;
             let displayPrice = (doc.price === 0) ? t.free : doc.price;
 
-            // Find similar doctors in the same category excluding current doctor
             const similarDocs = mockDoctors.filter(d => d.category === doc.category && d.id !== doc.id);
             let similarHtml = '';
             if (similarDocs.length > 0) {
@@ -462,10 +461,7 @@
                 `;
             }
 
-            // Directions tags
             let directionsHtml = doc.directions.map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
-
-            // Reviews list
             let reviewsHtml = doc.reviews.map(rev => `
                 <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
                     <div class="flex justify-between font-bold text-slate-700">
@@ -536,7 +532,6 @@
                 </div>
             `).join('');
 
-            // Doctors working in this clinic
             let clinicDoctors = mockDoctors.filter(d => d.clinic === clinic.name);
             let doctorsHtml = clinicDoctors.map(doc => `
                 <div onclick="openDoctorDetail(mockDoctors.find(d => d.id === ${doc.id}))" class="flex items-center space-x-2 bg-slate-50 p-2 rounded-xl cursor-pointer hover:bg-sky-50 transition">
@@ -595,7 +590,6 @@
             closeModal();
         }
 
-        // Initialize default language
         changeLang('uz');
     </script>
 </body>
