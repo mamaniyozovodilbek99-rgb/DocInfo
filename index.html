@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocInfo – Тошкент Шифокорлари</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f4f6f8; color: #333; padding: 12px; }
+        .header { background: #007bff; color: white; padding: 16px; border-radius: 12px; margin-bottom: 12px; text-align: center; }
+        .search-box { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; margin-bottom: 12px; outline: none; }
+        .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px; }
+        .cat-btn { background: #fff; border: 1px solid #007bff; color: #007bff; padding: 8px 14px; border-radius: 20px; font-size: 13px; white-space: nowrap; cursor: pointer; }
+        .cat-btn.active { background: #007bff; color: #fff; }
+        .card { background: #fff; border-radius: 12px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; gap: 12px; }
+        .card img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; }
+        .card-info { flex: 1; }
+        .card-title { font-size: 16px; font-weight: bold; margin-bottom: 4px; color: #111; }
+        .card-sub { font-size: 13px; color: #666; margin-bottom: 4px; }
+        .card-price { font-size: 14px; font-weight: bold; color: #28a745; margin-top: 4px; }
+        .btn-book { background: #007bff; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; margin-top: 8px; width: 100%; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>DocInfo Tashkent</h2>
+        <p style="font-size: 12px; opacity: 0.9;">Шифокорлар ва клиникалар каталоги</p>
+    </div>
+
+    <input type="text" id="searchInput" class="search-box" placeholder="Шифокор ёки клиника изланг..." onkeyup="filterCards()">
+
+    <div class="categories">
+        <button class="cat-btn active" onclick="filterCat('all')">Барчаси</button>
+        <button class="cat-btn" onclick="filterCat('stomatolog')">Стоматолог</button>
+        <button class="cat-btn" onclick="filterCat('kardiolog')">Кардиолог</button>
+        <button class="cat-btn" onclick="filterCat('pediatr')">Педиатр</button>
+    </div>
+
+    <div id="doctorList">
+        <div class="card" data-cat="kardiolog">
+            <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=300" alt="Doctor">
+            <div class="card-info">
+                <div class="card-title">Др. Алиев Жавлон</div>
+                <div class="card-sub">Кардиолог • 10 йил тажриба</div>
+                <div class="card-sub">📍 Akfa Medline</div>
+                <div class="card-price">Қабул: 150 000 сўм</div>
+                <button class="btn-book" onclick="bookDoctor('Др. Алиев Жавлон')">Кабулга ёзилиш</button>
+            </div>
+        </div>
+
+        <div class="card" data-cat="stomatolog">
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300" alt="Doctor">
+            <div class="card-info">
+                <div class="card-title">Др. Каримова Нигора</div>
+                <div class="card-sub">Стоматолог-ортодонт</div>
+                <div class="card-sub">📍 Stoma Dental</div>
+                <div class="card-price">Қабул: 120 000 сўм</div>
+                <button class="btn-book" onclick="bookDoctor('Др. Каримова Нигора')">Кабулга ёзилиш</button>
+            </div>
+        </div>
+
+        <div class="card" data-cat="pediatr">
+            <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=300" alt="Doctor">
+            <div class="card-info">
+                <div class="card-title">Др. Умаров Сардор</div>
+                <div class="card-sub">Педиатр • Болалар шифокори</div>
+                <div class="card-sub">📍 City Hospital</div>
+                <div class="card-price">Қабул: 100 000 сўм</div>
+                <button class="btn-book" onclick="bookDoctor('Др. Умаров Сардор')">Кабулга ёзилиш</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function filterCards() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                let text = card.innerText.toLowerCase();
+                card.style.display = text.includes(input) ? 'flex' : 'none';
+            });
+        }
+
+        function filterCat(cat) {
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            let cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function bookDoctor(name) {
+            tg.sendData(JSON.stringify({ doctor: name }));
+            tg.close();
+        }
+    </script>
+</body>
+</html>
