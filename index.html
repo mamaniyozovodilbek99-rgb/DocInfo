@@ -182,7 +182,7 @@
             <!-- Др. Низамов Қаҳрамон Маманиязович -->
             <div class="card doc-card" data-category="stomatolog">
                 <div class="card-header">
-                    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxITEhUTExMWFhUXGBgYGBgYGBgYGxsaGBgYGBgYGBgYHSggGBolGxUbITEhJSkrLi4uGB8zODMtNygtLisBCgoKDg0OGxAQGy0mICYtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAFAAIDBAYHAQj/xAA/EAACAQMDAgQDBgQEBQUBAQABAhEAAyESMQQFQVEGEyJhcYEHFCORoVKxwQdjgtHwFiQzUnLxJDRjkuHxU//EABsBAAEFAQEAAAAAAAAAAAAAAAABAgMEBQYH/8QAMREAAgEDAwMCBQUBAQEBAAAAAAECAwQRITESBUEFUTJhEyJxgaGxwdHwFPOy4fEUMv/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AO9A1N7Ww5s8/wA5n/u2lK8KajG4aY0OPhXj33uL1pGz2L5t3B5iZ0+GvF6m5W7M7k2j0+bO9L84Pj50zO/Lw+dZp837P5P317f0uY/Z7H7qfWfOte+l1r8zM2a+n3H2f2T0P7VpnF445d4/L+tJ+bN5b89V2177308q986j3/P0n0p5p8w0T/8QAFREBAQAAAAAAAAAAAAAAAAAAAAD/2gAIAQEAAT8AVD//2Q==" alt="Др. Низамов Қаҳрамон">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Др. Низамов Қаҳрамон" id="doctorPhoto">
                     <div>
                         <h3 class="card-title">Др. Низамов Қаҳрамон</h3>
                         <p class="card-sub">Стоматолог-Ортодонт • 25 йил тажриба</p>
@@ -207,7 +207,7 @@
             <!-- Бошқа шифокорлар -->
             <div class="card doc-card" data-category="kardiolog">
                 <div class="card-header">
-                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Доктор">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" alt="Доктор">
                     <div>
                         <h3 class="card-title">Др. Алиев Жавлон</h3>
                         <p class="card-sub">Кардиолог • 10 йил тажриба</p>
@@ -298,9 +298,9 @@
     <div id="reviewModal" class="modal">
         <div class="modal-content">
             <h3 id="modalTitle">Отзыв қолдириш</h3>
-            <label style="font-size:12px; color:#555;">Исмингiz:</label>
-            <input type="text" id="reviewerName" placeholder="Исмингizni kiriting">
-            <label style="font-size:12px; color:#555;">Баҳоingiz:</label>
+            <label style="font-size:12px; color:#555;">Исмингиз:</label>
+            <input type="text" id="reviewerName" placeholder="Исмингизни kiriting">
+            <label style="font-size:12px; color:#555;">Баҳоингиз:</label>
             <select id="ratingSelect">
                 <option value="⭐5">⭐⭐⭐⭐⭐ (5 - Аъло)</option>
                 <option value="⭐4">⭐⭐⭐⭐ (4 - Яхши)</option>
@@ -318,6 +318,9 @@
     </div>
 
     <script>
+        // Юборган расмингизни автоматик тарзда сайтга улаймиз
+        document.getElementById('doctorPhoto').src = "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150";
+
         function switchTab(tabId) {
             document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
