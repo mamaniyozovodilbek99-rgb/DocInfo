@@ -63,7 +63,10 @@
             border-radius: 12px;
             margin-bottom: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.1s ease;
         }
+        .card:active { transform: scale(0.98); }
         .card-header {
             display: flex;
             gap: 12px;
@@ -127,6 +130,7 @@
         }
         .review-btn { background: #f39c12; }
 
+        /* Модал ойналар созламаси */
         .modal {
             display: none;
             position: fixed;
@@ -142,9 +146,11 @@
             padding: 20px;
             border-radius: 12px;
             width: 85%;
-            max-width: 320px;
+            max-width: 340px;
+            max-height: 85vh;
+            overflow-y: auto;
         }
-        .modal-content h3 { margin-top: 0; font-size: 16px; }
+        .modal-content h3 { margin-top: 0; font-size: 18px; color: #222; }
         .modal-content select, .modal-content textarea, .modal-content input {
             width: 100%;
             padding: 8px;
@@ -152,8 +158,11 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 13px;
+            box-sizing: border-box;
         }
         .modal-content textarea { height: 60px; resize: none; }
+        .detail-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px auto; }
+        .detail-text { font-size: 13px; color: #444; line-height: 1.5; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -180,9 +189,8 @@
 
         <div id="doctorCardsList">
             <!-- Др. Низамов Қаҳрамон Маманиязович -->
-            <div class="card doc-card" data-category="stomatolog">
+            <div class="card doc-card" data-category="stomatolog" onclick="openDetailModal('doctor', 'Др. Низамов Қаҳрамон', 'IMG_0555.jpeg', 'Стоматолог-Ортодонт • 25 йил тажриба', '⭐ 5.0', 'Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис. 25 йиллик тажрибага эга.', 'Binafsha shifo (Мирзо Улуғбек т., TTZ-4)', '+998 90 123-45-67', 'Душанба - Шанба: 9:00 - 19:00', 'Бепул')">
                 <div class="card-header">
-                    <!-- Бу ерга сиз юклаган расм номи қўйилди -->
                     <img src="IMG_0555.jpeg" alt="Др. Низамов Қаҳрамон">
                     <div>
                         <h3 class="card-title">Др. Низамов Қаҳрамон</h3>
@@ -192,21 +200,11 @@
                 </div>
                 <p class="description">Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.</p>
                 <div class="info-row"><span>📍 Шифохона: Binafsha shifo</span></div>
-                <div class="info-row"><span>⏰ Иш вақти:</span><span>Душ-Шан: 9:00 - 19:00</span></div>
                 <div class="info-row"><span>Консультация:</span><span class="free-price">Бепул</span></div>
-                
-                <div class="reviews-container" id="reviews-doc-qahramon">
-                    <div class="review-item"><span class="review-author">Умида:</span> 25 йиллик тажриба ўз сўзини айтади, жуда зўр шифокор! ⭐5</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
-                    <button class="action-btn review-btn" onclick="openReviewModal('doc-qahramon', 'Др. Низамов Қаҳрамон')">⭐ Отзыв ёзиш</button>
-                </div>
             </div>
 
-            <!-- Бошқа шифокорлар -->
-            <div class="card doc-card" data-category="kardiolog">
+            <!-- Др. Алиев Жавлон -->
+            <div class="card doc-card" data-category="kardiolog" onclick="openDetailModal('doctor', 'Др. Алиев Жавлон', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150', 'Кардиолог • 10 йил тажриба', '⭐ 4.9', 'Юрак қон-томир касалликларини даволаш, ЭКГ таҳлили ва юрак уриши ритмини текшириш бўйича мутахассис.', 'Akfa Medline Hospital (Чилонзор тумани)', '+998 71 203-00-00', 'Душанба - Жума: 8:00 - 17:00', '150 000 сўм')">
                 <div class="card-header">
                     <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" alt="Доктор">
                     <div>
@@ -218,15 +216,6 @@
                 <p class="description">Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили.</p>
                 <div class="info-row"><span>📍 Клиника: Akfa Medline</span></div>
                 <div class="info-row"><span>Қабул нархи:</span><span class="price">150 000 сўм</span></div>
-                
-                <div class="reviews-container" id="reviews-doc-1">
-                    <div class="review-item"><span class="review-author">Aziz:</span> Юқори малакали шифокор! ⭐5</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
-                    <button class="action-btn review-btn" onclick="openReviewModal('doc-1', 'Др. Алиев Жавлон')">⭐ Отзыв ёзиш</button>
-                </div>
             </div>
         </div>
     </div>
@@ -241,7 +230,7 @@
 
         <div id="hospitalCardsList">
             <!-- Binafsha shifo -->
-            <div class="card hosp-card" data-district="mirzo-ulugbek">
+            <div class="card hosp-card" data-district="mirzo-ulugbek" onclick="openDetailModal('hospital', 'Binafsha shifo', 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150', 'Оилавий тиббиёт корхонаси', '⭐ 5.0', 'Бош шифокор: Др. Низамов Қаҳрамон Маманиязович. Замонавий жиҳозланган оилавий шифохона.', 'Мирзо Улуғбек т., TTZ-4, 11-дом, 16-хонадон', '+998 90 123-45-67', 'Душанба - Шанба: 9:00 - 19:00', 'Йўқ')">
                 <div class="card-header hospital-header">
                     <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150" alt="Клиника">
                     <div>
@@ -251,24 +240,11 @@
                     </div>
                 </div>
                 <p class="description">Бош шифокор: Др. Низамов Қаҳрамон Маманиязович (Ортодонт, терапевт, хирург).</p>
-                <div class="info-row">
-                    <span>📍 Мирзо Улуғбек т., TTZ-4, 11-дом, 16-хонадон</span>
-                    <a href="https://yandex.uz/maps/?text=Tashkent%20Mirzo%20Ulugbek%20TTZ%204" target="_blank" class="map-link">🗺️ Карта</a>
-                </div>
-                <div class="info-row"><span>⏰ Иш вақти:</span><span>Душанба - Шанба: 9:00 - 19:00</span></div>
-                
-                <div class="reviews-container" id="reviews-hosp-binafsha">
-                    <div class="review-item"><span class="review-author">Dilshod:</span> Жуда баҳоси аъло, шароитлар яхши. ⭐5</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
-                    <button class="action-btn review-btn" onclick="openReviewModal('hosp-binafsha', 'Binafsha shifo')">⭐ Отзыв ёзиш</button>
-                </div>
+                <div class="info-row"><span>📍 Мирзо Улуғбек т., TTZ-4</span></div>
             </div>
 
             <!-- Akfa Medline -->
-            <div class="card hosp-card" data-district="chilonzor">
+            <div class="card hosp-card" data-district="chilonzor" onclick="openDetailModal('hospital', 'Akfa Medline Hospital', 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150', 'Кўп тармоqli тиббиёт маркази', '⭐ 4.9', 'Энг сўнгги русумдаги тиббий жиҳозлар, юқори малакали шифокорлар жамоаси ва қулай стационар хизматлари мавжуд.', 'Чилонзор тумани, Беруний кўчаси', '+998 71 203-00-00', 'Ҳафтанинг 7 куни: 24 соат', 'Йўқ')">
                 <div class="card-header hospital-header">
                     <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
                     <div>
@@ -278,42 +254,41 @@
                     </div>
                 </div>
                 <p class="description">Энг сўнгги русумдаги тиббий жиҳозлар ва стационар хизмати.</p>
-                <div class="info-row">
-                    <span>📍 Чилонзор тумани, Беруний кўчаси</span>
-                    <a href="https://yandex.uz/maps/?text=Akfa%20Medline%20Tashkent" target="_blank" class="map-link">🗺️ Карта</a>
-                </div>
-                
-                <div class="reviews-container" id="reviews-hosp-1">
-                    <div class="review-item"><span class="review-author">Sardor:</span> Шароитлар зўр. ⭐5</div>
-                </div>
-
-                <div class="btn-group">
-                    <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
-                    <button class="action-btn review-btn" onclick="openReviewModal('hosp-1', 'Akfa Medline Hospital')">⭐ Отзыв ёзиш</button>
-                </div>
+                <div class="info-row"><span>📍 Чилонзор тумани</span></div>
             </div>
         </div>
     </div>
 
-    <!-- Отзыв ёзиш модал ойнаси -->
-    <div id="reviewModal" class="modal">
+    <!-- БАТАФСИЛ МАЪЛУМОТ МОДАЛ ОЙНАСИ -->
+    <div id="detailModal" class="modal">
         <div class="modal-content">
-            <h3 id="modalTitle">Отзыв қолдириш</h3>
-            <label style="font-size:12px; color:#555;">Исмингиз:</label>
-            <input type="text" id="reviewerName" placeholder="Исмингизни kiriting">
-            <label style="font-size:12px; color:#555;">Баҳоингиз:</label>
-            <select id="ratingSelect">
-                <option value="⭐5">⭐⭐⭐⭐⭐ (5 - Аъло)</option>
-                <option value="⭐4">⭐⭐⭐⭐ (4 - Яхши)</option>
-                <option value="⭐3">⭐⭐⭐ (3 - Қониқарли)</option>
-                <option value="⭐2">⭐⭐ (2 - Ёмон)</option>
-                <option value="⭐1">⭐ (1 - Жуда ёмон)</option>
-            </select>
-            <label style="font-size:12px; color:#555;">Фикрингизни ёзинг:</label>
-            <textarea id="reviewText" placeholder="Хизмат сифати қандай эди?"></textarea>
-            <div style="display: flex; gap: 8px;">
-                <button class="action-btn" onclick="submitReview()">Юбориш</button>
-                <button class="action-btn" style="background:#e0e0e0; color:#333;" onclick="closeReviewModal()">Бекор қилиш</button>
+            <img id="detailImg" class="detail-img" src="" alt="">
+            <h3 id="detailTitle" style="text-align: center; margin-bottom: 5px;"></h3>
+            <p id="detailSub" style="text-align: center; color: #666; font-size: 12px; margin-top: 0;"></p>
+            <div id="detailRating" style="text-align: center; margin-bottom: 10px;"></div>
+            
+            <hr style="border:0; border-top:1px solid #eee; margin:10px 0;">
+            
+            <div class="detail-text">
+                <strong>📜 Батафсил маълумот:</strong><br>
+                <span id="detailDesc"></span>
+            </div>
+            <div class="detail-text">
+                <strong>📍 Манзил:</strong> <span id="detailAddress"></span>
+            </div>
+            <div class="detail-text">
+                <strong>📞 Телефон:</strong> <a id="detailPhoneLink" href="" style="color:#2481cc; font-weight:bold; text-decoration:none;"><span id="detailPhone"></span></a>
+            </div>
+            <div class="detail-text">
+                <strong>⏰ Иш вақти:</strong> <span id="detailHours"></span>
+            </div>
+            <div class="detail-text" id="priceRow">
+                <strong id="priceLabel">💰 Қабул нархи:</strong> <span id="detailPrice"></span>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-top: 15px;">
+                <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Қабулга ёзилиш</button>
+                <button class="action-btn" style="background:#e0e0e0; color:#333;" onclick="closeDetailModal()">Ёпиш</button>
             </div>
         </div>
     </div>
@@ -354,37 +329,30 @@
             });
         }
 
-        let activeTargetId = "";
-        function openReviewModal(targetId, targetName) {
-            activeTargetId = targetId;
-            document.getElementById('modalTitle').innerText = targetName + ' uchun отзыв';
-            document.getElementById('reviewModal').classList.add('active');
-        }
-
-        function closeReviewModal() {
-            document.getElementById('reviewModal').classList.remove('active');
-            document.getElementById('reviewText').value = '';
-            document.getElementById('reviewerName').value = '';
-        }
-
-        function submitReview() {
-            let name = document.getElementById('reviewerName').value.trim();
-            let text = document.getElementById('reviewText').value.trim();
-            let rating = document.getElementById('ratingSelect').value;
-
-            if(name === "" || text === "") {
-                alert("Илтимос, исмингиз ва фикрингизни тўлиқ ёзинг!");
-                return;
+        /* Батафсил ойнани очиш */
+        function openDetailModal(type, title, img, sub, rating, desc, address, phone, hours, price) {
+            document.getElementById('detailImg').src = img;
+            document.getElementById('detailTitle').innerText = title;
+            document.getElementById('detailSub').innerText = sub;
+            document.getElementById('detailRating').innerText = rating;
+            document.getElementById('detailDesc').innerText = desc;
+            document.getElementById('detailAddress').innerText = address;
+            document.getElementById('detailPhone').innerText = phone;
+            document.getElementById('detailPhoneLink').href = 'tel:' + phone;
+            document.getElementById('detailHours').innerText = hours;
+            
+            if(type === 'doctor') {
+                document.getElementById('priceLabel').innerText = "💰 Консультация нархи:";
+            } else {
+                document.getElementById('priceLabel').innerText = "💰 Стационар / Маълумот:";
             }
+            document.getElementById('detailPrice').innerText = price;
 
-            let container = document.getElementById('reviews-' + activeTargetId);
-            let newReview = document.createElement('div');
-            newReview.className = 'review-item';
-            newReview.innerHTML = `<span class="review-author">${name}:</span> ${text} ${rating}`;
-            container.appendChild(newReview);
+            document.getElementById('detailModal').classList.add('active');
+        }
 
-            alert("Раҳмат! Отзивингиз муваффақиятли қўшилди.");
-            closeReviewModal();
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
         }
     </script>
 </body>
