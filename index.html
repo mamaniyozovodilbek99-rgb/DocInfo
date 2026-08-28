@@ -38,13 +38,14 @@
     <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
         <div class="flex items-center justify-between mb-3">
             <div>
-                <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
-                <p class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
+                <h1 id="appTitle" class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
+                <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
-            <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                </svg>
+            <!-- Language Switcher -->
+            <div class="flex items-center space-x-1 bg-white/20 p-1 rounded-xl backdrop-blur-sm">
+                <button onclick="changeLang('uz')" id="btnUz" class="px-2 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition">UZ</button>
+                <button onclick="changeLang('ru')" id="btnRu" class="px-2 py-1 text-xs font-bold rounded-lg text-white transition">RU</button>
+                <button onclick="changeLang('en')" id="btnEn" class="px-2 py-1 text-xs font-bold rounded-lg text-white transition">EN</button>
             </div>
         </div>
 
@@ -67,24 +68,15 @@
 
     <!-- Category Filters -->
     <div id="categoryFilters" class="bg-white py-2 px-4 border-b border-slate-100 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10">
-        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition">Барчаси</button>
-        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Стоматолог</button>
-        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Кардиolog</button>
-        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Терапевт</button>
-        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Хирург</button>
+        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition" data-cat="all">Барчаси</button>
+        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Stomatolog">Стоматолог</button>
+        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Kardiolog">Кардиолог</button>
+        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Terapevt">Терапевт</button>
+        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Xirurg">Хирург</button>
     </div>
 
     <!-- Main Content Container -->
     <main class="p-4 max-w-xl mx-auto">
-        <!-- iOS PWA Banner hint -->
-        <div id="iosInstallHint" class="hidden mb-4 bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-800 flex items-start justify-between">
-            <div>
-                <span class="font-bold block mb-0.5">iPhone ekraniga qo'shish:</span>
-                Safari brauzeridagi <span class="font-semibold">Ulashish (Поделиться)</span> tugmasini bosing va <span class="font-semibold">"На экран «Домой»"</span> ni tanlang.
-            </div>
-            <button onclick="document.getElementById('iosInstallHint').style.display='none'" class="text-sky-400 font-bold ml-2">✕</button>
-        </div>
-
         <div id="loading" class="text-center py-12 text-slate-400 text-sm">Ma'lumotlar yuklanmoqda...</div>
         <div id="contentList" class="space-y-3"></div>
     </main>
@@ -95,7 +87,7 @@
             <div class="flex justify-between items-start mb-4">
                 <h3 id="modalTitle" class="text-lg font-bold text-slate-800"></h3>
                 <button onclick="closeModal()" class="p-1 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <svg class="z-50 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div id="modalBody" class="space-y-4 text-sm"></div>
@@ -103,25 +95,97 @@
     </div>
 
     <script>
-        // Detect iOS & show hint if needed
-        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-        const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
-        if (isIos && !isInStandaloneMode) {
-            document.getElementById('iosInstallHint').style.display = 'flex';
+        // Translations Dictionary
+        const translations = {
+            uz: {
+                subtitle: "Shifokorlar va klinikalar katalogi",
+                searchPlaceholder: "Shifokor yoki mutaxassislikni izlash...",
+                tabDoctors: "Shifokorlar",
+                tabClinics: "Shifoxonalar",
+                allCat: "Барчаси",
+                experience: "yil tajriba",
+                free: "Bepul",
+                clinicLabel: "Klinika",
+                priceLabel: "Qabul narxi",
+                bookBtn: "Qabulga yozilish",
+                callBtn: "Qo'ng'iroq",
+                hoursLabel: "Ish vaqti",
+                bookedAlert: "qabuliga muvaffaqiyatli yozildingiz! Tez orada operatorlarimiz bog'lanishadi.",
+                notFound: "Hech qanday ma'lumot topilmadi"
+            },
+            ru: {
+                subtitle: "Каталог врачей и клиник",
+                searchPlaceholder: "Поиск врача или специализации...",
+                tabDoctors: "Врачи",
+                tabClinics: "Клиники",
+                allCat: "Все",
+                experience: "лет опыта",
+                free: "Бесплатно",
+                clinicLabel: "Клиника",
+                priceLabel: "Стоимость приема",
+                bookBtn: "Записаться на прием",
+                callBtn: "Позвонить",
+                hoursLabel: "Время работы",
+                bookedAlert: "Вы успешно записались на прием к! Скоро с вами свяжутся операторы.",
+                notFound: "Ничего не найдено"
+            },
+            en: {
+                subtitle: "Doctors and Clinics Directory",
+                searchPlaceholder: "Search doctor or specialization...",
+                tabDoctors: "Doctors",
+                tabClinics: "Clinics",
+                allCat: "All",
+                experience: "years of experience",
+                free: "Free",
+                clinicLabel: "Clinic",
+                priceLabel: "Consultation price",
+                bookBtn: "Book Appointment",
+                callBtn: "Call",
+                hoursLabel: "Working hours",
+                bookedAlert: "You have successfully booked an appointment with! Operators will contact you soon.",
+                notFound: "No information found"
+            }
+        };
+
+        let currentLang = localStorage.getItem('app_lang') || 'uz';
+
+        function changeLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('app_lang', lang);
+            
+            // Update buttons style
+            ['uz', 'ru', 'en'].forEach(l => {
+                const btn = document.getElementById('btn' + l.toUpperCase());
+                if (l === lang) {
+                    btn.className = "px-2 py-1 text-xs font-bold rounded-lg bg-white text-sky-700 shadow-xs transition";
+                } else {
+                    btn.className = "px-2 py-1 text-xs font-bold rounded-lg text-white transition";
+                }
+            });
+
+            updateTexts();
+            renderContent();
         }
 
-        // Telegram WebApp init
+        function updateTexts() {
+            const t = translations[currentLang];
+            document.getElementById('appSubtitle').textContent = t.subtitle;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('tabDoctors').textContent = t.tabDoctors;
+            document.getElementById('tabClinics').textContent = t.tabClinics;
+            document.querySelector('.cat-btn[data-cat="all"]').textContent = t.allCat;
+        }
+
         let tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
             tg.expand();
         }
 
-        // Mock Data fallback if Supabase is empty/offline, or actual dynamic fetch
         const mockDoctors = [
-            { id: 1, name: "Dr. Nizamov Qahramon", specialization: "Стоматолог-Ортодонт", experience: "25 yil tajriba", rating: 5.0, description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha yuqori malakali mutaxassis.", clinic: "Binafsha shifo", price: "Bepul", category: "Stomatolog" },
-            { id: 2, name: "Dr. Aliyev Javlon", specialization: "Кардиolog", experience: "10 yil tajriba", rating: 4.9, description: "Yurak qon-tomir kasalliklarini davolash va EKG tahlili.", clinic: "Akfa Medline", price: "150 000 so'm", category: "Kardiolog" },
-            { id: 3, name: "Dr. Karimova Dildora", specialization: "Терапевт", experience: "14 yil tajriba", rating: 4.8, description: " Kattalar va o'smirlar sog'ligini tekshirish, zamonaviy davolash usullari.", clinic: "Shifo Nur", price: "100 000 so'm", category: "Terapevt" }
+            { id: 1, name: "Dr. Nizamov Qahramon", specialization: "Стоматолог-Ортодонт", experience: 25, rating: 5.0, description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha yuqori malakali mutaxassis.", clinic: "Binafsha shifo", price: 0, category: "Stomatolog" },
+            { id: 2, name: "Dr. Aliyev Javlon", specialization: "Кардиолог", experience: 10, rating: 4.9, description: "Yurak qon-tomir kasalliklarini davolash va EKG tahlili.", clinic: "Akfa Medline", price: "150 000 so'm", category: "Kardiolog" },
+            { id: 3, name: "Dr. Karimova Dildora", specialization: "Терапевт", experience: 14, rating: 4.8, description: "Kattalar va o'smirlar sog'ligini tekshirish, zamonaviy davolash usullari.", clinic: "Shifo Nur", price: "100 000 so'm", category: "Terapevt" }
         ];
 
         const mockClinics = [
@@ -134,6 +198,7 @@
         let currentCategory = 'all';
 
         function renderContent() {
+            const t = translations[currentLang];
             const listEl = document.getElementById('contentList');
             document.getElementById('loading').style.display = 'none';
             listEl.innerHTML = '';
@@ -149,7 +214,7 @@
                 }
 
                 if (filtered.length === 0) {
-                    listEl.innerHTML = '<div class="text-center py-12 text-slate-400 text-sm">Hech qanday ma\'lumot topilmadi</div>';
+                    listEl.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">${t.notFound}</div>`;
                     return;
                 }
 
@@ -157,6 +222,7 @@
                     let card = document.createElement('div');
                     card.className = 'bg-white p-4 rounded-2xl shadow-xs border border-slate-100 active:scale-[0.99] transition cursor-pointer';
                     card.onclick = () => openDoctorDetail(doc);
+                    let displayPrice = (doc.price === 0) ? t.free : doc.price;
                     card.innerHTML = `
                         <div class="flex items-start space-x-3">
                             <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 font-bold text-lg shrink-0">
@@ -167,11 +233,11 @@
                                     <h4 class="font-bold text-slate-800 text-sm truncate">${doc.name}</h4>
                                     <span class="flex items-center text-amber-500 text-xs font-semibold bg-amber-50 px-2 py-0.5 rounded-full">★ ${doc.rating}</span>
                                 </div>
-                                <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.specialization} • ${doc.experience}</p>
+                                <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.specialization} • ${doc.experience} ${t.experience}</p>
                                 <p class="text-xs text-slate-500 mt-1 line-clamp-1">${doc.description}</p>
                                 <div class="mt-2.5 pt-2 border-t border-slate-50 flex items-center justify-between text-xs">
                                     <span class="text-slate-500">📍 ${doc.clinic}</span>
-                                    <span class="font-bold text-emerald-600">${doc.price}</span>
+                                    <span class="font-bold text-emerald-600">${displayPrice}</span>
                                 </div>
                             </div>
                         </div>
@@ -191,10 +257,10 @@
                     card.innerHTML = `
                         <h4 class="font-bold text-slate-800 text-sm">${clinic.name}</h4>
                         <p class="text-xs text-slate-500 mt-1">📍 ${clinic.address}</p>
-                        <p class="text-xs text-slate-500 mt-0.5">🕒 Ish vaqti: ${clinic.hours}</p>
+                        <p class="text-xs text-slate-500 mt-0.5">🕒 ${t.hoursInfo || 'Ish vaqti'}: ${clinic.hours}</p>
                         <div class="mt-3 pt-2 border-t border-slate-50 flex justify-between items-center text-xs">
                             <span class="text-sky-600 font-medium">${clinic.phone}</span>
-                            <a href="tel:${clinic.phone}" class="bg-sky-50 text-sky-600 px-3 py-1 rounded-lg font-semibold">Qo'ng'iroq</a>
+                            <a href="tel:${clinic.phone}" class="bg-sky-50 text-sky-600 px-3 py-1 rounded-lg font-semibold">${t.callBtn}</a>
                         </div>
                     `;
                     listEl.appendChild(card);
@@ -223,7 +289,7 @@
         function filterCategory(cat) {
             currentCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                if(btn.textContent.includes(cat) || (cat === 'all' && btn.textContent === 'Барчаси')) {
+                if(btn.getAttribute('data-cat') === cat) {
                     btn.className = "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition";
                 } else {
                     btn.className = "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition";
@@ -235,27 +301,29 @@
         document.getElementById('searchInput').addEventListener('input', renderContent);
 
         function openDoctorDetail(doc) {
+            const t = translations[currentLang];
             document.getElementById('modalTitle').textContent = doc.name;
+            let displayPrice = (doc.price === 0) ? t.free : doc.price;
             document.getElementById('modalBody').innerHTML = `
                 <div class="bg-sky-50 p-3 rounded-xl">
                     <p class="text-xs text-sky-600 font-semibold">${doc.specialization}</p>
-                    <p class="text-xs text-slate-600 mt-1">${doc.experience} • Reyting: ★ ${doc.rating}</p>
+                    <p class="text-xs text-slate-600 mt-1">${doc.experience} ${t.experience} • Reyting: ★ ${doc.rating}</p>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Ma'lumot</h5>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Info</h5>
                     <p class="text-slate-600 text-xs leading-relaxed">${doc.description}</p>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Klinika</h5>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">${t.clinicLabel}</h5>
                     <p class="text-slate-800 text-xs font-medium">📍 ${doc.clinic}</p>
                 </div>
                 <div>
-                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Qabul narxi</h5>
-                    <p class="text-emerald-600 font-bold text-sm">${doc.price}</p>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">${t.priceLabel}</h5>
+                    <p class="text-emerald-600 font-bold text-sm">${displayPrice}</p>
                 </div>
                 <div class="pt-2">
                     <button onclick="bookAppointment('${doc.name}')" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm">
-                        Qabulga yozilish
+                        ${t.bookBtn}
                     </button>
                 </div>
             `;
@@ -267,12 +335,13 @@
         }
 
         function bookAppointment(docName) {
-            alert(`Siz "${docName}" qabuliga muvaffaqiyatli yozildingiz! Tez orada operatorlarimiz bog'lanishadi.`);
+            const t = translations[currentLang];
+            alert(`${docName} ${t.bookedAlert}`);
             closeModal();
         }
 
-        // Initial render
-        renderContent();
+        // Initialize language on load
+        changeLang(currentLang);
     </script>
 </body>
 </html>
