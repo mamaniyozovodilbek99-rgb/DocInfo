@@ -30,22 +30,26 @@
         h1 { margin: 0; font-size: 20px; }
         p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
 
-        .tabs {
+        .tabs, .filter-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 8px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
         }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
+        .tab-btn, .filter-btn {
+            padding: 8px 12px;
             border: none;
             background: #e0e0e0;
             color: #333;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
+            white-space: nowrap;
+            font-size: 12px;
         }
-        .tab-btn.active {
+        .tabs .tab-btn { flex: 1; }
+        .tab-btn.active, .filter-btn.active {
             background: var(--tg-theme-button-color, #2481cc);
             color: var(--tg-theme-button-text-color, #fff);
         }
@@ -90,6 +94,21 @@
             border-radius: 6px;
         }
 
+        /* Отзывлар блоги карточка ичида */
+        .reviews-container {
+            margin-top: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 8px;
+        }
+        .review-item {
+            font-size: 12px;
+            background: #f9f9f9;
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: 6px;
+        }
+        .review-author { font-weight: bold; color: #333; }
+
         .btn-group {
             display: flex;
             gap: 8px;
@@ -106,9 +125,7 @@
             cursor: pointer;
             font-size: 12px;
         }
-        .review-btn {
-            background: #f39c12;
-        }
+        .review-btn { background: #f39c12; }
 
         /* Modal oyna */
         .modal {
@@ -129,15 +146,15 @@
             max-width: 320px;
         }
         .modal-content h3 { margin-top: 0; font-size: 16px; }
-        .modal-content select, .modal-content textarea {
+        .modal-content select, .modal-content textarea, .modal-content input {
             width: 100%;
             padding: 8px;
-            margin: 8px 0 12px 0;
+            margin: 6px 0 10px 0;
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 13px;
         }
-        .modal-content textarea { height: 70px; resize: none; }
+        .modal-content textarea { height: 60px; resize: none; }
     </style>
 </head>
 <body>
@@ -152,78 +169,126 @@
         <button class="tab-btn" onclick="switchTab('hospitals')">Шифохоналар</button>
     </div>
 
+    <!-- ШИФОКОРЛАР БЎЛИМИ -->
     <div id="doctors" class="content-section active">
-        <div class="card">
-            <div class="card-header">
-                <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Доктор">
-                <div>
-                    <h3 class="card-title">Др. Алиев Жавлон</h3>
-                    <p class="card-sub">Кардиолог • 10 йил тажриба</p>
-                    <div class="rating">⭐ 4.9 (124 та отзыв)</div>
+        <!-- Шифокорлар учун фильтрлар -->
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filterDoctors('all')">Барчаси</button>
+            <button class="filter-btn" onclick="filterDoctors('stomatolog')">Стоматолог</button>
+            <button class="filter-btn" onclick="filterDoctors('terapevt')">Терапевт</button>
+            <button class="filter-btn" onclick="filterDoctors('xirurg')">Хирург</button>
+            <button class="filter-btn" onclick="filterDoctors('kardiolog')">Кардиолог</button>
+        </div>
+
+        <div id="doctorCardsList">
+            <!-- Др. Алиев (Кардиолог) -->
+            <div class="card doc-card" data-category="kardiolog">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150" alt="Доктор">
+                    <div>
+                        <h3 class="card-title">Др. Алиев Жавлон</h3>
+                        <p class="card-sub">Кардиолог • 10 йил тажриба</p>
+                        <div class="rating">⭐ 4.9</div>
+                    </div>
+                </div>
+                <p class="description">Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили.</p>
+                <div class="info-row"><span>📍 Клиника: Akfa Medline</span></div>
+                <div class="info-row"><span>Қабул нархи:</span><span class="price">150 000 сўм</span></div>
+                
+                <div class="reviews-container" id="reviews-doc-1">
+                    <div class="review-item"><span class="review-author">Aziz:</span> Зўр шифокор, маслаҳатлари учун раҳмат! ⭐5</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
+                    <button class="action-btn review-btn" onclick="openReviewModal('doc-1', 'Др. Алиев Жавлон')">⭐ Отзыв ёзиш</button>
                 </div>
             </div>
-            <p class="description">Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили.</p>
-            <div class="info-row"><span>📍 Клиника: Akfa Medline</span></div>
-            <div class="info-row"><span>Қабул нархи:</span><span class="price">150 000 сўм</span></div>
-            <div class="btn-group">
-                <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
-                <button class="action-btn review-btn" onclick="openReviewModal('Др. Алиев Жавлон')">⭐ Отзыв ёзиш</button>
+
+            <!-- Др. Каримова (Стоматолог) -->
+            <div class="card doc-card" data-category="stomatolog">
+                <div class="card-header">
+                    <img src="https://images.unsplash.com/photo-1594824813567-4bb5962d3a6c?w=150" alt="Доктор">
+                    <div>
+                        <h3 class="card-title">Др. Каримова Нигора</h3>
+                        <p class="card-sub">Стоматолог • 8 йил тажриба</p>
+                        <div class="rating">⭐ 4.8</div>
+                    </div>
+                </div>
+                <p class="description">Тишларни davolash, протезлаш ва оғриқсиз даволаш.</p>
+                <div class="info-row"><span>📍 Клиника: Stoma Dental</span></div>
+                <div class="info-row"><span>Қабул нархи:</span><span class="price">120 000 сўм</span></div>
+                
+                <div class="reviews-container" id="reviews-doc-2">
+                    <div class="review-item"><span class="review-author">Malika:</span> Ишининг устаси экан, оғриқ сезмадим. ⭐5</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Ёзилиш</button>
+                    <button class="action-btn review-btn" onclick="openReviewModal('doc-2', 'Др. Каримова Нигора')">⭐ Отзыв ёзиш</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- ШИФОХОНАЛАР БЎЛИМИ -->
     <div id="hospitals" class="content-section">
-        <div class="card">
-            <div class="card-header hospital-header">
-                <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
-                <div>
-                    <h3 class="card-title">Akfa Medline Hospital</h3>
-                    <p class="card-sub">Кўп тармоqli тиббиёт маркази</p>
-                    <div class="rating">⭐ 4.9 (450 та отзыв)</div>
-                </div>
-            </div>
-            <p class="description">Энг сўнгги русумдаги тиббий жиҳозлар ва стационар хизмати.</p>
-            <div class="info-row">
-                <span>📍 Манзил: Беруний кўчаси, 3-уй</span>
-                <a href="https://yandex.uz/maps/?text=Akfa%20Medline%20Tashkent" target="_blank" class="map-link">🗺️ Картада кўриш</a>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
-                <button class="action-btn review-btn" onclick="openReviewModal('Akfa Medline Hospital')">⭐ Отзыв ёзиш</button>
-            </div>
+        <!-- Вилоятлар фильтри -->
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="filterRegion('tashkent-city')">Тошкент ш.</button>
+            <button class="filter-btn" onclick="filterRegion('tashkent-vil')">Тошкент вил.</button>
+            <button class="filter-btn" onclick="filterRegion('samarkand')">Самарқанд</button>
+        </div>
+        <!-- Туманлар фильтри -->
+        <div class="filter-group" style="background:#eef4f8; padding:6px; border-radius:8px;">
+            <button class="filter-btn active" onclick="filterDistrict('all')">Барча туманлар</button>
+            <button class="filter-btn" onclick="filterDistrict('chilonzor')">Чилонзор</button>
+            <button class="filter-btn" onclick="filterDistrict('yunusobod')">Юнусобод</button>
+            <button class="filter-btn" onclick="filterDistrict('mirzo-ulugbek')">Мирзо Улуғбек</button>
         </div>
 
-        <div class="card">
-            <div class="card-header hospital-header">
-                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150" alt="Клиника">
-                <div>
-                    <h3 class="card-title">City Hospital</h3>
-                    <p class="card-sub">Халқаро стандартдаги шифохона</p>
-                    <div class="rating">⭐ 4.7 (310 та отзыв)</div>
+        <div id="hospitalCardsList">
+            <!-- Akfa Medline -->
+            <div class="card hosp-card" data-region="tashkent-city" data-district="chilonzor">
+                <div class="card-header hospital-header">
+                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
+                    <div>
+                        <h3 class="card-title">Akfa Medline Hospital</h3>
+                        <p class="card-sub">Кўп тармоqli тиббиёт маркази</p>
+                        <div class="rating">⭐ 4.9</div>
+                    </div>
                 </div>
-            </div>
-            <p class="description">Беморлар учун юқори даражадаги шароитлар ва тез ёрдам.</p>
-            <div class="info-row">
-                <span>📍 Манзил: Чилонзор тумани</span>
-                <a href="https://yandex.uz/maps/?text=City%20Hospital%20Tashkent" target="_blank" class="map-link">🗺️ Картада кўриш</a>
-            </div>
-            <div class="btn-group">
-                <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
-                <button class="action-btn review-btn" onclick="openReviewModal('City Hospital')">⭐ Отзыв ёзиш</button>
+                <p class="description">Энг сўнгги русумдаги тиббий жиҳозлар ва стационар хизмати.</p>
+                <div class="info-row">
+                    <span>📍 Чилонзор тумани, Беруний кўчаси</span>
+                    <a href="https://yandex.uz/maps/?text=Akfa%20Medline%20Tashkent" target="_blank" class="map-link">🗺️ Карта</a>
+                </div>
+                
+                <div class="reviews-container" id="reviews-hosp-1">
+                    <div class="review-item"><span class="review-author">Sardor:</span> Шароитлар юқори даражада. ⭐5</div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="action-btn" onclick="alert('Клиника ҳақида маълумот!')">Батафсил</button>
+                    <button class="action-btn review-btn" onclick="openReviewModal('hosp-1', 'Akfa Medline Hospital')">⭐ Отзыв ёзиш</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Отзыв ёзиш модал ойнаси -->
     <div id="reviewModal" class="modal">
         <div class="modal-content">
             <h3 id="modalTitle">Отзыв қолдириш</h3>
-            <label style="font-size:12px; color:#555;">Баҳоingизни танланг:</label>
+            <label style="font-size:12px; color:#555;">Исмingiz:</label>
+            <input type="text" id="reviewerName" placeholder="Исмingizni kiriting">
+            <label style="font-size:12px; color:#555;">Баҳоingiz:</label>
             <select id="ratingSelect">
-                <option value="5">⭐⭐⭐⭐⭐ (5 - Аъло)</option>
-                <option value="4">⭐⭐⭐⭐ (4 - Яхши)</option>
-                <option value="3">⭐⭐⭐ (3 - Қониқарли)</option>
-                <option value="2">⭐⭐ (2 - Ёмон)</option>
-                <option value="1">⭐ (1 - Жуда ёмон)</option>
+                <option value="⭐5">⭐⭐⭐⭐⭐ (5 - Аъло)</option>
+                <option value="⭐4">⭐⭐⭐⭐ (4 - Яхши)</option>
+                <option value="⭐3">⭐⭐⭐ (3 - Қониқарли)</option>
+                <option value="⭐2">⭐⭐ (2 - Ёмон)</option>
+                <option value="⭐1">⭐ (1 - Жуда ёмон)</option>
             </select>
             <label style="font-size:12px; color:#555;">Фикрингизни ёзинг:</label>
             <textarea id="reviewText" placeholder="Хизмат сифати қандай эди?"></textarea>
@@ -242,9 +307,46 @@
             event.currentTarget.classList.add('active');
         }
 
-        let selectedTarget = "";
-        function openReviewModal(targetName) {
-            selectedTarget = targetName;
+        // Шифокорлар мутахассислиги бўйича фильтр
+        function filterDoctors(category) {
+            document.querySelectorAll('#doctors .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            let cards = document.querySelectorAll('.doc-card');
+            cards.forEach(card => {
+                if(category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Шифохоналар вилоят бўйича фильтр
+        function filterRegion(region) {
+            document.querySelectorAll('#hospitals .filter-group:first-of-type .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            // Бу ерда келгусида вилоят кесимида кенгайтириш мумкин
+        }
+
+        // Шифохоналар туман бўйича фильтр
+        function filterDistrict(district) {
+            document.querySelectorAll('#hospitals .filter-group:nth-of-type(2) .filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            let cards = document.querySelectorAll('.hosp-card');
+            cards.forEach(card => {
+                if(district === 'all' || card.getAttribute('data-district') === district) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        let activeTargetId = "";
+        function openReviewModal(targetId, targetName) {
+            activeTargetId = targetId;
             document.getElementById('modalTitle').innerText = targetName + ' uchun отзыв';
             document.getElementById('reviewModal').classList.add('active');
         }
@@ -252,15 +354,27 @@
         function closeReviewModal() {
             document.getElementById('reviewModal').classList.remove('active');
             document.getElementById('reviewText').value = '';
+            document.getElementById('reviewerName').value = '';
         }
 
+        // Отзывни жўнатиб, экранга чиқариш
         function submitReview() {
-            let text = document.getElementById('reviewText').value;
-            if(text.trim() === "") {
-                alert("Илтимос, фикрингизни ёзинг!");
+            let name = document.getElementById('reviewerName').value.trim();
+            let text = document.getElementById('reviewText').value.trim();
+            let rating = document.getElementById('ratingSelect').value;
+
+            if(name === "" || text === "") {
+                alert("Илтимос, исмингиз ва фикрингизни тўлиқ ёзинг!");
                 return;
             }
-            alert("Раҳмат! Отзивингиз қабул қилинди ва сайтга қўшилди.");
+
+            let container = document.getElementById('reviews-' + activeTargetId);
+            let newReview = document.createElement('div');
+            newReview.className = 'review-item';
+            newReview.innerHTML = `<span class="review-author">${name}:</span> ${text} ${rating}`;
+            container.appendChild(newReview);
+
+            alert("Раҳмат! Отзивингиз муваффақиятли қўшилди ва бошқаларга кўринди.");
             closeReviewModal();
         }
     </script>
