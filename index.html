@@ -2,365 +2,277 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DocInfo Tashkent</title>
+    <!-- PWA & iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DocInfo">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/stethoscope.png">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
+      \"name\": \"DocInfo Tashkent\",
+      \"short_name\": \"DocInfo\",
+      \"start_url\": \"./\",
+      \"display\": \"standalone\",
+      \"background_color\": \"#f8fafc\",
+      \"theme_color\": \"#0284c7\",
+      \"icons\": [{
+        \"src\": \"https://img.icons8.com/color/512/stethoscope.png\",
+        \"sizes\": \"512x512\",
+        \"type\": \"image/png\"
+      }]
+    }">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root {
-            --tg-theme-bg-color: #f4f6f9;
-            --tg-theme-text-color: #222;
-            --tg-theme-button-color: #2481cc;
-            --tg-theme-button-text-color: #fff;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f4f6f9);
-            color: var(--tg-theme-text-color, #222);
-            margin: 0;
-            padding: 10px;
-        }
-        header {
-            background: linear-gradient(135deg, #0088cc, #00aaff);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-        h1 { margin: 0; font-size: 20px; }
-        p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
-
-        .tabs, .filter-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-        .tab-btn, .filter-btn {
-            padding: 8px 12px;
-            border: none;
-            background: #e0e0e0;
-            color: #333;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            white-space: nowrap;
-            font-size: 12px;
-        }
-        .tabs .tab-btn { flex: 1; }
-        .tab-btn.active, .filter-btn.active {
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #fff);
-        }
-
-        .content-section { display: none; }
-        .content-section.active { display: block; }
-
-        .card {
-            background: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.1s ease;
-        }
-        .card:active { transform: scale(0.98); }
-        .card-header {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .card img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .hospital-header img { border-radius: 8px; }
-        .card-title { font-size: 16px; font-weight: bold; margin: 0 0 3px 0; }
-        .card-sub { font-size: 13px; color: #666; margin: 0; }
-        .rating { color: #f39c12; font-size: 14px; margin: 5px 0; }
-        .description { font-size: 13px; color: #444; margin: 8px 0; line-height: 1.4; }
-        .info-row { font-size: 13px; color: #555; margin: 6px 0; display: flex; justify-content: space-between; align-items: center; }
-        .price { font-weight: bold; color: #27ae60; }
-        .free-price { font-weight: bold; color: #e67e22; }
-
-        /* Батафсил ойна стиллари */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            width: 88%;
-            max-width: 350px;
-            max-height: 85vh;
-            overflow-y: auto;
-        }
-        .detail-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; display: block; margin: 0 auto 10px auto; }
-        
-        .details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-            margin: 12px 0;
-        }
-        .detail-box {
-            background: #fff;
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #eee;
-            text-align: center;
-        }
-        .detail-box span { font-size: 11px; color: #777; display: block; }
-        .detail-box strong { font-size: 13px; color: #333; }
-
-        .detail-text { font-size: 13px; color: #444; line-height: 1.4; margin-bottom: 8px; }
-        
-        .action-btn {
-            width: 100%;
-            padding: 11px;
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #fff);
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 13px;
-            margin-top: 5px;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 min-h-screen pb-20">
 
-    <header>
-        <h1>DocInfo Tashkent</h1>
-        <p>Шифокорлар ва клиникалар каталоги</p>
+    <!-- Header / Banner -->
+    <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
+        <div class="flex items-center justify-between mb-3">
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
+                <p class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
+            </div>
+            <div class="bg-white/20 p-2 rounded-full backdrop-blur-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </span>
+            <input type="text" id="searchInput" placeholder="Shifokor yoki mutaxassislikni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400">
+        </div>
     </header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('doctors')">Шифокорлар</button>
-        <button class="tab-btn" onclick="switchTab('hospitals')">Шифохоналар</button>
-    </div>
-
-    <div id="doctors" class="content-section active">
-        <div class="filter-group">
-            <button class="filter-btn active" onclick="filterDoctors('all')">Барчаси</button>
-            <button class="filter-btn" onclick="filterDoctors('stomatolog')">Стоматолог</button>
-            <button class="filter-btn" onclick="filterDoctors('kardiolog')">Кардиолог</button>
-            <button class="filter-btn" onclick="filterDoctors('terapevt')">Терапевт</button>
-            <button class="filter-btn" onclick="filterDoctors('xirurg')">Хирург</button>
-        </div>
-
-        <div id="doctorCardsList">
-            <div class="card doc-card" data-category="stomatolog" onclick="openDetailModal('doctor', 'Др. Низамов Қаҳрамон', 'IMG_0555.jpeg', 'Стоматолог-Ортодонт', '⭐ 5.0 (Рекорд баҳо)', 'Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.', '25 йил', 'Бепул', 'Binafsha shifo (ТТЗ-4)', 'https://yandex.uz/maps/-/CDuW6Z3l', '+998 94 622 15 22', 'Душ-Шан: 9:00 - 19:00')">
-                <div class="card-header">
-                    <img src="IMG_0555.jpeg" alt="Др. Низамов Қаҳрамон">
-                    <div>
-                        <h3 class="card-title">Др. Низамов Қаҳрамон</h3>
-                        <p class="card-sub">Стоматолог-Ортодонт • 25 йил тажриба</p>
-                        <div class="rating">⭐ 5.0</div>
-                    </div>
-                </div>
-                <p class="description">Ортодонтик, терапевтик ва хирургик стоматология йўналишлари бўйича юқори малакали мутахассис.</p>
-                <div class="info-row"><span>📍 Шифохона: Binafsha shifo</span></div>
-                <div class="info-row"><span>Консультация:</span><span class="free-price">Бепул</span></div>
-            </div>
-
-            <div class="card doc-card" data-category="kardiolog" onclick="openDetailModal('doctor', 'Др. Алиев Жавлон', 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150', 'Кардиолог', '⭐ 4.9', 'Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили бўйича эксперт.', '10 йил', '150 000 сўм', 'Akfa Medline (Чилонзор)', 'https://yandex.uz/maps/-/CDuW6W8Z', '+998 71 203-00-00', 'Душ-Жума: 8:00 - 17:00')">
-                <div class="card-header">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" alt="Доктор">
-                    <div>
-                        <h3 class="card-title">Др. Алиев Жавлон</h3>
-                        <p class="card-sub">Кардиолог • 10 йил тажриба</p>
-                        <div class="rating">⭐ 4.9</div>
-                    </div>
-                </div>
-                <p class="description">Юрак қон-томир касалликларини даволаш ва ЭКГ таҳлили.</p>
-                <div class="info-row"><span>📍 Клиника: Akfa Medline</span></div>
-                <div class="info-row"><span>Қабул нархи:</span><span class="price">150 000 сўм</span></div>
-            </div>
-
-            <div class="card doc-card" data-category="terapevt" onclick="openDetailModal('doctor', 'Др. Каримова Дилдора', 'https://images.unsplash.com/photo-1594824813589-2eb26fc36605?w=150', 'Олий тоифали терапевт', '⭐ 4.8', 'Умумий терапия, иммунитетни кўтариш ва сурункали касалликларни даволаш.', '14 йил', '100 000 сўм', 'Shifo Nur (Юнусобод)', 'https://yandex.uz/maps/-/CDuW6Y4N', '+998 71 123-44-55', 'Душ-Шан: 8:30 - 16:00')">
-                <div class="card-header">
-                    <img src="https://images.unsplash.com/photo-1594824813589-2eb26fc36605?w=150" alt="Доктор">
-                    <div>
-                        <h3 class="card-title">Др. Каримова Дилдора</h3>
-                        <p class="card-sub">Терапевт • 14 йил тажриба</p>
-                        <div class="rating">⭐ 4.8</div>
-                    </div>
-                </div>
-                <p class="description">Катталар ва ўсмирлар соғлиғини текшириш, замонавий даволаш усуллари.</p>
-                <div class="info-row"><span>📍 Клиника: Shifo Nur</span></div>
-                <div class="info-row"><span>Қабул нархи:</span><span class="price">100 000 сўм</span></div>
-            </div>
-
-            <div class="card doc-card" data-category="xirurg" onclick="openDetailModal('doctor', 'Др. Умаров Баҳодир', 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150', 'Хирург-Травматолог', '⭐ 4.9', 'Бўғимлар ва суяк тизими жароҳатларини даволаш, кичик амбулатор операциялар.', '18 йил', '180 000 сўм', 'Med Главсервис (Мирзо Улуғбек)', 'https://yandex.uz/maps/-/CDuW6U1K', '+998 71 234-56-78', 'Душ-Жума: 9:00 - 18:00')">
-                <div class="card-header">
-                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150" alt="Доктор">
-                    <div>
-                        <h3 class="card-title">Др. Умаров Баҳодир</h3>
-                        <p class="card-sub">Хирург • 18 йил тажриба</p>
-                        <div class="rating">⭐ 4.9</div>
-                    </div>
-                </div>
-                <p class="description">Травматология ва хирургия бўйича малакали мутахассис.</p>
-                <div class="info-row"><span>📍 Клиника: Med Главсервис</span></div>
-                <div class="info-row"><span>Қабул нархи:</span><span class="price">180 000 сўм</span></div>
-            </div>
+    <!-- Navigation Tabs -->
+    <div class="bg-white px-4 py-3 shadow-xs border-b border-slate-100 sticky top-[120px] z-20">
+        <div class="flex space-x-2">
+            <button id="tabDoctors" onclick="switchTab('doctors')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
+            <button id="tabClinics" onclick="switchTab('clinics')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition">Shifoxonalar</button>
         </div>
     </div>
 
-    <div id="hospitals" class="content-section">
-        <div id="hospitalCardsList">
-            <div class="card hosp-card" onclick="openDetailModal('hospital', 'Binafsha shifo', 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150', 'Оилавий тиббиёт корхонаси', '⭐ 5.0', 'Замонавий тиббий жиҳозлар ва малакали шифокорлар хизмати.', 'Манзил бўйича', 'Келишилган ҳолда', 'Мирзо Улуғбек т., TTZ-4', 'https://yandex.uz/maps/-/CDuW6Z3l', '+998 94 622 15 22', 'Душ-Шан: 9:00 - 19:00')">
-                <div class="card-header hospital-header">
-                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=150" alt="Клиника">
-                    <div>
-                        <h3 class="card-title">Binafsha shifo</h3>
-                        <p class="card-sub">Оилавий тиббиёт корхонаси</p>
-                        <div class="rating">⭐ 5.0</div>
-                    </div>
-                </div>
-                <p class="description">Бош шифокор: Др. Низамов Қаҳрамон Маманиязович.</p>
-                <div class="info-row"><span>📍 ТТЗ-4, 11-дом</span></div>
-            </div>
-
-            <div class="card hosp-card" onclick="openDetailModal('hospital', 'Akfa Medline Hospital', 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150', 'Кўп тармоqli тиббиёт маркази', '⭐ 4.9', 'Энг сўнгги русумдаги тиббий асбоб-ускуналар ва юқори даражали стационар.', 'Стационар ва амбулатория', 'Кўп тармоqli', 'Чилонзор тумани, Беруний кўчаси', 'https://yandex.uz/maps/-/CDuW6W8Z', '+998 71 203-00-00', 'Ҳафтанинг 7 куни: 24 соат')">
-                <div class="card-header hospital-header">
-                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=150" alt="Клиника">
-                    <div>
-                        <h3 class="card-title">Akfa Medline Hospital</h3>
-                        <p class="card-sub">Кўп тармоqli тиббиёт маркази</p>
-                        <div class="rating">⭐ 4.9</div>
-                    </div>
-                </div>
-                <p class="description">Юқори тоифали шифокорлар ва кенг қамровли текширувлар.</p>
-                <div class="info-row"><span>📍 Чилонзор тумани</span></div>
-            </div>
-
-            <div class="card hosp-card" onclick="openDetailModal('hospital', 'Shifo Nur клиникаси', 'https://images.unsplash.com/photo-1516549655169-df83a0774514?w=150', 'Хусусий тиббиёт маркази', '⭐ 4.8', 'Терапия, педиатрия ва ультратовуш (УЗИ) текширувлари.', 'Тезкор таҳлиллар', 'Хусусий клиника', 'Юнусобод тумани, 12-мавзе', 'https://yandex.uz/maps/-/CDuW6Y4N', '+998 71 123-44-55', 'Душ-Шан: 8:00 - 18:00')">
-                <div class="card-header hospital-header">
-                    <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=150" alt="Клиника">
-                    <div>
-                        <h3 class="card-title">Shifo Nur клиникаси</h3>
-                        <p class="card-sub">Хусусий тиббиёт маркази</p>
-                        <div class="rating">⭐ 4.8</div>
-                    </div>
-                </div>
-                <p class="description">Оилавий ва профилактик тиббиёт хизматлари.</p>
-                <div class="info-row"><span>📍 Юнусобод тумани</span></div>
-            </div>
-
-            <div class="card hosp-card" onclick="openDetailModal('hospital', 'Med Главсервис', 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=150', 'Тармоқли шифохона', '⭐ 4.9', 'Хирургия, травматология ва диагностика маркази.', 'Малакали ёрдам', 'Тармоқли марказ', 'Мирзо Улуғбек т., Буюк Ипак Йўли', 'https://yandex.uz/maps/-/CDuW6U1K', '+998 71 234-56-78', 'Ҳафтанинг 7 куни: 8:00 - 20:00')">
-                <div class="card-header hospital-header">
-                    <img src="https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=150" alt="Клиника">
-                    <div>
-                        <h3 class="card-title">Med Главсервис</h3>
-                        <p class="card-sub">Тармоқли шифохона</p>
-                        <div class="rating">⭐ 4.9</div>
-                    </div>
-                </div>
-                <p class="description">Замонавий диагностика ва жарроҳлик бўлими.</p>
-                <div class="info-row"><span>📍 Мирзо Улуғбек т.</span></div>
-            </div>
-        </div>
+    <!-- Category Filters -->
+    <div id="categoryFilters" class="bg-white py-2 px-4 border-b border-slate-100 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10">
+        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition">Барчаси</button>
+        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Стоматолог</button>
+        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Кардиolog</button>
+        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Терапевт</button>
+        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition">Хирург</button>
     </div>
 
-    <div id="detailModal" class="modal">
-        <div class="modal-content">
-            <img id="detailImg" class="detail-img" src="" alt="">
-            <h3 id="detailTitle" style="text-align: center; margin: 0 0 4px 0;"></h3>
-            <p id="detailSub" style="text-align: center; color: #666; font-size: 12px; margin: 0 0 8px 0;"></p>
-            <div id="detailRating" style="text-align: center; color: #f39c12; font-size: 13px; margin-bottom: 10px;"></div>
-            
-            <p id="detailDesc" class="detail-text" style="background: #f4f6f9; padding: 10px; border-radius: 8px;"></p>
-
-            <div class="details-grid">
-                <div class="detail-box">
-                    <span>Тажриба</span>
-                    <strong id="detailExperience"></strong>
-                </div>
-                <div class="detail-box">
-                    <span>Нархи</span>
-                    <strong id="detailPrice" style="color: #27ae60;"></strong>
-                </div>
-                <div class="detail-box" style="grid-column: span 2;">
-                    <span>Манзил (Яндекс карта)</span>
-                    <a id="detailAddressLink" href="" target="_blank" style="color: #2481cc; font-weight: bold; text-decoration: none; display: block; margin-top: 2px;"><span id="detailAddress"></span> 🗺️</a>
-                </div>
-                <div class="detail-box" style="grid-column: span 2;">
-                    <span>Иш вақти</span>
-                    <strong id="detailHours"></strong>
-                </div>
+    <!-- Main Content Container -->
+    <main class="p-4 max-w-xl mx-auto">
+        <!-- iOS PWA Banner hint -->
+        <div id="iosInstallHint" class="hidden mb-4 bg-sky-50 border border-sky-200 rounded-xl p-3 text-xs text-sky-800 flex items-start justify-between">
+            <div>
+                <span class="font-bold block mb-0.5">iPhone ekraniga qo'shish:</span>
+                Safari brauzeridagi <span class="font-semibold">Ulashish (Поделиться)</span> tugmasini bosing va <span class="font-semibold">"На экран «Домой»"</span> ni tanlang.
             </div>
+            <button onclick="document.getElementById('iosInstallHint').style.display='none'" class="text-sky-400 font-bold ml-2">✕</button>
+        </div>
 
-            <div class="detail-text" style="text-align: center; margin-bottom: 10px;">
-                📞 Телефон: <a id="detailPhoneLink" href="" style="color:#2481cc; font-weight:bold; text-decoration:none;"><span id="detailPhone"></span></a>
+        <div id="loading" class="text-center py-12 text-slate-400 text-sm">Ma'lumotlar yuklanmoqda...</div>
+        <div id="contentList" class="space-y-3"></div>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl transform transition-transform">
+            <div class="flex justify-between items-start mb-4">
+                <h3 id="modalTitle" class="text-lg font-bold text-slate-800"></h3>
+                <button onclick="closeModal()" class="p-1 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
-
-            <button class="action-btn" onclick="alert('Қабулга ёзилиш сўрови юборилди!')">Қабулга ёзилиш</button>
-            <button class="action-btn" style="background:#e0e0e0; color:#333; margin-top:6px;" onclick="closeDetailModal()">Ёпиш</button>
+            <div id="modalBody" class="space-y-4 text-sm"></div>
         </div>
     </div>
 
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+        // Detect iOS & show hint if needed
+        const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+        const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+        if (isIos && !isInStandaloneMode) {
+            document.getElementById('iosInstallHint').style.display = 'flex';
         }
 
-        function filterDoctors(category) {
-            document.querySelectorAll('#doctors .filter-btn').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            let cards = document.querySelectorAll('.doc-card');
-            cards.forEach(card => {
-                if(category === 'all' || card.getAttribute('data-category') === category) {
-                    card.style.display = 'block';
+        // Telegram WebApp init
+        let tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        // Mock Data fallback if Supabase is empty/offline, or actual dynamic fetch
+        const mockDoctors = [
+            { id: 1, name: "Dr. Nizamov Qahramon", specialization: "Стоматолог-Ортодонт", experience: "25 yil tajriba", rating: 5.0, description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha yuqori malakali mutaxassis.", clinic: "Binafsha shifo", price: "Bepul", category: "Stomatolog" },
+            { id: 2, name: "Dr. Aliyev Javlon", specialization: "Кардиolog", experience: "10 yil tajriba", rating: 4.9, description: "Yurak qon-tomir kasalliklarini davolash va EKG tahlili.", clinic: "Akfa Medline", price: "150 000 so'm", category: "Kardiolog" },
+            { id: 3, name: "Dr. Karimova Dildora", specialization: "Терапевт", experience: "14 yil tajriba", rating: 4.8, description: " Kattalar va o'smirlar sog'ligini tekshirish, zamonaviy davolash usullari.", clinic: "Shifo Nur", price: "100 000 so'm", category: "Terapevt" }
+        ];
+
+        const mockClinics = [
+            { id: 1, name: "Akfa Medline", address: "Toshkent shahri, Olmazor tumani", phone: "+998 71 203-30-03", hours: "08:00 - 20:00" },
+            { id: 2, name: "Binafsha shifo", address: "Toshkent shahri, Chilonzor tumani", phone: "+998 71 123-45-67", hours: "09:00 - 18:00" },
+            { id: 3, name: "Shifo Nur", address: "Toshkent shahri, Yakkasaroy tumani", phone: "+998 71 987-65-43", hours: "08:30 - 19:00" }
+        ];
+
+        let currentTab = 'doctors';
+        let currentCategory = 'all';
+
+        function renderContent() {
+            const listEl = document.getElementById('contentList');
+            document.getElementById('loading').style.display = 'none';
+            listEl.innerHTML = '';
+
+            if (currentTab === 'doctors') {
+                let filtered = mockDoctors;
+                if (currentCategory !== 'all') {
+                    filtered = mockDoctors.filter(d => d.category === currentCategory);
+                }
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                if (query) {
+                    filtered = filtered.filter(d => d.name.toLowerCase().includes(query) || d.specialization.toLowerCase().includes(query) || d.clinic.toLowerCase().includes(query));
+                }
+
+                if (filtered.length === 0) {
+                    listEl.innerHTML = '<div class="text-center py-12 text-slate-400 text-sm">Hech qanday ma\'lumot topilmadi</div>';
+                    return;
+                }
+
+                filtered.forEach(doc => {
+                    let card = document.createElement('div');
+                    card.className = 'bg-white p-4 rounded-2xl shadow-xs border border-slate-100 active:scale-[0.99] transition cursor-pointer';
+                    card.onclick = () => openDoctorDetail(doc);
+                    card.innerHTML = `
+                        <div class="flex items-start space-x-3">
+                            <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-sky-600 font-bold text-lg shrink-0">
+                                ${doc.name.charAt(4)}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="font-bold text-slate-800 text-sm truncate">${doc.name}</h4>
+                                    <span class="flex items-center text-amber-500 text-xs font-semibold bg-amber-50 px-2 py-0.5 rounded-full">★ ${doc.rating}</span>
+                                </div>
+                                <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.specialization} • ${doc.experience}</p>
+                                <p class="text-xs text-slate-500 mt-1 line-clamp-1">${doc.description}</p>
+                                <div class="mt-2.5 pt-2 border-t border-slate-50 flex items-center justify-between text-xs">
+                                    <span class="text-slate-500">📍 ${doc.clinic}</span>
+                                    <span class="font-bold text-emerald-600">${doc.price}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listEl.appendChild(card);
+                });
+            } else {
+                let filteredClinics = mockClinics;
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                if (query) {
+                    filteredClinics = filteredClinics.filter(c => c.name.toLowerCase().includes(query) || c.address.toLowerCase().includes(query));
+                }
+
+                filteredClinics.forEach(clinic => {
+                    let card = document.createElement('div');
+                    card.className = 'bg-white p-4 rounded-2xl shadow-xs border border-slate-100';
+                    card.innerHTML = `
+                        <h4 class="font-bold text-slate-800 text-sm">${clinic.name}</h4>
+                        <p class="text-xs text-slate-500 mt-1">📍 ${clinic.address}</p>
+                        <p class="text-xs text-slate-500 mt-0.5">🕒 Ish vaqti: ${clinic.hours}</p>
+                        <div class="mt-3 pt-2 border-t border-slate-50 flex justify-between items-center text-xs">
+                            <span class="text-sky-600 font-medium">${clinic.phone}</span>
+                            <a href="tel:${clinic.phone}" class="bg-sky-50 text-sky-600 px-3 py-1 rounded-lg font-semibold">Qo'ng'iroq</a>
+                        </div>
+                    `;
+                    listEl.appendChild(card);
+                });
+            }
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const docBtn = document.getElementById('tabDoctors');
+            const clinBtn = document.getElementById('tabClinics');
+            const catFilters = document.getElementById('categoryFilters');
+
+            if (tab === 'doctors') {
+                docBtn.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm";
+                clinBtn.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition";
+                catFilters.style.display = 'flex';
+            } else {
+                clinBtn.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm";
+                docBtn.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition";
+                catFilters.style.display = 'none';
+            }
+            renderContent();
+        }
+
+        function filterCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.textContent.includes(cat) || (cat === 'all' && btn.textContent === 'Барчаси')) {
+                    btn.className = "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition";
                 } else {
-                    card.style.display = 'none';
+                    btn.className = "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition";
                 }
             });
+            renderContent();
         }
 
-        function openDetailModal(type, title, img, sub, rating, desc, experience, price, address, mapUrl, phone, hours) {
-            document.getElementById('detailImg').src = img;
-            document.getElementById('detailTitle').innerText = title;
-            document.getElementById('detailSub').innerText = sub;
-            document.getElementById('detailRating').innerText = rating;
-            document.getElementById('detailDesc').innerText = desc;
-            document.getElementById('detailExperience').innerText = experience;
-            document.getElementById('detailPrice').innerText = price;
-            
-            document.getElementById('detailAddress').innerText = address;
-            document.getElementById('detailAddressLink').href = mapUrl;
+        document.getElementById('searchInput').addEventListener('input', renderContent);
 
-            document.getElementById('detailPhone').innerText = phone;
-            document.getElementById('detailPhoneLink').href = 'tel:' + phone;
-            document.getElementById('detailHours').innerText = hours;
-
-            document.getElementById('detailModal').classList.add('active');
+        function openDoctorDetail(doc) {
+            document.getElementById('modalTitle').textContent = doc.name;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="bg-sky-50 p-3 rounded-xl">
+                    <p class="text-xs text-sky-600 font-semibold">${doc.specialization}</p>
+                    <p class="text-xs text-slate-600 mt-1">${doc.experience} • Reyting: ★ ${doc.rating}</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Ma'lumot</h5>
+                    <p class="text-slate-600 text-xs leading-relaxed">${doc.description}</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Klinika</h5>
+                    <p class="text-slate-800 text-xs font-medium">📍 ${doc.clinic}</p>
+                </div>
+                <div>
+                    <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Qabul narxi</h5>
+                    <p class="text-emerald-600 font-bold text-sm">${doc.price}</p>
+                </div>
+                <div class="pt-2">
+                    <button onclick="bookAppointment('${doc.name}')" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl font-semibold text-sm transition shadow-sm">
+                        Qabulga yozilish
+                    </button>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.remove('active');
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
         }
+
+        function bookAppointment(docName) {
+            alert(`Siz "${docName}" qabuliga muvaffaqiyatli yozildingiz! Tez orada operatorlarimiz bog'lanishadi.`);
+            closeModal();
+        }
+
+        // Initial render
+        renderContent();
     </script>
 </body>
 </html>
