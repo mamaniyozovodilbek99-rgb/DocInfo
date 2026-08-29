@@ -238,7 +238,7 @@
 
         let currentLang = 'uz';
         let currentTab = 'doctors';
-        let selectedCategory = null;
+        let selectedCategory = null; // null bo'lsa - asosiy ekranda barcha shifokorlar ro'yxati turadi
         let selectedRegion = null;
         let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
@@ -556,51 +556,14 @@
             
             listContainer.innerHTML = '';
 
-            // 1. Favorites Tab Logic
-            if (currentTab === 'favorites') {
-                let favDoctors = doctorsData.filter(d => favorites.includes(d.id));
-                let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Saralangan shifokorlar</div>`;
-                if(favDoctors.length === 0) {
-                    listContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">Hali saralanganlar qo'shilmagan</div>`;
-                    return;
-                }
-                let containerHtml = html + `<div class="space-y-3">`;
-                favDoctors.forEach(item => {
-                    const imgHtml = item.img.startsWith('http') 
-                        ? `<img src="${item.img}" class="w-14 h-14 rounded-xl object-cover">` 
-                        : `<div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>`;
-                    
-                    containerHtml += `
-                        <div onclick="showDoctorDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
-                            <div class="flex items-center space-x-3.5 flex-1">
-                                ${imgHtml}
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ✅</h3>
-                                    <p class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-0.5">${item.spec} • ${item.exp} yil tajriba</p>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">📍 ${item.clinic}</p>
-                                </div>
-                            </div>
-                            <div class="text-right flex flex-col items-end space-y-1">
-                                <button onclick="toggleFavorite(${item.id}, event)" class="text-base">⭐</button>
-                                <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                                <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">${item.price}</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                containerHtml += `</div>`;
-                listContainer.innerHTML = containerHtml;
-                return;
-            }
-
-            // 2. Regions Tab Logic
+            // 1. Regions Tab Logic
             if (currentTab === 'regions') {
                 if (!selectedRegion) {
                     let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Viloyatni tanlang</div><div class="grid grid-cols-1 gap-2">`;
                     Object.keys(regionsData).forEach(reg => {
                         html += `
                             <div onclick="selectRegion('${reg}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">📍 ${reg}</span>
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-150">📍 ${reg}</span>
                                 <span class="text-xs text-sky-600 font-semibold">Tumanlar &rarr;</span>
                             </div>
                         `;
@@ -663,7 +626,7 @@
                 return;
             }
 
-            // 3. Clinics Tab Logic
+            // 2. Clinics Tab Logic
             if (currentTab === 'clinics') {
                 let clinicsToRender = clinicsData.filter(c => {
                     return c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
@@ -698,60 +661,43 @@
                 return;
             }
 
-            // 4. Doctors Tab Logic (Emoji iconlar butunlay olib tashlandi, faqat matnlar qoldi)
+            // 3. Doctors Tab Logic (Asosiy ekran: shifokorlar ro'yxati, yuqorida yoki alohida qismda mutaxassisliklar bo'yicha filter tugmalari)
             if (currentTab === 'doctors') {
-                if (!searchVal && selectedCategory === null) {
-                    let html = `
-                        <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Mutaxassislikni tanlang</div>
-                        <div class="grid grid-cols-2 gap-3">
-                            <div onclick="selectCategory('all')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex flex-col justify-center cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Barchasi</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">${doctorsData.length} ta shifokor</p>
-                            </div>
-                    `;
-                    
-                    categoriesList.forEach(cat => {
-                        html += `
-                            <div onclick="selectCategory('${cat.id}')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex flex-col justify-center cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${cat.name}</h4>
-                                <p class="text-[11px] text-slate-400 mt-0.5">${cat.count} ta shifokor</p>
-                            </div>
-                        `;
-                    });
-                    html += `</div>`;
-                    listContainer.innerHTML = html;
-                    return;
-                }
-
                 let itemsToRender = doctorsData.filter(d => {
                     const matchesCategory = (selectedCategory === null || selectedCategory === 'all' || d.cat === selectedCategory);
                     const matchesSearch = d.name.toLowerCase().includes(searchVal) || d.spec.toLowerCase().includes(searchVal) || d.clinic.toLowerCase().includes(searchVal);
                     return matchesCategory && matchesSearch;
                 });
 
-                let headerHtml = '';
-                if (selectedCategory !== null && selectedCategory !== 'all') {
-                    headerHtml = `
+                // Mutaxassisliklar paneli (Grid ko'rinishida tanlash uchun)
+                let categoriesBarHtml = `
+                    <div class="mb-4">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">&larr; Mutaxassisliklarga qaytish</span>
-                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedCategory}</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Mutaxassisliklar</span>
+                            ${selectedCategory !== null ? `<span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">Barchasini ko'rsatish</span>` : ''}
                         </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="selectCategory('all')" class="p-2.5 rounded-xl text-xs font-semibold text-center border transition ${selectedCategory === null || selectedCategory === 'all' ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700'}">
+                                Barchasi
+                            </button>
+                `;
+
+                categoriesList.forEach(cat => {
+                    const isActive = (selectedCategory === cat.id);
+                    categoriesBarHtml += `
+                        <button onclick="selectCategory('${cat.id}')" class="p-2.5 rounded-xl text-xs font-semibold text-center border transition truncate ${isActive ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700'}">
+                            ${cat.name}
+                        </button>
                     `;
-                } else if (selectedCategory === 'all') {
-                    headerHtml = `
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">&larr; Mutaxassisliklarga qaytish</span>
-                            <span class="text-xs font-bold text-slate-400 uppercase">Barcha shifokorlar</span>
-                        </div>
-                    `;
-                }
+                });
+                categoriesBarHtml += `</div></div>`;
 
                 if (itemsToRender.length === 0) {
-                    listContainer.innerHTML = headerHtml + `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
+                    listContainer.innerHTML = categoriesBarHtml + `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
                     return;
                 }
 
-                let containerHtml = headerHtml + `<div class="space-y-3">`;
+                let containerHtml = categoriesBarHtml + `<div class="space-y-3">`;
                 itemsToRender.forEach(item => {
                     const isFav = favorites.includes(item.id);
                     const imgHtml = item.img.startsWith('http') 
@@ -872,7 +818,7 @@
             showClinicDetail(clinic.id);
         }
 
-        function submitReview(docId) {
+        (function submitReview(docId) {
             const author = document.getElementById('reviewAuthor').value.trim();
             const text = document.getElementById('reviewText').value.trim();
             if(!author || !text) {
@@ -885,7 +831,7 @@
                 showToast(translations[currentLang].reviewAdded, "success");
                 closeModal();
             }
-        }
+        });
 
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
