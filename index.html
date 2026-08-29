@@ -83,20 +83,25 @@
 
     <!-- Navigation Tabs & Favorites -->
     <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
-        <div class="flex space-x-2">
-            <button id="tabDoctors" onclick="switchTab('doctors')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
-            <button id="tabClinics" onclick="switchTab('clinics')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Shifoxonalar</button>
-            <button id="tabFavs" onclick="switchTab('favorites')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center gap-1">⭐ <span id="favTabCount">0</span></button>
+        <div class="grid grid-cols-4 gap-1.5">
+            <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
+            <button id="tabClinics" onclick="switchTab('clinics')" class="py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
+            <button id="tabRegions" onclick="switchTab('regions')" class="py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
+            <button id="tabFavs" onclick="switchTab('favorites')" class="py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center justify-center gap-1">⭐ <span id="favTabCount">0</span></button>
         </div>
     </div>
 
-    <!-- Category Filters -->
-    <div id="categoryFilters" class="bg-white dark:bg-slate-800 py-2 px-4 border-b border-slate-100 dark:border-slate-700 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10 transition-colors duration-300">
+    <!-- Category Filters / Specialties Slider -->
+    <div id="categoryFilters" class="bg-white dark:bg-slate-800 py-2.5 px-4 border-b border-slate-100 dark:border-slate-700 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10 transition-colors duration-300">
         <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 whitespace-nowrap transition" data-cat="all">Barchasi</button>
-        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Stomatolog">Stomatolog</button>
-        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Kardiolog">Kardiolog</button>
-        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Terapevt">Terapevt</button>
-        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Xirurg">Xirurg</button>
+        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Stomatolog">🦷 Stomatolog</button>
+        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Kardiolog">❤️ Kardiolog</button>
+        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Terapevt">🩺 Terapevt</button>
+        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Xirurg">🔪 Xirurg</button>
+        <button onclick="filterCategory('Urolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Urolog">🔬 Urolog</button>
+        <button onclick="filterCategory('Ginekolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Ginekolog">🌸 Ginekolog</button>
+        <button onclick="filterCategory('Okulist')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Okulist">👁️ Okulist</button>
+        <button onclick="filterCategory('Travmatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Travmatolog">🦴 Travmatolog</button>
     </div>
 
     <!-- Main Content Container -->
@@ -107,9 +112,9 @@
         <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
             <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
             <div class="grid grid-cols-2 gap-2.5">
-                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
+                <a href="tel:+998946221522" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>📞</span>
-                    <span>+998 93 394 85 68</span>
+                    <span>+998 94 622 15 22</span>
                 </a>
                 <a href="https://t.me/SizningTelegramKanaligiz" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
                     <span>✈️</span>
@@ -157,7 +162,8 @@
                 subtitle: "Shifokorlar va klinikalar katalogi",
                 searchPlaceholder: "Shifokor yoki mutaxassislikni izlash...",
                 tabDoctors: "Shifokorlar",
-                tabClinics: "Shifoxonalar",
+                tabClinics: "Klinikalar",
+                tabRegions: "Hududlar",
                 experience: "yil tajriba",
                 free: "Bepul",
                 clinicLabel: "Klinika",
@@ -187,11 +193,12 @@
                 searchPlaceholder: "Поиск врача или специальности...",
                 tabDoctors: "Врачи",
                 tabClinics: "Клиники",
+                tabRegions: "Регионы",
                 experience: "лет опыта",
                 free: "Бесплатно",
                 clinicLabel: "Клиника",
                 priceLabel: "Стоимость приема",
-                bookBtn: "Записаться на прием",
+                bookBtn: "Записаться",
                 callBtn: "Позвонить",
                 shareBtn: "Поделиться",
                 mapBtn: "📍 Открыть в Яндекс Картах",
@@ -216,11 +223,12 @@
                 searchPlaceholder: "Search doctor or specialization...",
                 tabDoctors: "Doctors",
                 tabClinics: "Clinics",
+                tabRegions: "Regions",
                 experience: "years of experience",
                 free: "Free",
                 clinicLabel: "Clinic",
                 priceLabel: "Consultation price",
-                bookBtn: "Book Appointment",
+                bookBtn: "Book",
                 callBtn: "Call",
                 shareBtn: "Share",
                 mapBtn: "📍 Open in Yandex Maps",
@@ -245,9 +253,52 @@
         let currentLang = 'uz';
         let currentTab = 'doctors';
         let selectedCategory = 'all';
+        let selectedRegion = null;
+        let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
 
-        // Toast Notification System
+        const specialtiesList = [
+            { id: 'Stomatolog', name: 'Stomatolog', icon: '🦷', desc: 'Tish va tish bo\'shlig\'i kasalliklari' },
+            { id: 'Kardiolog', name: 'Kardiolog', icon: '❤️', desc: 'Yurak-qon tomir tizimi kasalliklari' },
+            { id: 'Terapevt', name: 'Terapevt', icon: '🩺', desc: 'Umumiy kasalliklar diagnostikasi' },
+            { id: 'Xirurg', name: 'Xirurg', icon: '🔪', desc: 'Jarrohlik amaliyotlari' },
+            { id: 'Urolog', name: 'Urolog', icon: '🔬', desc: 'Siydik yo\'llari va erkaklar salomatligi' },
+            { id: 'Ginekolog', name: 'Ginekolog', icon: '🌸', desc: 'Ayollar salomatligi va homiladorlik' },
+            { id: 'Okulist', name: 'Okulist', icon: '👁️', desc: 'Ko\'z kasalliklari va ko\'rish qobiliyati' },
+            { id: 'Travmatolog', name: 'Travmatolog', icon: '🦴', desc: 'Suyak va bo\'g\'im jarohatlari' }
+        ];
+
+        const regionsData = {
+            "Toshkent shahri": [
+                { name: "Mirzo Ulug'bek tumani", clinics: ["Binafsha shifo", "Akfa Medline"] },
+                { name: "Chilonzor tumani", clinics: ["Binafsha shifo"] },
+                { name: "Yakkasaroy tumani", clinics: ["Shifo Nur"] },
+                { name: "Olmazor tumani", clinics: ["Akfa Medline"] },
+                { name: "Yunusobod tumani", clinics: [] },
+                { name: "Mirobod tumani", clinics: [] }
+            ],
+            "Toshkent viloyati": [
+                { name: "Chinoz tumani", clinics: [] },
+                { name: "Yangiyo'l tumani", clinics: [] },
+                { name: "Zangiota tumani", clinics: [] },
+                { name: "Parkent tumani", clinics: [] }
+            ],
+            "Samarqand viloyati": [
+                { name: "Samarqand shahri", clinics: [] },
+                { name: "Kattaqo'rg'on tumani", clinics: [] }
+            ],
+            "Farg'ona viloyati": [
+                { name: "Farg'ona shahri", clinics: [] },
+                { name: "Qo'qon shahri", clinics: [] }
+            ],
+            "Andijon viloyati": [
+                { name: "Andijon shahri", clinics: [] }
+            ],
+            "Namangan viloyati": [
+                { name: "Namangan shahri", clinics: [] }
+            ]
+        };
+
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -268,7 +319,6 @@
             }, 3000);
         }
 
-        // Dark Mode Logic
         function toggleDarkMode() {
             const html = document.documentElement;
             const btn = document.getElementById('darkModeBtn');
@@ -291,16 +341,16 @@
         const doctorsData = [
             {
                 id: 1,
-                name: "Dr. Nizamov Qahramon",
+                name: "Dr. Nizamov Qahramon Mamaniyozovich",
                 spec: "Stomatolog-Ortodont",
                 cat: "Stomatolog",
                 exp: 25,
                 clinic: "Binafsha shifo",
-                address: "Toshkent shahri, Chilonzor tumani, Bunyodkor ko'chasi 15",
-                yandexQuery: "Binafsha shifo Toshkent",
+                address: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom",
+                yandexQuery: "Binafsha shifo TTZ Toshkent",
                 rating: 5.0,
                 price: "Bepul",
-                phone: "+998933948568",
+                phone: "+998946221522",
                 img: "❓",
                 verified: true,
                 reviews: [
@@ -319,7 +369,7 @@
                 yandexQuery: "Akfa Medline Toshkent",
                 rating: 4.9,
                 price: "150 000 so'm",
-                phone: "+998933948568",
+                phone: "+998946221522",
                 img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150",
                 verified: true,
                 reviews: [
@@ -337,7 +387,7 @@
                 yandexQuery: "Shifo Nur Toshkent",
                 rating: 4.8,
                 price: "100 000 so'm",
-                phone: "+998933948568",
+                phone: "+998946221522",
                 img: "❓",
                 verified: false,
                 reviews: []
@@ -349,11 +399,11 @@
                 cat: "Xirurg",
                 exp: 12,
                 clinic: "Binafsha shifo",
-                address: "Toshkent shahri, Chilonzor tumani, Bunyodkor ko'chasi 15",
-                yandexQuery: "Binafsha shifo Toshkent",
+                address: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom",
+                yandexQuery: "Binafsha shifo TTZ Toshkent",
                 rating: 4.9,
                 price: "50 000 so'm",
-                phone: "+998933948568",
+                phone: "+998946221522",
                 img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150",
                 verified: true,
                 reviews: [
@@ -365,6 +415,17 @@
         const clinicsData = [
             {
                 id: 101,
+                name: "Binafsha shifo",
+                address: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom",
+                yandexQuery: "Binafsha shifo TTZ Toshkent",
+                rating: 5.0,
+                phone: "+998946221522",
+                hours: "09:00 - 18:00",
+                directions: "Stomatologiya, Ortodontiya, Implantologiya",
+                verified: true
+            },
+            {
+                id: 102,
                 name: "Akfa Medline",
                 address: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li 5A",
                 yandexQuery: "Akfa Medline Toshkent",
@@ -375,15 +436,15 @@
                 verified: true
             },
             {
-                id: 102,
-                name: "Binafsha shifo",
-                address: "Toshkent shahri, Chilonzor tumani, Bunyodkor ko'chasi 15",
-                yandexQuery: "Binafsha shifo Toshkent",
+                id: 103,
+                name: "Shifo Nur",
+                address: "Toshkent shahri, Yakkasaroy tumani, Shota Rustaveli ko'chasi 42",
+                yandexQuery: "Shifo Nur Toshkent",
                 rating: 4.8,
                 phone: "+998711234567",
-                hours: "09:00 - 18:00",
-                directions: "Stomatologiya, Ortodontiya, Implantologiya",
-                verified: true
+                hours: "08:30 - 19:00",
+                directions: "Terapevtik xizmatlar, Urologiya, Ginekologiya",
+                verified: false
             }
         ];
 
@@ -405,6 +466,7 @@
             document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
             document.getElementById('tabDoctors').innerText = translations[lang].tabDoctors;
             document.getElementById('tabClinics').innerText = translations[lang].tabClinics;
+            document.getElementById('tabRegions').innerText = translations[lang].tabRegions;
             document.getElementById('footerTitle').innerText = translations[lang].footerTitle;
             document.getElementById('tgChannelBtn').innerText = translations[lang].tgChannelText;
             document.getElementById('instaBtn').innerText = translations[lang].instaText;
@@ -417,13 +479,16 @@
 
         function switchTab(tab) {
             currentTab = tab;
-            document.getElementById('tabDoctors').className = tab === 'doctors' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
-            document.getElementById('tabClinics').className = tab === 'clinics' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
-            document.getElementById('tabFavs').className = tab === 'favorites' ? "px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-white transition flex items-center gap-1 shadow-sm" : "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center gap-1";
+            selectedRegion = null;
+            selectedDistrict = null;
             
-            document.getElementById('categoryFilters').style.display = tab === 'doctors' ? 'flex' : 'none';
+            document.getElementById('tabDoctors').className = tab === 'doctors' ? "py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            document.getElementById('tabClinics').className = tab === 'clinics' ? "py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            document.getElementById('tabRegions').className = tab === 'regions' ? "py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            document.getElementById('tabFavs').className = tab === 'favorites' ? "py-2 text-xs font-semibold rounded-lg bg-amber-500 text-white transition flex items-center justify-center gap-1 shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center justify-center gap-1";
             
-            // Trigger Skeleton Loader on tab switch
+            document.getElementById('categoryFilters').style.display = (tab === 'doctors' || tab === 'clinics') ? 'flex' : 'none';
+            
             showSkeleton();
             setTimeout(renderContent, 300);
         }
@@ -446,13 +511,6 @@
                         <div class="flex-1 space-y-2">
                             <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
                             <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center space-x-3.5 skeleton">
-                        <div class="w-14 h-14 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
-                        <div class="flex-1 space-y-2">
-                            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
-                            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
                         </div>
                     </div>
                 </div>
@@ -494,6 +552,23 @@
             }
         }
 
+        function selectRegion(regionName) {
+            selectedRegion = regionName;
+            selectedDistrict = null;
+            renderContent();
+        }
+
+        function selectDistrict(districtName) {
+            selectedDistrict = districtName;
+            renderContent();
+        }
+
+        function resetRegions() {
+            selectedRegion = null;
+            selectedDistrict = null;
+            renderContent();
+        }
+
         function renderContent() {
             const listContainer = document.getElementById('contentList');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
@@ -501,6 +576,80 @@
             listContainer.innerHTML = '';
             updateFavCount();
 
+            // 1. Regions Tab Logic
+            if (currentTab === 'regions') {
+                if (!selectedRegion) {
+                    // Show Regions list
+                    let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Viloyatni tanlang</div><div class="grid grid-cols-1 gap-2">`;
+                    Object.keys(regionsData).forEach(reg => {
+                        html += `
+                            <div onclick="selectRegion('${reg}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">📍 ${reg}</span>
+                                <span class="text-xs text-sky-600 font-semibold">Tumanlar &rarr;</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                } else if (!selectedDistrict) {
+                    // Show Districts list
+                    let html = `
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="resetRegions()">&larr; Viloyatlarga qaytish</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedRegion}</span>
+                        </div>
+                        <div class="grid grid-cols-1 gap-2">
+                    `;
+                    regionsData[selectedRegion].forEach(dist => {
+                        html += `
+                            <div onclick="selectDistrict('${dist.name}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">🏢 ${dist.name}</span>
+                                <span class="text-xs text-emerald-600 font-semibold">${dist.clinics.length} ta klinika</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                } else {
+                    // Show Clinics in selected district
+                    let distObj = regionsData[selectedRegion].find(d => d.name === selectedDistrict);
+                    let html = `
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="selectRegion('${selectedRegion}')">&larr; Tumanlarga qaytish</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedDistrict}</span>
+                        </div>
+                        <div class="space-y-3">
+                    `;
+                    
+                    if (!distObj || distObj.clinics.length === 0) {
+                        html += `<div class="text-center py-12 text-slate-400 text-sm">Bu tumanda hozircha klinikalar qo'shilmagan</div>`;
+                    } else {
+                        distObj.clinics.forEach(cName => {
+                            let clinic = clinicsData.find(c => c.name === cName) || { name: cName, address: selectedDistrict, rating: 5.0, phone: "+998946221522", yandexQuery: cName };
+                            html += `
+                                <div onclick="showClinicDetailFromData('${clinic.name}')" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                                    <div class="flex items-center space-x-3.5 flex-1">
+                                        <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 dark:text-sky-300 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
+                                        <div class="flex-1">
+                                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${clinic.name} ✅</h3>
+                                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${clinic.address}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${clinic.rating}</div>
+                                        <span class="text-[11px] bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg font-semibold text-slate-700 dark:text-slate-300">Ochish</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                }
+                return;
+            }
+
+            // 2. Doctors & Clinics & Specialties Grid or List
             let itemsToRender = [];
             if (currentTab === 'doctors' || currentTab === 'favorites') {
                 itemsToRender = doctorsData.filter(d => {
@@ -510,7 +659,9 @@
                 });
             } else {
                 itemsToRender = clinicsData.filter(c => {
-                    return c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
+                    const matchesCat = selectedCategory === 'all' || c.directions.toLowerCase().includes(selectedCategory.toLowerCase());
+                    const matchesSearch = c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
+                    return matchesCat && matchesSearch;
                 });
             }
 
@@ -576,7 +727,6 @@
         }
 
         function showDoctorDetail(doc) {
-            document.getElementById('modalTitleinnerHTML', doc.name);
             document.getElementById('modalTitle').innerText = doc.name;
             const t = translations[currentLang];
             
@@ -609,9 +759,10 @@
                         <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>${t.priceLabel}:</b> <span class="text-emerald-600 dark:text-emerald-400 font-bold">${doc.price}</span></p>
                     </div>
                     
-                    <div class="flex space-x-2">
-                        <button onclick="showToast('${doc.name} ${t.bookedAlert}'); closeModal();" class="flex-1 bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.bookBtn}</button>
-                        <a href="tel:${doc.phone}" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">${t.callBtn}</a>
+                    <!-- PERFECT EQUAL SIZED BUTTONS -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="showToast('${doc.name} ${t.bookedAlert}'); closeModal();" class="w-full bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700 text-center">${t.bookBtn}</button>
+                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600 text-center flex items-center justify-center">${t.callBtn}</a>
                     </div>
 
                     <div class="border-t border-slate-100 dark:border-slate-700 pt-3">
@@ -640,13 +791,19 @@
                         <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Ish vaqti:</b> ${clinic.hours}</p>
                         <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Yo'nalishlar:</b> ${clinic.directions}</p>
                     </div>
-                    <div class="flex space-x-2">
-                        <a href="tel:${clinic.phone}" class="flex-1 bg-sky-600 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.callBtn}</a>
-                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">${t.mapBtn}</button>
+                    <!-- PERFECT EQUAL SIZED BUTTONS -->
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700 flex items-center justify-center">${t.callBtn}</a>
+                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600 text-center">${t.mapBtn}</button>
                     </div>
                 </div>
             `;
             document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function showClinicDetailFromData(cName) {
+            let clinic = clinicsData.find(c => c.name === cName) || { name: cName, address: "Toshkent shahri", yandexQuery: cName, rating: 5.0, phone: "+998946221522", hours: "09:00 - 18:00", directions: "Tibbiy xizmatlar" };
+            showClinicDetail(clinic);
         }
 
         function submitReview(docId) {
