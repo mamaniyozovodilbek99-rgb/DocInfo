@@ -34,9 +34,19 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .skeleton {
+            animation: pulse-soft 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen pb-12 transition-colors duration-300">
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 flex flex-col space-y-2 pointer-events-none w-11/12 max-w-md"></div>
 
     <!-- Header / Banner -->
     <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
@@ -91,7 +101,6 @@
 
     <!-- Main Content Container -->
     <main class="p-4 max-w-xl mx-auto space-y-4">
-        <div id="loading" class="text-center py-12 text-slate-400 text-sm">Ma'lumotlar yuklanmoqda...</div>
         <div id="contentList" class="space-y-3"></div>
 
         <!-- Contact & Social Links Section -->
@@ -155,6 +164,7 @@
                 priceLabel: "Qabul narxi",
                 bookBtn: "Qabulga yozilish",
                 callBtn: "Qo'ng'iroq",
+                shareBtn: "Ulashish",
                 mapBtn: "📍 Yandeks Xaritada ochish",
                 reviewsLabel: "Mijozlar sharhlari va baholar",
                 addReviewTitle: "Sharh va baho qoldirish",
@@ -169,7 +179,8 @@
                 instaText: "Instagram",
                 feedbackText: "Talab va takliflar",
                 aboutHeader: "DocInfo Tashkent haqida",
-                aboutText: "Toshkent shahridagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling."
+                aboutText: "Toshkent shahridagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.",
+                shareText: "Bu shifokorni tavsiya qilaman: "
             },
             ru: {
                 subtitle: "Каталог врачей и клиник",
@@ -182,6 +193,7 @@
                 priceLabel: "Стоимость приема",
                 bookBtn: "Записаться на прием",
                 callBtn: "Позвонить",
+                shareBtn: "Поделиться",
                 mapBtn: "📍 Открыть в Яндекс Картах",
                 reviewsLabel: "Отзывы клиентов и оценки",
                 addReviewTitle: "Оставить отзыв и оценку",
@@ -196,7 +208,8 @@
                 instaText: "Instagram",
                 feedbackText: "Отзывы и предложения",
                 aboutHeader: "О проекте DocInfo Tashkent",
-                aboutText: "Надежная база данных квалифицированных врачей, медицинских центров и клиник в Ташкенте. Найдите нужного специалиста и запишитесь на прием с помощью удобного поиска."
+                aboutText: "Надежная база данных квалифицированных врачей, медицинских центров и клиник в Ташкенте. Найдите нужного специалиста и запишитесь на прием с помощью удобного поиска.",
+                shareText: "Рекомендую этого врача: "
             },
             en: {
                 subtitle: "Doctors and Clinics Directory",
@@ -209,6 +222,7 @@
                 priceLabel: "Consultation price",
                 bookBtn: "Book Appointment",
                 callBtn: "Call",
+                shareBtn: "Share",
                 mapBtn: "📍 Open in Yandex Maps",
                 reviewsLabel: "Client reviews and ratings",
                 addReviewTitle: "Leave a review and rating",
@@ -223,7 +237,8 @@
                 instaText: "Instagram",
                 feedbackText: "Feedback & Ideas",
                 aboutHeader: "About DocInfo Tashkent",
-                aboutText: "A reliable database of qualified doctors, medical centers, and clinics in Tashkent. Find the right specialist and book an appointment using our convenient search."
+                aboutText: "A reliable database of qualified doctors, medical centers, and clinics in Tashkent. Find the right specialist and book an appointment using our convenient search.",
+                shareText: "I recommend this doctor: "
             }
         };
 
@@ -231,6 +246,27 @@
         let currentTab = 'doctors';
         let selectedCategory = 'all';
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
+
+        // Toast Notification System
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900';
+            
+            toast.className = `${bgColor} px-4 py-3 rounded-xl shadow-lg text-xs font-bold flex items-center justify-between pointer-events-auto transform translate-y-[-20px] opacity-0 transition-all duration-300`;
+            toast.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-20px]', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
         // Dark Mode Logic
         function toggleDarkMode() {
@@ -247,7 +283,6 @@
             }
         }
 
-        // Initialize Theme
         if (localStorage.getItem('docinfo_theme') === 'dark' || (!localStorage.getItem('docinfo_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
             document.getElementById('darkModeBtn').innerText = '☀️';
@@ -267,6 +302,7 @@
                 price: "Bepul",
                 phone: "+998933948568",
                 img: "❓",
+                verified: true,
                 reviews: [
                     { name: "Sardor", text: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman!", rating: 5 },
                     { name: "Malika", text: "Xizmat ko'rsatish darajasi a'lo darajada.", rating: 5 }
@@ -285,6 +321,7 @@
                 price: "150 000 so'm",
                 phone: "+998933948568",
                 img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150",
+                verified: true,
                 reviews: [
                     { name: "Jamshid", text: "O'z ishining ustasi, professional yondashuv.", rating: 5 }
                 ]
@@ -302,6 +339,7 @@
                 price: "100 000 so'm",
                 phone: "+998933948568",
                 img: "❓",
+                verified: false,
                 reviews: []
             },
             {
@@ -317,6 +355,7 @@
                 price: "50 000 so'm",
                 phone: "+998933948568",
                 img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150",
+                verified: true,
                 reviews: [
                     { name: "Anvar", text: "Og'riqsiz va tez operatsiya qilishdi, rahmat!", rating: 5 }
                 ]
@@ -333,7 +372,7 @@
                 phone: "+998712030003",
                 hours: "08:00 - 20:00",
                 directions: "Kardiologiya, Nevrologiya, Xirurgiya",
-                doctorsCount: 45
+                verified: true
             },
             {
                 id: 102,
@@ -344,7 +383,7 @@
                 phone: "+998711234567",
                 hours: "09:00 - 18:00",
                 directions: "Stomatologiya, Ortodontiya, Implantologiya",
-                doctorsCount: 15
+                verified: true
             }
         ];
 
@@ -383,7 +422,10 @@
             document.getElementById('tabFavs').className = tab === 'favorites' ? "px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-white transition flex items-center gap-1 shadow-sm" : "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center gap-1";
             
             document.getElementById('categoryFilters').style.display = tab === 'doctors' ? 'flex' : 'none';
-            renderContent();
+            
+            // Trigger Skeleton Loader on tab switch
+            showSkeleton();
+            setTimeout(renderContent, 300);
         }
 
         function filterCategory(cat) {
@@ -391,7 +433,30 @@
             document.querySelectorAll('.cat-btn').forEach(btn => {
                 btn.className = btn.getAttribute('data-cat') === cat ? "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 whitespace-nowrap transition" : "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition";
             });
-            renderContent();
+            showSkeleton();
+            setTimeout(renderContent, 200);
+        }
+
+        function showSkeleton() {
+            const listContainer = document.getElementById('contentList');
+            listContainer.innerHTML = `
+                <div class="space-y-3">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center space-x-3.5 skeleton">
+                        <div class="w-14 h-14 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center space-x-3.5 skeleton">
+                        <div class="w-14 h-14 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/3"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         function toggleFavorite(id, event) {
@@ -399,8 +464,10 @@
             const index = favorites.indexOf(id);
             if (index > -1) {
                 favorites.splice(index, 1);
+                showToast("Saralanganlardan olib tashlandi", "info");
             } else {
                 favorites.push(id);
+                showToast("Saralanganlarga qo'shildi!", "success");
             }
             localStorage.setItem('docinfo_favs', JSON.stringify(favorites));
             updateFavCount();
@@ -416,8 +483,18 @@
             window.open(url, '_blank');
         }
 
+        function shareItem(name, spec, event) {
+            event.stopPropagation();
+            const text = `${translations[currentLang].shareText} ${name} (${spec}) - DocInfo Tashkent`;
+            if (navigator.share) {
+                navigator.share({ title: 'DocInfo', text: text, url: window.location.href }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(text);
+                showToast("Ma'lumot nusxalandi!", "success");
+            }
+        }
+
         function renderContent() {
-            document.getElementById('loading').style.display = 'none';
             const listContainer = document.getElementById('contentList');
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             
@@ -447,18 +524,20 @@
                 const div = document.createElement('div');
                 div.className = "bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer";
                 
+                const verifiedBadge = item.verified ? `<span class="text-sky-500 ml-1" title="Tasdiqlangan">✅</span>` : '';
+
                 if (currentTab === 'clinics') {
                     div.innerHTML = `
                         <div class="flex items-center space-x-3.5 flex-1">
                             <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 dark:text-sky-300 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
                             <div class="flex-1">
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name}</h3>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ${verifiedBadge}</h3>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${item.address}</p>
                                 <p class="text-xs text-sky-600 dark:text-sky-400 font-medium mt-1">${item.directions}</p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${item.rating}</div>
+                        <div class="text-right flex flex-col items-end space-y-2">
+                            <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
                             <button onclick="openYandexMap('${item.yandexQuery}')" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-600">Xarita</button>
                         </div>
                     `;
@@ -472,15 +551,18 @@
                         <div class="flex items-center space-x-3.5 flex-1">
                             ${imgHtml}
                             <div class="flex-1">
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name}</h3>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ${verifiedBadge}</h3>
                                 <p class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-0.5">${item.spec} • ${item.exp} ${translations[currentLang].experience}</p>
                                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">📍 ${item.clinic}</p>
                             </div>
                         </div>
-                        <div class="text-right flex flex-col items-end">
-                            <button onclick="toggleFavorite(${item.id}, event)" class="text-lg mb-2">${isFav ? '⭐' : '☆'}</button>
+                        <div class="text-right flex flex-col items-end space-y-1">
+                            <div class="flex items-center space-x-2">
+                                <button onclick="shareItem('${item.name}', '${item.spec}', event)" class="text-xs text-slate-400 hover:text-sky-600">🔗</button>
+                                <button onclick="toggleFavorite(${item.id}, event)" class="text-base">${isFav ? '⭐' : '☆'}</button>
+                            </div>
                             <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                            <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1">${item.price}</div>
+                            <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">${item.price}</div>
                         </div>
                     `;
                     div.onclick = () => showDoctorDetail(item);
@@ -494,18 +576,25 @@
         }
 
         function showDoctorDetail(doc) {
+            document.getElementById('modalTitleinnerHTML', doc.name);
             document.getElementById('modalTitle').innerText = doc.name;
             const t = translations[currentLang];
             
-            let reviewsHtml = doc.reviews.map(r => `
-                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700 text-xs">
-                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-200 mb-1">
-                        <span>${r.name}</span>
-                        <span class="text-amber-500">⭐ ${r.rating}</span>
+            let reviewsHtml = doc.reviews.map(r => {
+                const initial = r.name.charAt(0).toUpperCase();
+                return `
+                    <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700 text-xs">
+                        <div class="flex items-center justify-between mb-1">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[10px]">${initial}</div>
+                                <span class="font-bold text-slate-700 dark:text-slate-200">${r.name}</span>
+                            </div>
+                            <span class="text-amber-500 font-bold">⭐ ${r.rating}</span>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-300 pl-8">${r.text}</p>
                     </div>
-                    <p class="text-slate-600 dark:text-slate-300">${r.text}</p>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             if(doc.reviews.length === 0) {
                 reviewsHtml = `<p class="text-xs text-slate-400 italic">Hali sharhlar yo'q. Birinchi bo'lib sharh qoldiring!</p>`;
@@ -521,7 +610,7 @@
                     </div>
                     
                     <div class="flex space-x-2">
-                        <button onclick="alert('${doc.name} ${t.bookedAlert}')" class="flex-1 bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.bookBtn}</button>
+                        <button onclick="showToast('${doc.name} ${t.bookedAlert}'); closeModal();" class="flex-1 bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.bookBtn}</button>
                         <a href="tel:${doc.phone}" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">${t.callBtn}</a>
                     </div>
 
@@ -564,13 +653,13 @@
             const author = document.getElementById('reviewAuthor').value.trim();
             const text = document.getElementById('reviewText').value.trim();
             if(!author || !text) {
-                alert("Iltimos, barcha maydonlarni to'ldiring!");
+                showToast("Iltimos, barcha maydonlarni to'ldiring!", "error");
                 return;
             }
             const doc = doctorsData.find(d => d.id === docId);
             if(doc) {
                 doc.reviews.push({ name: author, text: text, rating: 5 });
-                alert(translations[currentLang].reviewAdded);
+                showToast(translations[currentLang].reviewAdded, "success");
                 closeModal();
             }
         }
@@ -580,7 +669,8 @@
         }
 
         window.onload = function() {
-            renderContent();
+            showSkeleton();
+            setTimeout(renderContent, 400);
         }
     </script>
 </body>
