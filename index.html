@@ -91,7 +91,7 @@
         </div>
     </div>
 
-    <!-- Category Filters / Specialties Slider -->
+    <!-- Category Filters / Specialties Slider (Only inside Doctors tab) -->
     <div id="categoryFilters" class="bg-white dark:bg-slate-800 py-2.5 px-4 border-b border-slate-100 dark:border-slate-700 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10 transition-colors duration-300">
         <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 whitespace-nowrap transition" data-cat="all">Barchasi</button>
         <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Stomatolog">🦷 Stomatolog</button>
@@ -256,17 +256,6 @@
         let selectedRegion = null;
         let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
-
-        const specialtiesList = [
-            { id: 'Stomatolog', name: 'Stomatolog', icon: '🦷', desc: 'Tish va tish bo\'shlig\'i kasalliklari' },
-            { id: 'Kardiolog', name: 'Kardiolog', icon: '❤️', desc: 'Yurak-qon tomir tizimi kasalliklari' },
-            { id: 'Terapevt', name: 'Terapevt', icon: '🩺', desc: 'Umumiy kasalliklar diagnostikasi' },
-            { id: 'Xirurg', name: 'Xirurg', icon: '🔪', desc: 'Jarrohlik amaliyotlari' },
-            { id: 'Urolog', name: 'Urolog', icon: '🔬', desc: 'Siydik yo\'llari va erkaklar salomatligi' },
-            { id: 'Ginekolog', name: 'Ginekolog', icon: '🌸', desc: 'Ayollar salomatligi va homiladorlik' },
-            { id: 'Okulist', name: 'Okulist', icon: '👁️', desc: 'Ko\'z kasalliklari va ko\'rish qobiliyati' },
-            { id: 'Travmatolog', name: 'Travmatolog', icon: '🦴', desc: 'Suyak va bo\'g\'im jarohatlari' }
-        ];
 
         const regionsData = {
             "Toshkent shahri": [
@@ -487,7 +476,8 @@
             document.getElementById('tabRegions').className = tab === 'regions' ? "py-2 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
             document.getElementById('tabFavs').className = tab === 'favorites' ? "py-2 text-xs font-semibold rounded-lg bg-amber-500 text-white transition flex items-center justify-center gap-1 shadow-sm" : "py-2 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center justify-center gap-1";
             
-            document.getElementById('categoryFilters').style.display = (tab === 'doctors' || tab === 'clinics') ? 'flex' : 'none';
+            // Show category filters only when on 'doctors' tab
+            document.getElementById('categoryFilters').style.display = tab === 'doctors' ? 'flex' : 'none';
             
             showSkeleton();
             setTimeout(renderContent, 300);
@@ -576,10 +566,9 @@
             listContainer.innerHTML = '';
             updateFavCount();
 
-            // 1. Regions Tab Logic
+            // 1. Regions Tab Logic (Star removed)
             if (currentTab === 'regions') {
                 if (!selectedRegion) {
-                    // Show Regions list
                     let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Viloyatni tanlang</div><div class="grid grid-cols-1 gap-2">`;
                     Object.keys(regionsData).forEach(reg => {
                         html += `
@@ -592,7 +581,6 @@
                     html += `</div>`;
                     listContainer.innerHTML = html;
                 } else if (!selectedDistrict) {
-                    // Show Districts list
                     let html = `
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="resetRegions()">&larr; Viloyatlarga qaytish</span>
@@ -611,7 +599,6 @@
                     html += `</div>`;
                     listContainer.innerHTML = html;
                 } else {
-                    // Show Clinics in selected district
                     let distObj = regionsData[selectedRegion].find(d => d.name === selectedDistrict);
                     let html = `
                         <div class="flex items-center justify-between mb-2">
@@ -649,7 +636,7 @@
                 return;
             }
 
-            // 2. Doctors & Clinics & Specialties Grid or List
+            // 2. Doctors & Clinics Rendering
             let itemsToRender = [];
             if (currentTab === 'doctors' || currentTab === 'favorites') {
                 itemsToRender = doctorsData.filter(d => {
@@ -659,9 +646,7 @@
                 });
             } else {
                 itemsToRender = clinicsData.filter(c => {
-                    const matchesCat = selectedCategory === 'all' || c.directions.toLowerCase().includes(selectedCategory.toLowerCase());
-                    const matchesSearch = c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
-                    return matchesCat && matchesSearch;
+                    return c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
                 });
             }
 
