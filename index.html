@@ -31,7 +31,7 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-20">
+<body class="bg-slate-50 min-h-screen pb-28">
 
     <!-- Header / Banner -->
     <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
@@ -79,6 +79,29 @@
     <main class="p-4 max-w-xl mx-auto">
         <div id="loading" class="text-center py-12 text-slate-400 text-sm">Ma'lumotlar yuklanmoqda...</div>
         <div id="contentList" class="space-y-3"></div>
+
+        <!-- Contact & Social Footer Section Inside Main -->
+        <div class="mt-8 bg-white p-5 rounded-2xl shadow-xs border border-slate-100 space-y-4">
+            <h4 id="footerTitle" class="font-bold text-slate-800 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
+            <div class="grid grid-cols-2 gap-2.5">
+                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 hover:bg-sky-100 text-sky-700 p-3 rounded-xl text-xs font-semibold transition">
+                    <span>📞</span>
+                    <span>+998 93 394 85 68</span>
+                </a>
+                <a href="https://t.me/SizningTelegramKanaligiz" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
+                    <span>✈️</span>
+                    <span id="tgChannelBtn">Telegram kanal</span>
+                </a>
+                <a href="https://instagram.com/SizningInstagram Profilingiz" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 hover:bg-pink-100 text-pink-700 p-3 rounded-xl text-xs font-semibold transition">
+                    <span>📸</span>
+                    <span id="instaBtn">Instagram</span>
+                </a>
+                <a href="https://t.me/SizningAdminUsernamengiz" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 p-3 rounded-xl text-xs font-semibold transition">
+                    <span>💡</span>
+                    <span id="feedbackBtn">Talab va takliflar</span>
+                </a>
+            </div>
+        </div>
     </main>
 
     <!-- Detail Modal -->
@@ -114,8 +137,13 @@
                 reviewsLabel: "Mijozlar sharhlari",
                 similarLabel: "Shu yo'nalishdagi boshqa mutaxassislar",
                 doctorsLabel: "Klinika shifokorlari",
+                detailsBtn: "Batafsil →",
                 bookedAlert: "qabuliga muvaffaqiyatli yozildingiz! Tez orada operatorlarimiz bog'lanishadi.",
-                notFound: "Hech qanday ma'lumot topilmadi"
+                notFound: "Hech qanday ma'lumot topilmadi",
+                footerTitle: "Biz bilan bog'lanish va loyiha resurslari",
+                tgChannelText: "Telegram kanal",
+                instaText: "Instagram",
+                feedbackText: "Talab va takliflar"
             },
             ru: {
                 subtitle: "Каталог врачей и клиник",
@@ -135,8 +163,13 @@
                 reviewsLabel: "Отзывы клиентов",
                 similarLabel: "Другие специалисты этого профиля",
                 doctorsLabel: "Врачи клиники",
+                detailsBtn: "Подробнее →",
                 bookedAlert: "Вы успешно записались на прием! Скоро с вами свяжутся операторы.",
-                notFound: "Ничего не найдено"
+                notFound: "Ничего не найдено",
+                footerTitle: "Связаться с нами и ресурсы проекта",
+                tgChannelText: "Telegram канал",
+                instaText: "Instagram",
+                feedbackText: "Отзывы и предложения"
             },
             en: {
                 subtitle: "Doctors and Clinics Directory",
@@ -156,8 +189,13 @@
                 reviewsLabel: "Client reviews",
                 similarLabel: "Other specialists in this field",
                 doctorsLabel: "Clinic doctors",
+                detailsBtn: "Details →",
                 bookedAlert: "You have successfully booked an appointment! Operators will contact you soon.",
-                notFound: "No information found"
+                notFound: "No information found",
+                footerTitle: "Contact Us & Project Resources",
+                tgChannelText: "Telegram Channel",
+                instaText: "Instagram",
+                feedbackText: "Feedback & Ideas"
             }
         };
 
@@ -186,6 +224,10 @@
             document.getElementById('searchInput').placeholder = t.searchPlaceholder;
             document.getElementById('tabDoctors').textContent = t.tabDoctors;
             document.getElementById('tabClinics').textContent = t.tabClinics;
+            document.getElementById('footerTitle').textContent = t.footerTitle;
+            document.getElementById('tgChannelBtn').textContent = t.tgChannelText;
+            document.getElementById('instaBtn').textContent = t.instaText;
+            document.getElementById('feedbackBtn').textContent = t.feedbackText;
             
             const allBtn = document.querySelector('.cat-btn[data-cat="all"]');
             if (allBtn) allBtn.textContent = t.allCat;
@@ -405,7 +447,7 @@
             document.getElementById('loading').style.display = 'none';
             listEl.innerHTML = '';
 
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
 
             if (currentTab === 'doctors') {
                 let filtered = mockDoctors;
@@ -413,7 +455,12 @@
                     filtered = mockDoctors.filter(d => d.category === currentCategory);
                 }
                 if (query) {
-                    filtered = filtered.filter(d => d.name.toLowerCase().includes(query) || d.specialization.toLowerCase().includes(query) || d.clinic.toLowerCase().includes(query));
+                    filtered = filtered.filter(d => 
+                        d.name.toLowerCase().includes(query) || 
+                        d.specialization.toLowerCase().includes(query) || 
+                        d.subSpecialization[currentLang].toLowerCase().includes(query) ||
+                        d.clinic.toLowerCase().includes(query)
+                    );
                 }
 
                 if (filtered.length === 0) {
@@ -445,7 +492,11 @@
             } else {
                 let filteredClinics = mockClinics;
                 if (query) {
-                    filteredClinics = filteredClinics.filter(c => c.name.toLowerCase().includes(query) || c.address.toLowerCase().includes(query));
+                    filteredClinics = filteredClinics.filter(c => 
+                        c.name.toLowerCase().includes(query) || 
+                        c.address.toLowerCase().includes(query) ||
+                        c.description[currentLang].toLowerCase().includes(query)
+                    );
                 }
 
                 if (filteredClinics.length === 0) {
@@ -465,7 +516,7 @@
                             <p class="text-xs text-slate-500 mt-0.5">🕒 ${t.hoursLabel}: ${clinic.hours}</p>
                             <div class="mt-3 pt-2 border-t border-slate-50 flex justify-between items-center text-xs">
                                 <span class="text-sky-600 font-medium">📞 ${clinic.phone}</span>
-                                <span class="text-sky-700 font-bold bg-sky-50 px-2.5 py-1 rounded-lg">Batafsil →</span>
+                                <span class="text-sky-700 font-bold bg-sky-50 px-2.5 py-1 rounded-lg">${t.detailsBtn}</span>
                             </div>
                         </div>
                     `;
