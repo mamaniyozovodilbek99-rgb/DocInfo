@@ -57,11 +57,6 @@
             </div>
             
             <div class="flex items-center space-x-2">
-                <!-- Favorites Quick Button -->
-                <button onclick="switchTab('favorites')" class="bg-black/20 px-3 py-2 rounded-xl backdrop-blur-sm text-xs font-bold transition hover:bg-black/30 flex items-center gap-1">
-                    ⭐ <span id="favHeaderCount">0</span>
-                </button>
-
                 <!-- Dark Mode Toggle Button -->
                 <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30">
                     🌙
@@ -86,7 +81,7 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs (Hududlar yonidagi yulduzcha olib tashlandi, 3 ta bo'lim) -->
+    <!-- Navigation Tabs -->
     <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
         <div class="grid grid-cols-3 gap-2">
             <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
@@ -243,20 +238,20 @@
 
         let currentLang = 'uz';
         let currentTab = 'doctors';
-        let selectedCategory = null; // null means show specialties list inside Doctors tab
+        let selectedCategory = null;
         let selectedRegion = null;
         let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
 
         const categoriesList = [
-            { id: 'Stomatolog', name: 'Stomatolog', icon: '🦷', count: 2 },
-            { id: 'Kardiolog', name: 'Kardiolog', icon: '❤️', count: 1 },
-            { id: 'Terapevt', name: 'Terapevt', icon: '🩺', count: 1 },
-            { id: 'Xirurg', name: 'Xirurg', icon: '🔪', count: 1 },
-            { id: 'Urolog', name: 'Urolog', icon: '🔬', count: 0 },
-            { id: 'Ginekolog', name: 'Ginekolog', icon: '🌸', count: 0 },
-            { id: 'Okulist', name: 'Okulist', icon: '👁️', count: 0 },
-            { id: 'Travmatolog', name: 'Travmatolog', icon: '🦴', count: 0 }
+            { id: 'Stomatolog', name: 'Stomatolog', count: 2 },
+            { id: 'Kardiolog', name: 'Kardiolog', count: 1 },
+            { id: 'Terapevt', name: 'Terapevt', count: 1 },
+            { id: 'Xirurg', name: 'Xirurg', count: 1 },
+            { id: 'Urolog', name: 'Urolog', count: 0 },
+            { id: 'Ginekolog', name: 'Ginekolog', count: 0 },
+            { id: 'Okulist', name: 'Okulist', count: 0 },
+            { id: 'Travmatolog', name: 'Travmatolog', count: 0 }
         ];
 
         const regionsData = {
@@ -519,12 +514,7 @@
                 showToast("Saralanganlarga qo'shildi!", "success");
             }
             localStorage.setItem('docinfo_favs', JSON.stringify(favorites));
-            updateFavCount();
             renderContent();
-        }
-
-        function updateFavCount() {
-            document.getElementById('favHeaderCount').innerText = favorites.length;
         }
 
         function openYandexMap(query) {
@@ -565,7 +555,6 @@
             const searchVal = document.getElementById('searchInput').value.toLowerCase();
             
             listContainer.innerHTML = '';
-            updateFavCount();
 
             // 1. Favorites Tab Logic
             if (currentTab === 'favorites') {
@@ -709,29 +698,23 @@
                 return;
             }
 
-            // 4. Doctors Tab Logic
+            // 4. Doctors Tab Logic (Emoji iconlar butunlay olib tashlandi, faqat matnlar qoldi)
             if (currentTab === 'doctors') {
                 if (!searchVal && selectedCategory === null) {
                     let html = `
                         <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Mutaxassislikni tanlang</div>
                         <div class="grid grid-cols-2 gap-3">
-                            <div onclick="selectCategory('all')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center space-x-3 cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <div class="w-10 h-10 rounded-xl bg-sky-50 dark:bg-sky-950/50 flex items-center justify-center text-lg">🏥</div>
-                                <div>
-                                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Barchasi</h4>
-                                    <p class="text-[11px] text-slate-400">${doctorsData.length} ta shifokor</p>
-                                </div>
+                            <div onclick="selectCategory('all')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex flex-col justify-center cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Barchasi</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">${doctorsData.length} ta shifokor</p>
                             </div>
                     `;
                     
                     categoriesList.forEach(cat => {
                         html += `
-                            <div onclick="selectCategory('${cat.id}')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex items-center space-x-3 cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-lg">${cat.icon}</div>
-                                <div>
-                                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${cat.name}</h4>
-                                    <p class="text-[11px] text-slate-400">${cat.count} ta shifokor</p>
-                                </div>
+                            <div onclick="selectCategory('${cat.id}')" class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex flex-col justify-center cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${cat.name}</h4>
+                                <p class="text-[11px] text-slate-400 mt-0.5">${cat.count} ta shifokor</p>
                             </div>
                         `;
                     });
