@@ -204,17 +204,29 @@
                 id: 1, 
                 name: "Dr. Nizamov Qahramon", 
                 specialization: "Stomatolog", 
-                subSpecialization: "Stomatolog-Ortodont",
+                subSpecialization: {
+                    uz: "Stomatolog-Ortodont",
+                    ru: "Стоматолог-Ортодонт",
+                    en: "Orthodontist"
+                },
                 experience: 25, 
                 rating: 5.0, 
                 photo: "image_6.png", 
-                description: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha oliy toifali mutaxassis. 25 yillik tajribaga ega.", 
+                description: {
+                    uz: "Ortodontik, terapevtik va xirurgik stomatologiya yo'nalishlari bo'yicha oliy toifali mutaxassis. 25 yillik tajribaga ega.",
+                    ru: "Специалист высшей категории по ортодонтической, терапевтической и хирургической стоматологии. Имеет 25-летний опыт работы.",
+                    en: "Higher category specialist in orthodontic, therapeutic, and surgical dentistry with 25 years of experience."
+                }, 
                 clinic: "Binafsha shifo", 
                 price: 0, 
                 category: "Stomatolog", 
                 address: "Toshkent shahri, Chilonzor tumani",
                 hours: "Dushanba - Shanba: 09:00 - 18:00",
-                directions: ["Braket tizimlarini o'rnatish", "Tishlarni tekislash", "Jag'-yuz xirurgiyasi", "Estetik tiklash"],
+                directions: {
+                    uz: ["Braket tizimlarini o'rnatish", "Tishlarni tekislash", "Jag'-yuz xirurgiyasi", "Estetik tiklash"],
+                    ru: ["Установка брекет-систем", "Выравнивание зубов", "Челюстно-лицевая хирургия", "Эстетическая реставрация"],
+                    en: ["Braces installation", "Teeth alignment", "Maxillofacial surgery", "Esthetic restoration"]
+                },
                 reviews: [
                     { user: "Jasur M.", text: "Juda malakali shifokor, ishi aniq va ozoda.", rating: 5 },
                     { user: "Malika K.", text: "Maslahatlari uchun katta rahmat, muammomiz tez hal bo'ldi.", rating: 5 }
@@ -224,17 +236,29 @@
                 id: 2, 
                 name: "Dr. Aliyev Javlon", 
                 specialization: "Kardiolog", 
-                subSpecialization: "Kardiolog-Arritmolog",
+                subSpecialization: {
+                    uz: "Kardiolog-Arritmolog",
+                    ru: "Кардиолог-Аритмолог",
+                    en: "Cardiologist-Arrhythmologist"
+                },
                 experience: 10, 
                 rating: 4.9, 
                 photo: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150&h=150&fit=crop&crop=faces",
-                description: "Yurak qon-tomir tizimi kasalliklarini tashxislash va davolash, zamonaviy EKG va EXO-KG tahlillari.", 
+                description: {
+                    uz: "Yurak qon-tomir tizimi kasalliklarini tashxislash va davolash, zamonaviy EKG va EXO-KG tahlillari.",
+                    ru: "Диагностика и лечение сердечно-сосудистых заболеваний, современный анализ ЭКГ и ЭХО-КГ.",
+                    en: "Diagnosis and treatment of cardiovascular diseases, modern ECG and ECHO-KG analysis."
+                }, 
                 clinic: "Akfa Medline", 
                 price: "150 000 so'm", 
                 category: "Kardiolog", 
                 address: "Toshkent shahri, Olmazor tumani",
                 hours: "Har kuni: 08:00 - 20:00",
-                directions: ["Gipertoniyani davolash", "EXO-KG tahlili", "Yurak ritmi buzilishini davolash"],
+                directions: {
+                    uz: ["Gipertoniyani davolash", "EXO-KG tahlili", "Yurak ritmi buzilishini davolash"],
+                    ru: ["Лечение гипертонии", "ЭХО-КГ анализ", "Лечение нарушений сердечного ритма"],
+                    en: ["Hypertension treatment", "ECHO-KG analysis", "Heart rhythm disorder treatment"]
+                },
                 reviews: [
                     { user: "Sardor T.", text: "O'z ishining ustasi, barchaga tavsiya qilaman.", rating: 5 }
                 ]
@@ -243,17 +267,29 @@
                 id: 3, 
                 name: "Dr. Karimova Dildora", 
                 specialization: "Terapevt", 
-                subSpecialization: "Umumiy amaliyot shifokori",
+                subSpecialization: {
+                    uz: "Umumiy amaliyot shifokori",
+                    ru: "Врач общей практики",
+                    en: "General Practitioner"
+                },
                 experience: 14, 
                 rating: 4.8, 
                 photo: "https://images.unsplash.com/photo-1594824813589-7bb3d077b96f?w=150&h=150&fit=crop&crop=faces",
-                description: "Kattalar va o'smirlar umumiy salomatligini tekshirish, immun tizimini mustahkamlash.", 
+                description: {
+                    uz: "Kattalar va o'smirlar umumiy salomatligini tekshirish, immun tizimini mustahkamlash.",
+                    ru: "Общее оздоровительное обследование взрослых и подростков, укрепление иммунной системы.",
+                    en: "General health checkups for adults and adolescents, strengthening the immune system."
+                }, 
                 clinic: "Shifo Nur", 
                 price: "100 000 so'm", 
                 category: "Terapevt", 
                 address: "Toshkent shahri, Yakkasaroy tumani",
                 hours: "Dushanba - Juma: 08:30 - 17:00",
-                directions: ["Umumiy ko'rik", "Immunitetni tiklash", "Shamollashni davolash"],
+                directions: {
+                    uz: ["Umumiy ko'rik", "Immunitetni tiklash", "Shamollashni davolash"],
+                    ru: ["Общий осмотр", "Восстановление иммунитета", "Лечение простуды"],
+                    en: ["General checkup", "Immunity restoration", "Cold treatment"]
+                },
                 reviews: [
                     { user: "Zilola R.", text: "Mehribon va e'tiborli shifokor.", rating: 5 }
                 ]
@@ -262,17 +298,29 @@
                 id: 4, 
                 name: "Dr. Saidov Bobur", 
                 specialization: "Stomatolog", 
-                subSpecialization: "Implantolog-Xirurg",
+                subSpecialization: {
+                    uz: "Implantolog-Xirurg",
+                    ru: "Имплантолог-Хирург",
+                    en: "Implantologist-Surgeon"
+                },
                 experience: 12, 
                 rating: 4.9, 
                 photo: "https://images.unsplash.com/photo-1622902046580-2b47f47f5471?w=150&h=150&fit=crop&crop=faces",
-                description: "Tish implantatsiyasi va murakkab jarrohlik amaliyotlarini og'riqsiz bajarish.", 
+                description: {
+                    uz: "Tish implantatsiyasi va murakkab jarrohlik amaliyotlarini og'riqsiz bajarish.",
+                    ru: "Безболезненное проведение имплантации зубов и сложных хирургических операций.",
+                    en: "Painless dental implantation and complex surgical operations."
+                }, 
                 clinic: "Binafsha shifo", 
                 price: "50 000 so'm", 
                 category: "Stomatolog", 
                 address: "Toshkent shahri, Chilonzor tumani",
                 hours: "Dushanba - Shanba: 09:00 - 19:00",
-                directions: ["Tish implantatsiyasi", "Xirurgik stomatologiya", "Protezlash"],
+                directions: {
+                    uz: ["Tish implantatsiyasi", "Xirurgik stomatologiya", "Protezlash"],
+                    ru: ["Имплантация зубов", "Хирургическая стоматология", "Протезирование"],
+                    en: ["Dental implantation", "Surgical dentistry", "Prosthetics"]
+                },
                 reviews: [
                     { user: "Umid B.", text: "Og'riqsiz va tez qo'ydi implantni, rahmat!", rating: 5 }
                 ]
@@ -284,12 +332,20 @@
                 id: 1, 
                 name: "Akfa Medline", 
                 photo: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400&h=200&fit=crop",
-                description: "Markaziy Osiyodagi eng yirik zamonaviy ko'p tarmoqli tibbiyot markazlaridan biri.",
+                description: {
+                    uz: "Markaziy Osiyodagi eng yirik zamonaviy ko'p tarmoqli tibbiyot markazlaridan biri.",
+                    ru: "Один из крупнейших современных многопрофильных медицинских центров в Центральной Азии.",
+                    en: "One of the largest modern multi-profile medical centers in Central Asia."
+                },
                 address: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li", 
                 phone: "+998 71 203-30-03", 
                 hours: "08:00 - 20:00 (Har kuni)", 
                 mapQuery: "Akfa Medline Tashkent",
-                directions: ["Kardiologiya", "Nevrologiya", "Diagnostika va MRT", "Xirurgiya"],
+                directions: {
+                    uz: ["Kardiologiya", "Nevrologiya", "Diagnostika va MRT", "Xirurgiya"],
+                    ru: ["Кардиология", "Неврология", "Диагностика и МРТ", "Хирургия"],
+                    en: ["Cardiology", "Neurology", "Diagnostics and MRI", "Surgery"]
+                },
                 reviews: [
                     { user: "Aziz P.", text: "Klinika sharoitlari juda ajoyib va toza.", rating: 5 }
                 ]
@@ -298,12 +354,20 @@
                 id: 2, 
                 name: "Binafsha shifo", 
                 photo: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400&h=200&fit=crop",
-                description: "Ixtisoslashgan yuqori texnologiyali stomatologiya va tibbiyot markazi.",
+                description: {
+                    uz: "Ixtisoslashgan yuqori texnologiyali stomatologiya va tibbiyot markazi.",
+                    ru: "Специализированный высокотехнологичный стоматологический и медицинский центр.",
+                    en: "Specialized high-tech dental and medical center."
+                },
                 address: "Toshkent shahri, Chilonzor tumani, 9-mavze", 
                 phone: "+998 71 123-45-67", 
                 hours: "09:00 - 18:00 (Dush-Shanba)", 
                 mapQuery: "Binafsha shifo Tashkent",
-                directions: ["Ortodontiya", "Implantologiya", "Terapevtik stomatologiya"],
+                directions: {
+                    uz: ["Ortodontiya", "Implantologiya", "Terapevtik stomatologiya"],
+                    ru: ["Ортодонтия", "Имплантология", "Терапевтическая стоматология"],
+                    en: ["Orthodontics", "Implantology", "Therapeutic dentistry"]
+                },
                 reviews: [
                     { user: "Nodira S.", text: "Xodimlar va shifokorlar o'ta xushmuomala.", rating: 5 }
                 ]
@@ -312,12 +376,20 @@
                 id: 3, 
                 name: "Shifo Nur", 
                 photo: "https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=400&h=200&fit=crop",
-                description: "Oilaviy tibbiyot va diagnostika markazi.",
+                description: {
+                    uz: "Oilaviy tibbiyot va diagnostika markazi.",
+                    ru: "Центр семейной медицины и диагностики.",
+                    en: "Family medicine and diagnostics center."
+                },
                 address: "Toshkent shahri, Yakkasaroy tumani, Shota Rustaveli ko'chasi", 
                 phone: "+998 71 987-65-43", 
                 hours: "08:30 - 19:00", 
                 mapQuery: "Shifo Nur Tashkent",
-                directions: ["Pediatriya", "Terapevtik xizmatlar", "Laboratoriya tahlillari"],
+                directions: {
+                    uz: ["Pediatriya", "Terapevtik xizmatlar", "Laboratoriya tahlillari"],
+                    ru: ["Педиатрия", "Терапевтические услуги", "Лабораторные анализы"],
+                    en: ["Pediatrics", "Therapeutic services", "Laboratory tests"]
+                },
                 reviews: [
                     { user: "Dilshod K.", text: "Navbatlar kam, tez qabul qilishdi.", rating: 4 }
                 ]
@@ -361,7 +433,7 @@
                                 <h4 class="font-bold text-slate-800 text-sm truncate">${doc.name}</h4>
                                 <span class="flex items-center text-amber-500 text-xs font-semibold bg-amber-50 px-2 py-0.5 rounded-full">★ ${doc.rating}</span>
                             </div>
-                            <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.subSpecialization} • ${doc.experience} ${t.experience}</p>
+                            <p class="text-xs text-sky-600 font-medium mt-0.5">${doc.subSpecialization[currentLang]} • ${doc.experience} ${t.experience}</p>
                             <div class="mt-2 pt-1.5 border-t border-slate-50 flex items-center justify-between text-xs">
                                 <span class="text-slate-500 truncate mr-2">📍 ${doc.clinic}</span>
                                 <span class="font-bold text-emerald-600 shrink-0">${displayPrice}</span>
@@ -451,7 +523,7 @@
                                     <img src="${sim.photo}" class="w-10 h-10 rounded-lg object-cover">
                                     <div class="flex-1 min-w-0">
                                         <p class="text-xs font-bold text-slate-800 truncate">${sim.name}</p>
-                                        <p class="text-[10px] text-sky-600 truncate">${sim.subSpecialization}</p>
+                                        <p class="text-[10px] text-sky-600 truncate">${sim.subSpecialization[currentLang]}</p>
                                     </div>
                                     <span class="text-xs text-amber-500 font-semibold">★ ${sim.rating}</span>
                                 </div>
@@ -461,12 +533,12 @@
                 `;
             }
 
-            let directionsHtml = doc.directions.map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
+            let directionsHtml = doc.directions[currentLang].map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
             let reviewsHtml = doc.reviews.map(rev => `
                 <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
                     <div class="flex justify-between font-bold text-slate-700">
                         <span>${rev.user}</span>
-                        <span class="text-amber-500">{'★'.repeat(rev.rating)}</span>
+                        <span class="text-amber-500">${'★'.repeat(rev.rating)}</span>
                     </div>
                     <p class="text-slate-600">${rev.text}</p>
                 </div>
@@ -476,13 +548,13 @@
                 <div class="flex items-center space-x-3 bg-sky-50 p-3 rounded-2xl">
                     <img src="${doc.photo}" class="w-16 h-16 rounded-xl object-cover shadow-xs">
                     <div>
-                        <p class="text-xs text-sky-700 font-bold">${doc.subSpecialization}</p>
+                        <p class="text-xs text-sky-700 font-bold">${doc.subSpecialization[currentLang]}</p>
                         <p class="text-xs text-slate-600 mt-0.5">${doc.experience} ${t.experience} • Reyting: ★ ${doc.rating}</p>
                     </div>
                 </div>
                 <div>
                     <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Ma'lumot</h5>
-                    <p class="text-slate-600 text-xs leading-relaxed">${doc.description}</p>
+                    <p class="text-slate-600 text-xs leading-relaxed">${doc.description[currentLang]}</p>
                 </div>
                 <div>
                     <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1.5">${t.directionsLabel}</h5>
@@ -521,7 +593,7 @@
             const t = translations[currentLang];
             document.getElementById('modalTitle').textContent = clinic.name;
 
-            let directionsHtml = clinic.directions.map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
+            let directionsHtml = clinic.directions[currentLang].map(dir => `<span class="bg-sky-50 text-sky-700 px-2.5 py-1 rounded-lg text-xs font-medium">${dir}</span>`).join('');
             let reviewsHtml = clinic.reviews.map(rev => `
                 <div class="bg-slate-50 p-2.5 rounded-xl text-xs space-y-1">
                     <div class="flex justify-between font-bold text-slate-700">
@@ -538,7 +610,7 @@
                     <img src="${doc.photo}" class="w-10 h-10 rounded-lg object-cover">
                     <div class="flex-1 min-w-0">
                         <p class="text-xs font-bold text-slate-800 truncate">${doc.name}</p>
-                        <p class="text-[10px] text-sky-600 truncate">${doc.subSpecialization}</p>
+                        <p class="text-[10px] text-sky-600 truncate">${doc.subSpecialization[currentLang]}</p>
                     </div>
                     <span class="text-xs text-amber-500 font-semibold">★ ${doc.rating}</span>
                 </div>
@@ -548,7 +620,7 @@
                 <img src="${clinic.photo}" class="w-full h-40 object-cover rounded-2xl shadow-xs">
                 <div>
                     <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1">Ma'lumot</h5>
-                    <p class="text-slate-600 text-xs leading-relaxed">${clinic.description}</p>
+                    <p class="text-slate-600 text-xs leading-relaxed">${clinic.description[currentLang]}</p>
                 </div>
                 <div>
                     <h5 class="font-semibold text-xs text-slate-400 uppercase tracking-wider mb-1.5">${t.directionsLabel}</h5>
