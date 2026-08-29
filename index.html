@@ -24,28 +24,41 @@
     }">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen pb-12">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen pb-12 transition-colors duration-300">
 
     <!-- Header / Banner -->
-    <header class="bg-gradient-to-r from-sky-600 to-blue-700 text-white p-4 shadow-md sticky top-0 z-30">
+    <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
         <div class="flex items-center justify-between mb-3">
             <div>
                 <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
                 <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
-            <!-- Language Switcher -->
-            <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
-                <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
-                <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
-                <button onclick="changeLang('ru')" id="btnRu" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">RU</button>
-                <button onclick="changeLang('en')" id="btnEn" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">EN</button>
+            
+            <div class="flex items-center space-x-2">
+                <!-- Dark Mode Toggle Button -->
+                <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30">
+                    🌙
+                </button>
+
+                <!-- Language Switcher -->
+                <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
+                    <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
+                    <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
+                    <button onclick="changeLang('ru')" id="btnRu" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">RU</button>
+                    <button onclick="changeLang('en')" id="btnEn" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">EN</button>
+                </div>
             </div>
         </div>
 
@@ -54,26 +67,26 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </span>
-            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor yoki mutaxassislikni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400">
+            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor yoki mutaxassislikni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
         </div>
     </header>
 
     <!-- Navigation Tabs & Favorites -->
-    <div class="bg-white px-4 py-3 shadow-xs border-b border-slate-100 sticky top-[120px] z-20">
+    <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
         <div class="flex space-x-2">
             <button id="tabDoctors" onclick="switchTab('doctors')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
-            <button id="tabClinics" onclick="switchTab('clinics')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition">Shifoxonalar</button>
-            <button id="tabFavs" onclick="switchTab('favorites')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-amber-600 transition flex items-center gap-1">⭐ <span id="favTabCount">0</span></button>
+            <button id="tabClinics" onclick="switchTab('clinics')" class="flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Shifoxonalar</button>
+            <button id="tabFavs" onclick="switchTab('favorites')" class="px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center gap-1">⭐ <span id="favTabCount">0</span></button>
         </div>
     </div>
 
     <!-- Category Filters -->
-    <div id="categoryFilters" class="bg-white py-2 px-4 border-b border-slate-100 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10">
-        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition" data-cat="all">Barchasi</button>
-        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Stomatolog">Stomatolog</button>
-        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Kardiolog">Kardiolog</button>
-        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Terapevt">Terapevt</button>
-        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition" data-cat="Xirurg">Xirurg</button>
+    <div id="categoryFilters" class="bg-white dark:bg-slate-800 py-2 px-4 border-b border-slate-100 dark:border-slate-700 overflow-x-auto hide-scrollbar flex space-x-2 sticky top-[173px] z-10 transition-colors duration-300">
+        <button onclick="filterCategory('all')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 whitespace-nowrap transition" data-cat="all">Barchasi</button>
+        <button onclick="filterCategory('Stomatolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Stomatolog">Stomatolog</button>
+        <button onclick="filterCategory('Kardiolog')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Kardiolog">Kardiolog</button>
+        <button onclick="filterCategory('Terapevt')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Terapevt">Terapevt</button>
+        <button onclick="filterCategory('Xirurg')" class="cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition" data-cat="Xirurg">Xirurg</button>
     </div>
 
     <!-- Main Content Container -->
@@ -82,10 +95,10 @@
         <div id="contentList" class="space-y-3"></div>
 
         <!-- Contact & Social Links Section -->
-        <div class="bg-white p-5 rounded-2xl shadow-xs border border-slate-100 space-y-4">
-            <h4 id="footerTitle" class="font-bold text-slate-800 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
+            <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
             <div class="grid grid-cols-2 gap-2.5">
-                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 hover:bg-sky-100 text-sky-700 p-3 rounded-xl text-xs font-semibold transition">
+                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>📞</span>
                     <span>+998 93 394 85 68</span>
                 </a>
@@ -93,11 +106,11 @@
                     <span>✈️</span>
                     <span id="tgChannelBtn">Telegram kanal</span>
                 </a>
-                <a href="https://instagram.com/SizningInstagramProfilingiz" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 hover:bg-pink-100 text-pink-700 p-3 rounded-xl text-xs font-semibold transition">
+                <a href="https://instagram.com/SizningInstagramProfilingiz" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>📸</span>
                     <span id="instaBtn">Instagram</span>
                 </a>
-                <a href="https://t.me/SizningAdminUsernamengiz" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 p-3 rounded-xl text-xs font-semibold transition">
+                <a href="https://t.me/SizningAdminUsernamengiz" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-slate-600 text-emerald-700 dark:text-emerald-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>💡</span>
                     <span id="feedbackBtn">Talab va takliflar</span>
                 </a>
@@ -105,12 +118,12 @@
         </div>
 
         <!-- Footer -->
-        <footer class="bg-white p-5 rounded-2xl shadow-xs border border-slate-100 text-center space-y-3">
-            <h5 id="aboutHeader" class="font-bold text-slate-800 text-sm">DocInfo Tashkent haqida</h5>
-            <p id="aboutText" class="text-xs text-slate-500 leading-relaxed max-w-md mx-auto">
+        <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
+            <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Tashkent haqida</h5>
+            <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
                 Toshkent shahridagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.
             </p>
-            <div class="pt-2 border-t border-slate-100 text-[11px] text-slate-400">
+            <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
                 © 2026 DocInfo Tashkent. Barcha huquqlar himoyalangan.
             </div>
         </footer>
@@ -118,10 +131,10 @@
 
     <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
-        <div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl transform transition-transform">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-t-3xl sm:rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl transform transition-transform text-slate-800 dark:text-slate-100">
             <div class="flex justify-between items-start mb-4">
-                <h3 id="modalTitle" class="text-lg font-bold text-slate-800"></h3>
-                <button onclick="closeModal()" class="p-1 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200">
+                <h3 id="modalTitle" class="text-lg font-bold"></h3>
+                <button onclick="closeModal()" class="p-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
@@ -218,6 +231,27 @@
         let currentTab = 'doctors';
         let selectedCategory = 'all';
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
+
+        // Dark Mode Logic
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const btn = document.getElementById('darkModeBtn');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('docinfo_theme', 'light');
+                btn.innerText = '🌙';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('docinfo_theme', 'dark');
+                btn.innerText = '☀️';
+            }
+        }
+
+        // Initialize Theme
+        if (localStorage.getItem('docinfo_theme') === 'dark' || (!localStorage.getItem('docinfo_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('darkModeBtn').innerText = '☀️';
+        }
 
         const doctorsData = [
             {
@@ -344,9 +378,9 @@
 
         function switchTab(tab) {
             currentTab = tab;
-            document.getElementById('tabDoctors').className = tab === 'doctors' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition";
-            document.getElementById('tabClinics').className = tab === 'clinics' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-slate-600 transition";
-            document.getElementById('tabFavs').className = tab === 'favorites' ? "px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-white transition flex items-center gap-1 shadow-sm" : "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 text-amber-600 transition flex items-center gap-1";
+            document.getElementById('tabDoctors').className = tab === 'doctors' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            document.getElementById('tabClinics').className = tab === 'clinics' ? "flex-1 py-2 text-sm font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "flex-1 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            document.getElementById('tabFavs').className = tab === 'favorites' ? "px-4 py-2 text-sm font-semibold rounded-lg bg-amber-500 text-white transition flex items-center gap-1 shadow-sm" : "px-4 py-2 text-sm font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-amber-600 dark:text-amber-400 transition flex items-center gap-1";
             
             document.getElementById('categoryFilters').style.display = tab === 'doctors' ? 'flex' : 'none';
             renderContent();
@@ -355,7 +389,7 @@
         function filterCategory(cat) {
             selectedCategory = cat;
             document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = btn.getAttribute('data-cat') === cat ? "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 text-white whitespace-nowrap transition" : "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap transition";
+                btn.className = btn.getAttribute('data-cat') === cat ? "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 whitespace-nowrap transition" : "cat-btn px-3.5 py-1.5 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 whitespace-nowrap transition";
             });
             renderContent();
         }
@@ -411,42 +445,42 @@
             itemsToRender.forEach(item => {
                 const isFav = favorites.includes(item.id);
                 const div = document.createElement('div');
-                div.className = "bg-white rounded-2xl p-4 shadow-xs border border-slate-100 flex items-center justify-between transition hover:shadow-md cursor-pointer";
+                div.className = "bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer";
                 
                 if (currentTab === 'clinics') {
                     div.innerHTML = `
                         <div class="flex items-center space-x-3.5 flex-1">
-                            <div class="w-14 h-14 bg-sky-50 text-sky-600 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
+                            <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 dark:text-sky-300 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
                             <div class="flex-1">
-                                <h3 class="font-bold text-slate-800 text-sm">${item.name}</h3>
-                                <p class="text-xs text-slate-500 mt-0.5">📍 ${item.address}</p>
-                                <p class="text-xs text-sky-600 font-medium mt-1">${item.directions}</p>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name}</h3>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${item.address}</p>
+                                <p class="text-xs text-sky-600 dark:text-sky-400 font-medium mt-1">${item.directions}</p>
                             </div>
                         </div>
                         <div class="text-right">
                             <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${item.rating}</div>
-                            <button onclick="openYandexMap('${item.yandexQuery}')" class="text-[11px] bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg font-semibold hover:bg-slate-200">Xarita</button>
+                            <button onclick="openYandexMap('${item.yandexQuery}')" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-600">Xarita</button>
                         </div>
                     `;
                     div.onclick = () => showClinicDetail(item);
                 } else {
                     const imgHtml = item.img.startsWith('http') 
                         ? `<img src="${item.img}" class="w-14 h-14 rounded-xl object-cover">` 
-                        : `<div class="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center text-xl">${item.img}</div>`;
+                        : `<div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>`;
                     
                     div.innerHTML = `
                         <div class="flex items-center space-x-3.5 flex-1">
                             ${imgHtml}
                             <div class="flex-1">
-                                <h3 class="font-bold text-slate-800 text-sm">${item.name}</h3>
-                                <p class="text-xs text-sky-600 font-semibold mt-0.5">${item.spec} • ${item.exp} ${translations[currentLang].experience}</p>
-                                <p class="text-xs text-slate-500 mt-1">📍 ${item.clinic}</p>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name}</h3>
+                                <p class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-0.5">${item.spec} • ${item.exp} ${translations[currentLang].experience}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">📍 ${item.clinic}</p>
                             </div>
                         </div>
                         <div class="text-right flex flex-col items-end">
                             <button onclick="toggleFavorite(${item.id}, event)" class="text-lg mb-2">${isFav ? '⭐' : '☆'}</button>
                             <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                            <div class="text-xs font-bold text-emerald-600 mt-1">${item.price}</div>
+                            <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 mt-1">${item.price}</div>
                         </div>
                     `;
                     div.onclick = () => showDoctorDetail(item);
@@ -464,12 +498,12 @@
             const t = translations[currentLang];
             
             let reviewsHtml = doc.reviews.map(r => `
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs">
-                    <div class="flex justify-between font-bold text-slate-700 mb-1">
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700 text-xs">
+                    <div class="flex justify-between font-bold text-slate-700 dark:text-slate-200 mb-1">
                         <span>${r.name}</span>
                         <span class="text-amber-500">⭐ ${r.rating}</span>
                     </div>
-                    <p class="text-slate-600">${r.text}</p>
+                    <p class="text-slate-600 dark:text-slate-300">${r.text}</p>
                 </div>
             `).join('');
 
@@ -479,28 +513,28 @@
 
             document.getElementById('modalBody').innerHTML = `
                 <div class="space-y-3">
-                    <div class="bg-sky-50 p-3 rounded-xl">
-                        <p class="text-xs text-sky-800 font-semibold">${doc.spec}</p>
-                        <p class="text-xs text-slate-600 mt-1"><b>${t.clinicLabel}:</b> ${doc.clinic}</p>
-                        <p class="text-xs text-slate-600 mt-1 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')"><b>Manzil:</b> ${doc.address} (${t.mapBtn})</p>
-                        <p class="text-xs text-slate-600 mt-1"><b>${t.priceLabel}:</b> <span class="text-emerald-600 font-bold">${doc.price}</span></p>
+                    <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-xl">
+                        <p class="text-xs text-sky-800 dark:text-sky-300 font-semibold">${doc.spec}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>${t.clinicLabel}:</b> ${doc.clinic}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')"><b>Manzil:</b> ${doc.address} (${t.mapBtn})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>${t.priceLabel}:</b> <span class="text-emerald-600 dark:text-emerald-400 font-bold">${doc.price}</span></p>
                     </div>
                     
                     <div class="flex space-x-2">
                         <button onclick="alert('${doc.name} ${t.bookedAlert}')" class="flex-1 bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.bookBtn}</button>
-                        <a href="tel:${doc.phone}" class="bg-slate-100 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200">${t.callBtn}</a>
+                        <a href="tel:${doc.phone}" class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">${t.callBtn}</a>
                     </div>
 
-                    <div class="border-t border-slate-100 pt-3">
-                        <h4 class="font-bold text-slate-800 text-xs mb-2">${t.reviewsLabel}</h4>
+                    <div class="border-t border-slate-100 dark:border-slate-700 pt-3">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs mb-2">${t.reviewsLabel}</h4>
                         <div class="space-y-2 max-h-36 overflow-y-auto">${reviewsHtml}</div>
                     </div>
 
-                    <div class="border-t border-slate-100 pt-3 space-y-2">
-                        <h4 class="font-bold text-slate-800 text-xs">${t.addReviewTitle}</h4>
-                        <input type="text" id="reviewAuthor" placeholder="${t.namePlaceholderism}" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs">
-                        <textarea id="reviewText" placeholder="${t.reviewPlaceholder}" class="w-full p-2 bg-slate-50 border border-slate-200 rounded-lg text-xs h-16"></textarea>
-                        <button onclick="submitReview(${doc.id})" class="w-full bg-slate-900 text-white py-2 rounded-lg text-xs font-bold">${t.submitReview}</button>
+                    <div class="border-t border-slate-100 dark:border-slate-700 pt-3 space-y-2">
+                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${t.addReviewTitle}</h4>
+                        <input type="text" id="reviewAuthor" placeholder="${t.namePlaceholderism}" class="w-full p-2 bg-slate-50 dark:bg-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-lg text-xs">
+                        <textarea id="reviewText" placeholder="${t.reviewPlaceholder}" class="w-full p-2 bg-slate-50 dark:bg-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-lg text-xs h-16"></textarea>
+                        <button onclick="submitReview(${doc.id})" class="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-2 rounded-lg text-xs font-bold">${t.submitReview}</button>
                     </div>
                 </div>
             `;
@@ -512,14 +546,14 @@
             const t = translations[currentLang];
             document.getElementById('modalBody').innerHTML = `
                 <div class="space-y-3">
-                    <div class="bg-sky-50 p-3 rounded-xl">
-                        <p class="text-xs text-slate-600 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${clinic.yandexQuery}')"><b>Manzil:</b> ${clinic.address} (${t.mapBtn})</p>
-                        <p class="text-xs text-slate-600 mt-1"><b>Ish vaqti:</b> ${clinic.hours}</p>
-                        <p class="text-xs text-slate-600 mt-1"><b>Yo'nalishlar:</b> ${clinic.directions}</p>
+                    <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-xl">
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${clinic.yandexQuery}')"><b>Manzil:</b> ${clinic.address} (${t.mapBtn})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Ish vaqti:</b> ${clinic.hours}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Yo'nalishlar:</b> ${clinic.directions}</p>
                     </div>
                     <div class="flex space-x-2">
                         <a href="tel:${clinic.phone}" class="flex-1 bg-sky-600 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700">${t.callBtn}</a>
-                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200">${t.mapBtn}</button>
+                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="flex-1 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600">${t.mapBtn}</button>
                     </div>
                 </div>
             `;
