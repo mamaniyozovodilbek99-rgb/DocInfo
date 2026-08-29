@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DocInfo Tashkent</title>
+    <title>DocInfo Uzbekistan</title>
     <!-- PWA & iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="DocInfo">
     <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/stethoscope.png">
     <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
-      \"name\": \"DocInfo Tashkent\",
+      \"name\": \"DocInfo Uzbekistan\",
       \"short_name\": \"DocInfo\",
       \"start_url\": \"./\",
       \"display\": \"standalone\",
@@ -52,7 +52,7 @@
     <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
         <div class="flex items-center justify-between mb-3">
             <div>
-                <h1 class="text-xl font-bold tracking-tight">DocInfo Tashkent</h1>
+                <h1 class="text-xl font-bold tracking-tight">DocInfo Uzbekistan</h1>
                 <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
             
@@ -86,7 +86,7 @@
         </div>
     </header>
 
-    <!-- Navigation Tabs (Yulduzchasiz, faqat 3 ta bo'lim) -->
+    <!-- Navigation Tabs (Hududlar yonidagi yulduzcha olib tashlandi, 3 ta bo'lim) -->
     <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
         <div class="grid grid-cols-3 gap-2">
             <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
@@ -124,12 +124,12 @@
 
         <!-- Footer -->
         <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
-            <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Tashkent haqida</h5>
+            <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Uzbekistan haqida</h5>
             <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
-                Toshkent shahridagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.
+                O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.
             </p>
             <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
-                © 2026 DocInfo Tashkent. Barcha huquqlar himoyalangan.
+                © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
             </div>
         </footer>
     </main>
@@ -175,8 +175,8 @@
                 tgChannelText: "Telegram kanal",
                 instaText: "Instagram",
                 feedbackText: "Talab va takliflar",
-                aboutHeader: "DocInfo Tashkent haqida",
-                aboutText: "Toshkent shahridagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.",
+                aboutHeader: "DocInfo Uzbekistan haqida",
+                aboutText: "O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.",
                 shareText: "Bu shifokorni tavsiya qilaman: "
             },
             ru: {
@@ -205,8 +205,8 @@
                 tgChannelText: "Telegram канал",
                 instaText: "Instagram",
                 feedbackText: "Отзывы и предложения",
-                aboutHeader: "О проекте DocInfo Tashkent",
-                aboutText: "Надежная база данных квалифицированных врачей, медицинских центров и клиник в Ташкенте. Найдите нужного специалиста и запишитесь на прием с помощью удобного поиска.",
+                aboutHeader: "О проекте DocInfo Uzbekistan",
+                aboutText: "Надежная база данных квалифицированных врачей, медицинских центров и клиник в Узбекистане. Найдите нужного специалиста и запишитесь на прием с помощью удобного поиска.",
                 shareText: "Рекомендую этого врача: "
             },
             en: {
@@ -235,8 +235,8 @@
                 tgChannelText: "Telegram Channel",
                 instaText: "Instagram",
                 feedbackText: "Feedback & Ideas",
-                aboutHeader: "About DocInfo Tashkent",
-                aboutText: "A reliable database of qualified doctors, medical centers, and clinics in Tashkent. Find the right specialist and book an appointment using our convenient search.",
+                aboutHeader: "About DocInfo Uzbekistan",
+                aboutText: "A reliable database of qualified doctors, medical centers, and clinics in Uzbekistan. Find the right specialist and book an appointment using our convenient search.",
                 shareText: "I recommend this doctor: "
             }
         };
@@ -534,7 +534,7 @@
 
         function shareItem(name, spec, event) {
             event.stopPropagation();
-            const text = `${translations[currentLang].shareText} ${name} (${spec}) - DocInfo Tashkent`;
+            const text = `${translations[currentLang].shareText} ${name} (${spec}) - DocInfo Uzbekistan`;
             if (navigator.share) {
                 navigator.share({ title: 'DocInfo', text: text, url: window.location.href }).catch(() => {});
             } else {
@@ -709,9 +709,8 @@
                 return;
             }
 
-            // 4. Doctors Tab Logic (Mutaxassisliklar ichiga joylashtirildi)
+            // 4. Doctors Tab Logic
             if (currentTab === 'doctors') {
-                // Agar qidiruv yozilmagan bo'lsa va mutaxassislik tanlanmagan bo'lsa -> Mutaxassisliklar ro'yxatini chiqaramiz
                 if (!searchVal && selectedCategory === null) {
                     let html = `
                         <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Mutaxassislikni tanlang</div>
@@ -741,7 +740,6 @@
                     return;
                 }
 
-                // Agar mutaxassislik tanlangan bo'lsa yoki qidiruv ishlayotgan bo'lsa -> Shifokorlar chiqadi
                 let itemsToRender = doctorsData.filter(d => {
                     const matchesCategory = (selectedCategory === null || selectedCategory === 'all' || d.cat === selectedCategory);
                     const matchesSearch = d.name.toLowerCase().includes(searchVal) || d.spec.toLowerCase().includes(searchVal) || d.clinic.toLowerCase().includes(searchVal);
