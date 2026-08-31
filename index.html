@@ -2,466 +2,1189 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DocInfo Uzbekistan</title>
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Tailwind CSS -->
+    <!-- PWA & iOS Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DocInfo">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/stethoscope.png">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
+      \"name\": \"DocInfo Uzbekistan\",
+      \"short_name\": \"DocInfo\",
+      \"start_url\": \"./\",
+      \"display\": \"standalone\",
+      \"background_color\": \"#f8fafc\",
+      \"theme_color\": \"#0284c7\",
+      \"icons\": [{
+        \"src\": \"https://img.icons8.com/color/512/stethoscope.png\",
+        \"sizes\": \"512x512\",
+        \"type\": \"image/png\"
+      }]
+    }">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase App & Firestore SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Firebase SDK (Compat versiya) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #f8fafc;
-            color: #1e293b;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
-        .hide { display: none !important; }
+        .skeleton {
+            animation: pulse-soft 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex flex-col">
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen pb-12 transition-colors duration-300">
 
-    <!-- Asosiy Konteyner -->
-    <div id="app" class="max-w-md mx-auto w-full bg-white min-h-screen shadow-xl flex flex-col relative pb-20">
-        
-        <!-- HEADER -->
-        <header class="bg-blue-600 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 flex flex-col space-y-2 pointer-events-none w-11/12 max-w-md"></div>
+
+    <!-- Header / Banner -->
+    <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
+        <div class="flex items-center justify-between mb-3">
             <div>
-                <h1 class="text-xl font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-stethoscope"></i> DocInfo Uz
-                </h1>
-                <p class="text-xs text-blue-100" id="user-welcome">Toshkent, O'zbekiston</p>
+                <h1 class="text-xl font-bold tracking-tight">DocInfo Uzbekistan</h1>
+                <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
             </div>
-            <button id="auth-btn" onclick="openAuthModal()" class="bg-white text-blue-600 px-3 py-1.5 rounded-lg text-xs font-semibold shadow hover:bg-blue-50 transition">
-                Kirish
-            </button>
-        </header>
-
-        <!-- QIDIRUV VA FILTRLAR -->
-        <div class="p-4 bg-slate-100 border-b space-y-3">
-            <div class="relative">
-                <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400"></i>
-                <input type="text" id="search-input" oninput="filterData()" placeholder="Shifokor, klinika yoki dorixona izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
-            </div>
-            <div class="flex gap-2 overflow-x-auto pb-1 text-xs">
-                <button onclick="setCategory('all')" class="cat-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition shadow-sm">Barchasi</button>
-                <button onclick="setCategory('doctor')" class="cat-btn bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Shifokorlar</button>
-                <button onclick="setCategory('clinic')" class="cat-btn bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Klinikalar</button>
-                <button onclick="setCategory('pharmacy')" class="cat-btn bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition">Tibbiy buyumlar</button>
-            </div>
-        </div>
-
-        <!-- MA'LUMOTLAR RO'YXATI -->
-        <main class="flex-1 p-4 overflow-y-auto space-y-3" id="listings-container">
-            <!-- Dinamik yuklanadi -->
-            <div class="text-center py-10 text-slate-400">
-                <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i>
-                <p class="text-sm">Ma'lumotlar yuklanmoqda...</p>
-            </div>
-        </main>
-
-        <!-- PASTKI NAVIGATSIYA (BOTTOM NAV) -->
-        <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 py-2 px-6 flex justify-around items-center z-45 shadow-lg">
-            <button onclick="switchTab('home')" class="nav-item text-blue-600 flex flex-col items-center gap-1 text-xs font-semibold">
-                <i class="fa-solid fa-house text-lg"></i> Asosiy
-            </button>
-            <button onclick="switchTab('favorites')" class="nav-item text-slate-400 flex flex-col items-center gap-1 text-xs font-semibold">
-                <i class="fa-solid fa-bookmark text-lg"></i> Saqlangan
-            </button>
-            <button onclick="switchTab('profile')" class="nav-item text-slate-400 flex flex-col items-center gap-1 text-xs font-semibold">
-                <i class="fa-solid fa-user text-lg"></i> Profil
-            </button>
-        </nav>
-
-        <!-- TAFSILOTLAR MODALI (DETAILS MODAL) -->
-        <div id="details-modal" class="fixed inset-0 bg-black/60 z-50 hide flex items-end sm:items-center justify-center p-0 sm:p-4">
-            <div class="bg-white w-full max-w-lg rounded-t-2xl sm:rounded-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in fade-in duration-200">
-                <div class="p-4 bg-blue-600 text-white flex justify-between items-center">
-                    <h2 id="modal-title" class="font-bold text-lg">Ma'lumot</h2>
-                    <button onclick="closeDetailsModal()" class="text-white text-lg p-1 hover:bg-blue-700 rounded-lg w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            
+            <div class="flex items-center space-x-2">
+                <!-- Telegram User Greeting Badge (Auto-filled via WebApp) -->
+                <div id="tgUserBadge" class="hidden items-center space-x-1.5 bg-black/20 px-2.5 py-1.5 rounded-xl backdrop-blur-sm text-xs">
+                    <span id="tgUserAvatar">👤</span>
+                    <span id="tgUserName" class="font-semibold truncate max-w-[90px]">User</span>
                 </div>
-                <div id="modal-body" class="p-4 overflow-y-auto space-y-4 flex-1">
-                    <!-- Dinamik kontent -->
+
+                <!-- QR Code Button -->
+                <button onclick="openQrModal()" id="qrBtnText" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="QR kodni ko'rish">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                </button>
+
+                <!-- Dark Mode Toggle Button -->
+                <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30">
+                    🌙
+                </button>
+
+                <!-- Language Switcher -->
+                <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
+                    <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
+                    <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
+                    <button onclick="changeLang('ru')" id="btnRu" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">RU</button>
+                    <button onclick="changeLang('en')" id="btnEn" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">EN</button>
                 </div>
             </div>
         </div>
 
-        <!-- AUTH MODALI (KIRISH / RO'YXATDAN O'TISH) -->
-        <div id="auth-modal" class="fixed inset-0 bg-black/60 z-50 hide flex items-center justify-center p-4">
-            <div class="bg-white w-full max-w-sm rounded-2xl p-6 space-y-4 shadow-2xl">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-lg text-slate-800" id="auth-modal-title">Tizimga kirish</h3>
-                    <button onclick="closeAuthModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-                <div class="space-y-3">
-                    <div>
-                        <label class="text-xs font-medium text-slate-600 block mb-1">Email manzil</label>
-                        <input type="email" id="auth-email" placeholder="example@mail.com" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="text-xs font-medium text-slate-600 block mb-1">Parol</label>
-                        <input type="password" id="auth-password" placeholder="******" class="w-full px-3 py-2 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
-                    </div>
-                    <button onclick="handleAuthSubmit()" id="auth-submit-btn" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-semibold text-sm shadow hover:bg-blue-700 transition">Kirish</button>
-                    <div class="text-center pt-2">
-                        <button onclick="toggleAuthMode()" id="auth-toggle-text" class="text-xs text-blue-600 hover:underline">Akkauntingiz yo'qmi? Ro'yxatdan o'ting</button>
-                    </div>
-                </div>
-            </div>
+        <!-- Search Box -->
+        <div class="relative">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </span>
+            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor, klinika yoki med-magazinni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
         </div>
+    </header>
 
+    <!-- Navigation Tabs -->
+    <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
+        <div class="grid grid-cols-4 gap-1.5">
+            <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
+            <button id="tabClinics" onclick="switchTab('clinics')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
+            <button id="tabStores" onclick="switchTab('stores')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Med-magazin</button>
+            <button id="tabRegions" onclick="switchTab('regions')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
+        </div>
     </div>
 
-    <!-- JavaScript Mantig'i -->
-    <script>
-        // Firebase konfiguratsiyasi (Namuna / O'zingizning firebase kalitingizni qo'shishingiz mumkin)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForDemoPurposesOnly12345",
-            authDomain: "docinfo-uz.firebaseapp.com",
-            projectId: "docinfo-uz",
-            storageBucket: "docinfo-uz.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef"
-        };
+    <!-- Main Content Container -->
+    <main class="p-4 max-w-xl mx-auto space-y-4">
+        <div id="contentList" class="space-y-3"></div>
 
-        // Firebase ishga tushirish (agar mavjud bo'lmasa xatolikni oldini olish uchun xavfsiz init)
-        try {
+        <!-- Contact & Social Links Section -->
+        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
+            <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
+            <div class="grid grid-cols-2 gap-2.5">
+                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
+                    <span>📞</span>
+                    <span>+998 93 394 85 68</span>
+                </a>
+                <!-- Telegram Bot Link -->
+                <a href="https://t.me/DocInfouz_bot" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
+                    <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.162.332.01.104.022.341.004.526z"/>
+                    </svg>
+                    <span id="tgChannelBtn">@DocInfouz_bot</span>
+                </a>
+                <!-- Instagram Logo -->
+                <a href="https://www.instagram.com/docinfo_uz?igsi=eWV2Nzh2eGtuZzNr" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
+                    <svg class="w-4 h-4 fill-current text-pink-600 dark:text-pink-400 shrink-0" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    <span id="instaBtn">DocInfo</span>
+                </a>
+                <a href="https://t.me/Odil_Visa" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-slate-600 text-emerald-700 dark:text-emerald-300 p-3 rounded-xl text-xs font-semibold transition">
+                    <span>💡</span>
+                    <span id="feedbackBtn">Taklif va Murojatlar</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
+            <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Uzbekistan haqida</h5>
+            <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
+                O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.
+            </p>
+            <div id="rightsText" class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
+                © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
+            </div>
+        </footer>
+    </main>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl transform transition-transform text-slate-800 dark:text-slate-100">
+            <div class="flex justify-between items-start mb-4 border-b border-slate-100 dark:border-slate-700 pb-3">
+                <h3 id="modalTitle" class="text-lg font-bold"></h3>
+                <button onclick="closeModal()" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="modalBody" class="space-y-4 text-sm"></div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center space-y-4 text-slate-800 dark:text-slate-100">
+            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-3">
+                <h3 id="qrModalTitle" class="font-bold text-base">Sayt QR Kodi</h3>
+                <button onclick="closeQrModal()" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="py-2 flex justify-center">
+                <div class="bg-white p-3 rounded-2xl shadow-inner border border-slate-200 inline-block">
+                    <img id="qrImage" src="" alt="DocInfo QR Code" class="w-48 h-48 mx-auto">
+                </div>
+            </div>
+            <p id="qrModalDesc" class="text-xs text-slate-500 dark:text-slate-400">Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.</p>
+            <button onclick="closeQrModal()" id="qrCloseBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Yopish</button>
+        </div>
+    </div>
+
+    <script>
+        // --- FIREBASE INITIALIZATION ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
-        } catch (e) {
-            console.warn("Firebase allaqachon ulangan yoki xatolik:", e);
+        }
+        const db = firebase.firestore();
+
+        // --- TELEGRAM WEB APP INTEGRATION ---
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            
+            // Telegram orqali kirgan foydalanuvchini aniqlash va interfeysda ko'rsatish
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const user = tg.initDataUnsafe.user;
+                const badge = document.getElementById('tgUserBadge');
+                const nameSpan = document.getElementById('tgUserName');
+                if (badge && nameSpan) {
+                    nameSpan.innerText = user.first_name || "Foydalanuvchi";
+                    badge.classList.remove('hidden');
+                    badge.classList.add('flex');
+                }
+            }
+            
+            // Telegram ranglarini avtomatik moslashtirish (Dark/Light mode)
+            if (tg.colorScheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
         }
 
-        const auth = firebase.auth ? firebase.auth() : null;
-        const db = firebase.firestore ? firebase.firestore() : null;
+        const translations = {
+            uz: {
+                subtitle: "Shifokorlar va klinikalar katalogi",
+                searchPlaceholder: "Shifokor, klinika yoki med-magazinni izlash...",
+                tabDoctors: "Mutaxassislar",
+                tabClinics: "Klinikalar",
+                tabStores: "Med-magazin",
+                tabRegions: "Hududlar",
+                experience: "yil tajriba",
+                clinicLabel: "Klinika",
+                specLabel: "Mutaxassisligi",
+                locationLabel: "Manzil (Lokatsiya)",
+                phoneLabel: "Telefon raqami",
+                ratingLabel: "Reyting bahosi",
+                hoursLabel: "Ish vaqti",
+                directionsLabel: "Yo'nalishlar",
+                specTitle: "Mutaxassisliklar",
+                allCategories: "Barchasi",
+                selectRegionTitle: "Viloyatni tanlang",
+                showDistricts: "Tumanlarni ko'rsatish &rarr;",
+                backToRegions: "&larr; Viloyatlarga qaytish",
+                selectDistrictTitle: "Tuman yoki shaharni tanlang",
+                searchDoctorsLink: "Mutaxassislarni izlash &rarr;",
+                emptyDistrict: "Bu tumanda hozircha mutaxassislar ro'yxatga o'linmagan",
+                storesTitle: "Toshkentdagi Tibbiy Jihozlar Do'konlari",
+                mapBtnText: "Xarita",
+                bookBtn: "Qabulga yozilish",
+                callBtn: "Qo'ng'iroq qilish",
+                mapOpenText: "Yandeks Xarita",
+                reviewsTitle: "Mijozlarning fikrlari va baholari",
+                noReviews: "Hozircha fikrlar yo'q. Birinchi bo'lib o'z fikringizni yozing!",
+                addReviewHeader: "Sharh va baho qoldirish",
+                namePlaceholder: "Ismingiz",
+                reviewPlaceholder: "Fikr va taassurotlaringizni yozing...",
+                submitReviewBtn: "Sharhni yuborish",
+                successBooking: "qabuliga yozildingiz! Operatorlar bog'lanishadi.",
+                successReview: "Sharhingiz muvaffaqiyatli qo'shildi!",
+                reviewValidation: "Iltimos, ismingiz va fikringizni kiriting!",
+                notFound: "Hech qanday ma'lumot topilmadi",
+                footerTitle: "Biz bilan bog'lanish va loyiha resurslari",
+                tgChannelText: "@DocInfouz_bot",
+                instaText: "Instagram",
+                feedbackText: "Taklif va Murojatlar",
+                aboutHeader: "DocInfo Uzbekistan haqida",
+                aboutText: "O'zbekistondagi eng malakali mutaxassislar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi.",
+                rightsText: "© 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.",
+                qrModalTitle: "Sayt QR Kodi",
+                qrModalDesc: "Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.",
+                qrCloseBtn: "Yopish"
+            },
+            ru: {
+                subtitle: "Каталог врачей и клиник",
+                searchPlaceholder: "Поиск специалиста, клиники или медмага...",
+                tabDoctors: "Специалисты",
+                tabClinics: "Клиники",
+                tabStores: "Мед-магазин",
+                tabRegions: "Регионы",
+                experience: "лет опыта",
+                clinicLabel: "Клиника",
+                specLabel: "Специальность",
+                locationLabel: "Адрес (Локация)",
+                phoneLabel: "Номер телефона",
+                ratingLabel: "Рейтинг",
+                hoursLabel: "Часы работы",
+                directionsLabel: "Направления",
+                specTitle: "Специальности",
+                allCategories: "Все",
+                selectRegionTitle: "Выберите область",
+                showDistricts: "Показать районы &rarr;",
+                backToRegions: "&larr; К областям",
+                selectDistrictTitle: "Выберите район или город",
+                searchDoctorsLink: "Поиск специалистов &rarr;",
+                emptyDistrict: "В этом районе пока не зарегистрированы специалисты",
+                storesTitle: "Магазины медицинского оборудования в Ташкенте",
+                mapBtnText: "Карта",
+                bookBtn: "Записаться на прием",
+                callBtn: "Позвонить",
+                mapOpenText: "Яндекс Карты",
+                reviewsTitle: "Отзывы и оценки клиентов",
+                noReviews: "Пока нет отзывов. Напишите первыми!",
+                addReviewHeader: "Оставить отзыв и оценку",
+                namePlaceholder: "Ваше имя",
+                reviewPlaceholder: "Напишите ваши впечатления...",
+                submitReviewBtn: "Отправить отзыв",
+                successBooking: "Вы записаны на прием! Операторы свяжутся с вами.",
+                successReview: "Отзыв успешно добавлен!",
+                reviewValidation: "Пожалуйста, введите ваше имя и отзыв!",
+                notFound: "Ничего не найдено",
+                footerTitle: "Связаться с нами и ресурсы проекта",
+                tgChannelText: "@DocInfouz_bot",
+                instaText: "Instagram",
+                feedbackText: "Предложения и обращения",
+                aboutHeader: "О проекте DocInfo Uzbekistan",
+                aboutText: "Надежная база данных о квалифицированных специалистах, медицинских центрах, клиниках и медмагах в Узбекистане.",
+                rightsText: "© 2026 DocInfo Uzbekistan. Все права защищены.",
+                qrModalTitle: "QR код сайта",
+                qrModalDesc: "Вы можете открыть приложение, отсканировав этот QR код.",
+                qrCloseBtn: "Закрыть"
+            },
+            en: {
+                subtitle: "Specialists and Clinics Directory",
+                searchPlaceholder: "Search specialist, clinic or med-store...",
+                tabDoctors: "Specialists",
+                tabClinics: "Clinics",
+                tabStores: "Med-Store",
+                tabRegions: "Regions",
+                experience: "years of experience",
+                clinicLabel: "Clinic",
+                specLabel: "Specialization",
+                locationLabel: "Address (Location)",
+                phoneLabel: "Phone number",
+                ratingLabel: "Rating",
+                hoursLabel: "Working hours",
+                directionsLabel: "Directions",
+                specTitle: "Specialties",
+                allCategories: "All",
+                selectRegionTitle: "Select region",
+                showDistricts: "Show districts &rarr;",
+                backToRegions: "&larr; Back to regions",
+                selectDistrictTitle: "Select district or city",
+                searchDoctorsLink: "Search specialists &rarr;",
+                emptyDistrict: "No specialists registered in this district yet",
+                storesTitle: "Medical Equipment Stores in Tashkent",
+                mapBtnText: "Map",
+                bookBtn: "Book appointment",
+                callBtn: "Call",
+                mapOpenText: "Yandex Maps",
+                reviewsTitle: "Customer reviews and ratings",
+                noReviews: "No reviews yet. Be the first to write one!",
+                addReviewHeader: "Leave a review and rating",
+                namePlaceholder: "Your name",
+                reviewPlaceholder: "Write your impressions...",
+                submitReviewBtn: "Submit review",
+                successBooking: "appointment booked successfully! Operators will contact you.",
+                successReview: "Review added successfully!",
+                reviewValidation: "Please enter your name and review!",
+                notFound: "No information found",
+                footerTitle: "Contact Us and Project Resources",
+                tgChannelText: "@DocInfouz_bot",
+                instaText: "Instagram",
+                feedbackText: "Feedback & Appeals",
+                aboutHeader: "About DocInfo Uzbekistan",
+                aboutText: "Reliable database of qualified specialists, medical centers, clinics, and med-stores in Uzbekistan.",
+                rightsText: "© 2026 DocInfo Uzbekistan. All rights reserved.",
+                qrModalTitle: "Site QR Code",
+                qrModalDesc: "You can open the application by scanning this QR code.",
+                qrCloseBtn: "Close"
+            }
+        };
 
-        // Telegram WebApp ni sozlash
-        let tg = window.Telegram.WebApp;
-        tg.expand();
+        let currentLang = 'uz';
+        let currentTab = 'doctors';
+        let selectedCategory = null;
+        let selectedRegion = null;
+        let selectedDistrict = null;
+        let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
 
-        // Asosiy ma'lumotlar bazasi (Statik ma'lumotlar + Firestore bilan sinxronizatsiya)
-        let itemsData = [
+        let doctorsData = [
             {
-                id: "doc_1",
-                category: "doctor",
-                name: "Dr. Alisher Toshmatov",
-                specialty: "Kardiolog",
-                district: "Yunusobod tumani",
-                address: "Amir Temur ko'chasi, 108-uy",
-                phone: "+998 90 123-45-67",
+                id: 1,
+                name: { 
+                    uz: "Dr. Nizamov Qahramon Mamaniyozovich", 
+                    ru: "Др. Низамов Кахрамон Маманиязович", 
+                    en: "Dr. Nizamov Qakhramon Mamaniyozovich" 
+                },
+                spec: { 
+                    uz: "Stomatolog-Ortodont", 
+                    ru: "Стоматолог-Ортодонт", 
+                    en: "Dentist-Orthodontist" 
+                },
+                cat: "Stomatolog",
+                exp: 25,
+                clinic: { 
+                    uz: "Binafsha shifo", 
+                    ru: "Бинафша шифо", 
+                    en: "Binafsha shifo" 
+                },
+                address: { 
+                    uz: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom", 
+                    ru: "город Ташкент, Мирзо-Улугбекский район, массив ТТЗ-2, дом 11", 
+                    en: "Tashkent city, Mirzo Ulugbek district, TTZ-2 microdistrict, house 11" 
+                },
+                yandexQuery: "Binafsha shifo TTZ Toshkent",
+                rating: 5.0,
+                phone: "+998946221522",
+                img: "👨‍⚕️",
+                verified: true,
+                reviews: []
+            },
+            {
+                id: 2,
+                name: { 
+                    uz: "Dr. Aliyev Javlon", 
+                    ru: "Др. Алиев Жавлон", 
+                    en: "Dr. Aliyev Javlon" 
+                },
+                spec: { 
+                    uz: "Kardiolog-Arritmolog", 
+                    ru: "Кардиолог-Аритмолог", 
+                    en: "Cardiologist-Arrhythmologist" 
+                },
+                cat: "Kardiolog",
+                exp: 10,
+                clinic: { 
+                    uz: "Akfa Medline", 
+                    ru: "Акфа Медлайн", 
+                    en: "Akfa Medline" 
+                },
+                address: { 
+                    uz: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li 5A", 
+                    ru: "город Ташкент, Алмазарский район, Малая кольцевая дорога 5А", 
+                    en: "Tashkent city, Almazar district, Small Ring Road 5A" 
+                },
+                yandexQuery: "Akfa Medline Toshkent",
                 rating: 4.9,
-                reviewsCount: 38,
-                image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=200",
-                description: "15 yildan ortiq tajribaga ega oliy toifali kardiolog. Yurak-qon tomir kasalliklarini davolash va profilaktikasi bo'yicha mutaxassis."
+                phone: "+998933948568",
+                img: "👨‍⚕️",
+                verified: true,
+                reviews: []
             },
             {
-                id: "doc_2",
-                category: "doctor",
-                name: "Dr. Malika Karimova",
-                specialty: "Pediatr",
-                district: "Mirzo Ulug'bek tumani",
-                address: "Buyuk ipak yo'li ko'chasi, 45",
-                phone: "+998 93 321-65-87",
-                rating: 4.8,
-                reviewsCount: 24,
-                image: "https://images.unsplash.com/photo-1594824813511-2895697d6a50?auto=format&fit=crop&q=80&w=200",
-                description: "Bolalar kasalliklari bo'yicha mutaxassis. Chaqaloqlar parvarishi va emlash jarayonlarini nazorat qilish."
-            },
-            {
-                id: "clinic_1",
-                category: "clinic",
-                name: "MedPrime Tibbiyot Markazi",
-                specialty: "Ko'p tarmoqli klinika",
-                district: "Chilonzor tumani",
-                address: "Qatortol ko'chasi, 28",
-                phone: "+998 71 200-11-22",
-                rating: 4.7,
-                reviewsCount: 56,
-                image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=200",
-                description: "Zamonaviy UZI, MRT diagnostika markazi va malakali shifokorlar qabuli."
-            },
-            {
-                id: "pharm_1",
-                category: "pharmacy",
-                name: "Omad Tibbiy Buyumlar Do'koni",
-                specialty: "Ortopediya va reabilitatsiya",
-                district: "Shayxontohur tumani",
-                address: "Navoiy ko'chasi, 15",
-                phone: "+998 71 244-55-66",
-                rating: 4.9,
-                reviewsCount: 19,
-                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=200",
-                description: "Barcha turdagi tonometrlar, nogironlar aravachalari, ortopedik koresetlar va tibbiy sarf materiallari."
+                id: 3,
+                name: { 
+                    uz: "Barakayev Farruh Ilhomovich", 
+                    ru: "Баракаев Фаррух Илхомович", 
+                    en: "Barakayev Farruh Ilhomovich" 
+                },
+                spec: { 
+                    uz: "Laborant", 
+                    ru: "Лаборант", 
+                    en: "Laboratory Assistant" 
+                },
+                cat: "Laborant",
+                exp: 6,
+                clinic: { 
+                    uz: "Shox Med", 
+                    ru: "Шокс Мед", 
+                    en: "Shox Med" 
+                },
+                address: { 
+                    uz: "Toshkent shahri, Shox Med klinikasi", 
+                    ru: "город Ташкент, клиника Шокс Мед", 
+                    en: "Tashkent city, Shox Med clinic" 
+                },
+                yandexQuery: "Shox Med Toshkent",
+                rating: 5.0,
+                phone: "+998909279515",
+                img: "👨‍🔬",
+                verified: true,
+                reviews: []
             }
         ];
 
-        let currentCategory = 'all';
-        let currentTab = 'home';
-        let favorites = JSON.parse(localStorage.getItem('docinfo_favs')) || [];
-        let currentUser = null;
-        let isRegistering = false;
+        let clinicsData = [
+            {
+                id: 101,
+                name: { uz: "Binafsha shifo", ru: "Бинафша шифо", en: "Binafsha shifo" },
+                address: { 
+                    uz: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom", 
+                    ru: "город Ташкент, Мирзо-Улугбекский район, массив ТТЗ-2, дом 11", 
+                    en: "Tashkent city, Mirzo Ulugbek district, TTZ-2 microdistrict, house 11" 
+                },
+                yandexQuery: "Binafsha shifo TTZ Toshkent",
+                rating: 5.0,
+                phone: "+998933948568",
+                hours: "09:00 - 18:00",
+                directions: { uz: "Stomatologiya, Ortodontiya, Implantologiya", ru: "Стоматология, Ортодонтия, Имплантология", en: "Dentistry, Orthodontics, Implantology" },
+                verified: true,
+                reviews: []
+            },
+            {
+                id: 102,
+                name: { uz: "Akfa Medline", ru: "Акфа Медлайн", en: "Akfa Medline" },
+                address: { 
+                    uz: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li 5A", 
+                    ru: "город Ташкент, Алмазарский район, Малая кольцевая дорога 5А", 
+                    en: "Tashkent city, Almazar district, Small Ring Road 5A" 
+                },
+                yandexQuery: "Akfa Medline Toshkent",
+                rating: 4.9,
+                phone: "+998712030003",
+                hours: "08:00 - 20:00",
+                directions: { uz: "Kardiologiya, Nevrologiya, Xirurgiya", ru: "Кардиология, Неврология, Хирургия", en: "Cardiology, Neurology, Surgery" },
+                verified: true,
+                reviews: []
+            },
+            {
+                id: 103,
+                name: { uz: "Shox Med", ru: "Шокс Мед", en: "Shox Med" },
+                address: { 
+                    uz: "Toshkent shahri, Shox Med klinikasi", 
+                    ru: "город Ташкент, клиника Шокс Мед", 
+                    en: "Tashkent city, Shox Med clinic" 
+                },
+                yandexQuery: "Shox Med Toshkent",
+                rating: 5.0,
+                phone: "+998909279515",
+                hours: "08:00 - 19:00",
+                directions: { uz: "Laboratoriya tahlillari, Diagnostika", ru: "Лабораторные анализы, Диагностика", en: "Laboratory tests, Diagnostics" },
+                verified: true,
+                reviews: []
+            }
+        ];
 
-        // Ilovani ishga tushirish
-        window.addEventListener('DOMContentLoaded', () => {
-            initAuth();
-            renderListings();
-            checkTelegramUser();
-        });
+        let medStoresData = [
+            {
+                id: 201,
+                name: { uz: "Medtehnika / Medexpress", ru: "Медтехника / Медэкспресс", en: "Medtech / Medexpress" },
+                specialization: { 
+                    uz: "Tibbiy uskunalar, tonometr, glyukometr, uy uchun jihozlar", 
+                    ru: "Медицинское оборудование, тонометр, глюкометр, товары для дома", 
+                    en: "Medical equipment, tonometer, glucometer, home appliances" 
+                },
+                address: { 
+                    uz: "Toshkent shahri, Shayxontohur tumani, Labzak ko'chasi", 
+                    ru: "город Ташкент, Шайхантахурский район, улица Лабзак", 
+                    en: "Tashkent city, Shaykhontohur district, Labzak street" 
+                },
+                phone: "+998 71 200-00-01",
+                yandexQuery: "Medtehnika Toshkent Labzak",
+                rating: 4.9,
+                reviews: []
+            }
+        ];
 
-        function checkTelegramUser() {
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                let user = tg.initDataUnsafe.user;
-                document.getElementById('user-welcome').innerText = `Salom, ${user.first_name}!`;
+        const categoriesList = [
+            { id: 'Stomatolog', name: { uz: 'Stomatolog', ru: 'Стоматолог', en: 'Dentist' } },
+            { id: 'Kardiolog', name: { uz: 'Kardiolog', ru: 'Кардиолог', en: 'Cardiologist' } },
+            { id: 'Laborant', name: { uz: 'Laborant', ru: 'Лаборант', en: 'Laboratory Assistant' } },
+            { id: 'Terapevt', name: { uz: 'Terapevt', ru: 'Терапевт', en: 'Therapist' } },
+            { id: 'Xirurg', name: { uz: 'Хирург', ru: 'Хирург', en: 'Surgeon' } }
+        ];
+
+        const regionsData = {
+            "Toshkent shahri": [
+                "Mirzo Ulug'bek tumani", "Chilonzor tumani", "Yakkasaroy tumani", 
+                "Olmazor tumani", "Yunusobod tumani", "Mirobod tumani", 
+                "Shayxontohur tumani", "Uchtepa tumani", "Yashnobod tumani", "Sergeli tumani"
+            ],
+            "Toshkent viloyati": [
+                "Chinoz tumani", "Yangiyo'l tumani", "Zangiota tumani", 
+                "Qibray tumani", "Parkent tumani", "Bo'stonliq tumani", "Angren shahri"
+            ],
+            "Samarqand viloyati": [
+                "Samarqand shahri", "Kattaqo'rg'on tumani", "Urgut tumani", "Bulung'ur tumani"
+            ],
+            "Farg'ona viloyati": [
+                "Farg'ona shahri", "Marg'ilon shahri", "Qo'qon shahri", "Rishton tumani"
+            ],
+            "Andijon viloyati": [
+                "Andijon shahri", "Asaka tumani", "Xonobod shahri", "Shahrixon tumani"
+            ],
+            "Namangan viloyati": [
+                "Namangan shahri", "Chust tumani", "Kosonsoy tumani", "Pop tumani"
+            ]
+        };
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900';
+            
+            toast.className = `${bgColor} px-4 py-3 rounded-xl shadow-lg text-xs font-bold flex items-center justify-between pointer-events-auto transform translate-y-[-20px] opacity-0 transition-all duration-300`;
+            toast.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-[-20px]', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const btn = document.getElementById('darkModeBtn');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('docinfo_theme', 'light');
+                btn.innerText = '🌙';
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('docinfo_theme', 'dark');
+                btn.innerText = '☀️';
             }
         }
 
-        function initAuth() {
-            if (auth) {
-                auth.onAuthStateChanged(user => {
-                    currentUser = user;
-                    const authBtn = document.getElementById('auth-btn');
-                    if (user) {
-                        authBtn.innerText = "Chiqish";
-                        authBtn.onclick = logoutUser;
-                    } else {
-                        authBtn.innerText = "Kirish";
-                        authBtn.onclick = openAuthModal;
-                    }
-                });
-            }
+        if (localStorage.getItem('docinfo_theme') === 'dark' || (!localStorage.getItem('docinfo_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('darkModeBtn').innerText = '☀️';
         }
 
-        // Kategoriya o'zgartirish
-        function setCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-btn').forEach(btn => {
-                btn.className = "cat-btn bg-white text-slate-600 border border-slate-200 px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition";
-            });
-            event.target.className = "cat-btn bg-blue-600 text-white px-3 py-1.5 rounded-lg font-medium whitespace-nowrap transition shadow-sm";
-            renderListings();
-        }
+        function changeLang(lang) {
+            currentLang = lang;
+            const indicator = document.getElementById('langIndicator');
+            if (lang === 'uz') indicator.style.left = '4px';
+            else if (lang === 'ru') indicator.style.left = '40px';
+            else if (lang === 'en') indicator.style.left = '76px';
 
-        // Ma'lumotlarni chiqarish
-        function renderListings() {
-            const container = document.getElementById('listings-container');
-            container.innerHTML = '';
-
-            let dataToRender = itemsData;
-
-            if (currentTab === 'favorites') {
-                dataToRender = itemsData.filter(item => favorites.includes(item.id));
-                if (dataToRender.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-16 text-slate-400 space-y-2">
-                            <i class="fa-regular fa-bookmark text-3xl"></i>
-                            <p class="text-sm">Saqlangan elementlar yo'q</p>
-                        </div>
-                    `;
-                    return;
+            ['uz', 'ru', 'en'].forEach(l => {
+                const btn = document.getElementById('btn' + l.toUpperCase());
+                if (btn) {
+                    btn.className = l === lang ? "relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition" : "relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition";
                 }
-            } else if (currentTab === 'profile') {
-                renderProfileTab(container);
-                return;
-            }
-
-            // Filtr turi va qidiruv bo'yicha saralash
-            const searchQuery = document.getElementById('search-input').value.toLowerCase();
-            dataToRender = dataToRender.filter(item => {
-                const matchCat = currentCategory === 'all' || item.category === currentCategory;
-                const matchSearch = item.name.toLowerCase().includes(searchQuery) || 
-                                    item.specialty.toLowerCase().includes(searchQuery) || 
-                                    item.district.toLowerCase().includes(searchQuery);
-                return matchCat && matchSearch;
             });
 
-            if (dataToRender.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-16 text-slate-400 space-y-2">
-                        <i class="fa-solid fa-triangle-exclamation text-3xl"></i>
-                        <p class="text-sm">Hech narsa topilmadi</p>
-                    </div>
-                `;
-                return;
+            document.getElementById('appSubtitle').innerText = translations[lang].subtitle;
+            document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+            document.getElementById('tabDoctors').innerText = translations[lang].tabDoctors;
+            document.getElementById('tabClinics').innerText = translations[lang].tabClinics;
+            document.getElementById('tabStores').innerText = translations[lang].tabStores;
+            document.getElementById('tabRegions').innerText = translations[lang].tabRegions;
+            document.getElementById('footerTitle').innerText = translations[lang].footerTitle;
+            document.getElementById('tgChannelBtn').innerText = translations[lang].tgChannelText;
+            document.getElementById('instaBtn').innerText = translations[lang].instaText;
+            document.getElementById('feedbackBtn').innerText = translations[lang].feedbackText;
+            document.getElementById('aboutHeader').innerText = translations[lang].aboutHeader;
+            document.getElementById('aboutText').innerText = translations[lang].aboutText;
+            document.getElementById('rightsText').innerText = translations[lang].rightsText;
+            
+            document.getElementById('qrModalTitle').innerText = translations[lang].qrModalTitle;
+            document.getElementById('qrModalDesc').innerText = translations[lang].qrModalDesc;
+            document.getElementById('qrCloseBtn').innerText = translations[lang].qrCloseBtn;
+            
+            renderContent();
+            
+            const modal = document.getElementById('detailModal');
+            if (!modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
             }
-
-            dataToRender.forEach(item => {
-                const isFav = favorites.includes(item.id);
-                const card = document.createElement('div');
-                card.className = "bg-white border border-slate-100 rounded-2xl p-3.5 shadow-sm hover:shadow-md transition flex gap-3.5 items-center cursor-pointer relative";
-                card.onclick = () => openDetailsModal(item.id);
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover bg-slate-100">
-                    <div class="flex-1 min-w-0">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-sm text-slate-800 truncate">${item.name}</h3>
-                            <button onclick="event.stopPropagation(); toggleFavorite('${item.id}')" class="text-slate-300 hover:text-red-500 text-base">
-                                <i class="${isFav ? 'fa-solid text-red-500' : 'fa-regular'} fa-bookmark"></i>
-                            </button>
-                        </div>
-                        <p class="text-xs text-blue-600 font-medium">${item.specialty}</p>
-                        <p class="text-xs text-slate-500 mt-1 flex items-center gap-1">
-                            <i class="fa-solid fa-location-dot text-[10px]"></i> ${item.district}
-                        </p>
-                        <div class="flex items-center gap-1 mt-2 text-xs font-semibold text-amber-500">
-                            <i class="fa-solid fa-star"></i> ${item.rating} <span class="text-slate-400 font-normal">(${item.reviewsCount} sharh)</span>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
         }
 
-        function filterData() {
-            renderListings();
-        }
-
-        // Tablar bo'yicha almashish
         function switchTab(tab) {
             currentTab = tab;
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.className = "nav-item text-slate-400 flex flex-col items-center gap-1 text-xs font-semibold";
+            selectedCategory = null;
+            selectedRegion = null;
+            selectedDistrict = null;
+            
+            ['doctors', 'clinics', 'stores', 'regions'].forEach(tName => {
+                const btn = document.getElementById('tab' + tName.charAt(0).toUpperCase() + tName.slice(1));
+                if(btn) {
+                    btn.className = tName === tab ? "py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+                }
             });
-            event.currentTarget.className = "nav-item text-blue-600 flex flex-col items-center gap-1 text-xs font-semibold";
-            renderListings();
+            
+            showSkeleton();
+            setTimeout(renderContent, 200);
         }
 
-        function renderProfileTab(container) {
-            container.innerHTML = `
-                <div class="bg-white border rounded-2xl p-5 shadow-sm space-y-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-xl font-bold">
-                            ${currentUser ? currentUser.email[0].toUpperCase() : 'U'}
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-slate-800">${currentUser ? currentUser.email : 'Mehmon foydalanuvchi'}</h3>
-                            <p class="text-xs text-slate-500">DocInfo Uz foydalanuvchisi</p>
+        function selectCategory(cat) {
+            selectedCategory = cat;
+            renderContent();
+        }
+
+        function backToCategories() {
+            selectedCategory = null;
+            renderContent();
+        }
+
+        function showSkeleton() {
+            const listContainer = document.getElementById('contentList');
+            listContainer.innerHTML = `
+                <div class="space-y-3">
+                    <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center space-x-3.5 skeleton">
+                        <div class="w-14 h-14 bg-slate-200 dark:bg-slate-700 rounded-xl"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+                            <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-1/2"></div>
                         </div>
                     </div>
-                    <hr class="border-slate-100">
-                    <div class="space-y-2 text-sm text-slate-600">
-                        <p><i class="fa-solid fa-shield-halved text-blue-600 w-6"></i> Xavfsiz Telegram WebApp</p>
-                        <p><i class="fa-solid fa-location-crosshairs text-blue-600 w-6"></i> Toshkent shahar va tumanlari</p>
-                    </div>
-                    ${!currentUser ? '<button onclick="openAuthModal()" class="w-full bg-blue-600 text-white py-2 rounded-xl text-sm font-semibold shadow">Tizimga kirish</button>' : '<button onclick="logoutUser()" class="w-full bg-slate-100 text-red-600 py-2 rounded-xl text-sm font-semibold">Chiqish</button>'}
                 </div>
             `;
         }
 
-        // Sevimlilarga qo'shish / O'chirish
-        function toggleFavorite(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(favId => favId !== id);
+        function toggleFavorite(id, event) {
+            event.stopPropagation();
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+                showToast(currentLang === 'uz' ? "Saralanganlardan olib tashlandi" : currentLang === 'ru' ? "Удалено из избранного" : "Removed from favorites", "info");
             } else {
                 favorites.push(id);
+                showToast(currentLang === 'uz' ? "Saralanganlarga qo'shildi!" : currentLang === 'ru' ? "Добавлено в избранное!" : "Added to favorites!", "success");
             }
             localStorage.setItem('docinfo_favs', JSON.stringify(favorites));
-            renderListings();
+            renderContent();
         }
 
-        // Tafsilotlar modalini ochish
-        function openDetailsModal(id) {
-            const item = itemsData.find(i => i.id === id);
-            if (!item) return;
+        function openYandexMap(query) {
+            const url = `https://yandex.uz/maps/?text=${encodeURIComponent(query)}`;
+            window.open(url, '_blank');
+        }
 
-            document.getElementById('modal-title').innerText = item.name;
-            document.getElementById('modal-body').innerHTML = `
-                <img src="${item.image}" alt="${item.name}" class="w-full h-48 rounded-xl object-cover bg-slate-100">
-                <div class="space-y-2">
-                    <span class="bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg text-xs font-semibold inline-block">${item.specialty}</span>
-                    <h3 class="font-bold text-lg text-slate-800">${item.name}</h3>
-                    <p class="text-xs text-slate-600 leading-relaxed">${item.description}</p>
-                </div>
-                <div class="bg-slate-50 p-3.5 rounded-xl space-y-2 text-xs">
-                    <div class="flex items-center gap-2 text-slate-700">
-                        <i class="fa-solid fa-location-dot text-blue-600 w-4"></i>
-                        <span>${item.address}, ${item.district}</span>
+        function openQrModal() {
+            const currentUrl = window.location.href;
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+            document.getElementById('qrImage').src = qrApiUrl;
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        function selectRegion(regionName) {
+            selectedRegion = regionName;
+            selectedDistrict = null;
+            renderContent();
+        }
+
+        function selectDistrict(districtName) {
+            selectedDistrict = districtName;
+            renderContent();
+        }
+
+        function resetRegions() {
+            selectedRegion = null;
+            selectedDistrict = null;
+            renderContent();
+        }
+
+        function renderContent() {
+            const listContainer = document.getElementById('contentList');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            
+            listContainer.innerHTML = '';
+
+            if (currentTab === 'regions') {
+                if (!selectedRegion) {
+                    let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].selectRegionTitle}</div><div class="grid grid-cols-1 gap-2">`;
+                    Object.keys(regionsData).forEach(reg => {
+                        html += `
+                            <div onclick="selectRegion('${reg}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">📍 ${reg}</span>
+                                <span class="text-xs text-sky-600 font-semibold">${translations[currentLang].showDistricts}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                } else if (!selectedDistrict) {
+                    let html = `
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline flex items-center" onclick="resetRegions()">${translations[currentLang].backToRegions}</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedRegion}</span>
+                        </div>
+                        <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].selectDistrictTitle}</div>
+                        <div class="grid grid-cols-1 gap-2">
+                    `;
+                    regionsData[selectedRegion].forEach(dist => {
+                        html += `
+                            <div onclick="selectDistrict('${dist}')" class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
+                                <span class="font-semibold text-sm text-slate-800 dark:text-slate-100">🏢 ${dist}</span>
+                                <span class="text-xs text-slate-400">${translations[currentLang].searchDoctorsLink}</span>
+                            </div>
+                        `;
+                    });
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                } else {
+                    let filteredDocs = doctorsData.filter(d => d.address[currentLang].toLowerCase().includes(selectedDistrict.toLowerCase()));
+                    let filteredClinics = clinicsData.filter(c => c.address[currentLang].toLowerCase().includes(selectedDistrict.toLowerCase()));
+
+                    let html = `
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="selectRegion('${selectedRegion}')">${translations[currentLang].backToRegions}</span>
+                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedDistrict}</span>
+                        </div>
+                        <div class="space-y-3">
+                    `;
+
+                    if (filteredDocs.length === 0 && filteredClinics.length === 0) {
+                        html += `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].emptyDistrict}</div>`;
+                    } else {
+                        filteredDocs.forEach(item => {
+                            html += `
+                                <div onclick="showDoctorDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                                    <div class="flex items-center space-x-3.5">
+                                        <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name[currentLang]} ✅</h3>
+                                            <p class="text-xs text-sky-600 font-semibold mt-0.5">${item.spec[currentLang]}</p>
+                                            <p class="text-xs text-slate-500 mt-0.5">📍 ${item.clinic[currentLang]}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        filteredClinics.forEach(item => {
+                            html += `
+                                <div onclick="showClinicDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:shadow-md transition">
+                                    <div class="flex items-center space-x-3.5">
+                                        <div class="w-14 h-14 rounded-xl bg-sky-50 dark:bg-slate-700 text-sky-600 flex items-center justify-center text-xl font-bold">🏥</div>
+                                        <div>
+                                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name[currentLang]}</h3>
+                                            <p class="text-xs text-sky-600 font-semibold mt-0.5">${translations[currentLang].tabClinics}</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                    html += `</div>`;
+                    listContainer.innerHTML = html;
+                }
+                return;
+            }
+
+            if (currentTab === 'stores') {
+                let storesToRender = medStoresData.filter(s => {
+                    return s.name[currentLang].toLowerCase().includes(searchVal) || s.specialization[currentLang].toLowerCase().includes(searchVal);
+                });
+
+                if (storesToRender.length === 0) {
+                    listContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
+                    return;
+                }
+
+                let html = `<div class="space-y-3"><div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">${translations[currentLang].storesTitle}</div>`;
+                storesToRender.forEach(item => {
+                    html += `
+                        <div onclick="showStoreDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
+                            <div class="flex items-center space-x-3.5 flex-1">
+                                <div class="w-14 h-14 bg-emerald-50 dark:bg-slate-700 text-emerald-600 rounded-xl flex items-center justify-center text-xl font-bold">🩺</div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name[currentLang]} ✅</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">📍 ${item.address[currentLang]}</p>
+                                    <p class="text-xs text-emerald-600 font-medium mt-1">${item.specialization[currentLang]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end space-y-2">
+                                <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold">${translations[currentLang].mapBtnText}</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                listContainer.innerHTML = html;
+                return;
+            }
+
+            if (currentTab === 'clinics') {
+                let clinicsToRender = clinicsData.filter(c => {
+                    return c.name[currentLang].toLowerCase().includes(searchVal) || c.directions[currentLang].toLowerCase().includes(searchVal);
+                });
+
+                if (clinicsToRender.length === 0) {
+                    listContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
+                    return;
+                }
+
+                let html = `<div class="space-y-3">`;
+                clinicsToRender.forEach(item => {
+                    html += `
+                        <div onclick="showClinicDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
+                            <div class="flex items-center space-x-3.5 flex-1">
+                                <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name[currentLang]} ✅</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">📍 ${item.address[currentLang]}</p>
+                                    <p class="text-xs text-sky-600 font-medium mt-1">${item.directions[currentLang]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${item.rating}</div>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 px-2.5 py-1 rounded-lg font-semibold">${translations[currentLang].mapBtnText}</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                listContainer.innerHTML = html;
+                return;
+            }
+
+            if (currentTab === 'doctors') {
+                let itemsToRender = doctorsData.filter(d => {
+                    const matchesCategory = (selectedCategory === null || selectedCategory === 'all' || d.cat === selectedCategory);
+                    const matchesSearch = d.name[currentLang].toLowerCase().includes(searchVal) || d.spec[currentLang].toLowerCase().includes(searchVal) || d.clinic[currentLang].toLowerCase().includes(searchVal);
+                    return matchesCategory && matchesSearch;
+                });
+
+                let categoriesBarHtml = `
+                    <div class="mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].specTitle}</span>
+                            ${selectedCategory !== null ? `<span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">${translations[currentLang].allCategories}</span>` : ''}
+                        </div>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button onclick="selectCategory('all')" class="p-2.5 rounded-xl text-xs font-semibold text-center border transition ${selectedCategory === null || selectedCategory === 'all' ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700'}">
+                                ${translations[currentLang].allCategories}
+                            </button>
+                `;
+
+                categoriesList.forEach(cat => {
+                    const isActive = (selectedCategory === cat.id);
+                    categoriesBarHtml += `
+                        <button onclick="selectCategory('${cat.id}')" class="p-2.5 rounded-xl text-xs font-semibold text-center border transition truncate ${isActive ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700'}">
+                            ${cat.name[currentLang]}
+                        </button>
+                    `;
+                });
+                categoriesBarHtml += `</div></div>`;
+
+                if (itemsToRender.length === 0) {
+                    listContainer.innerHTML = categoriesBarHtml + `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
+                    return;
+                }
+
+                let containerHtml = categoriesBarHtml + `<div class="space-y-3" id="reviews-container">`;
+                itemsToRender.forEach(item => {
+                    const isFav = favorites.includes(item.id);
+                    containerHtml += `
+                        <div onclick="showDoctorDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
+                            <div class="flex items-center space-x-3.5 flex-1">
+                                <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name[currentLang]} ✅</h3>
+                                    <p class="text-xs text-sky-600 font-semibold mt-0.5">${item.spec[currentLang]} • ${item.exp} ${translations[currentLang].experience}</p>
+                                    <p class="text-xs text-slate-500 mt-1">📍 ${item.clinic[currentLang]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end space-y-1">
+                                <button onclick="toggleFavorite(${item.id}, event)" class="text-base">${isFav ? '⭐' : '☆'}</button>
+                                <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                containerHtml += `</div>`;
+                listContainer.innerHTML = containerHtml;
+            }
+        }
+
+        function handleSearch() {
+            renderContent();
+        }
+
+        function renderReviewsSection(itemType, itemId, reviews) {
+            let reviewsHtml = `
+                <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${translations[currentLang].reviewsTitle} (<span id="reviewCount">${reviews.length}</span>)</h4>
+                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1" id="reviews-list">
+            `;
+
+            if (reviews.length === 0) {
+                reviewsHtml += `<p class="text-xs text-slate-400 italic" id="noReviewsText">${translations[currentLang].noReviews}</p>`;
+            } else {
+                reviews.forEach(rev => {
+                    const reviewText = (typeof rev.text === 'object' && rev.text[currentLang]) ? rev.text[currentLang] : (typeof rev.text === 'object' ? rev.text['uz'] : rev.text);
+                    reviewsHtml += `
+                        <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl text-xs space-y-1">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-slate-700 dark:text-slate-200">${rev.name}</span>
+                                <span class="text-amber-500 font-bold">${'⭐'.repeat(rev.rating)}</span>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-300">${reviewText}</p>
+                            <span class="text-[10px] text-slate-400 block text-right">${rev.date || ''}</span>
+                        </div>
+                    `;
+                });
+            }
+
+            // Telegram orqali kirgan bo'lsa, ism maydonini avtomatik to'ldirish
+            let defaultName = "";
+            if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+                const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+                defaultName = (tgUser.first_name || "") + (tgUser.last_name ? " " + tgUser.last_name : "");
+            }
+
+            reviewsHtml += `
                     </div>
-                    <div class="flex items-center gap-2 text-slate-700">
-                        <i class="fa-solid fa-phone text-blue-600 w-4"></i>
-                        <a href="tel:${item.phone}" class="font-semibold text-blue-600">${item.phone}</a>
-                    </div>
+                    <form id="review-form" onsubmit="submitReview(event, '${itemType}', ${itemId})" class="bg-slate-50 dark:bg-slate-700/40 p-3 rounded-xl space-y-2 mt-3">
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">${translations[currentLang].addReviewHeader}</p>
+                        <input type="text" id="reviewAuthorName" value="${defaultName}" placeholder="${translations[currentLang].namePlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none">
+                        <div class="flex items-center space-x-2">
+                            <span class="text-xs text-slate-500">Baho:</span>
+                            <select id="reviewRatingVal" class="px-2 py-1 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg">
+                                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                                <option value="4">⭐⭐⭐⭐ (4)</option>
+                                <option value="3">⭐⭐⭐ (3)</option>
+                                <option value="2">⭐⭐ (2)</option>
+                                <option value="1">⭐ (1)</option>
+                            </select>
+                        </div>
+                        <textarea id="reviewTextContent" placeholder="${translations[currentLang].reviewPlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none" rows="2"></textarea>
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg text-xs font-bold transition">${translations[currentLang].submitReviewBtn}</button>
+                    </form>
                 </div>
-                <div>
-                    <h4 class="font-bold text-sm text-slate-800 mb-2">Sharh qoldirish</h4>
-                    <div class="space-y-2">
-                        <textarea id="review-text" placeholder="O'z fikringizni yozing..." class="w-full p-2.5 border rounded-xl text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
-                        <button onclick="submitReview('${item.id}')" class="w-full bg-blue-600 text-white py-2 rounded-xl text-xs font-semibold shadow">Sharh yuborish</button>
+            `;
+            return reviewsHtml;
+        }
+
+        async function submitReview(event, itemType, itemId) {
+            event.preventDefault();
+            const nameInput = document.getElementById('reviewAuthorName').value.trim();
+            const ratingInput = parseInt(document.getElementById('reviewRatingVal').value);
+            const textInput = document.getElementById('reviewTextContent').value.trim();
+
+            if (!nameInput || !textInput) {
+                showToast(translations[currentLang].reviewValidation, "info");
+                return;
+            }
+
+            const newReview = {
+                itemId: itemId,
+                itemType: itemType,
+                name: nameInput,
+                text: textInput,
+                rating: ratingInput,
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            try {
+                await db.collection("reviews").add(newReview);
+                
+                let targetItem = null;
+                if (itemType === 'doctor') targetItem = doctorsData.find(d => d.id === itemId);
+                else if (itemType === 'clinic') targetItem = clinicsData.find(c => c.id === itemId);
+                else if (itemType === 'store') targetItem = medStoresData.find(s => s.id === itemId);
+
+                if (targetItem) {
+                    targetItem.reviews.push({
+                        name: nameInput,
+                        text: { uz: textInput, ru: textInput, en: textInput },
+                        rating: ratingInput,
+                        date: newReview.date
+                    });
+                    let totalRating = targetItem.reviews.reduce((sum, r) => sum + r.rating, 0);
+                    targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
+                }
+
+                showToast(translations[currentLang].successReview);
+                
+                if (itemType === 'doctor') showDoctorDetail(itemId);
+                else if (itemType === 'clinic') showClinicDetail(itemId);
+                else if (itemType === 'store') showStoreDetail(itemId);
+                
+            } catch (error) {
+                console.error("Xatolik yuz berdi: ", error);
+                showToast("Xatolik yuz berdi. Qayta urinib ko'ring.", "info");
+            }
+        }
+
+        async function loadReviews() {
+            try {
+                const querySnapshot = await db.collection("reviews").get();
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let targetItem = null;
+                    if (data.itemType === 'doctor') targetItem = doctorsData.find(d => d.id === data.itemId);
+                    else if (data.itemType === 'clinic') targetItem = clinicsData.find(c => c.id === data.itemId);
+                    else if (data.itemType === 'store') targetItem = medStoresData.find(s => s.id === data.itemId);
+
+                    if (targetItem) {
+                        const exists = targetItem.reviews.some(r => r.name === data.name && r.date === data.date && (r.text === data.text || r.text.uz === data.text));
+                        if (!exists) {
+                            targetItem.reviews.push({
+                                name: data.name,
+                                text: { uz: data.text, ru: data.text, en: data.text },
+                                rating: data.rating,
+                                date: data.date
+                            });
+                        }
+                    }
+                });
+            } catch (e) {
+                console.log("Internetga ulanishda xatolik yoki bazada ma'lumot yo'q");
+            }
+        }
+
+        function showDoctorDetail(docId) {
+            const doc = doctorsData.find(d => d.id === docId);
+            if(!doc) return;
+
+            document.getElementById('modalTitle').innerText = doc.name[currentLang];
+            let bodyHtml = `
+                <div class="space-y-3">
+                    <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-xl space-y-1.5">
+                        <p class="text-xs font-bold text-sky-800 dark:text-sky-300">🩺 ${translations[currentLang].specLabel}: ${doc.spec[currentLang]} (${doc.exp} ${translations[currentLang].experience})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">🏥 <b>${translations[currentLang].clinicLabel}:</b> ${doc.clinic[currentLang]}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${doc.address[currentLang]} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${doc.phone}" class="text-sky-600 font-bold">${doc.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${doc.rating} / 5.0</span></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="showToast('${doc.name[currentLang]} ${translations[currentLang].successBooking}'); closeModal();" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].bookBtn}</button>
+                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
                     </div>
                 </div>
             `;
-            document.getElementById('details-modal').classList.remove('hide');
+            bodyHtml += renderReviewsSection('doctor', doc.id, doc.reviews);
+            document.getElementById('modalBody').innerHTML = bodyHtml;
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        function closeDetailsModal() {
-            document.getElementById('details-modal').classList.add('hide');
+        function showClinicDetail(clinicId) {
+            const clinic = clinicsData.find(c => c.id === clinicId);
+            if(!clinic) return;
+
+            document.getElementById('modalTitle').innerText = clinic.name[currentLang];
+            let bodyHtml = `
+                <div class="space-y-3">
+                    <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-xl space-y-1.5">
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer underline" onclick="openYandexMap('${clinic.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${clinic.address[currentLang]} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⏰ <b>${translations[currentLang].hoursLabel}:</b> ${clinic.hours}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">🩺 <b>${translations[currentLang].directionsLabel}:</b> ${clinic.directions[currentLang]}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${clinic.phone}" class="text-sky-600 font-bold">${clinic.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${clinic.rating} / 5.0</span></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 hover:bg-sky-700 text-white text-center py-2.5 rounded-xl text-xs font-bold flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
+                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnText}</button>
+                    </div>
+                </div>
+            `;
+            bodyHtml += renderReviewsSection('clinic', clinic.id, clinic.reviews);
+            document.getElementById('modalBody').innerHTML = bodyHtml;
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        // Sharh qo'shish funksiyasi
-        function submitReview(id) {
-            const text = document.getElementById('review-text').value;
-            if (!text.trim()) {
-                alert("Iltimos, sharh matnini kiriting!");
-                return;
-            }
-            alert("Sharhingiz muvaffaqiyatli qo'shildi!");
-            document.getElementById('review-text').value = '';
+        function showStoreDetail(storeId) {
+            const store = medStoresData.find(s => s.id === storeId);
+            if(!store) return;
+
+            document.getElementById('modalTitle').innerText = store.name[currentLang];
+            let bodyHtml = `
+                <div class="space-y-3">
+                    <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3.5 rounded-xl space-y-1.5">
+                        <p class="text-xs text-slate-600 dark:text-slate-300"><b>${translations[currentLang].specLabel}:</b> ${store.specialization[currentLang]}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${store.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${store.address[currentLang]} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${store.phone}" class="text-emerald-600 font-bold">${store.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${store.rating} / 5.0</span></p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:${store.phone}" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
+                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnText}</button>
+                    </div>
+                </div>
+            `;
+            bodyHtml += renderReviewsSection('store', store.id, store.reviews);
+            document.getElementById('modalBody').innerHTML = bodyHtml;
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        // Auth Modal funksiyalari
-        function openAuthModal() {
-            document.getElementById('auth-modal').classList.remove('hide');
+        function closeModal() {
+            document.getElementById('detailModal').classList.add('hidden');
         }
 
-        function closeAuthModal() {
-            document.getElementById('auth-modal').classList.add('hide');
-        }
-
-        function toggleAuthMode() {
-            isRegistering = !isRegistering;
-            document.getElementById('auth-modal-title').innerText = isRegistering ? "Ro'yxatdan o'tish" : "Tizimga kirish";
-            document.getElementById('auth-submit-btn').innerText = isRegistering ? "Ro'yxatdan o'tish" : "Kirish";
-            document.getElementById('auth-toggle-text').innerText = isRegistering ? "Akkauntingiz bormi? Tizimga kiring" : "Akkauntingiz yo'qmi? Ro'yxatdan o'ting";
-        }
-
-        async function handleAuthSubmit() {
-            const email = document.getElementById('auth-email').value;
-            const password = document.getElementById('auth-password').value;
-
-            if (!email || !password) {
-                alert("Barcha maydonlarni to'ldiring!");
-                return;
-            }
-
-            if (!auth) {
-                alert("Autentifikatsiya xizmati ulanmagan (Demo rejim).");
-                closeAuthModal();
-                return;
-            }
-
-            try {
-                if (isRegistering) {
-                    await auth.createUserWithEmailAndPassword(email, password);
-                    alert("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
-                } else {
-                    await auth.signInWithEmailAndPassword(email, password);
-                    alert("Xush kelibsiz!");
-                }
-                closeAuthModal();
-            } catch (error) {
-                alert("Xatolik: " + error.message);
-            }
-        }
-
-        async function logoutUser() {
-            if (auth) {
-                await auth.signOut();
-                alert("Tizimdan chiqildi.");
-                renderListings();
-            }
+        window.onload = async function() {
+            showSkeleton();
+            await loadReviews();
+            setTimeout(renderContent, 300);
         }
     </script>
 </body>
