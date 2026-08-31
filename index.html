@@ -141,7 +141,7 @@
         </footer>
     </main>
 
-    <!-- Detail Modal (Kengaytirilgan oyna) -->
+    <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 w-full max-w-lg rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl transform transition-transform text-slate-800 dark:text-slate-100">
             <div class="flex justify-between items-start mb-4 border-b border-slate-100 dark:border-slate-700 pb-3">
@@ -334,11 +334,23 @@
         let doctorsData = [
             {
                 id: 1,
-                name: { uz: "Dr. Nizamov Qahramon Mamaniyozovich", ru: "Др. Низамов Кахрамон Маманиязович", en: "Dr. Nizamov Qakhramon Mamaniyozovich" },
-                spec: { uz: "Stomatolog-Ortodont", ru: "Стоматолог-Ортодонт", en: "Dentist-Orthodontist" },
+                name: { 
+                    uz: "Dr. Nizamov Qahramon Mamaniyozovich", 
+                    ru: "Др. Низамов Кахрамон Маманиязович", 
+                    en: "Dr. Nizamov Qakhramon Mamaniyozovich" 
+                },
+                spec: { 
+                    uz: "Stomatolog-Ortodont", 
+                    ru: "Стоматолог-Ортодонт", 
+                    en: "Dentist-Orthodontist" 
+                },
                 cat: "Stomatolog",
                 exp: 25,
-                clinic: { uz: "Binafsha shifo", ru: "Бинафша шифо", en: "Binafsha shifo" },
+                clinic: { 
+                    uz: "Binafsha shifo", 
+                    ru: "Бинафша шифо", 
+                    en: "Binafsha shifo" 
+                },
                 address: { 
                     uz: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom", 
                     ru: "город Ташкент, Мирзо-Улугбекский район, массив ТТЗ-2, дом 11", 
@@ -352,13 +364,21 @@
                 reviews: [
                     { 
                         name: "Sardor", 
-                        text: { uz: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman!", ru: "Очень опытный и внимательный врач. Рекомендую!", en: "Very experienced and attentive doctor. I recommend!" }, 
+                        text: { 
+                            uz: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman!", 
+                            ru: "Очень опытный и внимательный врач. Рекомендую!", 
+                            en: "Very experienced and attentive doctor. I recommend!" 
+                        }, 
                         rating: 5, 
                         date: "2026-08-20" 
                     },
                     { 
                         name: "Malika", 
-                        text: { uz: "Ishlari sifatli va og'riqsiz bajarildi.", ru: "Работа выполнена качественно и безболезненно.", en: "Work was done qualitatively and painlessly." }, 
+                        text: { 
+                            uz: "Ishlari sifatli va og'riqsiz bajarildi.", 
+                            ru: "Работа выполнена качественно и безболезненно.", 
+                            en: "Work was done qualitatively and painlessly." 
+                        }, 
                         rating: 5, 
                         date: "2026-08-25" 
                     }
@@ -366,11 +386,23 @@
             },
             {
                 id: 2,
-                name: { uz: "Dr. Aliyev Javlon", ru: "Др. Алиев Жавлон", en: "Dr. Aliyev Javlon" },
-                spec: { uz: "Kardiolog-Arritmolog", ru: "Кардиолог-Аритмолог", en: "Cardiologist-Arrhythmologist" },
+                name: { 
+                    uz: "Dr. Aliyev Javlon", 
+                    ru: "Др. Алиев Жавлон", 
+                    en: "Dr. Aliyev Javlon" 
+                },
+                spec: { 
+                    uz: "Kardiolog-Arritmolog", 
+                    ru: "Кардиолог-Аритмолог", 
+                    en: "Cardiologist-Arrhythmologist" 
+                },
                 cat: "Kardiolog",
                 exp: 10,
-                clinic: { uz: "Akfa Medline", ru: "Акфа Медлайн", en: "Akfa Medline" },
+                clinic: { 
+                    uz: "Akfa Medline", 
+                    ru: "Акфа Медлайн", 
+                    en: "Akfa Medline" 
+                },
                 address: { 
                     uz: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li 5A", 
                     ru: "город Ташкент, Алмазарский район, Малая кольцевая дорога 5А", 
@@ -384,7 +416,11 @@
                 reviews: [
                     { 
                         name: "Jasur", 
-                        text: { uz: "Malakali kardiolog, barchasini tushuntirib berdi.", ru: "Квалифицированный кардиолог, все объяснил.", en: "Qualified cardiologist, explained everything." }, 
+                        text: { 
+                            uz: "Malakali kardiolog, barchasini tushuntirib berdi.", 
+                            ru: "Квалифицированный кардиолог, все объяснил.", 
+                            en: "Qualified cardiologist, explained everything." 
+                        }, 
                         rating: 5, 
                         date: "2026-08-28" 
                     }
@@ -410,7 +446,11 @@
                 reviews: [
                     { 
                         name: "Bobur", 
-                        text: { uz: "Ajoyib klinika, sharoitlar yaxshi.", ru: "Отличная клиника, условия хорошие.", en: "Great clinic, good conditions." }, 
+                        text: { 
+                            uz: "Ajoyib klinika, sharoitlar yaxshi.", 
+                            ru: "Отличная клиника, условия хорошие.", 
+                            en: "Great clinic, good conditions." 
+                        }, 
                         rating: 5, 
                         date: "2026-08-15" 
                     }
@@ -576,6 +616,12 @@
             document.getElementById('qrCloseBtn').innerText = translations[lang].qrCloseBtn;
             
             renderContent();
+            
+            // Ochiq turgan modal oynani ham til o'zgarganda yangilash
+            const modal = document.getElementById('detailModal');
+            if (!modal.classList.contains('hidden')) {
+                modal.classList.add('hidden');
+            }
         }
 
         function switchTab(tab) {
@@ -902,7 +948,7 @@
                 reviewsHtml += `<p class="text-xs text-slate-400 italic">${translations[currentLang].noReviews}</p>`;
             } else {
                 reviews.forEach(rev => {
-                    const reviewText = typeof rev.text === 'object' ? rev.text[currentLang] : rev.text;
+                    const reviewText = (typeof rev.text === 'object' && rev.text[currentLang]) ? rev.text[currentLang] : (typeof rev.text === 'object' ? rev.text['uz'] : rev.text);
                     reviewsHtml += `
                         <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl text-xs space-y-1">
                             <div class="flex justify-between items-center">
