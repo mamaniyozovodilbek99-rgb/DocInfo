@@ -107,9 +107,10 @@
                     <span>✈️</span>
                     <span id="tgChannelBtn">Telegram kanal</span>
                 </a>
-                <a href="https://instagram.com/SizningInstagramProfilingiz" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
+                <!-- Instagram Link Qo'shildi -->
+                <a href="https://www.instagram.com/docinfo_uz?igsi=eWV2Nzh2eGtuZzNr" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>📸</span>
-                    <span id="instaBtn">Instagram</span>
+                    <span id="instaBtn">DocInfo</span>
                 </a>
                 <a href="https://t.me/SizningAdminUsernamengiz" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-slate-600 text-emerald-700 dark:text-emerald-300 p-3 rounded-xl text-xs font-semibold transition">
                     <span>💡</span>
@@ -244,7 +245,6 @@
         let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
 
-        // Ma'lumotlar bazasini saqlash (sharhlar dinamik saqlanishi uchun)
         let doctorsData = [
             {
                 id: 1,
@@ -346,7 +346,6 @@
             { id: 'Xirurg', name: 'Xirurg' }
         ];
 
-        // O'zbekiston viloyatlari va tumanlari ma'lumotlar bazasi
         const regionsData = {
             "Toshkent shahri": [
                 "Mirzo Ulug'bek tumani", "Chilonzor tumani", "Yakkasaroy tumani", 
@@ -524,7 +523,6 @@
             
             listContainer.innerHTML = '';
 
-            // 1. Regions Tab Logic
             if (currentTab === 'regions') {
                 if (!selectedRegion) {
                     let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Viloyatni tanlang</div><div class="grid grid-cols-1 gap-2">`;
@@ -558,7 +556,6 @@
                     html += `</div>`;
                     listContainer.innerHTML = html;
                 } else {
-                    // Tuman tanlanganda o'sha tumandagi doktorlar yoki klinikalar chiqadi
                     let filteredDocs = doctorsData.filter(d => d.address.toLowerCase().includes(selectedDistrict.toLowerCase()));
                     let filteredClinics = clinicsData.filter(c => c.address.toLowerCase().includes(selectedDistrict.toLowerCase()));
 
@@ -613,7 +610,6 @@
                 return;
             }
 
-            // 2. Med-Stores Tab Logic
             if (currentTab === 'stores') {
                 let storesToRender = medStoresData.filter(s => {
                     return s.name.toLowerCase().includes(searchVal) || s.specialization.toLowerCase().includes(searchVal);
@@ -648,7 +644,6 @@
                 return;
             }
 
-            // 3. Clinics Tab Logic
             if (currentTab === 'clinics') {
                 let clinicsToRender = clinicsData.filter(c => {
                     return c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
@@ -683,7 +678,6 @@
                 return;
             }
 
-            // 4. Doctors Tab Logic
             if (currentTab === 'doctors') {
                 let itemsToRender = doctorsData.filter(d => {
                     const matchesCategory = (selectedCategory === null || selectedCategory === 'all' || d.cat === selectedCategory);
@@ -748,8 +742,6 @@
             renderContent();
         }
 
-        // --- BATAFSIL OYNA VA SHARHLAR MANTIG'I ---
-
         function renderReviewsSection(itemType, itemId, reviews) {
             let reviewsHtml = `
                 <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
@@ -776,7 +768,6 @@
 
             reviewsHtml += `
                     </div>
-                    <!-- Yangi sharh yozish formasi -->
                     <div class="bg-slate-50 dark:bg-slate-700/40 p-3 rounded-xl space-y-2 mt-3">
                         <p class="text-xs font-bold text-slate-700 dark:text-slate-300">Sharh va baho qoldirish</p>
                         <input type="text" id="reviewAuthorName" placeholder="Ismingiz" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none">
@@ -821,13 +812,11 @@
                     date: new Date().toISOString().split('T')[0]
                 });
 
-                // O'rtacha reytingni qayta hisoblash
                 let totalRating = targetItem.reviews.reduce((sum, r) => sum + r.rating, 0);
                 targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
 
                 showToast("Sharhingiz muvaffaqiyatli qo'shildi!");
                 
-                // Oynani yangilash
                 if (itemType === 'doctor') showDoctorDetail(itemId);
                 else if (itemType === 'clinic') showClinicDetail(itemId);
                 else if (itemType === 'store') showStoreDetail(itemId);
