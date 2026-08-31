@@ -1,0 +1,15 @@
+{
+  "name": "DocInfo Uzbekistan",
+  "short_name": "DocInfo",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0284c7",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/color/512/document.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
