@@ -24,6 +24,9 @@
     }">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Firebase SDK (Compat versiya) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -174,13 +177,26 @@
     </div>
 
     <script>
+        // --- FIREBASE INITIALIZATION ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Agar firebase allaqachon ishga tushmagan bo'lsa
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
         // --- TELEGRAM WEB APP INTEGRATION ---
         const tg = window.Telegram?.WebApp;
         if (tg) {
             tg.ready();
             tg.expand();
-            // Optional: Match Telegram theme or header color if needed
-            // tg.setHeaderColor('#0284c7');
         }
 
         const translations = {
@@ -916,7 +932,7 @@
                     return;
                 }
 
-                let containerHtml = categoriesBarHtml + `<div class="space-y-3">`;
+                let containerHtml = categoriesBarHtml + `<div class="space-y-3" id="reviews-container">`;
                 itemsToRender.forEach(item => {
                     const isFav = favorites.includes(item.id);
                     containerHtml += `
@@ -948,12 +964,12 @@
         function renderReviewsSection(itemType, itemId, reviews) {
             let reviewsHtml = `
                 <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
-                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${translations[currentLang].reviewsTitle} (${reviews.length})</h4>
-                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${translations[currentLang].reviewsTitle} (<span id="reviewCount">${reviews.length}</span>)</h4>
+                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1" id="reviews-list">
             `;
 
             if (reviews.length === 0) {
-                reviewsHtml += `<p class="text-xs text-slate-400 italic">${translations[currentLang].noReviews}</p>`;
+                reviewsHtml += `<p class="text-xs text-slate-400 italic" id="noReviewsText">${translations[currentLang].noReviews}</p>`;
             } else {
                 reviews.forEach(rev => {
                     const reviewText = (typeof rev.text === 'object' && rev.text[currentLang]) ? rev.text[currentLang] : (typeof rev.text === 'object' ? rev.text['uz'] : rev.text);
@@ -972,7 +988,7 @@
 
             reviewsHtml += `
                     </div>
-                    <div class="bg-slate-50 dark:bg-slate-700/40 p-3 rounded-xl space-y-2 mt-3">
+                    <form id="review-form" onsubmit="submitReview(event, '${itemType}', ${itemId})" class="bg-slate-50 dark:bg-slate-700/40 p-3 rounded-xl space-y-2 mt-3">
                         <p class="text-xs font-bold text-slate-700 dark:text-slate-300">${translations[currentLang].addReviewHeader}</p>
                         <input type="text" id="reviewAuthorName" placeholder="${translations[currentLang].namePlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none">
                         <div class="flex items-center space-x-2">
@@ -986,14 +1002,16 @@
                             </select>
                         </div>
                         <textarea id="reviewTextContent" placeholder="${translations[currentLang].reviewPlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none" rows="2"></textarea>
-                        <button onclick="submitReview('${itemType}', ${itemId})" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg text-xs font-bold transition">${translations[currentLang].submitReviewBtn}</button>
-                    </div>
+                        <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg text-xs font-bold transition">${translations[currentLang].submitReviewBtn}</button>
+                    </form>
                 </div>
             `;
             return reviewsHtml;
         }
 
-        function submitReview(itemType, itemId) {
+        // Firebase-ga ulangan yangi submitReview funksiyasi
+        async function submitReview(event, itemType, itemId) {
+            event.preventDefault();
             const nameInput = document.getElementById('reviewAuthorName').value.trim();
             const ratingInput = parseInt(document.getElementById('reviewRatingVal').value);
             const textInput = document.getElementById('reviewTextContent').value.trim();
@@ -1003,28 +1021,75 @@
                 return;
             }
 
-            let targetItem = null;
-            if (itemType === 'doctor') targetItem = doctorsData.find(d => d.id === itemId);
-            else if (itemType === 'clinic') targetItem = clinicsData.find(c => c.id === itemId);
-            else if (itemType === 'store') targetItem = medStoresData.find(s => s.id === itemId);
+            const newReview = {
+                itemId: itemId,
+                itemType: itemType,
+                name: nameInput,
+                text: textInput,
+                rating: ratingInput,
+                date: new Date().toISOString().split('T')[0]
+            };
 
-            if (targetItem) {
-                let newTextObj = { uz: textInput, ru: textInput, en: textInput };
-                targetItem.reviews.push({
-                    name: nameInput,
-                    text: newTextObj,
-                    rating: ratingInput,
-                    date: new Date().toISOString().split('T')[0]
-                });
+            try {
+                // Firestore bazasiga yozish
+                await db.collection("reviews").add(newReview);
+                
+                // Mahalliy obyektga ham qo'shamiz
+                let targetItem = null;
+                if (itemType === 'doctor') targetItem = doctorsData.find(d => d.id === itemId);
+                else if (itemType === 'clinic') targetItem = clinicsData.find(c => c.id === itemId);
+                else if (itemType === 'store') targetItem = medStoresData.find(s => s.id === itemId);
 
-                let totalRating = targetItem.reviews.reduce((sum, r) => sum + r.rating, 0);
-                targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
+                if (targetItem) {
+                    targetItem.reviews.push({
+                        name: nameInput,
+                        text: { uz: textInput, ru: textInput, en: textInput },
+                        rating: ratingInput,
+                        date: newReview.date
+                    });
+                    let totalRating = targetItem.reviews.reduce((sum, r) => sum + r.rating, 0);
+                    targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
+                }
 
                 showToast(translations[currentLang].successReview);
                 
+                // Modalni qayta yuklash
                 if (itemType === 'doctor') showDoctorDetail(itemId);
                 else if (itemType === 'clinic') showClinicDetail(itemId);
                 else if (itemType === 'store') showStoreDetail(itemId);
+                
+            } catch (error) {
+                console.error("Xatolik yuz berdi: ", error);
+                showToast("Xatolik yuz berdi. Qayta urinib ko'ring.", "info");
+            }
+        }
+
+        // Firebase-dan sharhlarni yuklab olish funksiyasi
+        async function loadReviews() {
+            try {
+                const querySnapshot = await db.collection("reviews").get();
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    let targetItem = null;
+                    if (data.itemType === 'doctor') targetItem = doctorsData.find(d => d.id === data.itemId);
+                    else if (data.itemType === 'clinic') targetItem = clinicsData.find(c => c.id === data.itemId);
+                    else if (data.itemType === 'store') targetItem = medStoresData.find(s => s.id === data.itemId);
+
+                    if (targetItem) {
+                        // Agar bunday sharh oldin qo'shilmagan bo'lsa
+                        const exists = targetItem.reviews.some(r => r.name === data.name && r.date === data.date && (r.text === data.text || r.text.uz === data.text));
+                        if (!exists) {
+                            targetItem.reviews.push({
+                                name: data.name,
+                                text: { uz: data.text, ru: data.text, en: data.text },
+                                rating: data.rating,
+                                date: data.date
+                            });
+                        }
+                    }
+                });
+            } catch (e) {
+                console.log("Internetga ulanishda xatolik yoki bazada ma'lumot yo'q");
             }
         }
 
@@ -1099,15 +1164,16 @@
             `;
             bodyHtml += renderReviewsSection('store', store.id, store.reviews);
             document.getElementById('modalBody').innerHTML = bodyHtml;
-            document.getElementById('detailModal').classList.add('hidden');
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        window.onload = function() {
+        window.onload = async function() {
             showSkeleton();
+            await loadReviews();
             setTimeout(renderContent, 300);
         }
     </script>
