@@ -2,14 +2,21 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DocInfo Uzbekistan</title>
     <!-- PWA & iOS Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjogIkRvY0luZm8gVXpiZWtpc3RhbiIsICJzaG9ydF9uYW1lIjogIkRvY0luZm8iLCAic3RhcnRfdXJsIjogIi4vIiwgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmOGZhZmMiLCAidGhlbWVfY29sb3IiOiAiIzAyODRjNyJ9">
-</head>
+    <meta name="apple-mobile-web-app-title" content="DocInfo">
+    <link rel="apple-touch-icon" href="https://img.icons8.com/color/192/stethoscope.png">
+    <link rel="manifest" href="data:application/manifest+json;charset=utf-8,{
+      \"name\": \"DocInfo Uzbekistan\",
+      \"short_name\": \"DocInfo\",
+      \"start_url\": \"./\",
+      \"display\": \"standalone\",
+      \"background_color\": \"#f8fafc\",
+      \"theme_color\": \"#0284c7\",
+      \"icons\": [{
         \"src\": \"https://img.icons8.com/color/512/stethoscope.png\",
         \"sizes\": \"512x512\",
         \"type\": \"image/png\"
@@ -141,13 +148,6 @@
         <main class="p-4 max-w-xl mx-auto space-y-4">
             <div id="contentList" class="space-y-3"></div>
 
-            <!-- Yangi qo'shilgan: Shifokor yoki Klinika qo'shish uchun ariza/forma tugmasi -->
-            <div class="bg-gradient-to-r from-sky-500 to-blue-600 p-5 rounded-2xl shadow-md text-white text-center space-y-3">
-                <h4 class="font-bold text-sm">O'z klinika yoki shifokor profilingizni qo'shmoqchimisiz?</h4>
-                <p class="text-xs text-sky-100 leading-relaxed">Ma'lumotlar bazamizga qo'shilish va mijozlar oqimini oshirish uchun arizangizni qoldiring.</p>
-                <button onclick="openAddDocModal()" class="bg-white text-sky-700 hover:bg-sky-50 font-bold text-xs px-5 py-2.5 rounded-xl shadow transition">Ariza yuborish (+)</button>
-            </div>
-
             <!-- Contact & Social Links Section -->
             <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
                 <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
@@ -219,41 +219,6 @@
             </div>
             <p id="qrModalDesc" class="text-xs text-slate-500 dark:text-slate-400">Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.</p>
             <button onclick="closeQrModal()" id="qrCloseBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Yopish</button>
-        </div>
-    </div>
-
-    <!-- Yangi qo'shilgan: Shifokor/Klinika qo'shish modal oynasi -->
-    <div id="addDocModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl max-h-[90vh] overflow-y-auto p-6 shadow-2xl text-slate-800 dark:text-slate-100 space-y-4">
-            <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-3">
-                <h3 class="font-bold text-base">Mutaxassis yoki Klinika qo'shish</h3>
-                <button onclick="closeAddDocModal()" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-            <form id="addDocForm" onsubmit="handleNewDoctorSubmit(event)" class="space-y-3 text-xs">
-                <div>
-                    <label class="block font-semibold mb-1">To'liq F.I.Sh yoki Klinika nomi</label>
-                    <input type="text" id="newDocName" required placeholder="Masalan: Dr. Karimov Anvar" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none dark:text-white">
-                </div>
-                <div>
-                    <label class="block font-semibold mb-1">Mutaxassisligi yoki Yo'nalishi</label>
-                    <input type="text" id="newDocSpec" required placeholder="Masalan: Nevrolog, Kardiolog yoki Stomatologiya" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none dark:text-white">
-                </div>
-                <div>
-                    <label class="block font-semibold mb-1">Klinika nomi</label>
-                    <input type="text" id="newDocClinic" required placeholder="Masalan: Med Life Center" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none dark:text-white">
-                </div>
-                <div>
-                    <label class="block font-semibold mb-1">Manzil (Viloyat, tuman, ko'cha)</label>
-                    <input type="text" id="newDocAddress" required placeholder="Toshkent shahri, Chilonzor tumani..." class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none dark:text-white">
-                </div>
-                <div>
-                    <label class="block font-semibold mb-1">Telefon raqami</label>
-                    <input type="text" id="newDocPhone" required placeholder="+998 90 123 45 67" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none dark:text-white">
-                </div>
-                <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl font-bold transition shadow-sm">Ariza yuborish</button>
-            </form>
         </div>
     </div>
 
@@ -870,49 +835,6 @@
             document.getElementById('qrModal').classList.add('hidden');
         }
 
-        function openAddDocModal() {
-            document.getElementById('addDocModal').classList.remove('hidden');
-        }
-
-        function closeAddDocModal() {
-            document.getElementById('addDocModal').classList.add('hidden');
-        }
-
-        async function handleNewDoctorSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('newDocName').value.trim();
-            const spec = document.getElementById('newDocSpec').value.trim();
-            const clinic = document.getElementById('newDocClinic').value.trim();
-            const address = document.getElementById('newDocAddress').value.trim();
-            const phone = document.getElementById('newDocPhone').value.trim();
-
-            const newEntry = {
-                name: { uz: name, ru: name, en: name },
-                spec: { uz: spec, ru: spec, en: spec },
-                cat: "Terapevt",
-                exp: 5,
-                clinic: { uz: clinic, ru: clinic, en: clinic },
-                address: { uz: address, ru: address, en: address },
-                yandexQuery: address,
-                rating: 5.0,
-                phone: phone,
-                img: "👨‍⚕️",
-                verified: false,
-                reviews: [],
-                status: "pending"
-            };
-
-            try {
-                await db.collection("doctor_requests").add(newEntry);
-                showToast("Arizangiz muvaffaqiyatli yuborildi! Tekshiruvdan so'ng qo'shiladi.");
-                closeAddDocModal();
-                document.getElementById('addDocForm').reset();
-            } catch (e) {
-                console.error(e);
-                showToast("Yuborishda xatolik yuz berdi.", "info");
-            }
-        }
-
         function selectRegion(regionName) {
             selectedRegion = regionName;
             selectedDistrict = null;
@@ -1359,7 +1281,7 @@
             `;
             bodyHtml += renderReviewsSection('store', store.id, store.reviews);
             document.getElementById('modalBody').innerHTML = bodyHtml;
-            document.getElementById('detailModal'].classList.remove('hidden');
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
         function closeModal() {
