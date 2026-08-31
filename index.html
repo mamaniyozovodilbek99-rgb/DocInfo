@@ -24,9 +24,12 @@
     }">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Firebase SDK (Compat versiya) -->
+    
+    <!-- Firebase SDK (Compat versiya - Auth va Firestore uchun) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -51,104 +54,141 @@
     <!-- Toast Notification Container -->
     <div id="toastContainer" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 flex flex-col space-y-2 pointer-events-none w-11/12 max-w-md"></div>
 
-    <!-- Header / Banner -->
-    <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
-        <div class="flex items-center justify-between mb-3">
-            <div>
-                <h1 class="text-xl font-bold tracking-tight">DocInfo Uzbekistan</h1>
-                <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
+    <!-- AUTHENTICATION CONTAINER (Agar foydalanuvchi kirmagan bo'lsa chiqadi) -->
+    <div id="authWrapper" class="min-h-screen flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-md p-6 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-sky-100 dark:bg-sky-900/50 text-sky-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold">🩺</div>
+                <h2 id="authModalTitle" class="text-xl font-bold text-slate-800 dark:text-slate-100">Tizimga kirish</h2>
+                <p id="authModalDesc" class="text-xs text-slate-500 dark:text-slate-400">DocInfo Uzbekistan imkoniyatlaridan foydalanish uchun hisobingizga kiring</p>
             </div>
-            
-            <div class="flex items-center space-x-2">
-                <!-- Telegram User Greeting Badge (Auto-filled via WebApp) -->
-                <div id="tgUserBadge" class="hidden items-center space-x-1.5 bg-black/20 px-2.5 py-1.5 rounded-xl backdrop-blur-sm text-xs">
-                    <span id="tgUserAvatar">👤</span>
-                    <span id="tgUserName" class="font-semibold truncate max-w-[90px]">User</span>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Elektron pochta (Email)</label>
+                    <input type="email" id="authEmail" required placeholder="example@gmail.com" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-sky-500 dark:text-white">
                 </div>
-
-                <!-- QR Code Button -->
-                <button onclick="openQrModal()" id="qrBtnText" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="QR kodni ko'rish">
-                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                </button>
-
-                <!-- Dark Mode Toggle Button -->
-                <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30">
-                    🌙
-                </button>
-
-                <!-- Language Switcher -->
-                <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
-                    <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
-                    <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
-                    <button onclick="changeLang('ru')" id="btnRu" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">RU</button>
-                    <button onclick="changeLang('en')" id="btnEn" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">EN</button>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">Parol</label>
+                    <input type="password" id="authPassword" required placeholder="********" class="w-full px-3.5 py-2.5 text-sm bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-sky-500 dark:text-white">
                 </div>
+                <button type="submit" id="authSubmitBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-3 rounded-xl text-sm font-bold transition shadow-sm">Kirish</button>
+            </form>
+
+            <div class="text-center">
+                <button type="button" onclick="toggleAuthMode()" id="authToggleBtn" class="text-xs text-sky-600 dark:text-sky-400 font-semibold hover:underline">
+                    Akkauntingiz yo'qmi? Ro'yxatdan o'ting
+                </button>
             </div>
-        </div>
-
-        <!-- Search Box -->
-        <div class="relative">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </span>
-            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor, klinika yoki med-magazinni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
-        </div>
-    </header>
-
-    <!-- Navigation Tabs -->
-    <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
-        <div class="grid grid-cols-4 gap-1.5">
-            <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
-            <button id="tabClinics" onclick="switchTab('clinics')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
-            <button id="tabStores" onclick="switchTab('stores')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Med-magazin</button>
-            <button id="tabRegions" onclick="switchTab('regions')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
         </div>
     </div>
 
-    <!-- Main Content Container -->
-    <main class="p-4 max-w-xl mx-auto space-y-4">
-        <div id="contentList" class="space-y-3"></div>
+    <!-- MAIN APP WRAPPER (Faqat tizimga kirgandan keyin ko'rinadi) -->
+    <div id="mainAppWrapper" class="hidden">
+        <!-- Header / Banner -->
+        <header class="bg-gradient-to-r from-sky-600 to-blue-700 dark:from-sky-900 dark:to-blue-950 text-white p-4 shadow-md sticky top-0 z-30 transition-colors duration-300">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight">DocInfo Uzbekistan</h1>
+                    <p id="appSubtitle" class="text-xs text-sky-100">Shifokorlar va klinikalar katalogi</p>
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <!-- Logout Button -->
+                    <button onclick="logoutUser()" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="Chiqish">
+                        🚪
+                    </button>
 
-        <!-- Contact & Social Links Section -->
-        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
-            <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
-            <div class="grid grid-cols-2 gap-2.5">
-                <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
-                    <span>📞</span>
-                    <span>+998 93 394 85 68</span>
-                </a>
-                <!-- Telegram Bot Link -->
-                <a href="https://t.me/DocInfouz_bot" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
-                    <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24">
-                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.162.332.01.104.022.341.004.526z"/>
-                    </svg>
-                    <span id="tgChannelBtn">@DocInfouz_bot</span>
-                </a>
-                <!-- Instagram Logo -->
-                <a href="https://www.instagram.com/docinfo_uz?igsi=eWV2Nzh2eGtuZzNr" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
-                    <svg class="w-4 h-4 fill-current text-pink-600 dark:text-pink-400 shrink-0" viewBox="0 0 24 24">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                    </svg>
-                    <span id="instaBtn">DocInfo</span>
-                </a>
-                <a href="https://t.me/Odil_Visa" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-slate-600 text-emerald-700 dark:text-emerald-300 p-3 rounded-xl text-xs font-semibold transition">
-                    <span>💡</span>
-                    <span id="feedbackBtn">Taklif va Murojatlar</span>
-                </a>
+                    <!-- Telegram User Greeting Badge (Auto-filled via WebApp) -->
+                    <div id="tgUserBadge" class="hidden items-center space-x-1.5 bg-black/20 px-2.5 py-1.5 rounded-xl backdrop-blur-sm text-xs">
+                        <span id="tgUserAvatar">👤</span>
+                        <span id="tgUserName" class="font-semibold truncate max-w-[90px]">User</span>
+                    </div>
+
+                    <!-- QR Code Button -->
+                    <button onclick="openQrModal()" id="qrBtnText" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="QR kodni ko'rish">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                    </button>
+
+                    <!-- Dark Mode Toggle Button -->
+                    <button onclick="toggleDarkMode()" id="darkModeBtn" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30">
+                        🌙
+                    </button>
+
+                    <!-- Language Switcher -->
+                    <div class="relative flex items-center bg-black/20 p-1 rounded-xl backdrop-blur-sm">
+                        <div id="langIndicator" class="absolute h-7 w-9 bg-white rounded-lg shadow-sm transition-all duration-300 ease-in-out left-1"></div>
+                        <button onclick="changeLang('uz')" id="btnUz" class="relative z-10 w-9 py-1 text-xs font-bold text-sky-700 text-center transition">UZ</button>
+                        <button onclick="changeLang('ru')" id="btnRu" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">RU</button>
+                        <button onclick="changeLang('en')" id="btnEn" class="relative z-10 w-9 py-1 text-xs font-bold text-white text-center transition">EN</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </span>
+                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor, klinika yoki med-magazinni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
+            <div class="grid grid-cols-4 gap-1.5">
+                <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
+                <button id="tabClinics" onclick="switchTab('clinics')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
+                <button id="tabStores" onclick="switchTab('stores')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Med-magazin</button>
+                <button id="tabRegions" onclick="switchTab('regions')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
-            <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Uzbekistan haqida</h5>
-            <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
-                O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.
-            </p>
-            <div id="rightsText" class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
-                © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
+        <!-- Main Content Container -->
+        <main class="p-4 max-w-xl mx-auto space-y-4">
+            <div id="contentList" class="space-y-3"></div>
+
+            <!-- Contact & Social Links Section -->
+            <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 space-y-4 transition-colors">
+                <h4 id="footerTitle" class="font-bold text-slate-800 dark:text-slate-100 text-sm text-center">Biz bilan bog'lanish va loyiha resurslari</h4>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <a href="tel:+998933948568" class="flex items-center justify-center space-x-2 bg-sky-50 dark:bg-slate-700 hover:bg-sky-100 dark:hover:bg-slate-600 text-sky-700 dark:text-sky-300 p-3 rounded-xl text-xs font-semibold transition">
+                        <span>📞</span>
+                        <span>+998 93 394 85 68</span>
+                    </a>
+                    <!-- Telegram Bot Link -->
+                    <a href="https://t.me/DocInfouz_bot" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
+                        <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.162.332.01.104.022.341.004.526z"/>
+                        </svg>
+                        <span id="tgChannelBtn">@DocInfouz_bot</span>
+                    </a>
+                    <!-- Instagram Logo -->
+                    <a href="https://www.instagram.com/docinfo_uz?igsi=eWV2Nzh2eGtuZzNr" target="_blank" class="flex items-center justify-center space-x-2 bg-pink-50 dark:bg-slate-700 hover:bg-pink-100 dark:hover:bg-slate-600 text-pink-700 dark:text-pink-300 p-3 rounded-xl text-xs font-semibold transition">
+                        <svg class="w-4 h-4 fill-current text-pink-600 dark:text-pink-400 shrink-0" viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                        <span id="instaBtn">DocInfo</span>
+                    </a>
+                    <a href="https://t.me/Odil_Visa" target="_blank" class="flex items-center justify-center space-x-2 bg-emerald-50 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-slate-600 text-emerald-700 dark:text-emerald-300 p-3 rounded-xl text-xs font-semibold transition">
+                        <span>💡</span>
+                        <span id="feedbackBtn">Taklif va Murojatlar</span>
+                    </a>
+                </div>
             </div>
-        </footer>
-    </main>
+
+            <!-- Footer -->
+            <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
+                <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Uzbekistan haqida</h5>
+                <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
+                    O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.
+                </p>
+                <div id="rightsText" class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
+                    © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
+                </div>
+            </footer>
+        </main>
+    </div>
 
     <!-- Detail Modal -->
     <div id="detailModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
@@ -196,6 +236,69 @@
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        let isSignUpMode = false;
+
+        // --- AUTHENTICATION LOGIC ---
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            const title = document.getElementById('authModalTitle');
+            const desc = document.getElementById('authModalDesc');
+            const btn = document.getElementById('authSubmitBtn');
+            const toggleBtn = document.getElementById('authToggleBtn');
+
+            if (isSignUpMode) {
+                title.innerText = "Ro'yxatdan o'tish";
+                desc.innerText = "Yangi hisob yaratish uchun ma'lumotlarni kiriting";
+                btn.innerText = "Ro'yxatdan o'tish";
+                toggleBtn.innerText = "Akkauntingiz bormi? Tizimga kiring";
+            } else {
+                title.innerText = "Tizimga kirish";
+                desc.innerText = "DocInfo Uzbekistan imkoniyatlaridan foydalanish uchun hisobingizga kiring";
+                btn.innerText = "Kirish";
+                toggleBtn.innerText = "Akkauntingiz yo'qmi? Ro'yxatdan o'ting";
+            }
+        }
+
+        async function handleAuthSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+
+            try {
+                if (isSignUpMode) {
+                    await auth.createUserWithEmailAndPassword(email, password);
+                    showToast("Muvaffaqiyatli ro'yxatdan o'tdingiz!");
+                } else {
+                    await auth.signInWithEmailAndPassword(email, password);
+                    showToast("Xush kelibsiz!");
+                }
+            } catch (error) {
+                showToast("Xatolik: " + error.message, "info");
+            }
+        }
+
+        function logoutUser() {
+            auth.signOut().then(() => {
+                showToast("Tizimdan chiqildi", "info");
+            });
+        }
+
+        // Kuzatuvchi: Foydalanuvchi tizimda bormi yoki yo'q
+        auth.onAuthStateChanged((user) => {
+            const authWrapper = document.getElementById('authWrapper');
+            const mainAppWrapper = document.getElementById('mainAppWrapper');
+
+            if (user) {
+                authWrapper.classList.add('hidden');
+                mainAppWrapper.classList.remove('hidden');
+                initApp(); // Ilovani yuklash
+            } else {
+                authWrapper.classList.remove('hidden');
+                mainAppWrapper.classList.add('hidden');
+            }
+        });
 
         // --- TELEGRAM WEB APP INTEGRATION ---
         const tg = window.Telegram?.WebApp;
@@ -203,7 +306,6 @@
             tg.ready();
             tg.expand();
             
-            // Telegram orqali kirgan foydalanuvchini aniqlash va interfeysda ko'rsatish
             if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 const user = tg.initDataUnsafe.user;
                 const badge = document.getElementById('tgUserBadge');
@@ -215,7 +317,6 @@
                 }
             }
             
-            // Telegram ranglarini avtomatik moslashtirish (Dark/Light mode)
             if (tg.colorScheme === 'dark') {
                 document.documentElement.classList.add('dark');
             }
@@ -580,6 +681,7 @@
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
+            if(!container) return;
             const toast = document.createElement('div');
             const bgColor = type === 'success' ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900';
             
@@ -604,25 +706,28 @@
             if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
                 localStorage.setItem('docinfo_theme', 'light');
-                btn.innerText = '🌙';
+                if(btn) btn.innerText = '🌙';
             } else {
                 html.classList.add('dark');
                 localStorage.setItem('docinfo_theme', 'dark');
-                btn.innerText = '☀️';
+                if(btn) btn.innerText = '☀️';
             }
         }
 
         if (localStorage.getItem('docinfo_theme') === 'dark' || (!localStorage.getItem('docinfo_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
-            document.getElementById('darkModeBtn').innerText = '☀️';
+            const btn = document.getElementById('darkModeBtn');
+            if(btn) btn.innerText = '☀️';
         }
 
         function changeLang(lang) {
             currentLang = lang;
             const indicator = document.getElementById('langIndicator');
-            if (lang === 'uz') indicator.style.left = '4px';
-            else if (lang === 'ru') indicator.style.left = '40px';
-            else if (lang === 'en') indicator.style.left = '76px';
+            if (indicator) {
+                if (lang === 'uz') indicator.style.left = '4px';
+                else if (lang === 'ru') indicator.style.left = '40px';
+                else if (lang === 'en') indicator.style.left = '76px';
+            }
 
             ['uz', 'ru', 'en'].forEach(l => {
                 const btn = document.getElementById('btn' + l.toUpperCase());
@@ -631,28 +736,28 @@
                 }
             });
 
-            document.getElementById('appSubtitle').innerText = translations[lang].subtitle;
-            document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
-            document.getElementById('tabDoctors').innerText = translations[lang].tabDoctors;
-            document.getElementById('tabClinics').innerText = translations[lang].tabClinics;
-            document.getElementById('tabStores').innerText = translations[lang].tabStores;
-            document.getElementById('tabRegions').innerText = translations[lang].tabRegions;
-            document.getElementById('footerTitle').innerText = translations[lang].footerTitle;
-            document.getElementById('tgChannelBtn').innerText = translations[lang].tgChannelText;
-            document.getElementById('instaBtn').innerText = translations[lang].instaText;
-            document.getElementById('feedbackBtn').innerText = translations[lang].feedbackText;
-            document.getElementById('aboutHeader').innerText = translations[lang].aboutHeader;
-            document.getElementById('aboutText').innerText = translations[lang].aboutText;
-            document.getElementById('rightsText').innerText = translations[lang].rightsText;
+            if(document.getElementById('appSubtitle')) document.getElementById('appSubtitle').innerText = translations[lang].subtitle;
+            if(document.getElementById('searchInput')) document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+            if(document.getElementById('tabDoctors')) document.getElementById('tabDoctors').innerText = translations[lang].tabDoctors;
+            if(document.getElementById('tabClinics')) document.getElementById('tabClinics').innerText = translations[lang].tabClinics;
+            if(document.getElementById('tabStores')) document.getElementById('tabStores').innerText = translations[lang].tabStores;
+            if(document.getElementById('tabRegions')) document.getElementById('tabRegions').innerText = translations[lang].tabRegions;
+            if(document.getElementById('footerTitle')) document.getElementById('footerTitle').innerText = translations[lang].footerTitle;
+            if(document.getElementById('tgChannelBtn')) document.getElementById('tgChannelBtn').innerText = translations[lang].tgChannelText;
+            if(document.getElementById('instaBtn')) document.getElementById('instaBtn').innerText = translations[lang].instaText;
+            if(document.getElementById('feedbackBtn')) document.getElementById('feedbackBtn').innerText = translations[lang].feedbackText;
+            if(document.getElementById('aboutHeader')) document.getElementById('aboutHeader').innerText = translations[lang].aboutHeader;
+            if(document.getElementById('aboutText')) document.getElementById('aboutText').innerText = translations[lang].aboutText;
+            if(document.getElementById('rightsText')) document.getElementById('rightsText').innerText = translations[lang].rightsText;
             
-            document.getElementById('qrModalTitle').innerText = translations[lang].qrModalTitle;
-            document.getElementById('qrModalDesc').innerText = translations[lang].qrModalDesc;
-            document.getElementById('qrCloseBtn').innerText = translations[lang].qrCloseBtn;
+            if(document.getElementById('qrModalTitle')) document.getElementById('qrModalTitle').innerText = translations[lang].qrModalTitle;
+            if(document.getElementById('qrModalDesc')) document.getElementById('qrModalDesc').innerText = translations[lang].qrModalDesc;
+            if(document.getElementById('qrCloseBtn')) document.getElementById('qrCloseBtn').innerText = translations[lang].qrCloseBtn;
             
             renderContent();
             
             const modal = document.getElementById('detailModal');
-            if (!modal.classList.contains('hidden')) {
+            if (modal && !modal.classList.contains('hidden')) {
                 modal.classList.add('hidden');
             }
         }
@@ -686,6 +791,7 @@
 
         function showSkeleton() {
             const listContainer = document.getElementById('contentList');
+            if(!listContainer) return;
             listContainer.innerHTML = `
                 <div class="space-y-3">
                     <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-100 dark:border-slate-700 flex items-center space-x-3.5 skeleton">
@@ -748,7 +854,9 @@
 
         function renderContent() {
             const listContainer = document.getElementById('contentList');
-            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            if(!listContainer) return;
+            const searchInputEl = document.getElementById('searchInput');
+            const searchVal = searchInputEl ? searchInputEl.value.toLowerCase() : '';
             
             listContainer.innerHTML = '';
 
@@ -995,7 +1103,6 @@
                 });
             }
 
-            // Telegram orqali kirgan bo'lsa, ism maydonini avtomatik to'ldirish
             let defaultName = "";
             if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
                 const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
@@ -1168,7 +1275,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <a href="tel:${store.phone}" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
-                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnTest}</button>
+                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnText}</button>
                     </div>
                 </div>
             `;
@@ -1181,7 +1288,7 @@
             document.getElementById('detailModal').classList.add('hidden');
         }
 
-        window.onload = async function() {
+        async function initApp() {
             showSkeleton();
             await loadReviews();
             setTimeout(renderContent, 300);
