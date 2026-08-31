@@ -186,6 +186,7 @@
             messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
             appId: "YOUR_APP_ID"
         };
+        // Agar firebase allaqachon ishga tushmagan bo'lsa
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
@@ -395,6 +396,16 @@
                         }, 
                         rating: 5, 
                         date: "2026-08-20" 
+                    },
+                    { 
+                        name: "Malika", 
+                        text: { 
+                            uz: "Ishlari sifatli va og'riqsiz bajarildi.", 
+                            ru: "Работа выполнена качественно и безболезненно.", 
+                            en: "Work was done qualitatively and painlessly." 
+                        }, 
+                        rating: 5, 
+                        date: "2026-08-25" 
                     }
                 ]
             },
@@ -427,39 +438,18 @@
                 phone: "+998933948568",
                 img: "👨‍⚕️",
                 verified: true,
-                reviews: []
-            },
-            // --- Yangi qo'shilgan mutaxassis: Farrux Ilhomovich Barakayev ---
-            {
-                id: 3,
-                name: { 
-                    uz: "Farrux Ilhomovich Barakayev", 
-                    ru: "Фаррух Ильхомович Баракаев", 
-                    en: "Farrux Ilhomovich Barakayev" 
-                },
-                spec: { 
-                    uz: "Laborant", 
-                    ru: "Лаборант", 
-                    en: "Laboratory Assistant" 
-                },
-                cat: "Laborant",
-                exp: 6,
-                clinic: { 
-                    uz: "Shox Med", 
-                    ru: "Shox Med", 
-                    en: "Shox Med" 
-                },
-                address: { 
-                    uz: "Toshkent shahri, Shox Med klinikasi", 
-                    ru: "город Ташкент, клиника Shox Med", 
-                    en: "Tashkent city, Shox Med Clinic" 
-                },
-                yandexQuery: "Shox Med Toshkent",
-                rating: 5.0,
-                phone: "+998909279515",
-                img: "🔬",
-                verified: true,
-                reviews: []
+                reviews: [
+                    { 
+                        name: "Jasur", 
+                        text: { 
+                            uz: "Malakali kardiolog, barchasini tushuntirib berdi.", 
+                            ru: "Квалифицированный кардиолог, все объяснил.", 
+                            en: "Qualified cardiologist, explained everything." 
+                        }, 
+                        rating: 5, 
+                        date: "2026-08-28" 
+                    }
+                ]
             }
         ];
 
@@ -478,7 +468,18 @@
                 hours: "09:00 - 18:00",
                 directions: { uz: "Stomatologiya, Ortodontiya, Implantologiya", ru: "Стоматология, Ортодонтия, Имплантология", en: "Dentistry, Orthodontics, Implantology" },
                 verified: true,
-                reviews: []
+                reviews: [
+                    { 
+                        name: "Bobur", 
+                        text: { 
+                            uz: "Ajoyib klinika, sharoitlar yaxshi.", 
+                            ru: "Отличная клиника, условия хорошие.", 
+                            en: "Great clinic, good conditions." 
+                        }, 
+                        rating: 5, 
+                        date: "2026-08-15" 
+                    }
+                ]
             },
             {
                 id: 102,
@@ -493,23 +494,6 @@
                 phone: "+998712030003",
                 hours: "08:00 - 20:00",
                 directions: { uz: "Kardiologiya, Nevrologiya, Xirurgiya", ru: "Кардиология, Неврология, Хирургия", en: "Cardiology, Neurology, Surgery" },
-                verified: true,
-                reviews: []
-            },
-            // --- Shox Med klinikasi ham qo'shildi ---
-            {
-                id: 103,
-                name: { uz: "Shox Med", ru: "Shox Med", en: "Shox Med" },
-                address: { 
-                    uz: "Toshkent shahri, Shox Med klinikasi", 
-                    ru: "город Ташкент, клиника Shox Med", 
-                    en: "Tashkent city, Shox Med Clinic" 
-                },
-                yandexQuery: "Shox Med Toshkent",
-                rating: 5.0,
-                phone: "+998909279515",
-                hours: "08:00 - 18:00",
-                directions: { uz: "Laboratoriya tahlillari, Diagnostika", ru: "Лабораторные анализы, Диагностика", en: "Laboratory tests, Diagnostics" },
                 verified: true,
                 reviews: []
             }
@@ -533,13 +517,30 @@
                 yandexQuery: "Medtehnika Toshkent Labzak",
                 rating: 4.9,
                 reviews: []
+            },
+            {
+                id: 202,
+                name: { uz: "Ortopediya va Reabilitatsiya Markazi", ru: "Центр Ортопедии и Реабилитации", en: "Orthopedics and Rehabilitation Center" },
+                specialization: { 
+                    uz: "Ortopedik korsetlar, nogironlar aravachalari, reabilitatsiya vositalari", 
+                    ru: "Ортопедические корсеты, инвалидные коляски, реабилитационные средства", 
+                    en: "Orthopedic corsets, wheelchairs, rehabilitation aids" 
+                },
+                address: { 
+                    uz: "Toshkent shahri, Chilonzor tumani, Bunyodkor ko'chasi", 
+                    ru: "город Ташкент, Чиланзарский район, проспект Бунёдкор", 
+                    en: "Tashkent city, Chilanzar district, Bunyodkor street" 
+                },
+                phone: "+998 71 200-00-02",
+                yandexQuery: "Ortopedik salon Toshkent Chilonzor",
+                rating: 4.8,
+                reviews: []
             }
         ];
 
         const categoriesList = [
             { id: 'Stomatolog', name: { uz: 'Stomatolog', ru: 'Стоматолог', en: 'Dentist' } },
             { id: 'Kardiolog', name: { uz: 'Kardiolog', ru: 'Кардиолог', en: 'Cardiologist' } },
-            { id: 'Laborant', name: { uz: 'Laborant', ru: 'Лаборант', en: 'Lab Assistant' } },
             { id: 'Terapevt', name: { uz: 'Terapevt', ru: 'Терапевт', en: 'Therapist' } },
             { id: 'Xirurg', name: { uz: 'Хирург', ru: 'Хирург', en: 'Surgeon' } }
         ];
@@ -1008,6 +1009,7 @@
             return reviewsHtml;
         }
 
+        // Firebase-ga ulangan yangi submitReview funksiyasi
         async function submitReview(event, itemType, itemId) {
             event.preventDefault();
             const nameInput = document.getElementById('reviewAuthorName').value.trim();
@@ -1029,8 +1031,10 @@
             };
 
             try {
+                // Firestore bazasiga yozish
                 await db.collection("reviews").add(newReview);
                 
+                // Mahalliy obyektga ham qo'shamiz
                 let targetItem = null;
                 if (itemType === 'doctor') targetItem = doctorsData.find(d => d.id === itemId);
                 else if (itemType === 'clinic') targetItem = clinicsData.find(c => c.id === itemId);
@@ -1049,6 +1053,7 @@
 
                 showToast(translations[currentLang].successReview);
                 
+                // Modalni qayta yuklash
                 if (itemType === 'doctor') showDoctorDetail(itemId);
                 else if (itemType === 'clinic') showClinicDetail(itemId);
                 else if (itemType === 'store') showStoreDetail(itemId);
@@ -1059,6 +1064,7 @@
             }
         }
 
+        // Firebase-dan sharhlarni yuklab olish funksiyasi
         async function loadReviews() {
             try {
                 const querySnapshot = await db.collection("reviews").get();
@@ -1070,6 +1076,7 @@
                     else if (data.itemType === 'store') targetItem = medStoresData.find(s => s.id === data.itemId);
 
                     if (targetItem) {
+                        // Agar bunday sharh oldin qo'shilmagan bo'lsa
                         const exists = targetItem.reviews.some(r => r.name === data.name && r.date === data.date && (r.text === data.text || r.text.uz === data.text));
                         if (!exists) {
                             targetItem.reviews.push({
@@ -1157,7 +1164,7 @@
             `;
             bodyHtml += renderReviewsSection('store', store.id, store.reviews);
             document.getElementById('modalBody').innerHTML = bodyHtml;
-            document.getElementById('detailModal'].classList.remove('hidden');
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
         function closeModal() {
