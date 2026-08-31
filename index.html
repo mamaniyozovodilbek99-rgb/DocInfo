@@ -58,7 +58,7 @@
             
             <div class="flex items-center space-x-2">
                 <!-- QR Code Button -->
-                <button onclick="openQrModal()" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="QR kodni ko'rish">
+                <button onclick="openQrModal()" id="qrBtnText" class="bg-black/20 p-2 rounded-xl backdrop-blur-sm text-sm transition hover:bg-black/30" title="QR kodni ko'rish">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                 </button>
 
@@ -108,7 +108,7 @@
                     <span>📞</span>
                     <span>+998 93 394 85 68</span>
                 </a>
-                <!-- Telegram (DB so'zi olib tashlandi) -->
+                <!-- Telegram -->
                 <a href="https://t.me/SizningTelegramKanaligiz" target="_blank" class="flex items-center justify-center space-x-2 bg-sky-600 hover:bg-sky-700 text-white p-3 rounded-xl text-xs font-semibold transition">
                     <svg class="w-4 h-4 fill-current text-white shrink-0" viewBox="0 0 24 24">
                         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.622-.168.9-.5 1.201-.82 1.23-.697.064-1.228-.461-1.901-.903-1.056-.693-1.653-1.124-2.678-1.8-1.185-.781-.417-1.21.258-1.911.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635.099-.002.321.023.465.141.119.098.152.228.162.332.01.104.022.341.004.526z"/>
@@ -135,7 +135,7 @@
             <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
                 O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.
             </p>
-            <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
+            <div id="rightsText" class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
                 © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
             </div>
         </footer>
@@ -158,19 +158,18 @@
     <div id="qrModal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-2xl p-6 shadow-2xl text-center space-y-4 text-slate-800 dark:text-slate-100">
             <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-3">
-                <h3 class="font-bold text-base">Sayt QR Kodi</h3>
+                <h3 id="qrModalTitle" class="font-bold text-base">Sayt QR Kodi</h3>
                 <button onclick="closeQrModal()" class="p-1.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div class="py-2 flex justify-center">
                 <div class="bg-white p-3 rounded-2xl shadow-inner border border-slate-200 inline-block">
-                    <!-- Dinamik ravishda joriy sahifa havolasi asosida QR kod chiqariladi -->
                     <img id="qrImage" src="" alt="DocInfo QR Code" class="w-48 h-48 mx-auto">
                 </div>
             </div>
-            <p class="text-xs text-slate-500 dark:text-slate-400">Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.</p>
-            <button onclick="closeQrModal()" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Yopish</button>
+            <p id="qrModalDesc" class="text-xs text-slate-500 dark:text-slate-400">Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.</p>
+            <button onclick="closeQrModal()" id="qrCloseBtn" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Yopish</button>
         </div>
     </div>
 
@@ -184,27 +183,46 @@
                 tabStores: "Med-magazin",
                 tabRegions: "Hududlar",
                 experience: "yil tajriba",
-                free: "Bepul",
                 clinicLabel: "Klinika",
-                priceLabel: "Qabul narxi",
+                specLabel: "Mutaxassisligi",
+                locationLabel: "Manzil (Lokatsiya)",
+                phoneLabel: "Telefon raqami",
+                ratingLabel: "Reyting bahosi",
+                hoursLabel: "Ish vaqti",
+                directionsLabel: "Yo'nalishlar",
+                specTitle: "Mutaxassisliklar",
+                allCategories: "Barchasi",
+                selectRegionTitle: "Viloyatni tanlang",
+                showDistricts: "Tumanlarni ko'rsatish &rarr;",
+                backToRegions: "&larr; Viloyatlarga qaytish",
+                selectDistrictTitle: "Tuman yoki shaharni tanlang",
+                searchDoctorsLink: "Shifokorlarni izlash &rarr;",
+                emptyDistrict: "Bu tumanda hozircha mutaxassislar ro'yxatga o'linmagan",
+                storesTitle: "Toshkentdagi Tibbiy Jihozlar Do'konlari",
+                mapBtnText: "Xarita",
                 bookBtn: "Qabulga yozilish",
-                callBtn: "Qo'ng'iroq",
-                shareBtn: "Ulashish",
-                mapBtn: "📍 Yandeks Xaritada ochish",
-                reviewsLabel: "Mijozlar sharhlari va baholar",
-                addReviewTitle: "Sharh va baho qoldirish",
-                namePlaceholderism: "Ismingiz",
+                callBtn: "Qo'ng'iroq qilish",
+                mapOpenText: "Yandeks Xarita",
+                reviewsTitle: "Mijozlarning fikrlari va baholari",
+                noReviews: "Hozircha fikrlar yo'q. Birinchi bo'lib o'z fikringizni yozing!",
+                addReviewHeader: "Sharh va baho qoldirish",
+                namePlaceholder: "Ismingiz",
                 reviewPlaceholder: "Fikr va taassurotlaringizni yozing...",
-                submitReview: "Sharhni yuborish",
-                bookedAlert: "qabuliga muvaffaqiyatli yozildingiz!",
-                reviewAdded: "Sharhingiz qo'shildi!",
+                submitReviewBtn: "Sharhni yuborish",
+                successBooking: "qabuliga yozildingiz! Operatorlar bog'lanishadi.",
+                successReview: "Sharhingiz muvaffaqiyatli qo'shildi!",
+                reviewValidation: "Iltimos, ismingiz va fikringizni kiriting!",
                 notFound: "Hech qanday ma'lumot topilmadi",
                 footerTitle: "Biz bilan bog'lanish va loyiha resurslari",
                 tgChannelText: "DocInfo",
                 instaText: "Instagram",
                 feedbackText: "Taklif va Murojatlar",
                 aboutHeader: "DocInfo Uzbekistan haqida",
-                aboutText: "O'zbekistondagi eng malakali shifokorlar va tibbiyot markazlari bazasi."
+                aboutText: "O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.",
+                rightsText: "© 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.",
+                qrModalTitle: "Sayt QR Kodi",
+                qrModalDesc: "Ushbu QR kodni skanerlash orqali ilovani ochishingiz mumkin.",
+                qrCloseBtn: "Yopish"
             },
             ru: {
                 subtitle: "Каталог врачей и клиник",
@@ -214,27 +232,46 @@
                 tabStores: "Мед-магазин",
                 tabRegions: "Регионы",
                 experience: "лет опыта",
-                free: "Бесплатно",
                 clinicLabel: "Клиника",
-                priceLabel: "Стоимость приема",
-                bookBtn: "Записаться",
+                specLabel: "Специальность",
+                locationLabel: "Адрес (Локация)",
+                phoneLabel: "Номер телефона",
+                ratingLabel: "Рейтинг",
+                hoursLabel: "Часы работы",
+                directionsLabel: "Направления",
+                specTitle: "Специальности",
+                allCategories: "Все",
+                selectRegionTitle: "Выберите область",
+                showDistricts: "Показать районы &rarr;",
+                backToRegions: "&larr; К областям",
+                selectDistrictTitle: "Выберите район или город",
+                searchDoctorsLink: "Поиск врачей &rarr;",
+                emptyDistrict: "В этом районе пока не зарегистрированы специалисты",
+                storesTitle: "Магазины медицинского оборудования в Ташкенте",
+                mapBtnText: "Карта",
+                bookBtn: "Записаться на прием",
                 callBtn: "Позвонить",
-                shareBtn: "Поделиться",
-                mapBtn: "📍 Открыть в Яндекс Картах",
-                reviewsLabel: "Отзывы клиентов и оценки",
-                addReviewTitle: "Оставить отзыв и оценку",
-                namePlaceholderism: "Ваше имя",
+                mapOpenText: "Яндекс Карты",
+                reviewsTitle: "Отзывы и оценки клиентов",
+                noReviews: "Пока нет отзывов. Напишите первыми!",
+                addReviewHeader: "Оставить отзыв и оценку",
+                namePlaceholder: "Ваше имя",
                 reviewPlaceholder: "Напишите ваши впечатления...",
-                submitReview: "Отправить отзыв",
-                bookedAlert: "Вы успешно записались на прием!",
-                reviewAdded: "Отзыв добавлен!",
+                submitReviewBtn: "Отправить отзыв",
+                successBooking: "Вы записаны на прием к! Операторы свяжутся с вами.",
+                successReview: "Отзыв успешно добавлен!",
+                reviewValidation: "Пожалуйста, введите ваше имя и отзыв!",
                 notFound: "Ничего не найдено",
-                footerTitle: "Связаться с нами",
+                footerTitle: "Связаться с нами и ресурсы проекта",
                 tgChannelText: "DocInfo",
                 instaText: "Instagram",
                 feedbackText: "Предложения и обращения",
-                aboutHeader: "О проекте",
-                aboutText: "База данных квалифицированных врачей."
+                aboutHeader: "О проекте DocInfo Uzbekistan",
+                aboutText: "Надежная база данных о квалифицированных врачах, медицинских центрах, клиниках и медмагах в Узбекистане. Найдите нужного специалиста или товар с помощью удобного поиска.",
+                rightsText: "© 2026 DocInfo Uzbekistan. Все права защищены.",
+                qrModalTitle: "QR код сайта",
+                qrModalDesc: "Вы можете открыть приложение, отсканировав этот QR код.",
+                qrCloseBtn: "Закрыть"
             },
             en: {
                 subtitle: "Doctors and Clinics Directory",
@@ -244,27 +281,46 @@
                 tabStores: "Med-Store",
                 tabRegions: "Regions",
                 experience: "years of experience",
-                free: "Free",
                 clinicLabel: "Clinic",
-                priceLabel: "Consultation price",
-                bookBtn: "Book",
+                specLabel: "Specialization",
+                locationLabel: "Address (Location)",
+                phoneLabel: "Phone number",
+                ratingLabel: "Rating",
+                hoursLabel: "Working hours",
+                directionsLabel: "Directions",
+                specTitle: "Specialties",
+                allCategories: "All",
+                selectRegionTitle: "Select region",
+                showDistricts: "Show districts &rarr;",
+                backToRegions: "&larr; Back to regions",
+                selectDistrictTitle: "Select district or city",
+                searchDoctorsLink: "Search doctors &rarr;",
+                emptyDistrict: "No specialists registered in this district yet",
+                storesTitle: "Medical Equipment Stores in Tashkent",
+                mapBtnText: "Map",
+                bookBtn: "Book appointment",
                 callBtn: "Call",
-                shareBtn: "Share",
-                mapBtn: "📍 Open in Yandex Maps",
-                reviewsLabel: "Client reviews and ratings",
-                addReviewTitle: "Leave a review and rating",
-                namePlaceholderism: "Your name",
+                mapOpenText: "Yandex Maps",
+                reviewsTitle: "Customer reviews and ratings",
+                noReviews: "No reviews yet. Be the first to write one!",
+                addReviewHeader: "Leave a review and rating",
+                namePlaceholder: "Your name",
                 reviewPlaceholder: "Write your impressions...",
-                submitReview: "Submit Review",
-                bookedAlert: "Appointment booked successfully!",
-                reviewAdded: "Review added!",
+                submitReviewBtn: "Submit review",
+                successBooking: "appointment booked successfully! Operators will contact you.",
+                successReview: "Review added successfully!",
+                reviewValidation: "Please enter your name and review!",
                 notFound: "No information found",
-                footerTitle: "Contact Us",
+                footerTitle: "Contact Us and Project Resources",
                 tgChannelText: "DocInfo",
                 instaText: "Instagram",
                 feedbackText: "Feedback & Appeals",
-                aboutHeader: "About",
-                aboutText: "Database of qualified doctors."
+                aboutHeader: "About DocInfo Uzbekistan",
+                aboutText: "Reliable database of qualified doctors, medical centers, clinics, and med-stores in Uzbekistan. Find the specialist or product you need using the convenient search system.",
+                rightsText: "© 2026 DocInfo Uzbekistan. All rights reserved.",
+                qrModalTitle: "Site QR Code",
+                qrModalDesc: "You can open the application by scanning this QR code.",
+                qrCloseBtn: "Close"
             }
         };
 
@@ -286,7 +342,6 @@
                 address: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom",
                 yandexQuery: "Binafsha shifo TTZ Toshkent",
                 rating: 5.0,
-                price: "Bepul",
                 phone: "+998946221522",
                 img: "👨‍⚕️",
                 verified: true,
@@ -305,7 +360,6 @@
                 address: "Toshkent shahri, Olmazor tumani, Kichik halqa yo'li 5A",
                 yandexQuery: "Akfa Medline Toshkent",
                 rating: 4.9,
-                price: "150 000 so'm",
                 phone: "+998933948568",
                 img: "👨‍⚕️",
                 verified: true,
@@ -465,6 +519,11 @@
             document.getElementById('feedbackBtn').innerText = translations[lang].feedbackText;
             document.getElementById('aboutHeader').innerText = translations[lang].aboutHeader;
             document.getElementById('aboutText').innerText = translations[lang].aboutText;
+            document.getElementById('rightsText').innerText = translations[lang].rightsText;
+            
+            document.getElementById('qrModalTitle').innerText = translations[lang].qrModalTitle;
+            document.getElementById('qrModalDesc').innerText = translations[lang].qrModalDesc;
+            document.getElementById('qrCloseBtn').innerText = translations[lang].qrCloseBtn;
             
             renderContent();
         }
@@ -516,10 +575,10 @@
             const index = favorites.indexOf(id);
             if (index > -1) {
                 favorites.splice(index, 1);
-                showToast("Saralanganlardan olib tashlandi", "info");
+                showToast(currentLang === 'uz' ? "Saralanganlardan olib tashlandi" : currentLang === 'ru' ? "Удалено из избранного" : "Removed from favorites", "info");
             } else {
                 favorites.push(id);
-                showToast("Saralanganlarga qo'shildi!", "success");
+                showToast(currentLang === 'uz' ? "Saralanganlarga qo'shildi!" : currentLang === 'ru' ? "Добавлено в избранное!" : "Added to favorites!", "success");
             }
             localStorage.setItem('docinfo_favs', JSON.stringify(favorites));
             renderContent();
@@ -532,7 +591,6 @@
 
         function openQrModal() {
             const currentUrl = window.location.href;
-            // Google Chart API yordamida dinamik QR kod yaratish
             const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
             document.getElementById('qrImage').src = qrApiUrl;
             document.getElementById('qrModal').classList.remove('hidden');
@@ -567,12 +625,12 @@
 
             if (currentTab === 'regions') {
                 if (!selectedRegion) {
-                    let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Viloyatni tanlang</div><div class="grid grid-cols-1 gap-2">`;
+                    let html = `<div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].selectRegionTitle}</div><div class="grid grid-cols-1 gap-2">`;
                     Object.keys(regionsData).forEach(reg => {
                         html += `
                             <div onclick="selectRegion('${reg}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
                                 <span class="font-bold text-sm text-slate-800 dark:text-slate-100">📍 ${reg}</span>
-                                <span class="text-xs text-sky-600 font-semibold">Tumanlarni ko'rsatish &rarr;</span>
+                                <span class="text-xs text-sky-600 font-semibold">${translations[currentLang].showDistricts}</span>
                             </div>
                         `;
                     });
@@ -581,17 +639,17 @@
                 } else if (!selectedDistrict) {
                     let html = `
                         <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline flex items-center" onclick="resetRegions()">&larr; Viloyatlarga qaytish</span>
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline flex items-center" onclick="resetRegions()">${translations[currentLang].backToRegions}</span>
                             <span class="text-xs font-bold text-slate-400 uppercase">${selectedRegion}</span>
                         </div>
-                        <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Tuman yoki shaharni tanlang</div>
+                        <div class="mb-2 text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].selectDistrictTitle}</div>
                         <div class="grid grid-cols-1 gap-2">
                     `;
                     regionsData[selectedRegion].forEach(dist => {
                         html += `
                             <div onclick="selectDistrict('${dist}')" class="bg-white dark:bg-slate-800 p-3.5 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
                                 <span class="font-semibold text-sm text-slate-800 dark:text-slate-100">🏢 ${dist}</span>
-                                <span class="text-xs text-slate-400">Shifokorlarni izlash &rarr;</span>
+                                <span class="text-xs text-slate-400">${translations[currentLang].searchDoctorsLink}</span>
                             </div>
                         `;
                     });
@@ -603,14 +661,14 @@
 
                     let html = `
                         <div class="flex items-center justify-between mb-3">
-                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="selectRegion('${selectedRegion}')">&larr; Tumanlarga qaytish</span>
+                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="selectRegion('${selectedRegion}')">${translations[currentLang].backToRegions}</span>
                             <span class="text-xs font-bold text-slate-400 uppercase">${selectedDistrict}</span>
                         </div>
                         <div class="space-y-3">
                     `;
 
                     if (filteredDocs.length === 0 && filteredClinics.length === 0) {
-                        html += `<div class="text-center py-12 text-slate-400 text-sm">Bu tumanda hozircha mutaxassislar ro'yxatga olinmagan</div>`;
+                        html += `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].emptyDistrict}</div>`;
                     } else {
                         filteredDocs.forEach(item => {
                             html += `
@@ -636,7 +694,7 @@
                                         <div class="w-14 h-14 rounded-xl bg-sky-50 dark:bg-slate-700 text-sky-600 flex items-center justify-center text-xl font-bold">🏥</div>
                                         <div>
                                             <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name}</h3>
-                                            <p class="text-xs text-sky-600 font-semibold mt-0.5">Klinika</p>
+                                            <p class="text-xs text-sky-600 font-semibold mt-0.5">${translations[currentLang].tabClinics}</p>
                                         </div>
                                     </div>
                                     <div class="text-right">
@@ -662,7 +720,7 @@
                     return;
                 }
 
-                let html = `<div class="space-y-3"><div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Toshkentdagi Tibbiy Jihozlar Do'konlari</div>`;
+                let html = `<div class="space-y-3"><div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">${translations[currentLang].storesTitle}</div>`;
                 storesToRender.forEach(item => {
                     html += `
                         <div onclick="showStoreDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
@@ -676,7 +734,7 @@
                             </div>
                             <div class="text-right flex flex-col items-end space-y-2">
                                 <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold">Xarita</button>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold">${translations[currentLang].mapBtnText}</button>
                             </div>
                         </div>
                     `;
@@ -710,7 +768,7 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${item.rating}</div>
-                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 px-2.5 py-1 rounded-lg font-semibold">Xarita</button>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 px-2.5 py-1 rounded-lg font-semibold">${translations[currentLang].mapBtnText}</button>
                             </div>
                         </div>
                     `;
@@ -730,12 +788,12 @@
                 let categoriesBarHtml = `
                     <div class="mb-4">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Mutaxassisliklar</span>
-                            ${selectedCategory !== null ? `<span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">Barchasi</span>` : ''}
+                            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">${translations[currentLang].specTitle}</span>
+                            ${selectedCategory !== null ? `<span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="backToCategories()">${translations[currentLang].allCategories}</span>` : ''}
                         </div>
                         <div class="grid grid-cols-4 gap-2">
                             <button onclick="selectCategory('all')" class="p-2.5 rounded-xl text-xs font-semibold text-center border transition ${selectedCategory === null || selectedCategory === 'all' ? 'bg-sky-600 text-white border-sky-600 shadow-sm' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-100 dark:border-slate-700'}">
-                                Barchasi
+                                ${translations[currentLang].allCategories}
                             </button>
                 `;
 
@@ -763,14 +821,13 @@
                                 <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>
                                 <div class="flex-1">
                                     <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name} ✅</h3>
-                                    <p class="text-xs text-sky-600 font-semibold mt-0.5">${item.spec} • ${item.exp} yil tajriba</p>
+                                    <p class="text-xs text-sky-600 font-semibold mt-0.5">${item.spec} • ${item.exp} ${translations[currentLang].experience}</p>
                                     <p class="text-xs text-slate-500 mt-1">📍 ${item.clinic}</p>
                                 </div>
                             </div>
                             <div class="text-right flex flex-col items-end space-y-1">
                                 <button onclick="toggleFavorite(${item.id}, event)" class="text-base">${isFav ? '⭐' : '☆'}</button>
                                 <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                                <div class="text-xs font-bold text-emerald-600">${item.price}</div>
                             </div>
                         </div>
                     `;
@@ -787,12 +844,12 @@
         function renderReviewsSection(itemType, itemId, reviews) {
             let reviewsHtml = `
                 <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-700 space-y-3">
-                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">Mijozlarning fikrlari va baholari (${reviews.length})</h4>
+                    <h4 class="font-bold text-sm text-slate-800 dark:text-slate-100">${translations[currentLang].reviewsTitle} (${reviews.length})</h4>
                     <div class="space-y-2 max-h-40 overflow-y-auto pr-1">
             `;
 
             if (reviews.length === 0) {
-                reviewsHtml += `<p class="text-xs text-slate-400 italic">Hozircha fikrlar yo'q. Birinchi bo'lib o'z fikringizni yozing!</p>`;
+                reviewsHtml += `<p class="text-xs text-slate-400 italic">${translations[currentLang].noReviews}</p>`;
             } else {
                 reviews.forEach(rev => {
                     reviewsHtml += `
@@ -811,8 +868,8 @@
             reviewsHtml += `
                     </div>
                     <div class="bg-slate-50 dark:bg-slate-700/40 p-3 rounded-xl space-y-2 mt-3">
-                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">Sharh va baho qoldirish</p>
-                        <input type="text" id="reviewAuthorName" placeholder="Ismingiz" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none">
+                        <p class="text-xs font-bold text-slate-700 dark:text-slate-300">${translations[currentLang].addReviewHeader}</p>
+                        <input type="text" id="reviewAuthorName" placeholder="${translations[currentLang].namePlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none">
                         <div class="flex items-center space-x-2">
                             <span class="text-xs text-slate-500">Baho:</span>
                             <select id="reviewRatingVal" class="px-2 py-1 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg">
@@ -823,8 +880,8 @@
                                 <option value="1">⭐ (1)</option>
                             </select>
                         </div>
-                        <textarea id="reviewTextContent" placeholder="Fikr va taassurotlaringizni yozing..." class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none" rows="2"></textarea>
-                        <button onclick="submitReview('${itemType}', ${itemId})" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg text-xs font-bold transition">Sharhni yuborish</button>
+                        <textarea id="reviewTextContent" placeholder="${translations[currentLang].reviewPlaceholder}" class="w-full px-3 py-1.5 text-xs bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none" rows="2"></textarea>
+                        <button onclick="submitReview('${itemType}', ${itemId})" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2 rounded-lg text-xs font-bold transition">${translations[currentLang].submitReviewBtn}</button>
                     </div>
                 </div>
             `;
@@ -837,7 +894,7 @@
             const textInput = document.getElementById('reviewTextContent').value.trim();
 
             if (!nameInput || !textInput) {
-                showToast("Iltimos, ismingiz va fikringizni kiriting!", "info");
+                showToast(translations[currentLang].reviewValidation, "info");
                 return;
             }
 
@@ -857,7 +914,7 @@
                 let totalRating = targetItem.reviews.reduce((sum, r) => sum + r.rating, 0);
                 targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
 
-                showToast("Sharhingiz muvaffaqiyatli qo'shildi!");
+                showToast(translations[currentLang].successReview);
                 
                 if (itemType === 'doctor') showDoctorDetail(itemId);
                 else if (itemType === 'clinic') showClinicDetail(itemId);
@@ -873,16 +930,15 @@
             let bodyHtml = `
                 <div class="space-y-3">
                     <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-xl space-y-1.5">
-                        <p class="text-xs font-bold text-sky-800 dark:text-sky-300">🩺 Mutaxassisligi: ${doc.spec} (${doc.exp} yil tajriba)</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">🏥 <b>Ishlash joyi (Klinika):</b> ${doc.clinic}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')">📍 <b>Lokatsiya (Manzil):</b> ${doc.address} (Xaritada ko'rish)</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>Telefon raqami:</b> <a href="tel:${doc.phone}" class="text-sky-600 font-bold">${doc.phone}</a></p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>Reyting bahosi:</b> <span class="text-amber-500 font-bold">${doc.rating} / 5.0</span></p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">💰 <b>Qabul narxi:</b> <span class="text-emerald-600 font-bold">${doc.price}</span></p>
+                        <p class="text-xs font-bold text-sky-800 dark:text-sky-300">🩺 ${translations[currentLang].specLabel}: ${doc.spec} (${doc.exp} ${translations[currentLang].experience})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">🏥 <b>${translations[currentLang].clinicLabel}:</b> ${doc.clinic}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${doc.address} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${doc.phone}" class="text-sky-600 font-bold">${doc.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${doc.rating} / 5.0</span></p>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="showToast('${doc.name} qabuliga yozildingiz! Operatorlar bog\'lanishadi.'); closeModal();" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">Qabulga yozilish</button>
-                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center transition">Qo'ng'iroq qilish</a>
+                        <button onclick="showToast('${doc.name} ${translations[currentLang].successBooking}'); closeModal();" class="w-full bg-sky-600 hover:bg-sky-700 text-white py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].bookBtn}</button>
+                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
                     </div>
                 </div>
             `;
@@ -899,15 +955,15 @@
             let bodyHtml = `
                 <div class="space-y-3">
                     <div class="bg-sky-50 dark:bg-sky-950/40 p-3.5 rounded-xl space-y-1.5">
-                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer underline" onclick="openYandexMap('${clinic.yandexQuery}')">📍 <b>Manzil (Lokatsiya):</b> ${clinic.address} (Yandeks Xarita)</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">⏰ <b>Ish vaqti:</b> ${clinic.hours}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">🩺 <b>Yo'nalishlar:</b> ${clinic.directions}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>Telefon raqami:</b> <a href="tel:${clinic.phone}" class="text-sky-600 font-bold">${clinic.phone}</a></p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>Reyting bahosi:</b> <span class="text-amber-500 font-bold">${clinic.rating} / 5.0</span></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer underline" onclick="openYandexMap('${clinic.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${clinic.address} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⏰ <b>${translations[currentLang].hoursLabel}:</b> ${clinic.hours}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">🩺 <b>${translations[currentLang].directionsLabel}:</b> ${clinic.directions}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${clinic.phone}" class="text-sky-600 font-bold">${clinic.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${clinic.rating} / 5.0</span></p>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 hover:bg-sky-700 text-white text-center py-2.5 rounded-xl text-xs font-bold flex items-center justify-center transition">Qo'ng'iroq qilish</a>
-                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">Xarita</button>
+                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 hover:bg-sky-700 text-white text-center py-2.5 rounded-xl text-xs font-bold flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
+                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnText}</button>
                     </div>
                 </div>
             `;
@@ -924,15 +980,14 @@
             let bodyHtml = `
                 <div class="space-y-3">
                     <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3.5 rounded-xl space-y-1.5">
-                        <p class="text-xs text-slate-600 dark:text-slate-300"><b>Ixtisoslashuvi:</b> ${store.specialization}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${store.yandexQuery}')">📍 <b>Manzil (Lokatsiya):</b> ${store.address} (Yandeks Xarita)</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">🏢 <b>Mo'ljal:</b> ${store.landmarks}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>Telefon raqami:</b> <a href="tel:${store.phone}" class="text-emerald-600 font-bold">${store.phone}</a></p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>Reyting bahosi:</b> <span class="text-amber-500 font-bold">${store.rating} / 5.0</span></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300"><b>${translations[currentLang].specLabel}:</b> ${store.specialization}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${store.yandexQuery}')">📍 <b>${translations[currentLang].locationLabel}:</b> ${store.address} (${translations[currentLang].mapOpenText})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">📞 <b>${translations[currentLang].phoneLabel}:</b> <a href="tel:${store.phone}" class="text-emerald-600 font-bold">${store.phone}</a></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">⭐ <b>${translations[currentLang].ratingLabel}:</b> <span class="text-amber-500 font-bold">${store.rating} / 5.0</span></p>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="tel:${store.phone}" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center transition">Qo'ng'iroq qilish</a>
-                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">Xarita</button>
+                        <a href="tel:${store.phone}" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm flex items-center justify-center transition">${translations[currentLang].callBtn}</a>
+                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold transition">${translations[currentLang].mapBtnText}</button>
                     </div>
                 </div>
             `;
