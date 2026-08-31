@@ -77,16 +77,17 @@
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </span>
-            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor yoki mutaxassislikni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
+            <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Shifokor, klinika yoki med-magazinni izlash..." class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 dark:text-white text-slate-800 text-sm rounded-xl focus:outline-none shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-colors">
         </div>
     </header>
 
     <!-- Navigation Tabs -->
     <div class="bg-white dark:bg-slate-800 px-4 py-3 shadow-xs border-b border-slate-100 dark:border-slate-700 sticky top-[120px] z-20 transition-colors duration-300">
-        <div class="grid grid-cols-3 gap-2">
-            <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
-            <button id="tabClinics" onclick="switchTab('clinics')" class="py-2.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
-            <button id="tabRegions" onclick="switchTab('regions')" class="py-2.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
+        <div class="grid grid-cols-4 gap-1.5">
+            <button id="tabDoctors" onclick="switchTab('doctors')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm">Shifokorlar</button>
+            <button id="tabClinics" onclick="switchTab('clinics')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Klinikalar</button>
+            <button id="tabStores" onclick="switchTab('stores')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Med-magazin</button>
+            <button id="tabRegions" onclick="switchTab('regions')" class="py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition">Hududlar</button>
         </div>
     </div>
 
@@ -121,7 +122,7 @@
         <footer class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-xs border border-slate-100 dark:border-slate-700 text-center space-y-3 transition-colors">
             <h5 id="aboutHeader" class="font-bold text-slate-800 dark:text-slate-100 text-sm">DocInfo Uzbekistan haqida</h5>
             <p id="aboutText" class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-md mx-auto">
-                O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.
+                O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari, klinikalar va med-magazinlar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mahsulot yoki mutaxassisni toping.
             </p>
             <div class="pt-2 border-t border-slate-100 dark:border-slate-700 text-[11px] text-slate-400">
                 © 2026 DocInfo Uzbekistan. Barcha huquqlar himoyalangan.
@@ -146,9 +147,10 @@
         const translations = {
             uz: {
                 subtitle: "Shifokorlar va klinikalar katalogi",
-                searchPlaceholder: "Shifokor yoki mutaxassislikni izlash...",
+                searchPlaceholder: "Shifokor, klinika yoki med-magazinni izlash...",
                 tabDoctors: "Shifokorlar",
                 tabClinics: "Klinikalar",
+                tabStores: "Med-magazin",
                 tabRegions: "Hududlar",
                 experience: "yil tajriba",
                 free: "Bepul",
@@ -171,14 +173,15 @@
                 instaText: "Instagram",
                 feedbackText: "Talab va takliflar",
                 aboutHeader: "DocInfo Uzbekistan haqida",
-                aboutText: "O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi. Qulay qidiruv tizimi yordamida o'zingizga kerakli mutaxassisni toping va qabulga yoziling.",
-                shareText: "Bu shifokorni tavsiya qilaman: "
+                aboutText: "O'zbekistondagi eng malakali shifokorlar, tibbiyot markazlari va klinikalar haqida ishonchli ma'lumotlar bazasi.",
+                shareText: "Bu ma'lumotni tavsiya qilaman: "
             },
             ru: {
                 subtitle: "Каталог врачей и клиник",
-                searchPlaceholder: "Поиск врача или специальности...",
+                searchPlaceholder: "Поиск врача, клиники или медмага...",
                 tabDoctors: "Врачи",
                 tabClinics: "Клиники",
+                tabStores: "Мед-магазин",
                 tabRegions: "Регионы",
                 experience: "лет опыта",
                 free: "Бесплатно",
@@ -193,22 +196,23 @@
                 namePlaceholderism: "Ваше имя",
                 reviewPlaceholder: "Напишите ваши впечатления...",
                 submitReview: "Отправить отзыв",
-                bookedAlert: "Вы успешно записались на прием! Скоро с вами свяжутся операторы.",
-                reviewAdded: "Спасибо за ваш отзыв! Он появится после модерации.",
+                bookedAlert: "Вы успешно записались на прием!",
+                reviewAdded: "Спасибо за ваш отзыв!",
                 notFound: "Ничего не найдено",
                 footerTitle: "Связаться с нами и ресурсы проекта",
                 tgChannelText: "Telegram канал",
                 instaText: "Instagram",
                 feedbackText: "Отзывы и предложения",
                 aboutHeader: "О проекте DocInfo Uzbekistan",
-                aboutText: "Надежная база данных квалифицированных врачей, медицинских центров и клиник в Узбекистане. Найдите нужного специалиста и запишитесь на прием с помощью удобного поиска.",
-                shareText: "Рекомендую этого врача: "
+                aboutText: "Надежная база данных квалифицированных врачей и медицинских центров.",
+                shareText: "Рекомендую: "
             },
             en: {
                 subtitle: "Doctors and Clinics Directory",
-                searchPlaceholder: "Search doctor or specialization...",
+                searchPlaceholder: "Search doctor, clinic or med-store...",
                 tabDoctors: "Doctors",
                 tabClinics: "Clinics",
+                tabStores: "Med-Store",
                 tabRegions: "Regions",
                 experience: "years of experience",
                 free: "Free",
@@ -223,22 +227,22 @@
                 namePlaceholderism: "Your name",
                 reviewPlaceholder: "Write your impressions...",
                 submitReview: "Submit Review",
-                bookedAlert: "You have successfully booked an appointment! Operators will contact you soon.",
-                reviewAdded: "Thank you for your review! It will be added after moderation.",
+                bookedAlert: "Appointment booked successfully!",
+                reviewAdded: "Thank you for your review!",
                 notFound: "No information found",
                 footerTitle: "Contact Us & Project Resources",
                 tgChannelText: "Telegram Channel",
                 instaText: "Instagram",
                 feedbackText: "Feedback & Ideas",
                 aboutHeader: "About DocInfo Uzbekistan",
-                aboutText: "A reliable database of qualified doctors, medical centers, and clinics in Uzbekistan. Find the right specialist and book an appointment using our convenient search.",
-                shareText: "I recommend this doctor: "
+                aboutText: "A reliable database of qualified doctors and medical centers.",
+                shareText: "I recommend: "
             }
         };
 
         let currentLang = 'uz';
         let currentTab = 'doctors';
-        let selectedCategory = null; // null bo'lsa - asosiy ekranda barcha shifokorlar ro'yxati turadi
+        let selectedCategory = null;
         let selectedRegion = null;
         let selectedDistrict = null;
         let favorites = JSON.parse(localStorage.getItem('docinfo_favs') || '[]');
@@ -247,11 +251,41 @@
             { id: 'Stomatolog', name: 'Stomatolog', count: 2 },
             { id: 'Kardiolog', name: 'Kardiolog', count: 1 },
             { id: 'Terapevt', name: 'Terapevt', count: 1 },
-            { id: 'Xirurg', name: 'Xirurg', count: 1 },
-            { id: 'Urolog', name: 'Urolog', count: 0 },
-            { id: 'Ginekolog', name: 'Ginekolog', count: 0 },
-            { id: 'Okulist', name: 'Okulist', count: 0 },
-            { id: 'Travmatolog', name: 'Travmatolog', count: 0 }
+            { id: 'Xirurg', name: 'Xirurg', count: 1 }
+        ];
+
+        // Toshkentdagi Med-Magazinlar bazasi
+        const medStoresData = [
+            {
+                id: 201,
+                name: "Medtehnika / Medexpress",
+                specialization: "Tibbiy uskunalar, tonometr, glyukometr, uy uchun jihozlar",
+                address: "Toshkent shahri, Shayxontohur tumani, Labzak ko'chasi",
+                phone: "+998 71 200-00-01",
+                yandexQuery: "Medtehnika Toshkent Labzak",
+                rating: 4.9,
+                landmarks: "Yirik tibbiyot muassasalari yaqinida"
+            },
+            {
+                id: 202,
+                name: "Ortopediya va Reabilitatsiya Markazi",
+                specialization: "Ortopedik korsetlar, nogironlar aravachalari, reabilitatsiya vositalari",
+                address: "Toshkent shahri, Chilonzor tumani, Bunyodkor ko'chasi",
+                phone: "+998 71 200-00-02",
+                yandexQuery: "Ortopedik salon Toshkent Chilonzor",
+                rating: 4.8,
+                landmarks: "Metro yo'nalishlari bo'ylab"
+            },
+            {
+                id: 203,
+                name: "Farsh Medical (Tibbiy jihozlar)",
+                specialization: "Professional tibbiy jihozlar, shifoxonalar uchun mebellar va asboblar",
+                address: "Toshkent shahri, Yunusobod tumani, Amir Temur shoh ko'chasi",
+                phone: "+998 71 200-00-03",
+                yandexQuery: "Farsh Medical Toshkent",
+                rating: 5.0,
+                landmarks: "Minor metro bekati yaqinida"
+            }
         ];
 
         const regionsData = {
@@ -265,23 +299,7 @@
             ],
             "Toshkent viloyati": [
                 { name: "Chinoz tumani", clinics: [] },
-                { name: "Yangiyo'l tumani", clinics: [] },
-                { name: "Zangiota tumani", clinics: [] },
-                { name: "Parkent tumani", clinics: [] }
-            ],
-            "Samarqand viloyati": [
-                { name: "Samarqand shahri", clinics: [] },
-                { name: "Kattaqo'rg'on tumani", clinics: [] }
-            ],
-            "Farg'ona viloyati": [
-                { name: "Farg'ona shahri", clinics: [] },
-                { name: "Qo'qon shahri", clinics: [] }
-            ],
-            "Andijon viloyati": [
-                { name: "Andijon shahri", clinics: [] }
-            ],
-            "Namangan viloyati": [
-                { name: "Namangan shahri", clinics: [] }
+                { name: "Yangiyo'l tumani", clinics: [] }
             ]
         };
 
@@ -340,8 +358,7 @@
                 img: "❓",
                 verified: true,
                 reviews: [
-                    { name: "Sardor", text: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman!", rating: 5 },
-                    { name: "Malika", text: "Xizmat ko'rsatish darajasi a'lo darajada.", rating: 5 }
+                    { name: "Sardor", text: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman!", rating: 5 }
                 ]
             },
             {
@@ -358,43 +375,7 @@
                 phone: "+998946221522",
                 img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150",
                 verified: true,
-                reviews: [
-                    { name: "Jamshid", text: "O'z ishining ustasi, professional yondashuv.", rating: 5 }
-                ]
-            },
-            {
-                id: 3,
-                name: "Dr. Karimova Dildora",
-                spec: "Umumiy amaliyot shifokori",
-                cat: "Terapevt",
-                exp: 14,
-                clinic: "Shifo Nur",
-                address: "Toshkent shahri, Yakkasaroy tumani, Shota Rustaveli ko'chasi 42",
-                yandexQuery: "Shifo Nur Toshkent",
-                rating: 4.8,
-                price: "100 000 so'm",
-                phone: "+998946221522",
-                img: "❓",
-                verified: false,
                 reviews: []
-            },
-            {
-                id: 4,
-                name: "Dr. Saidov Bobur",
-                spec: "Implantolog-Xirurg",
-                cat: "Xirurg",
-                exp: 12,
-                clinic: "Binafsha shifo",
-                address: "Toshkent shahri, Mirzo Ulug'bek tumani, TTZ-2 mavzesi, 11-dom",
-                yandexQuery: "Binafsha shifo TTZ Toshkent",
-                rating: 4.9,
-                price: "50 000 so'm",
-                phone: "+998946221522",
-                img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=150",
-                verified: true,
-                reviews: [
-                    { name: "Anvar", text: "Og'riqsiz va tez operatsiya qilishdi, rahmat!", rating: 5 }
-                ]
             }
         ];
 
@@ -420,17 +401,6 @@
                 hours: "08:00 - 20:00",
                 directions: "Kardiologiya, Nevrologiya, Xirurgiya",
                 verified: true
-            },
-            {
-                id: 103,
-                name: "Shifo Nur",
-                address: "Toshkent shahri, Yakkasaroy tumani, Shota Rustaveli ko'chasi 42",
-                yandexQuery: "Shifo Nur Toshkent",
-                rating: 4.8,
-                phone: "+998711234567",
-                hours: "08:30 - 19:00",
-                directions: "Terapevtik xizmatlar, Urologiya, Ginekologiya",
-                verified: false
             }
         ];
 
@@ -452,6 +422,7 @@
             document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
             document.getElementById('tabDoctors').innerText = translations[lang].tabDoctors;
             document.getElementById('tabClinics').innerText = translations[lang].tabClinics;
+            document.getElementById('tabStores').innerText = translations[lang].tabStores;
             document.getElementById('tabRegions').innerText = translations[lang].tabRegions;
             document.getElementById('footerTitle').innerText = translations[lang].footerTitle;
             document.getElementById('tgChannelBtn').innerText = translations[lang].tgChannelText;
@@ -469,9 +440,12 @@
             selectedRegion = null;
             selectedDistrict = null;
             
-            document.getElementById('tabDoctors').className = tab === 'doctors' ? "py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
-            document.getElementById('tabClinics').className = tab === 'clinics' ? "py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
-            document.getElementById('tabRegions').className = tab === 'regions' ? "py-2.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2.5 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+            ['doctors', 'clinics', 'stores', 'regions'].forEach(tName => {
+                const btn = document.getElementById('tab' + tName.charAt(0).toUpperCase() + tName.slice(1));
+                if(btn) {
+                    btn.className = tName === tab ? "py-2.5 text-[11px] font-semibold rounded-lg bg-sky-600 text-white transition shadow-sm" : "py-2.5 text-[11px] font-semibold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 transition";
+                }
+            });
             
             showSkeleton();
             setTimeout(renderContent, 300);
@@ -522,17 +496,6 @@
             window.open(url, '_blank');
         }
 
-        function shareItem(name, spec, event) {
-            event.stopPropagation();
-            const text = `${translations[currentLang].shareText} ${name} (${spec}) - DocInfo Uzbekistan`;
-            if (navigator.share) {
-                navigator.share({ title: 'DocInfo', text: text, url: window.location.href }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(text);
-                showToast("Ma'lumot nusxalandi!", "success");
-            }
-        }
-
         function selectRegion(regionName) {
             selectedRegion = regionName;
             selectedDistrict = null;
@@ -563,14 +526,14 @@
                     Object.keys(regionsData).forEach(reg => {
                         html += `
                             <div onclick="selectRegion('${reg}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
-                                <span class="font-bold text-sm text-slate-800 dark:text-slate-150">📍 ${reg}</span>
+                                <span class="font-bold text-sm text-slate-800 dark:text-slate-100">📍 ${reg}</span>
                                 <span class="text-xs text-sky-600 font-semibold">Tumanlar &rarr;</span>
                             </div>
                         `;
                     });
                     html += `</div>`;
                     listContainer.innerHTML = html;
-                } else if (!selectedDistrict) {
+                } else {
                     let html = `
                         <div class="flex items-center justify-between mb-2">
                             <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="resetRegions()">&larr; Viloyatlarga qaytish</span>
@@ -580,7 +543,7 @@
                     `;
                     regionsData[selectedRegion].forEach(dist => {
                         html += `
-                            <div onclick="selectDistrict('${dist.name}')" class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:border-sky-500 transition shadow-xs">
+                            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 flex items-center justify-between shadow-xs">
                                 <span class="font-bold text-sm text-slate-800 dark:text-slate-100">🏢 ${dist.name}</span>
                                 <span class="text-xs text-emerald-600 font-semibold">${dist.clinics.length} ta klinika</span>
                             </div>
@@ -588,45 +551,46 @@
                     });
                     html += `</div>`;
                     listContainer.innerHTML = html;
-                } else {
-                    let distObj = regionsData[selectedRegion].find(d => d.name === selectedDistrict);
-                    let html = `
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-bold text-sky-600 cursor-pointer hover:underline" onclick="selectRegion('${selectedRegion}')">&larr; Tumanlarga qaytish</span>
-                            <span class="text-xs font-bold text-slate-400 uppercase">${selectedDistrict}</span>
-                        </div>
-                        <div class="space-y-3">
-                    `;
-                    
-                    if (!distObj || distObj.clinics.length === 0) {
-                        html += `<div class="text-center py-12 text-slate-400 text-sm">Bu tumanda hozircha klinikalar qo'shilmagan</div>`;
-                    } else {
-                        distObj.clinics.forEach(cName => {
-                            let clinic = clinicsData.find(c => c.name === cName) || { name: cName, address: selectedDistrict, rating: 5.0, phone: "+998946221522", yandexQuery: cName };
-                            html += `
-                                <div onclick="showClinicDetailFromData('${clinic.name}')" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between cursor-pointer hover:shadow-md transition">
-                                    <div class="flex items-center space-x-3.5 flex-1">
-                                        <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 dark:text-sky-300 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
-                                        <div class="flex-1">
-                                            <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${clinic.name} ✅</h3>
-                                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${clinic.address}</p>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${clinic.rating}</div>
-                                        <span class="text-[11px] bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded-lg font-semibold text-slate-700 dark:text-slate-300">Ochish</span>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    }
-                    html += `</div>`;
-                    listContainer.innerHTML = html;
                 }
                 return;
             }
 
-            // 2. Clinics Tab Logic
+            // 2. Med-Stores Tab Logic (Yangi qo'shilgan med-magazinlar)
+            if (currentTab === 'stores') {
+                let storesToRender = medStoresData.filter(s => {
+                    return s.name.toLowerCase().includes(searchVal) || s.specialization.toLowerCase().includes(searchVal);
+                });
+
+                if (storesToRender.length === 0) {
+                    listContainer.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm">${translations[currentLang].notFound}</div>`;
+                    return;
+                }
+
+                let html = `<div class="space-y-3"><div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Toshkentdagi Tibbiy Jihozlar Do'konlari</div>`;
+                storesToRender.forEach(item => {
+                    html += `
+                        <div onclick="showStoreDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
+                            <div class="flex items-center space-x-3.5 flex-1">
+                                <div class="w-14 h-14 bg-emerald-50 dark:bg-slate-700 text-emerald-600 dark:text-emerald-300 rounded-xl flex items-center justify-center text-xl font-bold">🩺</div>
+                                <div class="flex-1">
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ✅</h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${item.address}</p>
+                                    <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-1">${item.specialization}</p>
+                                </div>
+                            </div>
+                            <div class="text-right flex flex-col items-end space-y-2">
+                                <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold hover:bg-slate-200">Xarita</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+                listContainer.innerHTML = html;
+                return;
+            }
+
+            // 3. Clinics Tab Logic
             if (currentTab === 'clinics') {
                 let clinicsToRender = clinicsData.filter(c => {
                     return c.name.toLowerCase().includes(searchVal) || c.directions.toLowerCase().includes(searchVal);
@@ -644,14 +608,14 @@
                             <div class="flex items-center space-x-3.5 flex-1">
                                 <div class="w-14 h-14 bg-sky-50 dark:bg-slate-700 text-sky-600 dark:text-sky-300 rounded-xl flex items-center justify-center text-xl font-bold">🏥</div>
                                 <div class="flex-1">
-                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ✅</h3>
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name} ✅</h3>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">📍 ${item.address}</p>
                                     <p class="text-xs text-sky-600 dark:text-sky-400 font-medium mt-1">${item.directions}</p>
                                 </div>
                             </div>
-                            <div class="text-right flex flex-col items-end space-y-2">
-                                <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 px-2.5 py-1 rounded-lg font-semibold hover:bg-slate-200 dark:hover:bg-slate-600">Xarita</button>
+                            <div class="text-right">
+                                <div class="text-xs font-bold text-amber-500 mb-1">⭐ ${item.rating}</div>
+                                <button onclick="openYandexMap('${item.yandexQuery}'); event.stopPropagation();" class="text-[11px] bg-slate-100 dark:bg-slate-700 text-slate-700 px-2.5 py-1 rounded-lg font-semibold">Xarita</button>
                             </div>
                         </div>
                     `;
@@ -661,7 +625,7 @@
                 return;
             }
 
-            // 3. Doctors Tab Logic (Asosiy ekran: shifokorlar ro'yxati, yuqorida yoki alohida qismda mutaxassisliklar bo'yicha filter tugmalari)
+            // 4. Doctors Tab Logic
             if (currentTab === 'doctors') {
                 let itemsToRender = doctorsData.filter(d => {
                     const matchesCategory = (selectedCategory === null || selectedCategory === 'all' || d.cat === selectedCategory);
@@ -669,7 +633,6 @@
                     return matchesCategory && matchesSearch;
                 });
 
-                // Mutaxassisliklar paneli (Grid ko'rinishida tanlash uchun)
                 let categoriesBarHtml = `
                     <div class="mb-4">
                         <div class="flex items-center justify-between mb-2">
@@ -700,27 +663,20 @@
                 let containerHtml = categoriesBarHtml + `<div class="space-y-3">`;
                 itemsToRender.forEach(item => {
                     const isFav = favorites.includes(item.id);
-                    const imgHtml = item.img.startsWith('http') 
-                        ? `<img src="${item.img}" class="w-14 h-14 rounded-xl object-cover">` 
-                        : `<div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>`;
-                    
                     containerHtml += `
                         <div onclick="showDoctorDetail(${item.id})" class="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-xs border border-slate-100 dark:border-slate-700 flex items-center justify-between transition hover:shadow-md cursor-pointer">
                             <div class="flex items-center space-x-3.5 flex-1">
-                                ${imgHtml}
+                                <div class="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xl">${item.img}</div>
                                 <div class="flex-1">
-                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm flex items-center">${item.name} ✅</h3>
+                                    <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">${item.name} ✅</h3>
                                     <p class="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-0.5">${item.spec} • ${item.exp} yil tajriba</p>
                                     <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">📍 ${item.clinic}</p>
                                 </div>
                             </div>
                             <div class="text-right flex flex-col items-end space-y-1">
-                                <div class="flex items-center space-x-2">
-                                    <button onclick="shareItem('${item.name}', '${item.spec}', event)" class="text-xs text-slate-400 hover:text-sky-600">🔗</button>
-                                    <button onclick="toggleFavorite(${item.id}, event)" class="text-base">${isFav ? '⭐' : '☆'}</button>
-                                </div>
+                                <button onclick="toggleFavorite(${item.id}, event)" class="text-base">${isFav ? '⭐' : '☆'}</button>
                                 <div class="text-xs font-bold text-amber-500">⭐ ${item.rating}</div>
-                                <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">${item.price}</div>
+                                <div class="text-xs font-bold text-emerald-600">${item.price}</div>
                             </div>
                         </div>
                     `;
@@ -734,57 +690,42 @@
             renderContent();
         }
 
+        function showStoreDetail(storeId) {
+            const store = medStoresData.find(s => s.id === storeId);
+            if(!store) return;
+
+            document.getElementById('modalTitle').innerText = store.name;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="space-y-3">
+                    <div class="bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-xl">
+                        <p class="text-xs text-slate-600 dark:text-slate-300"><b>Ixtisoslashuvi:</b> ${store.specialization}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${store.yandexQuery}')"><b>Manzil:</b> ${store.address} (Yandeks Xarita)</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Mo'ljal:</b> ${store.landmarks}</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <a href="tel:${store.phone}" class="w-full bg-emerald-600 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-emerald-700 flex items-center justify-center">Qo'ng'iroq qilish</a>
+                        <button onclick="openYandexMap('${store.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold">Xarita</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
         function showDoctorDetail(docId) {
             const doc = doctorsData.find(d => d.id === docId);
             if(!doc) return;
 
             document.getElementById('modalTitle').innerText = doc.name;
-            const t = translations[currentLang];
-            
-            let reviewsHtml = doc.reviews.map(r => {
-                const initial = r.name.charAt(0).toUpperCase();
-                return `
-                    <div class="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700 text-xs">
-                        <div class="flex items-center justify-between mb-1">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-6 h-6 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[10px]">${initial}</div>
-                                <span class="font-bold text-slate-700 dark:text-slate-200">${r.name}</span>
-                            </div>
-                            <span class="text-amber-500 font-bold">⭐ ${r.rating}</span>
-                        </div>
-                        <p class="text-slate-600 dark:text-slate-300 pl-8">${r.text}</p>
-                    </div>
-                `;
-            }).join('');
-
-            if(doc.reviews.length === 0) {
-                reviewsHtml = `<p class="text-xs text-slate-400 italic">Hali sharhlar yo'q. Birinchi bo'lib sharh qoldiring!</p>`;
-            }
-
             document.getElementById('modalBody').innerHTML = `
                 <div class="space-y-3">
                     <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-xl">
                         <p class="text-xs text-sky-800 dark:text-sky-300 font-semibold">${doc.spec}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>${t.clinicLabel}:</b> ${doc.clinic}</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')"><b>Manzil:</b> ${doc.address} (${t.mapBtn})</p>
-                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>${t.priceLabel}:</b> <span class="text-emerald-600 dark:text-emerald-400 font-bold">${doc.price}</span></p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Klinika:</b> ${doc.clinic}</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${doc.yandexQuery}')"><b>Manzil:</b> ${doc.address}</p>
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-2">
-                        <button onclick="showToast('${doc.name} ${t.bookedAlert}'); closeModal();" class="w-full bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700 text-center">${t.bookBtn}</button>
-                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600 text-center flex items-center justify-center">${t.callBtn}</a>
-                    </div>
-
-                    <div class="border-t border-slate-100 dark:border-slate-700 pt-3">
-                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs mb-2">${t.reviewsLabel}</h4>
-                        <div class="space-y-2 max-h-36 overflow-y-auto">${reviewsHtml}</div>
-                    </div>
-
-                    <div class="border-t border-slate-100 dark:border-slate-700 pt-3 space-y-2">
-                        <h4 class="font-bold text-slate-800 dark:text-slate-100 text-xs">${t.addReviewTitle}</h4>
-                        <input type="text" id="reviewAuthor" placeholder="${t.namePlaceholderism}" class="w-full p-2 bg-slate-50 dark:bg-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-lg text-xs">
-                        <textarea id="reviewText" placeholder="${t.reviewPlaceholder}" class="w-full p-2 bg-slate-50 dark:bg-slate-700 dark:text-white border border-slate-200 dark:border-slate-600 rounded-lg text-xs h-16"></textarea>
-                        <button onclick="submitReview(${doc.id})" class="w-full bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 py-2 rounded-lg text-xs font-bold">${t.submitReview}</button>
+                        <button onclick="showToast('${doc.name} qabuliga yozildingiz!'); closeModal();" class="w-full bg-sky-600 text-white py-2.5 rounded-xl text-xs font-bold">Qabulga yozilish</button>
+                        <a href="tel:${doc.phone}" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 py-2.5 rounded-xl text-xs font-bold text-center flex items-center justify-center">Qo'ng'iroq</a>
                     </div>
                 </div>
             `;
@@ -796,42 +737,21 @@
             if(!clinic) return;
 
             document.getElementById('modalTitle').innerText = clinic.name;
-            const t = translations[currentLang];
             document.getElementById('modalBody').innerHTML = `
                 <div class="space-y-3">
                     <div class="bg-sky-50 dark:bg-sky-950/40 p-3 rounded-xl">
-                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer hover:text-sky-600 underline" onclick="openYandexMap('${clinic.yandexQuery}')"><b>Manzil:</b> ${clinic.address} (${t.mapBtn})</p>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer underline" onclick="openYandexMap('${clinic.yandexQuery}')"><b>Manzil:</b> ${clinic.address}</p>
                         <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Ish vaqti:</b> ${clinic.hours}</p>
                         <p class="text-xs text-slate-600 dark:text-slate-300 mt-1"><b>Yo'nalishlar:</b> ${clinic.directions}</p>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 text-white text-center py-2.5 rounded-xl text-xs font-bold shadow-sm hover:bg-sky-700 flex items-center justify-center">${t.callBtn}</a>
-                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-600 text-center">${t.mapBtn}</button>
+                        <a href="tel:${clinic.phone}" class="w-full bg-sky-600 text-white text-center py-2.5 rounded-xl text-xs font-bold flex items-center justify-center">Qo'ng'iroq</a>
+                        <button onclick="openYandexMap('${clinic.yandexQuery}')" class="w-full bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 py-2.5 rounded-xl text-xs font-bold">Xarita</button>
                     </div>
                 </div>
             `;
             document.getElementById('detailModal').classList.remove('hidden');
         }
-
-        function showClinicDetailFromData(cName) {
-            let clinic = clinicsData.find(c => c.name === cName) || { id: 999, name: cName, address: "Toshkent shahri", yandexQuery: cName, rating: 5.0, phone: "+998946221522", hours: "09:00 - 18:00", directions: "Tibbiy xizmatlar" };
-            showClinicDetail(clinic.id);
-        }
-
-        (function submitReview(docId) {
-            const author = document.getElementById('reviewAuthor').value.trim();
-            const text = document.getElementById('reviewText').value.trim();
-            if(!author || !text) {
-                showToast("Iltimos, barcha maydonlarni to'ldiring!", "error");
-                return;
-            }
-            const doc = doctorsData.find(d => d.id === docId);
-            if(doc) {
-                doc.reviews.push({ name: author, text: text, rating: 5 });
-                showToast(translations[currentLang].reviewAdded, "success");
-                closeModal();
-            }
-        });
 
         function closeModal() {
             document.getElementById('detailModal').classList.add('hidden');
