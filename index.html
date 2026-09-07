@@ -376,18 +376,41 @@
         let currentCaptchaCode = '';
         let temporarySelectedImages = [];
 
+        // Telegram WebApp integratsiyasi va foydalanuvchini avtomatik aniqlash
         if (tg) {
             tg.expand();
             tg.ready();
+            
+            // Telegram ranglar rejimiga moslash (Dark/Light)
             if (tg.colorScheme === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.getElementById('themeIcon').className = "fa-solid fa-sun text-base";
+                const themeIcon = document.getElementById('themeIcon');
+                if (themeIcon) themeIcon.className = "fa-solid fa-sun text-base";
+            }
+
+            // Agar Telegram orqali ochilgan bo'lsa va ism mavjud bo'lsa, avtomatik profilingizni to'ldiramiz
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const tgUser = tg.initDataUnsafe.user;
+                const tgFullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ');
+                
+                if (!userProfile.name && tgFullName) {
+                    userProfile.name = tgFullName;
+                }
+                // Agar bot orqali kontakt ulashilgan bo'lsa olish mumkin, aks holda qo'lda so'raladi
+                if (tgUser.phone_number && !userProfile.contact) {
+                    userProfile.contact = tgUser.phone_number;
+                }
+                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
             }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (!userProfile.contact) {
+            if (!userProfile.contact || !userProfile.name) {
                 document.getElementById('authModal').classList.remove('hidden');
+                // Agar Telegramdan ism kelgan bo'lsa inputga yozib qo'yamiz
+                if (userProfile.name) {
+                    document.getElementById('authName').value = userProfile.name;
+                }
                 generateCaptcha();
             } else {
                 updateWelcomeText();
@@ -399,7 +422,8 @@
 
         function updateWelcomeText() {
             const nameToUse = userProfile.name || (currentLang === 'ru' ? 'Гость' : currentLang === 'en' ? 'Guest' : 'Mehmon');
-            document.getElementById('userWelcome').innerText = translations[currentLang].welcomeUser.replace('{name}', nameToUse);
+            const welcomeEl = document.getElementById('userWelcome');
+            if(welcomeEl) welcomeEl.innerText = translations[currentLang].welcomeUser.replace('{name}', nameToUse);
         }
 
         function generateCaptcha() {
@@ -705,7 +729,6 @@
                         "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
                 }
             });
-            const titleSpan = document.getElementById('sectionTitleText');
             const t = translations[currentLang];
             let iconClass = tabName === 'clinics' ? "fa-solid fa-hospital" : tabName === 'pharmacies' ? "fa-solid fa-pills" : "fa-solid fa-user-doctor";
             let labelText = tabName === 'clinics' ? t.clinicsTab : tabName === 'pharmacies' ? t.pharmaciesTab : t.doctorsTab;
@@ -782,17 +805,20 @@
                 id: 'custom_' + Date.now(),
                 name, specialty, region, experience, workplace, address,
                 rating: 5.0, phone, image: temporarySelectedImages[0], images: temporarySelectedImages, 
-                bio: {
-                    uz: bioText,
-                    ru: bioText,
-                    en: bioText
-                }, 
+                bio: { uz: bioText, ru: bioText, en: bioText }, 
                 reviews: []
             };
 
             if (!customItems[category]) customItems[category] = [];
             customItems[category].push(newItem);
             localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
+
+            // Telegram botga yangi qo'shilgan obyekt haqida xabar yuborish (agar tg mavjud bo'lsa)
+            if (tg && tg.sendData) {
+                try {
+                    tg.sendData(JSON.stringify({ action: 'new_item', category, name, phone }));
+                } catch (e) { console.log(e); }
+            }
 
             alert("Muvaffaqiyatli saqlandi va qo'shildi!");
             closeAddItemModal();
@@ -1009,13 +1035,31 @@
 
         function submitBooking(event) {
             event.preventDefault();
-            const phone = document.getElementById('patientPhone').value;
+            const patientName = document.getElementById('patientName').value.trim();
+            const phone = document.getElementById('patientPhone').value.trim();
             const date = document.getElementById('bookingDate').value;
             const time = document.getElementById('bookingTime').value;
 
             if (!validateUzbekPhone(phone)) {
                 alert("Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting (+998...)");
                 return;
+            }
+
+            // Telegram bot orqali ma'lumotni bot serveriga yuborish (Telegram WebApp sendData orqali)
+            if (tg && tg.sendData) {
+                const bookingPayload = {
+                    action: 'booking',
+                    item_name: selectedItemForBooking ? selectedItemForBooking.name : '',
+                    patient_name: patientName,
+                    phone: phone,
+                    date: date,
+                    time: time
+                };
+                try {
+                    tg.sendData(JSON.stringify(bookingPayload));
+                } catch(e) {
+                    console.log("Telegram sendData error:", e);
+                }
             }
 
             alert(`Qabulingiz muvaffaqiyatli band qilindi!\n\nMutaxassis: ${selectedItemForBooking ? selectedItemForBooking.name : ''}\nSana va vaqt: ${date} / ${time}`);
@@ -1085,7 +1129,6 @@
             document.getElementById('optAllRegions').innerText = t.allRegions;
             document.getElementById('menuCategoriesTitle').innerText = t.menuCategories;
 
-            // Modal text translations
             document.getElementById('addItemModalTitle').innerText = currentTab === 'clinics' ? t.addModalClinicTitle : currentTab === 'pharmacies' ? t.addModalPharmacyTitle : t.addModalDoctorTitle;
             document.getElementById('addItemModalSubtitle').innerText = t.addItemSub;
             document.getElementById('lblSelectCategory').innerText = t.lblCat;
@@ -1109,7 +1152,7 @@
 
             document.getElementById('qrModalTitle').innerText = t.qrTitle;
             document.getElementById('qrModalSub').innerText = t.qrSub;
-            document.getElementById('favModalTitle').innerHTML = `<i class="fa-solid fa-heart text-red-500"></i><span>${t.favTitle}</span>`;
+            document.getElementById('favModalTitle').innerHTML = `<i class="fa-solid fa-heart text-red-500"><span>${t.favTitle}</span>`;
             document.getElementById('footerText').innerText = t.footerText;
 
             switchTab(currentTab);
