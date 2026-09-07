@@ -294,12 +294,18 @@
                 document.getElementById('authModal').classList.remove('hidden');
                 generateCaptcha();
             } else {
-                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name || 'Mehmon'}!`;
+                updateWelcomeText();
                 document.getElementById('authModal').classList.add('hidden');
             }
             updateFavCount();
             switchTab('doctors');
         });
+
+        function updateWelcomeText() {
+            const t = translations[currentLang];
+            const nameToUse = userProfile.name || (currentLang === 'ru' ? 'Гость' : currentLang === 'en' ? 'Guest' : 'Mehmon');
+            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', nameToUse);
+        }
 
         function generateCaptcha() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -381,6 +387,13 @@
                 bookBtn: "Band qilish",
                 sectionsTitle: "Bo'limlar",
                 logoutMenuText: "Profildan chiqish",
+                welcomeUser: "Salom, {name}!",
+                portalSubtext: "Tibbiyot Portali",
+                heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
+                heroSubtitle: "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.",
+                searchPlaceholder: "Shifokor, klinika yoki xizmatni qidirish...",
+                allRegions: "Barcha hududlar",
+                resultsSuffix: "ta natija",
                 modalBookingTitle: "Qabulga yozilish",
                 labelPatientName: "Ism va familiyangiz",
                 labelPatientPhone: "Telefon raqamingiz (+998...)",
@@ -407,6 +420,13 @@
                 bookBtn: "Забронировать",
                 sectionsTitle: "Разделы",
                 logoutMenuText: "Выйти из профиля",
+                welcomeUser: "Привет, {name}!",
+                portalSubtext: "Медицинский Портал",
+                heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
+                heroSubtitle: "База данных квалифицированных специалистов, современных клиник и аптек в одном месте.",
+                searchPlaceholder: "Поиск врача, клиники или услуги...",
+                allRegions: "Все регионы",
+                resultsSuffix: "результатов",
                 modalBookingTitle: "Запись на прием",
                 labelPatientName: "Ваше имя и фамилия",
                 labelPatientPhone: "Ваш номер телефона (+998...)",
@@ -433,6 +453,13 @@
                 bookBtn: "Book",
                 sectionsTitle: "Sections",
                 logoutMenuText: "Sign Out",
+                welcomeUser: "Hello, {name}!",
+                portalSubtext: "Medical Portal",
+                heroTitle: "Find the best doctors and clinics in Uzbekistan",
+                heroSubtitle: "Database of qualified specialists, modern clinics and pharmacies in one place.",
+                searchPlaceholder: "Search doctor, clinic or service...",
+                allRegions: "All regions",
+                resultsSuffix: "results",
                 modalBookingTitle: "Book an Appointment",
                 labelPatientName: "Full Name",
                 labelPatientPhone: "Phone Number (+998...)",
@@ -474,7 +501,7 @@
             userProfile = { name: name, contact: contact };
             localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
 
-            document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
+            updateWelcomeText();
             document.getElementById('authModal').classList.add('hidden');
         }
 
@@ -539,7 +566,8 @@
             grid.innerHTML = '';
             
             const badge = document.getElementById('resultCountBadge');
-            if (badge) badge.innerText = `${data.length} ta natija`;
+            const t = translations[currentLang];
+            if (badge) badge.innerText = `${data.length} ${t.resultsSuffix}`;
 
             if (data.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-400 bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700"><i class="fa-solid fa-folder-open text-4xl mb-3 opacity-40"></i><p class="text-sm font-medium">Hech qanday ma'lumot topilmadi.</p></div>`;
@@ -551,7 +579,6 @@
                 card.className = "bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-700/50 transition-all duration-300 flex flex-col justify-between group";
 
                 let specificInfo = '';
-                const t = translations[currentLang];
                 const isFav = favorites.some(f => f.id === item.id);
                 const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
 
@@ -737,6 +764,17 @@
             currentLang = lang;
             const t = translations[lang];
 
+            // Navbar elements update
+            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || (lang === 'ru' ? 'Гость' : lang === 'en' ? 'Guest' : 'Mehmon'));
+            document.querySelector('#userWelcome').nextElementSibling?.previousElementSibling; // portal subtext
+            
+            // Hero section update
+            document.getElementById('heroTitle').innerText = t.heroTitle;
+            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('optAllRegions').innerText = t.allRegions;
+
+            // Modals and buttons
             document.getElementById('logoutMenuText').innerText = t.logoutMenuText;
             document.getElementById('modalBookingTitle').innerText = t.modalBookingTitle;
             document.getElementById('labelPatientName').innerText = t.labelPatientName;
@@ -754,7 +792,6 @@
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
             if (html.classList.contains('dark')) {
-                html.classList.remove('html.dark');
                 html.classList.remove('dark');
                 icon.className = "fa-solid fa-moon text-base";
             } else {
