@@ -181,7 +181,7 @@
                 </div>
                 <div class="flex gap-2">
                     <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="">Barcha hududlar</option>
+                        <option value="" id="optAllRegions">Barcha hududlar</option>
                         <option value="Toshkent">Toshkent sh.</option>
                         <option value="Samarqand">Samarqand</option>
                         <option value="Buxoro">Buxoro</option>
@@ -506,21 +506,33 @@
                 experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
                 welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarExperts: "O'xshash mutaxassislar",
                 addDoctorBtn: "Shifokor qo'shish", addClinicBtn: "Shifoxona qo'shish", addPharmacyBtn: "Med magazin qo'shish",
-                addModalDoctorTitle: "Yangi shifokor qo'shish", addModalClinicTitle: "Yangi shifoxona qo'shish", addModalPharmacyTitle: "Yangi med magazin qo'shish"
+                addModalDoctorTitle: "Yangi shifokor qo'shish", addModalClinicTitle: "Yangi shifoxona qo'shish", addModalPharmacyTitle: "Yangi med magazin qo'shish",
+                heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
+                heroSubtitle: "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.",
+                searchPlaceholder: "Shifokor, klinika yoki xizmatni qidirish...",
+                allRegions: "Barcha hududlar"
             },
             ru: {
                 doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки",
                 experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
                 welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы", similarExperts: "Похожие специалисты",
                 addDoctorBtn: "Добавить врача", addClinicBtn: "Добавить больницу", addPharmacyBtn: "Добавить мед магазин",
-                addModalDoctorTitle: "Добавить врача", addModalClinicTitle: "Добавить больницу", addModalPharmacyTitle: "Добавить мед магазин"
+                addModalDoctorTitle: "Добавить врача", addModalClinicTitle: "Добавить больницу", addModalPharmacyTitle: "Добавить мед магазин",
+                heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
+                heroSubtitle: "База данных квалифицированных специалистов, современных клиник и аптек в одном месте.",
+                searchPlaceholder: "Поиск врача, клиники или услуги...",
+                allRegions: "Все регионы"
             },
             en: {
                 doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies",
                 experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
                 welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarExperts: "Similar Experts",
                 addDoctorBtn: "Add Doctor", addClinicBtn: "Add Hospital", addPharmacyBtn: "Add Med Shop",
-                addModalDoctorTitle: "Add Doctor", addModalClinicTitle: "Add Hospital", addModalPharmacyTitle: "Add Med Shop"
+                addModalDoctorTitle: "Add Doctor", addModalClinicTitle: "Add Hospital", addModalPharmacyTitle: "Add Med Shop",
+                heroTitle: "Find the best doctors and clinics in Uzbekistan",
+                heroSubtitle: "Database of qualified specialists, modern clinics and pharmacies in one place.",
+                searchPlaceholder: "Search for a doctor, clinic or service...",
+                allRegions: "All regions"
             }
         };
 
@@ -564,7 +576,6 @@
             if (dropdown && !dropdown.classList.contains('hidden')) dropdown.classList.add('hidden');
         }
 
-        // Modal yopish funksiyalari (aniq va kafolatli ishlashi uchun)
         function closeDetailModal() {
             const modal = document.getElementById('detailModal');
             if (modal) modal.classList.add('hidden');
@@ -1170,10 +1181,16 @@
         function changeLanguage(lang) {
             currentLang = lang;
             const t = translations[lang];
+            
+            // Foydalanuvchi ismini yangilash
             document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || (lang === 'ru' ? 'Гость' : lang === 'en' ? 'Guest' : 'Mehmon'));
-            document.getElementById('heroTitle').innerText = "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping";
-            document.getElementById('heroSubtitle').innerText = "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.";
-            document.getElementById('searchInput').placeholder = "Shifokor, klinika yoki xizmatni qidirish...";
+            
+            // Asosiy banner matnlarini tarjima qilish
+            document.getElementById('heroTitle').innerText = t.heroTitle;
+            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('optAllRegions').innerText = t.allRegions;
+
             switchTab(currentTab);
         }
 
