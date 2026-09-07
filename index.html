@@ -36,19 +36,39 @@
         .animate-scale {
             animation: scaleIn 0.2s ease-out forwards;
         }
-        /* Tilla (Gold) rang effekti TOP so'zi uchun (faqat yuqori qism uchun saqlab qolindi) */
-        .gold-text {
-            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.1));
-        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
+    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish) -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
+                    <i class="fa-solid fa-stethoscope"></i>
+                </div>
+                <h2 id="authTitle" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">ShifoTop'ga xush kelibsiz</h2>
+                <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting</p>
+            </div>
+
+            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div>
+                    <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
+                    <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <div>
+                    <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam yoki elektron pochta</label>
+                    <input type="text" id="authContact" required placeholder="+998 90 123 45 67 yokiexample@gmail.com" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <button type="submit" id="submitAuthBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
+                    Kirish va davom etish
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Header / Navbar -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-gray-700">
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 border-b border-gray-100 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             
             <!-- Logo & Brand Dropdown Trigger -->
@@ -59,7 +79,7 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-1.5">
-                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">Shifo<span class="gold-text">Top</span></span>
+                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">ShifoTop</span>
                             <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
                         </div>
                         <span class="block text-[11px] text-gray-400 font-medium" id="userWelcome">Tibbiyot Portali</span>
@@ -223,7 +243,7 @@
     <!-- Footer -->
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
-            &copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.
+            <span id="footerRights">&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.</span>
         </div>
     </footer>
 
@@ -231,7 +251,7 @@
     <script>
         // --- Telegram WebApp & CloudStorage / Data Integration ---
         let tg = window.Telegram?.WebApp;
-        let userProfile = { name: "Mehmon", telegramId: null };
+        let userProfile = { name: "Mehmon", contact: null, telegramId: null };
 
         if (tg) {
             tg.expand();
@@ -246,6 +266,7 @@
                 const user = tg.initDataUnsafe.user;
                 userProfile.name = user.first_name || 'Mehmon';
                 userProfile.telegramId = user.id;
+                userProfile.contact = `Telegram ID: ${user.id}`;
                 document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
             }
 
@@ -263,7 +284,7 @@
             }
         }
 
-        // --- Multi-language Mock Database (Uzbek, Russian, English) ---
+        // --- Multi-language Mock Database ---
         const dbData = {
             uz: {
                 doctors: [
@@ -344,7 +365,13 @@
                 qrModalTitle: "Profil QR-kodi",
                 qrModalDesc: "Ushbu kodni skanerlash orqali mutaxassis sahifasiga tezkor o'tishingiz mumkin.",
                 favoritesModalTitle: "Saralanganlar",
-                emptyFavorites: "Saralanganlar bo'sh."
+                emptyFavorites: "Saralanganlar bo'sh.",
+                authTitle: "ShifoTop'ga xush kelibsiz",
+                authSubtitle: "Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting",
+                labelAuthName: "Ism va familiyangiz",
+                labelAuthContact: "Telefon raqam yoki elektron pochta",
+                submitAuthBtn: "Kirish va davom etish",
+                footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
             },
             ru: {
                 brandTitle: "ShifoTop",
@@ -371,7 +398,13 @@
                 qrModalTitle: "QR-код профиля",
                 qrModalDesc: "Вы можете быстро перейти к странице специалиста, сканировав этот код.",
                 favoritesModalTitle: "Избранное",
-                emptyFavorites: "Список избранного пуст."
+                emptyFavorites: "Список избранного пуст.",
+                authTitle: "Добро пожаловать в ShifoTop",
+                authSubtitle: "Зарегистрируйтесь по номеру телефона или электронной почте для продолжения",
+                labelAuthName: "Ваше имя и фамилия",
+                labelAuthContact: "Номер телефона или email",
+                submitAuthBtn: "Войти и продолжить",
+                footerRights: "&copy; 2026 ShifoTop. Все права защищены."
             },
             en: {
                 brandTitle: "ShifoTop",
@@ -398,9 +431,35 @@
                 qrModalTitle: "Profile QR Code",
                 qrModalDesc: "Scan this code to quickly access the specialist profile page.",
                 favoritesModalTitle: "Favorites",
-                emptyFavorites: "Favorites list is empty."
+                emptyFavorites: "Favorites list is empty.",
+                authTitle: "Welcome to ShifoTop",
+                authSubtitle: "Register with your phone number or email to continue",
+                labelAuthName: "Your Full Name",
+                labelAuthContact: "Phone number or email",
+                submitAuthBtn: "Sign In & Continue",
+                footerRights: "&copy; 2026 ShifoTop. All rights reserved."
             }
         };
+
+        // --- Authentication Flow ---
+        function handleAuthSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('authName').value.trim();
+            const contact = document.getElementById('authContact').value.trim();
+
+            if (name && contact) {
+                userProfile.name = name;
+                userProfile.contact = contact;
+                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
+                document.getElementById('authModal').classList.add('hidden');
+                
+                // Prefill booking form fields if available
+                document.getElementById('patientName').value = name;
+                if (!contact.includes('@') && contact.startsWith('+')) {
+                    document.getElementById('patientPhone').value = contact;
+                }
+            }
+        }
 
         // --- Dropdown Menu Control ---
         function toggleMenuDropdown(event) {
@@ -465,8 +524,6 @@
                 let specificInfo = '';
                 const t = translations[currentLang];
                 const isFav = favorites.some(f => f.id === item.id);
-
-                // Yandex Maps URL generator query
                 const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
 
                 if (currentTab === 'doctors') {
@@ -499,7 +556,6 @@
                             <span class="absolute top-3 left-3 bg-brand-600/90 backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full shadow">
                                 ${item.region}
                             </span>
-                            <!-- Action Buttons on Image -->
                             <div class="absolute bottom-3 right-3 flex space-x-2">
                                 <button onclick="toggleFavorite('${item.id}', '${currentTab}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-red-500 shadow hover:scale-110 transition" title="Saralashga qo'shish">
                                     <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-base"></i>
@@ -553,6 +609,13 @@
 
             document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
             document.getElementById('bookingModal').classList.remove('hidden');
+
+            if (userProfile.name && userProfile.name !== "Mehmon") {
+                document.getElementById('patientName').value = userProfile.name;
+            }
+            if (userProfile.contact && !userProfile.contact.startsWith('Telegram')) {
+                document.getElementById('patientPhone').value = userProfile.contact;
+            }
 
             if (tg && tg.MainButton) {
                 tg.MainButton.text = translations[currentLang].submitBookingBtn.toUpperCase();
@@ -698,6 +761,13 @@
             document.getElementById('qrModalTitle').innerText = t.qrModalTitle;
             document.getElementById('qrModalDesc').innerText = t.qrModalDesc;
             document.getElementById('favoritesModalTitle').innerHTML = `<i class="fa-solid fa-heart text-red-500"></i><span>${t.favoritesModalTitle}</span>`;
+
+            document.getElementById('authTitle').innerText = t.authTitle;
+            document.getElementById('authSubtitle').innerText = t.authSubtitle;
+            document.getElementById('labelAuthName').innerText = t.labelAuthName;
+            document.getElementById('labelAuthContact').innerText = t.labelAuthContact;
+            document.getElementById('submitAuthBtn').innerText = t.submitAuthBtn;
+            document.getElementById('footerRights').innerHTML = t.footerRights;
 
             switchTab(currentTab);
         }
