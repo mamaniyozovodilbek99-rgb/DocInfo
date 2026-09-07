@@ -48,7 +48,7 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish, SMS va Captcha) -->
+    <!-- Authentication Modal (Faqat UZB raqam va Captcha tekshiruvi) -->
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
@@ -56,18 +56,19 @@
                     <i class="fa-solid fa-stethoscope"></i>
                 </div>
                 <h2 id="authTitle" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">ShifoTop'ga xush kelibsiz</h2>
-                <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting</p>
+                <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
             </div>
 
-            <!-- 1-Qadam: Ma'lumot kiritish va Captcha -->
+            <!-- Ro'yxatdan o'tish Formasi -->
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
                     <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
                     <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
                 </div>
                 <div>
-                    <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam yoki elektron pochta</label>
-                    <input type="text" id="authContact" required placeholder="+998 90 123 45 67 yoki example@gmail.com" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam (+998...)</label>
+                    <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <p class="text-[10px] text-gray-400 mt-1">Faqat O'zbekiston raqamlari (+998) qabul qilinadi.</p>
                 </div>
 
                 <!-- Harfli/Raqamli Captcha bloki -->
@@ -85,25 +86,7 @@
                 </div>
 
                 <button type="submit" id="submitAuthBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
-                    SMS kod olish
-                </button>
-            </form>
-
-            <!-- 2-Qadam: SMS kodni tasdiqlash (Yashirin turadi) -->
-            <form id="smsForm" onsubmit="handleSmsSubmit(event)" class="space-y-4 hidden">
-                <div class="bg-brand-50 dark:bg-brand-900/30 p-3 rounded-xl text-center mb-2">
-                    <p class="text-xs text-brand-600 dark:text-brand-400 font-medium" id="smsInfoText">Ushbu raqamga tasdiq kodi yuborildi: <b id="sentContactDisplay"></b></p>
-                    <p class="text-[11px] text-gray-400 mt-1">(Test uchun demo kod: <span class="font-bold text-gray-700 dark:text-gray-200">7777</span>)</p>
-                </div>
-                <div>
-                    <label id="labelSmsCode" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">SMS kodni kiriting</label>
-                    <input type="text" id="smsCodeInput" required maxlength="4" placeholder="7777" class="w-full text-center tracking-widest text-lg font-bold bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 dark:text-white">
-                </div>
-                <button type="submit" id="submitSmsBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
-                    Tasdiqlash va kirish
-                </button>
-                <button type="button" onclick="backToAuthForm()" class="w-full text-xs text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 py-1 transition">
-                    Raqamni yoki ma'lumotlarni o'zgartirish
+                    Kirish va Tasdiqlash
                 </button>
             </form>
         </div>
@@ -243,7 +226,7 @@
                     <input type="text" id="patientName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
                 </div>
                 <div>
-                    <label id="labelPatientPhone" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz</label>
+                    <label id="labelPatientPhone" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz (+998...)</label>
                     <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
                 </div>
                 <div>
@@ -299,10 +282,9 @@
 
     <!-- JavaScript Application Logic & Telegram Mini App Integration -->
     <script>
-        // --- Telegram WebApp & CloudStorage / Data Integration ---
+        // --- Telegram WebApp & Data Integration ---
         let tg = window.Telegram?.WebApp;
         let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null, telegramId: null };
-        let tempAuthData = { name: '', contact: '' };
         let currentCaptchaCode = '';
 
         if (tg) {
@@ -358,9 +340,17 @@
             }
             currentCaptchaCode = code;
             
-            // Vizual ko'rinishni biroz buzibroq/chiroyli qilib joylash
             const box = document.getElementById('captchaBox');
             box.innerText = code.split('').join(' ');
+        }
+
+        // --- Uzbek Phone Number Validation (+998 and 9 digits) ---
+        function validateUzbekPhone(phone) {
+            // Remove spaces, dashes, brackets to check pure string numbers
+            const cleaned = phone.replace(/[\s\-\(\)]/g, '');
+            // Regular expression for Uzbek phone: must start with +998 followed by exactly 9 digits
+            const uzbPhoneRegex = /^\+998\d{9}$/;
+            return uzbPhoneRegex.test(cleaned);
         }
 
         // --- Multi-language Mock Database ---
@@ -439,7 +429,7 @@
                 logoutMenuText: "Profildan chiqish",
                 modalBookingTitle: "Qabulga yozilish",
                 labelPatientName: "Ism va familiyangiz",
-                labelPatientPhone: "Telefon raqamingiz",
+                labelPatientPhone: "Telefon raqamingiz (+998...)",
                 labelBookingDate: "Qabul kuni",
                 submitBookingBtn: "Band qilish",
                 qrModalTitle: "Profil QR-kodi",
@@ -447,12 +437,10 @@
                 favoritesModalTitle: "Saralanganlar",
                 emptyFavorites: "Saralanganlar bo'sh.",
                 authTitle: "ShifoTop'ga xush kelibsiz",
-                authSubtitle: "Davom etish uchun telefon raqam va rasmdagi kodni kiriting",
+                authSubtitle: "O'zbekiston raqami va rasmdagi kodni kiriting",
                 labelAuthName: "Ism va familiyangiz",
-                labelAuthContact: "Telefon raqam yoki elektron pochta",
-                submitAuthBtn: "SMS kod olish",
-                labelSmsCode: "SMS kodni kiriting",
-                submitSmsBtn: "Tasdiqlash va kirish",
+                labelAuthContact: "Telefon raqam (+998...)",
+                submitAuthBtn: "Kirish va Tasdiqlash",
                 footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
             },
             ru: {
@@ -475,7 +463,7 @@
                 logoutMenuText: "Выйти из профиля",
                 modalBookingTitle: "Запись на прием",
                 labelPatientName: "Ваше имя и фамилия",
-                labelPatientPhone: "Ваш номер телефона",
+                labelPatientPhone: "Ваш номер телефона (+998...)",
                 labelBookingDate: "Дата приема",
                 submitBookingBtn: "Забронировать",
                 qrModalTitle: "QR-код профиля",
@@ -483,12 +471,10 @@
                 favoritesModalTitle: "Избранное",
                 emptyFavorites: "Список избранного пуст.",
                 authTitle: "Добро пожаловать в ShifoTop",
-                authSubtitle: "Введите номер телефона и код с картинки для продолжения",
+                authSubtitle: "Введите номер Узбекистана и код с картинки",
                 labelAuthName: "Ваше имя и фамилия",
-                labelAuthContact: "Номер телефона или email",
-                submitAuthBtn: "Получить SMS-код",
-                labelSmsCode: "Введите SMS-код",
-                submitSmsBtn: "Подтвердить и войти",
+                labelAuthContact: "Номер телефона (+998...)",
+                submitAuthBtn: "Войти и подтвердить",
                 footerRights: "&copy; 2026 ShifoTop. Все права защищены."
             },
             en: {
@@ -511,7 +497,7 @@
                 logoutMenuText: "Sign Out",
                 modalBookingTitle: "Book an Appointment",
                 labelPatientName: "Full Name",
-                labelPatientPhone: "Phone Number",
+                labelPatientPhone: "Phone Number (+998...)",
                 labelBookingDate: "Appointment Date",
                 submitBookingBtn: "Confirm Booking",
                 qrModalTitle: "Profile QR Code",
@@ -519,74 +505,51 @@
                 favoritesModalTitle: "Favorites",
                 emptyFavorites: "Favorites list is empty.",
                 authTitle: "Welcome to ShifoTop",
-                authSubtitle: "Enter your phone number and image code to continue",
+                authSubtitle: "Enter Uzbek phone number and image code",
                 labelAuthName: "Your Full Name",
-                labelAuthContact: "Phone number or email",
-                submitAuthBtn: "Get SMS Code",
-                labelSmsCode: "Enter SMS Code",
-                submitSmsBtn: "Verify & Sign In",
+                labelAuthContact: "Phone number (+998...)",
+                submitAuthBtn: "Sign In & Verify",
                 footerRights: "&copy; 2026 ShifoTop. All rights reserved."
             }
         };
 
-        // --- Authentication & Captcha/SMS Flow ---
+        // --- Authentication & Strict Uzbek Phone + Captcha Flow ---
         function handleAuthSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('authName').value.trim();
             const contact = document.getElementById('authContact').value.trim();
             const userInputCaptcha = document.getElementById('captchaInput').value.trim().toUpperCase();
 
-            // Captcha tekshiruvi
+            // 1. Validate Uzbek Phone Number strictly (+998 format, 9 digits following)
+            if (!validateUzbekPhone(contact)) {
+                alert("Xato! Faqat to'g'ri O'zbekiston telefon raqami (+998 bilan boshlanadigan va 9 ta raqamdan iborat) kiritilishi shart. Qisqa yoki boshqa davlat raqamlari qabul qilinmaydi.");
+                document.getElementById('authContact').focus();
+                return;
+            }
+
+            // 2. Validate Captcha
             if (userInputCaptcha !== currentCaptchaCode) {
-                alert("Xato! Rasmdagi kod noto'g'ri kiritildi. Iltimos, qaytadan urinib ko'ring.");
+                alert("Xato! Rasmdagi kod (Captcha) noto'g'ri kiritildi. Iltimos, qaytadan urinib ko'ring.");
                 generateCaptcha();
                 document.getElementById('captchaInput').value = '';
                 document.getElementById('captchaInput').focus();
                 return;
             }
 
-            if (name && contact) {
-                tempAuthData = { name, contact };
-                // Captcha to'g'ri bo'lsa, SMS kod kiritish oynasiga o'tish
-                document.getElementById('authForm').classList.add('hidden');
-                document.getElementById('smsForm').classList.remove('hidden');
-                document.getElementById('sentContactDisplay').innerText = contact;
-                document.getElementById('smsCodeInput').value = '7777'; // Qulaylik uchun demo kod
-                document.getElementById('smsCodeInput').focus();
-            }
-        }
+            // Success Registration / Login
+            userProfile = {
+                name: name,
+                contact: contact,
+                telegramId: null
+            };
+            localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
 
-        function backToAuthForm() {
-            document.getElementById('smsForm').classList.add('hidden');
-            document.getElementById('authForm').classList.remove('hidden');
-            generateCaptcha();
-            document.getElementById('captchaInput').value = '';
-        }
+            document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
+            document.getElementById('authModal').classList.add('hidden');
 
-        function handleSmsSubmit(event) {
-            event.preventDefault();
-            const code = document.getElementById('smsCodeInput').value.trim();
-
-            // Demo shart: kod 7777 bo'lsa to'g'ri qabul qilinadi
-            if (code === '7777') {
-                userProfile = {
-                    name: tempAuthData.name,
-                    contact: tempAuthData.contact,
-                    telegramId: null
-                };
-                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
-
-                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
-                document.getElementById('authModal').classList.add('hidden');
-
-                // Qabul oynasidagi ma'lumotlarni ham avto to'ldirish
-                document.getElementById('patientName').value = userProfile.name;
-                if (!userProfile.contact.includes('@') && userProfile.contact.startsWith('+')) {
-                    document.getElementById('patientPhone').value = userProfile.contact;
-                }
-            } else {
-                alert("Xato SMS kod! Iltimos, demo uchun 7777 kodini kiriting.");
-            }
+            // Pre-fill booking inputs if necessary
+            document.getElementById('patientName').value = userProfile.name;
+            document.getElementById('patientPhone').value = userProfile.contact;
         }
 
         // --- Profildan chiqish funksiyasi ---
@@ -594,16 +557,11 @@
             localStorage.removeItem('shifotop_user');
             userProfile = { name: null, contact: null, telegramId: null };
             
-            // Menuni yopish
             document.getElementById('menuDropdown').classList.add('hidden');
 
-            // Formani tozalab, yana kirish oynasini va yangi captcha chiqarish
             document.getElementById('authName').value = '';
             document.getElementById('authContact').value = '';
             document.getElementById('captchaInput').value = '';
-            document.getElementById('smsCodeInput').value = '';
-            document.getElementById('smsForm').classList.add('hidden');
-            document.getElementById('authForm').classList.remove('hidden');
             document.getElementById('authModal').classList.remove('hidden');
             generateCaptcha();
         }
@@ -760,7 +718,7 @@
             if (userProfile.name) {
                 document.getElementById('patientName').value = userProfile.name;
             }
-            if (userProfile.contact && !userProfile.contact.startsWith('Telegram')) {
+            if (userProfile.contact) {
                 document.getElementById('patientPhone').value = userProfile.contact;
             }
 
@@ -796,6 +754,12 @@
             const name = document.getElementById('patientName').value;
             const phone = document.getElementById('patientPhone').value;
             const date = document.getElementById('bookingDate').value;
+
+            // Optional check for patient phone too
+            if (!validateUzbekPhone(phone)) {
+                alert("Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting (+998...)");
+                return;
+            }
 
             const bookingDetails = {
                 item: selectedItemForBooking ? selectedItemForBooking.name : 'Nomaʼlum',
@@ -915,8 +879,6 @@
             document.getElementById('labelAuthName').innerText = t.labelAuthName;
             document.getElementById('labelAuthContact').innerText = t.labelAuthContact;
             document.getElementById('submitAuthBtn').innerText = t.submitAuthBtn;
-            document.getElementById('labelSmsCode').innerText = t.labelSmsCode;
-            document.getElementById('submitSmsBtn').innerText = t.submitSmsBtn;
             document.getElementById('footerRights').innerHTML = t.footerRights;
 
             switchTab(currentTab);
