@@ -40,7 +40,7 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish) -->
+    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish & SMS Tasdiqlash) -->
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
@@ -51,6 +51,7 @@
                 <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting</p>
             </div>
 
+            <!-- 1-Qadam: Ma'lumot kiritish -->
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
                     <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
@@ -58,10 +59,28 @@
                 </div>
                 <div>
                     <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam yoki elektron pochta</label>
-                    <input type="text" id="authContact" required placeholder="+998 90 123 45 67 yokiexample@gmail.com" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="text" id="authContact" required placeholder="+998 90 123 45 67 yoki example@gmail.com" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
                 </div>
                 <button type="submit" id="submitAuthBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
-                    Kirish va davom etish
+                    Kod olish
+                </button>
+            </form>
+
+            <!-- 2-Qadam: SMS kodni tasdiqlash (Yashirin turadi) -->
+            <form id="smsForm" onsubmit="handleSmsSubmit(event)" class="space-y-4 hidden">
+                <div class="bg-brand-50 dark:bg-brand-900/30 p-3 rounded-xl text-center mb-2">
+                    <p class="text-xs text-brand-600 dark:text-brand-400 font-medium" id="smsInfoText">Ushbu raqamga tasdiq kodi yuborildi: <b id="sentContactDisplay"></b></p>
+                    <p class="text-[11px] text-gray-400 mt-1">(Test uchun demo kod: <span class="font-bold text-gray-700 dark:text-gray-200">7777</span>)</p>
+                </div>
+                <div>
+                    <label id="labelSmsCode" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">SMS kodni kiriting</label>
+                    <input type="text" id="smsCodeInput" required maxlength="4" placeholder="7777" class="w-full text-center tracking-widest text-lg font-bold bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <button type="submit" id="submitSmsBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
+                    Tasdiqlash va kirish
+                </button>
+                <button type="button" onclick="backToAuthForm()" class="w-full text-xs text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 py-1 transition">
+                    Raqamni o'zgartirish
                 </button>
             </form>
         </div>
@@ -103,6 +122,14 @@
                         <button onclick="switchTab('pharmacies')" id="menuItem-pharmacies" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
                             <i class="fa-solid fa-pills w-5"></i>
                             <span data-translate="pharmaciesTab">Med-magazinlar</span>
+                        </button>
+                    </div>
+
+                    <!-- Profildan chiqish tugmasi menu qatorining eng pastida -->
+                    <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
+                        <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3">
+                            <i class="fa-solid fa-right-from-bracket w-5"></i>
+                            <span id="logoutMenuText">Profildan chiqish</span>
                         </button>
                     </div>
                 </div>
@@ -251,7 +278,8 @@
     <script>
         // --- Telegram WebApp & CloudStorage / Data Integration ---
         let tg = window.Telegram?.WebApp;
-        let userProfile = { name: "Mehmon", contact: null, telegramId: null };
+        let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null, telegramId: null };
+        let tempAuthData = { name: '', contact: '' };
 
         if (tg) {
             tg.expand();
@@ -262,12 +290,12 @@
                 document.getElementById('themeIcon').className = "fa-solid fa-sun text-base";
             }
 
-            if (tg.initDataUnsafe?.user) {
+            if (tg.initDataUnsafe?.user && !userProfile.contact) {
                 const user = tg.initDataUnsafe.user;
                 userProfile.name = user.first_name || 'Mehmon';
                 userProfile.telegramId = user.id;
                 userProfile.contact = `Telegram ID: ${user.id}`;
-                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
+                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
             }
 
             if (tg.CloudStorage) {
@@ -283,6 +311,18 @@
                 });
             }
         }
+
+        // Check authentication status on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!userProfile.contact) {
+                document.getElementById('authModal').classList.remove('hidden');
+            } else {
+                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name || 'Mehmon'}!`;
+                document.getElementById('authModal').classList.add('hidden');
+            }
+            updateFavCount();
+            switchTab('doctors');
+        });
 
         // --- Multi-language Mock Database ---
         const dbData = {
@@ -357,6 +397,7 @@
                 call: "Bog'lanish",
                 bookBtn: "Band qilish",
                 sectionsTitle: "Bo'limlar",
+                logoutMenuText: "Profildan chiqish",
                 modalBookingTitle: "Qabulga yozilish",
                 labelPatientName: "Ism va familiyangiz",
                 labelPatientPhone: "Telefon raqamingiz",
@@ -367,10 +408,12 @@
                 favoritesModalTitle: "Saralanganlar",
                 emptyFavorites: "Saralanganlar bo'sh.",
                 authTitle: "ShifoTop'ga xush kelibsiz",
-                authSubtitle: "Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting",
+                authSubtitle: "Davom etish uchun telefon raqam yoki elektron pochta kiriting",
                 labelAuthName: "Ism va familiyangiz",
                 labelAuthContact: "Telefon raqam yoki elektron pochta",
-                submitAuthBtn: "Kirish va davom etish",
+                submitAuthBtn: "Kod olish",
+                labelSmsCode: "SMS kodni kiriting",
+                submitSmsBtn: "Tasdiqlash va kirish",
                 footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
             },
             ru: {
@@ -390,6 +433,7 @@
                 call: "Связаться",
                 bookBtn: "Забронировать",
                 sectionsTitle: "Разделы",
+                logoutMenuText: "Выйти из профиля",
                 modalBookingTitle: "Запись на прием",
                 labelPatientName: "Ваше имя и фамилия",
                 labelPatientPhone: "Ваш номер телефона",
@@ -400,10 +444,12 @@
                 favoritesModalTitle: "Избранное",
                 emptyFavorites: "Список избранного пуст.",
                 authTitle: "Добро пожаловать в ShifoTop",
-                authSubtitle: "Зарегистрируйтесь по номеру телефона или электронной почте для продолжения",
+                authSubtitle: "Введите номер телефона или email для продолжения",
                 labelAuthName: "Ваше имя и фамилия",
                 labelAuthContact: "Номер телефона или email",
-                submitAuthBtn: "Войти и продолжить",
+                submitAuthBtn: "Получить код",
+                labelSmsCode: "Введите SMS-код",
+                submitSmsBtn: "Подтвердить и войти",
                 footerRights: "&copy; 2026 ShifoTop. Все права защищены."
             },
             en: {
@@ -423,6 +469,7 @@
                 call: "Contact",
                 bookBtn: "Book",
                 sectionsTitle: "Sections",
+                logoutMenuText: "Sign Out",
                 modalBookingTitle: "Book an Appointment",
                 labelPatientName: "Full Name",
                 labelPatientPhone: "Phone Number",
@@ -433,32 +480,79 @@
                 favoritesModalTitle: "Favorites",
                 emptyFavorites: "Favorites list is empty.",
                 authTitle: "Welcome to ShifoTop",
-                authSubtitle: "Register with your phone number or email to continue",
+                authSubtitle: "Enter your phone number or email to continue",
                 labelAuthName: "Your Full Name",
                 labelAuthContact: "Phone number or email",
-                submitAuthBtn: "Sign In & Continue",
+                submitAuthBtn: "Get Code",
+                labelSmsCode: "Enter SMS Code",
+                submitSmsBtn: "Verify & Sign In",
                 footerRights: "&copy; 2026 ShifoTop. All rights reserved."
             }
         };
 
-        // --- Authentication Flow ---
+        // --- Authentication & SMS Flow ---
         function handleAuthSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('authName').value.trim();
             const contact = document.getElementById('authContact').value.trim();
 
             if (name && contact) {
-                userProfile.name = name;
-                userProfile.contact = contact;
+                tempAuthData = { name, contact };
+                // 1-bosqichdan keyin SMS kod kiritish oynasiga o'tish
+                document.getElementById('authForm').classList.add('hidden');
+                document.getElementById('smsForm').classList.remove('hidden');
+                document.getElementById('sentContactDisplay').innerText = contact;
+                document.getElementById('smsCodeInput').value = '7777'; // Qulaylik uchun avto to'ldirish
+                document.getElementById('smsCodeInput').focus();
+            }
+        }
+
+        function backToAuthForm() {
+            document.getElementById('smsForm').classList.add('hidden');
+            document.getElementById('authForm').classList.remove('hidden');
+        }
+
+        function handleSmsSubmit(event) {
+            event.preventDefault();
+            const code = document.getElementById('smsCodeInput').value.trim();
+
+            // Demo shart: kod 7777 bo'lsa to'g'ri qabul qilinadi
+            if (code === '7777') {
+                userProfile = {
+                    name: tempAuthData.name,
+                    contact: tempAuthData.contact,
+                    telegramId: null
+                };
+                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
+
                 document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
                 document.getElementById('authModal').classList.add('hidden');
-                
-                // Prefill booking form fields if available
-                document.getElementById('patientName').value = name;
-                if (!contact.includes('@') && contact.startsWith('+')) {
-                    document.getElementById('patientPhone').value = contact;
+
+                // Qabul oynasidagi ma'lumotlarni ham avto to'ldirish
+                document.getElementById('patientName').value = userProfile.name;
+                if (!userProfile.contact.includes('@') && userProfile.contact.startsWith('+')) {
+                    document.getElementById('patientPhone').value = userProfile.contact;
                 }
+            } else {
+                alert("Xato SMS kod! Iltimos, demo uchun 7777 kodini kiriting.");
             }
+        }
+
+        // --- Profildan chiqish funksiyasi ---
+        function logoutProfile() {
+            localStorage.removeItem('shifotop_user');
+            userProfile = { name: null, contact: null, telegramId: null };
+            
+            // Menuni yopish
+            document.getElementById('menuDropdown').classList.add('hidden');
+
+            // Formani tozalab, yana kirish oynasini chiqarish
+            document.getElementById('authName').value = '';
+            document.getElementById('authContact').value = '';
+            document.getElementById('smsCodeInput').value = '';
+            document.getElementById('smsForm').classList.add('hidden');
+            document.getElementById('authForm').classList.remove('hidden');
+            document.getElementById('authModal').classList.remove('hidden');
         }
 
         // --- Dropdown Menu Control ---
@@ -610,7 +704,7 @@
             document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
             document.getElementById('bookingModal').classList.remove('hidden');
 
-            if (userProfile.name && userProfile.name !== "Mehmon") {
+            if (userProfile.name) {
                 document.getElementById('patientName').value = userProfile.name;
             }
             if (userProfile.contact && !userProfile.contact.startsWith('Telegram')) {
@@ -751,6 +845,7 @@
             document.querySelector('#menuItem-clinics span').innerText = t.clinicsTab;
             document.querySelector('#menuItem-pharmacies span').innerText = t.pharmaciesTab;
             document.getElementById('menuHeaderTitle').innerText = t.sectionsTitle;
+            document.getElementById('logoutMenuText').innerText = t.logoutMenuText;
 
             document.getElementById('modalBookingTitle').innerText = t.modalBookingTitle;
             document.getElementById('labelPatientName').innerText = t.labelPatientName;
@@ -767,6 +862,8 @@
             document.getElementById('labelAuthName').innerText = t.labelAuthName;
             document.getElementById('labelAuthContact').innerText = t.labelAuthContact;
             document.getElementById('submitAuthBtn').innerText = t.submitAuthBtn;
+            document.getElementById('labelSmsCode').innerText = t.labelSmsCode;
+            document.getElementById('submitSmsBtn').innerText = t.submitSmsBtn;
             document.getElementById('footerRights').innerHTML = t.footerRights;
 
             switchTab(currentTab);
@@ -784,12 +881,6 @@
                 icon.className = "fa-solid fa-sun text-base";
             }
         }
-
-        // Initial Load
-        window.onload = () => {
-            updateFavCount();
-            switchTab('doctors');
-        };
     </script>
 </body>
 </html>
