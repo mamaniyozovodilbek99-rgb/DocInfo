@@ -351,33 +351,6 @@
         </div>
     </div>
 
-    <!-- Chat Modal -->
-    <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative flex flex-col h-[500px] border border-gray-100 dark:border-gray-700 animate-scale">
-            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-full primary-bg text-white flex items-center justify-center font-bold">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
-                    <div>
-                        <h3 id="chatDoctorName" class="font-bold text-sm text-gray-900 dark:text-white">Shifokor</h3>
-                        <span class="text-[10px] text-emerald-500 font-semibold flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-1.5 animate-pulse"></span> Online</span>
-                    </div>
-                </div>
-                <button onclick="closeChatModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            <div id="chatMessages" class="flex-grow overflow-y-auto py-4 space-y-3 pr-2 flex flex-col"></div>
-            <form id="chatForm" onsubmit="sendChatMessage(event)" class="pt-3 border-t border-gray-100 dark:border-gray-700 flex gap-2">
-                <input type="text" id="chatInputText" required placeholder="Savolingizni yozing..." class="flex-grow bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                <button type="submit" class="primary-bg text-white px-4 rounded-xl flex items-center justify-center shadow-md hover:opacity-95 transition">
-                    <i class="fa-solid fa-paper-plane text-sm"></i>
-                </button>
-            </form>
-        </div>
-    </div>
-
     <!-- Footer -->
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
@@ -391,7 +364,6 @@
         let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null };
         let currentCaptchaCode = '';
         let temporarySelectedImages = [];
-        let activeChatDoctor = null;
 
         if (tg) {
             tg.expand();
@@ -448,6 +420,24 @@
                         ],
                         bio: "Tajribali kardiolog, 12 yildan ortiq vaqt davomida yurak-qon tomir kasalliklarini davolash va profilaktikasi bilan shug'ullanib keladi.",
                         reviews: []
+                    },
+                    { 
+                        id: 'd2', name: "Dr. Malika Umarova", specialty: "Kardiolog", region: "Toshkent", experience: "9 yil", workplace: "1-son shahar klinik shifoxonasi", address: "Farg'ona yo'li 15", rating: 4.8, phone: "+998 90 234 56 78", 
+                        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300",
+                        images: ["https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=500"],
+                        bio: "Yurak aritmiyasi va gipertoniya kasalliklari bo'yicha mutaxassis.", reviews: []
+                    },
+                    { 
+                        id: 'd3', name: "Dr. Jamshid Rahimov", specialty: "Kardiolog", region: "Samarqand", experience: "15 yil", workplace: "Samarqand viloyat kardiologiya markazi", address: "Imom Buxoriy ko'chasi 4", rating: 4.9, phone: "+998 91 345 67 89", 
+                        image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
+                        images: ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=500"],
+                        bio: "Oliy toifali kardiolog, koronarografiya va stentlash bo'yicha mutaxassis.", reviews: []
+                    },
+                    { 
+                        id: 'd4', name: "Dr. Dilshodbek Nazarov", specialty: "Kardiolog", region: "Toshkent", experience: "7 yil", workplace: "Med Club Private Clinic", address: "Navoiy ko'chasi 22", rating: 4.7, phone: "+998 93 456 78 90", 
+                        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        images: ["https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=500"],
+                        bio: "Zamonaviy funksional diagnostika va EKG/EXOKG tahlillari bo'yicha mutaxassis.", reviews: []
                     }
                 ],
                 clinics: [
@@ -484,17 +474,17 @@
             uz: {
                 doctorsTab: "Shifokorlar", clinicsTab: "Klinikalar", pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
-                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar"
+                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarExperts: "O'xshash mutaxassislar"
             },
             ru: {
                 doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки",
                 experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
-                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы"
+                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы", similarExperts: "Похожие специалисты"
             },
             en: {
                 doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies",
                 experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
-                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews"
+                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarExperts: "Similar Experts"
             }
         };
 
@@ -731,6 +721,34 @@
                 </div>
             `).join('');
 
+            // O'xshash mutaxassislarni topish (shu kategoriyadagi boshqa 3 ta element)
+            let similarItems = currentLangData[category].filter(i => i.id !== id).slice(0, 3);
+            let similarHtml = '';
+            if (similarItems.length > 0) {
+                similarHtml = `
+                    <div class="border-t border-gray-100 dark:border-gray-700 pt-5 mt-5">
+                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3">${t.similarExperts}</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            ${similarItems.map(sim => `
+                                <div onclick="openDetailModal('${sim.id}', '${category}')" class="bg-gray-50 dark:bg-gray-700/30 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:border-blue-500 transition flex flex-col justify-between">
+                                    <div class="flex items-center space-x-2.5 mb-2">
+                                        <img src="${sim.image}" class="w-10 h-10 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/100?text=Rasm'">
+                                        <div class="overflow-hidden">
+                                            <h5 class="font-bold text-xs text-gray-900 dark:text-white truncate">${sim.name}</h5>
+                                            <p class="text-[10px] text-blue-600 dark:text-blue-400 truncate">${sim.specialty}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-between items-center text-[10px] text-gray-500">
+                                        <span><i class="fa-solid fa-star text-amber-500"></i> ${sim.rating}</span>
+                                        <span class="font-semibold text-gray-700 dark:text-gray-300">${sim.region}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
             const container = document.getElementById('detailContentContainer');
             container.innerHTML = `
                 <div class="w-full h-64 bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden mb-3 shadow-sm border border-gray-100 dark:border-gray-700 relative">
@@ -765,13 +783,6 @@
                         <div class="flex items-center"><i class="fa-solid fa-phone w-5 text-blue-600"></i><a href="tel:${item.phone}" class="font-bold text-blue-600 underline">${item.phone}</a></div>
                     </div>
                     ${item.bio ? `<div><h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">${t.aboutDoctor}</h4><p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${item.bio}</p></div>` : ''}
-                </div>
-
-                <div class="flex gap-2 mb-6">
-                    <button onclick="closeDetailModal(); openChatModal('${item.id}', '${category}')" class="flex-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition border border-emerald-200 dark:border-emerald-800">
-                        <i class="fa-solid fa-comments"></i>
-                        <span>Onlayn Chat</span>
-                    </button>
                 </div>
 
                 <div class="flex gap-3 mb-6">
@@ -813,6 +824,9 @@
                         <button type="submit" class="w-full primary-bg text-white font-semibold py-2 rounded-xl text-xs transition shadow">Sharh qoldirish</button>
                     </form>
                 </div>
+
+                <!-- O'xshash mutaxassislar bo'limi -->
+                ${similarHtml}
             `;
 
             document.getElementById('detailModal').classList.remove('hidden');
@@ -897,58 +911,6 @@
             }
         }
 
-        function openChatModal(id, category) {
-            const mergedDb = getMergedDbData();
-            const currentLangData = mergedDb[currentLang] || mergedDb['uz'];
-            activeChatDoctor = currentLangData[category].find(i => i.id === id);
-            if (!activeChatDoctor) return;
-
-            document.getElementById('chatDoctorName').innerText = activeChatDoctor.name;
-            renderChatMessages();
-            document.getElementById('chatModal').classList.remove('hidden');
-        }
-
-        function closeChatModal() {
-            document.getElementById('chatModal').classList.add('hidden');
-            activeChatDoctor = null;
-        }
-
-        function renderChatMessages() {
-            const container = document.getElementById('chatMessages');
-            if (!activeChatDoctor) return;
-            
-            if (!activeChatDoctor.messages) {
-                activeChatDoctor.messages = [
-                    { sender: 'doctor', text: `Assalomu alaykum! Men ${activeChatDoctor.name}. Sizga qanday yordam bera olaman?` }
-                ];
-            }
-
-            container.innerHTML = activeChatDoctor.messages.map(msg => `
-                <div class="max-w-[80%] p-3 rounded-2xl text-xs ${msg.sender === 'user' ? 'ml-auto primary-bg text-white rounded-br-none' : 'mr-auto bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none'}">
-                    ${msg.text}
-                </div>
-            `).join('');
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function sendChatMessage(event) {
-            event.preventDefault();
-            const input = document.getElementById('chatInputText');
-            const text = input.value.trim();
-            if (!text || !activeChatDoctor) return;
-
-            if (!activeChatDoctor.messages) activeChatDoctor.messages = [];
-            activeChatDoctor.messages.push({ sender: 'user', text: text });
-            input.value = '';
-            renderChatMessages();
-
-            setTimeout(() => {
-                activeChatDoctor.messages.push({ sender: 'doctor', text: "Xabaringiz qabul qilindi. Shifokor tez orada javob qaytaradi." });
-                renderChatMessages();
-                localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
-            }, 1000);
-        }
-
         function handleReviewSubmit(event, id, category) {
             event.preventDefault();
             const author = document.getElementById('reviewAuthor').value.trim();
@@ -1022,7 +984,7 @@
         function submitBooking(event) {
             event.preventDefault();
             const phone = document.getElementById('patientPhone').value;
-            const date = document.getElementById('bookingDate').value;
+            const date = document.getElementById('bookingDate5') || document.getElementById('bookingDate').value;
             if (!validateUzbekPhone(phone)) {
                 alert("Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting (+998...)");
                 return;
