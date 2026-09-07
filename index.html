@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShifoTop — O'zbekistondagi tibbiyot portali va katalogi</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -23,7 +24,9 @@
             }
         }
     </script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @keyframes scaleIn {
@@ -33,20 +36,15 @@
         .animate-scale {
             animation: scaleIn 0.2s ease-out forwards;
         }
-        /* Tilla (Gold) rang effekti faqat TOP so'zi uchun */
-        .gold-text {
-            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.1));
-        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
+    <!-- Header / Navbar -->
     <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 border-b border-gray-100 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             
+            <!-- Logo & Brand Dropdown Trigger -->
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
                     <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md flex items-center justify-center group-hover:bg-brand-700 transition">
@@ -54,13 +52,14 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-1.5">
-                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">Shifo<span class="gold-text">Top</span></span>
+                            <span id="brandTitle" class="text-xl font-bold tracking-tight text-brand-600 dark:text-brand-400">ShifoTop</span>
                             <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
                         </div>
                         <span class="block text-[11px] text-gray-400 font-medium" id="userWelcome">Tibbiyot Portali</span>
                     </div>
                 </div>
 
+                <!-- Dropdown Menu Box -->
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale">
                     <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
@@ -82,16 +81,569 @@
                 </div>
             </div>
 
+            <!-- Controls (Appointments, Favorites, Lang & DarkMode) -->
             <div class="flex items-center space-x-3">
+                <!-- My Appointments Button -->
+                <button onclick="openAppointmentsModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Qabullarim">
+                    <i class="fa-solid fa-calendar-check text-brand-600 dark:text-brand-400 text-base"></i>
+                    <span id="appointmentCount" class="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
+                </button>
+
+                <!-- Favorites Counter Button -->
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
 
+                <!-- Language Selector -->
                 <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-100 dark:bg-gray-700 text-xs sm:text-sm font-medium rounded-xl px-2.5 py-2 focus:outline-none border-0 text-gray-700 dark:text-gray-200 cursor-pointer">
                     <option value="uz">O'zbekcha</option>
                     <option value="ru">Русский</option>
                     <option value="en">English</option>
                 </select>
 
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-
+                <!-- Theme Toggle -->
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Rejimni o'zgartirish">
+                    <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Hero Search Section -->
+        <div class="bg-gradient-to-r from-brand-600 via-indigo-600 to-indigo-800 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
+                <i class="fa-solid fa-stethoscope"></i>
+            </div>
+            <div class="relative z-10 max-w-2xl">
+                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
+                <p id="heroSubtitle" class="text-indigo-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
+            </div>
+            
+            <!-- Search Bar & Filters -->
+            <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10">
+                <div class="flex items-center px-3 flex-grow bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2 sm:py-0">
+                    <i class="fa-solid fa-search text-gray-400 mr-3"></i>
+                    <input type="text" id="searchInput" oninput="filterData()" placeholder="Shifokor, klinika yoki xizmatni qidirish..." class="w-full bg-transparent border-0 focus:outline-none text-gray-800 dark:text-gray-100 text-sm placeholder-gray-400">
+                </div>
+                <div class="flex gap-2">
+                    <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
+                        <option value="">Barcha hududlar</option>
+                        <option value="Toshkent">Toshkent sh.</option>
+                        <option value="Samarqand">Samarqand</option>
+                        <option value="Buxoro">Buxoro</option>
+                        <option value="Fargona">Farg'ona</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Section Indicator Title -->
+        <div class="flex items-center justify-between px-2">
+            <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
+                <i class="fa-solid fa-user-doctor text-brand-600"></i>
+                <span>Shifokorlar</span>
+            </h2>
+            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-full"></span>
+        </div>
+
+        <!-- Dynamic Content Grid -->
+        <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards will be dynamically injected here via JS -->
+        </div>
+
+    </main>
+
+    <!-- Booking Modal (Qabulga yozilish) -->
+    <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
+            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
+            <p id="bookingItemName" class="text-xs text-brand-600 dark:text-brand-400 font-semibold mb-4"></p>
+            
+            <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
+                    <input type="text" id="patientName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz</label>
+                    <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qabul kuni</label>
+                    <input type="date" id="bookingDate" required class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-brand-600/20">
+                    Band qilish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Appointments Modal (Mening yozuvlarim) -->
+    <div id="appointmentsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col border border-gray-100 dark:border-gray-700 animate-scale">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-calendar-check text-brand-600"></i>
+                    <span>Mening qabullarim</span>
+                </h3>
+                <button onclick="closeAppointmentsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div id="appointmentsList" class="overflow-y-auto space-y-3 flex-grow pr-1">
+                <!-- Appointments populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div id="qrModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
+            <button onclick="closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 id="qrModalTitle" class="font-bold text-lg mb-1 text-gray-900 dark:text-white mt-2">Profil QR-kodi</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ushbu kodni skanerlash orqali mutaxassis sahifasiga tezkor o'tishingiz mumkin.</p>
+            <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl inline-block border border-gray-200 dark:border-gray-700 shadow-inner mb-4">
+                <img id="qrImage" src="" alt="QR Code" class="w-48 h-48 mx-auto rounded-lg">
+            </div>
+            <div id="qrItemName" class="font-bold text-sm text-brand-600 dark:text-brand-400"></div>
+        </div>
+    </div>
+
+    <!-- Favorites Modal -->
+    <div id="favoritesModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col border border-gray-100 dark:border-gray-700 animate-scale">
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-heart text-red-500"></i>
+                    <span>Saralanganlar</span>
+                </h3>
+                <button onclick="closeFavoritesModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div id="favoritesList" class="overflow-y-auto space-y-3 flex-grow pr-1">
+                <!-- Fav items populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
+            &copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // --- Telegram WebApp Initialization ---
+        let tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.expand();
+            if (tg.initDataUnsafe?.user) {
+                const user = tg.initDataUnsafe.user;
+                document.getElementById('userWelcome').innerText = `Salom, ${user.first_name || 'Mehmon'}!`;
+            }
+        }
+
+        // --- Mock Database & State ---
+        const dbData = {
+            doctors: [
+                { id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", rating: 4.9, price: "150,000 so'm", phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
+                { id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatr", region: "Samarqand", experience: "8 yil", rating: 4.7, price: "100,000 so'm", phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
+                { id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurolog", region: "Buxoro", experience: "15 yil", rating: 4.8, price: "120,000 so'm", phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
+            ],
+            clinics: [
+                { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", rating: 4.9, address: "Chilonzor tumani, 19-mavze", phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
+                { id: 'c2', name: "Samarqand Diagnostika", specialty: "Laboratoriya va UTT", region: "Samarqand", rating: 4.6, address: "Ipak Yo'li ko'chasi 45", phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
+            ],
+            pharmacies: [
+                { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", rating: 4.9, address: "Amir Temur ko'chasi 12", phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
+                { id: 'p2', name: "Darmon Farm", specialty: "Sifatli va hamyonbop dorilar", region: "Fargona", rating: 4.7, address: "Al Farg'oniy ko'chasi 8", phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
+            ]
+        };
+
+        let currentTab = 'doctors';
+        let currentLang = 'uz';
+        let favorites = JSON.parse(localStorage.getItem('shifotop_favs')) || [];
+        let appointments = JSON.parse(localStorage.getItem('shifotop_appointments')) || [];
+        let selectedItemForBooking = null;
+
+        // --- Translations Dictionary ---
+        const translations = {
+            uz: {
+                brandTitle: "ShifoTop",
+                userWelcome: "Tibbiyot Portali",
+                heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
+                heroSubtitle: "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.",
+                searchPlaceholder: "Shifokor, klinika yoki xizmatni qidirish...",
+                allRegions: "Barcha hududlar",
+                doctorsTab: "Shifokorlar",
+                clinicsTab: "Klinikalar",
+                pharmaciesTab: "Med-magazinlar",
+                experience: "Tajriba",
+                price: "Qabul narxi",
+                address: "Manzil",
+                call: "Bog'lanish",
+                bookBtn: "Qabulga yozilish"
+            },
+            ru: {
+                brandTitle: "ShifoTop",
+                userWelcome: "Медицинский портал",
+                heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
+                heroSubtitle: "Квалифицированные специалисты, современные клиники и аптеки в одном месте.",
+                searchPlaceholder: "Поиск врача, клиники или услуги...",
+                allRegions: "Все регионы",
+                doctorsTab: "Врачи",
+                clinicsTab: "Клиники",
+                pharmaciesTab: "Аптеки",
+                experience: "Стаж",
+                price: "Цена приема",
+                address: "Адрес",
+                call: "Связаться",
+                bookBtn: "Записаться"
+            },
+            en: {
+                brandTitle: "ShifoTop",
+                userWelcome: "Medical Portal",
+                heroTitle: "Find the best doctors and clinics in Uzbekistan",
+                heroSubtitle: "Qualified specialists, modern clinics and pharmacies all in one place.",
+                searchPlaceholder: "Search doctor, clinic or service...",
+                allRegions: "All regions",
+                doctorsTab: "Doctors",
+                clinicsTab: "Clinics",
+                pharmaciesTab: "Pharmacies",
+                experience: "Experience",
+                price: "Consultation",
+                address: "Address",
+                call: "Contact",
+                bookBtn: "Book appointment"
+            }
+        };
+
+        // --- Dropdown Menu Control ---
+        function toggleMenuDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('menuDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function closeAllDropdowns(event) {
+            const dropdown = document.getElementById('menuDropdown');
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        }
+
+        // --- Tab Management ---
+        function switchTab(tabName) {
+            currentTab = tabName;
+            
+            const items = ['doctors', 'clinics', 'pharmacies'];
+            items.forEach(item => {
+                const btn = document.getElementById(`menuItem-${item}`);
+                if (item === tabName) {
+                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3";
+                } else {
+                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
+                }
+            });
+
+            const titleEl = document.getElementById('currentSectionTitle');
+            const t = translations[currentLang];
+            let iconClass = "fa-solid fa-user-doctor";
+            let labelText = t.doctorsTab;
+
+            if (tabName === 'clinics') {
+                iconClass = "fa-solid fa-hospital";
+                labelText = t.clinicsTab;
+            } else if (tabName === 'pharmacies') {
+                iconClass = "fa-solid fa-pills";
+                labelText = t.pharmaciesTab;
+            }
+            titleEl.innerHTML = `<i class="${iconClass} text-brand-600"></i><span>${labelText}</span>`;
+
+            filterData();
+        }
+
+        // --- Render Content Cards ---
+        function renderContent(data) {
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = '';
+            document.getElementById('resultCountBadge').innerText = `${data.length} ta natija`;
+
+            if (data.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-400 bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700"><i class="fa-solid fa-folder-open text-4xl mb-3 opacity-40"></i><p class="text-sm font-medium">Hech qanday ma'lumot topilmadi.</p></div>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col justify-between group";
+
+                let specificInfo = '';
+                const t = translations[currentLang];
+                const isFav = favorites.some(f => f.id === item.id);
+
+                if (currentTab === 'doctors') {
+                    specificInfo = `
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center"><i class="fa-solid fa-briefcase mr-2 text-brand-500"></i> ${t.experience}: <span class="font-semibold ml-1 text-gray-700 dark:text-gray-300">${item.experience}</span></div>
+                        <div class="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3 flex items-center"><i class="fa-solid fa-tag mr-2"></i> ${t.price}: <span class="ml-1">${item.price}</span></div>
+                    `;
+                } else {
+                    specificInfo = `
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start"><i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> <span>${t.address}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.address}</strong></span></div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div>
+                        <div class="h-52 overflow-hidden relative">
+                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                            <span class="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-xs font-bold px-3 py-1 rounded-full text-amber-500 shadow flex items-center">
+                                <i class="fa-solid fa-star mr-1"></i>${item.rating}
+                            </span>
+                            <span class="absolute top-3 left-3 bg-brand-600/90 backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full shadow">
+                                ${item.region}
+                            </span>
+                            <!-- Action Buttons on Image -->
+                            <div class="absolute bottom-3 right-3 flex space-x-2">
+                                <button onclick="toggleFavorite('${item.id}', '${currentTab}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-red-500 shadow hover:scale-110 transition" title="Saralashga qo'shish">
+                                    <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-base"></i>
+                                </button>
+                                <button onclick="showQrCode('${item.name}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-gray-700 dark:text-gray-200 shadow hover:scale-110 transition" title="QR-kod">
+                                    <i class="fa-solid fa-qrcode text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white tracking-tight">${item.name}</h3>
+                            <p class="text-xs text-brand-600 dark:text-brand-400 mb-3 font-semibold uppercase tracking-wider">${item.specialty}</p>
+                            ${specificInfo}
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0 flex gap-2">
+                        <a href="tel:${item.phone}" class="flex-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-brand-50 dark:hover:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-gray-200/80 dark:border-gray-700 font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition">
+                            <i class="fa-solid fa-phone"></i>
+                            <span>${item.phone}</span>
+                        </a>
+                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-md shadow-brand-600/20">
+                            <i class="fa-solid fa-calendar-plus"></i>
+                            <span>${t.bookBtn}</span>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- Filter Function ---
+        function filterData() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const region = document.getElementById('regionFilter').value;
+
+            let list = dbData[currentTab] || [];
+
+            const filtered = list.filter(item => {
+                const matchesQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query);
+                const matchesRegion = region === "" || item.region === region;
+                return matchesQuery && matchesRegion;
+            });
+
+            renderContent(filtered);
+        }
+
+        // --- Booking Management ---
+        function openBookingModal(id, category) {
+            selectedItemForBooking = dbData[category].find(i => i.id === id);
+            if (!selectedItemForBooking) return;
+
+            document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.getElementById('bookingForm').reset();
+            selectedItemForBooking = null;
+        }
+
+        function submitBooking(event) {
+            event.preventDefault();
+            const name = document.getElementById('patientName').value;
+            const phone = document.getElementById('patientPhone').value;
+            const date = document.getElementById('bookingDate').value;
+
+            const newAppointment = {
+                id: 'app_' + Date.now(),
+                itemName: selectedItemForBooking.name,
+                itemSpecialty: selectedItemForBooking.specialty,
+                patientName: name,
+                patientPhone: phone,
+                date: date
+            };
+
+            appointments.push(newAppointment);
+            localStorage.setItem('shifotop_appointments', JSON.stringify(appointments));
+            updateAppointmentCount();
+            closeBookingModal();
+            alert("Qabulingiz muvaffaqiyatli band qilindi!");
+        }
+
+        function updateAppointmentCount() {
+            document.getElementById('appointmentCount').innerText = appointments.length;
+        }
+
+        function openAppointmentsModal() {
+            const listContainer = document.getElementById('appointmentsList');
+            listContainer.innerHTML = '';
+
+            if (appointments.length === 0) {
+                listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><i class="fa-regular fa-calendar-xmark text-4xl mb-2 opacity-40"></i><p class="text-sm">Sizda faol qabullar mavjud emas.</p></div>`;
+            } else {
+                appointments.forEach(app => {
+                    const row = document.createElement('div');
+                    row.className = "p-4 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-2";
+                    row.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">${app.itemName}</h4>
+                            <button onclick="deleteAppointment('${app.id}')" class="text-red-500 hover:text-red-700 p-1 rounded transition">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-brand-600 dark:text-brand-400 font-medium">${app.itemSpecialty}</p>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 flex justify-between pt-1 border-t border-gray-200 dark:border-gray-600">
+                            <span>Bemor: <strong>${app.patientName}</strong></span>
+                            <span>Sana: <strong class="text-brand-600 dark:text-brand-400">${app.date}</strong></span>
+                        </div>
+                    `;
+                    listContainer.appendChild(row);
+                });
+            }
+            document.getElementById('appointmentsModal').classList.remove('hidden');
+        }
+
+        function closeAppointmentsModal() {
+            document.getElementById('appointmentsModal').classList.add('hidden');
+        }
+
+        function deleteAppointment(id) {
+            appointments = appointments.filter(a => a.id !== id);
+            localStorage.setItem('shifotop_appointments', JSON.stringify(appointments));
+            updateAppointmentCount();
+            openAppointmentsModal();
+        }
+
+        // --- Favorites Logic ---
+        function toggleFavorite(id, category) {
+            let item = dbData[category].find(i => i.id === id);
+            if (!item) return;
+
+            const index = favorites.findIndex(f => f.id === id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(item);
+            }
+            localStorage.setItem('shifotop_favs', JSON.stringify(favorites));
+            updateFavCount();
+            filterData();
+        }
+
+        function updateFavCount() {
+            document.getElementById('favCount').innerText = favorites.length;
+        }
+
+        function openFavoritesModal() {
+            const listContainer = document.getElementById('favoritesList');
+            listContainer.innerHTML = '';
+
+            if (favorites.length === 0) {
+                listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><i class="fa-regular fa-heart text-4xl mb-2 opacity-40"></i><p class="text-sm">Saralanganlar bo'sh.</p></div>`;
+            } else {
+                favorites.forEach(fav => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center justify-between p-3.5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700";
+                    row.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <img src="${fav.image}" class="w-12 h-12 rounded-xl object-cover shadow-sm">
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-900 dark:text-white">${fav.name}</h4>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">${fav.specialty}</p>
+                            </div>
+                        </div>
+                        <button onclick="toggleFavorite('${fav.id}', '${fav.id.startsWith('d') ? 'doctors' : fav.id.startsWith('c') ? 'clinics' : 'pharmacies'}'); openFavoritesModal();" class="text-red-500 hover:text-red-700 p-2.5 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition">
+                            <i class="fa-solid fa-trash-can text-sm"></i>
+                        </button>
+                    `;
+                    listContainer.appendChild(row);
+                });
+            }
+            document.getElementById('favoritesModal').classList.remove('hidden');
+        }
+
+        function closeFavoritesModal() {
+            document.getElementById('favoritesModal').classList.add('hidden');
+        }
+
+        // --- QR Code Modal Logic ---
+        function showQrCode(name) {
+            document.getElementById('qrItemName').innerText = name;
+            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(name + ' - ShifoTop Portal')}`;
+            document.getElementById('qrImage').src = qrApi;
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        // --- Language Switcher ---
+        function changeLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+
+            document.getElementById('heroTitle').innerText = t.heroTitle;
+            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            
+            document.querySelector('#menuItem-doctors span').innerText = t.doctorsTab;
+            document.querySelector('#menuItem-clinics span').innerText = t.clinicsTab;
+            document.querySelector('#menuItem-pharmacies span').innerText = t.pharmaciesTab;
+
+            switchTab(currentTab);
+        }
+
+        // --- Dark Mode Toggle ---
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = "fa-solid fa-moon text-base";
+            } else {
+                html.classList.add('dark');
+                icon.className = "fa-solid fa-sun text-base";
+            }
+        }
+
+        // Initial Load
+        window.onload = () => {
+            updateFavCount();
+            updateAppointmentCount();
+            switchTab('doctors');
+        };
+    </script>
+</body>
+</html>
