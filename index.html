@@ -63,7 +63,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/45 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
-                    <i class="fa-solid fa-laptop-medical"></i>
+                    <i class="fa-solid fa-stethoscope"></i>
                 </div>
                 <h2 id="authTitle" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Shifo<span class="gold-gradient font-black">Top</span>'ga xush kelibsiz</h2>
                 <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
@@ -104,7 +104,7 @@
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
                     <div class="primary-bg text-white p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition">
-                        <i class="fa-solid fa-laptop-medical text-sm"></i>
+                        <i class="fa-solid fa-crown text-sm"></i>
                     </div>
                     <div>
                         <div class="flex items-center space-x-0.5">
@@ -166,7 +166,7 @@
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="primary-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
-                <i class="fa-solid fa-laptop-medical"></i>
+                <i class="fa-solid fa-stethoscope"></i>
             </div>
             <div class="relative z-10 max-w-2xl">
                 <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
@@ -601,7 +601,7 @@
                             <i class="fa-solid fa-phone"></i>
                             <span>${item.phone}</span>
                         </a>
-                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 primary-bg hover:opacity-95 text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-lg shadow-blue-600/20">
+                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 primary-bg hover:opacity-95 text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-md shadow-blue-600/20">
                             <i class="fa-solid fa-calendar-plus"></i>
                             <span>${t.bookBtn}</span>
                         </button>
@@ -651,7 +651,7 @@
         function submitBooking(event) {
             event.preventDefault();
             const name = document.getElementById('patientName').value;
-            const phone = document.getElementById('patientPhone'].value;
+            const phone = document.getElementById('patientPhone').value;
             const date = document.getElementById('bookingDate').value;
 
             if (!validateUzbekPhone(phone)) {
