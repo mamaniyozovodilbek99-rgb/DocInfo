@@ -198,9 +198,9 @@
             </h2>
             <div class="flex items-center space-x-3">
                 <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-                <button onclick="openAddItemModal()" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
+                <button onclick="openAddItemModal()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
                     <i class="fa-solid fa-plus"></i>
-                    <span>Shifokor qo'shish</span>
+                    <span id="addItemBtnText">Shifokor qo'shish</span>
                 </button>
             </div>
         </div>
@@ -224,16 +224,16 @@
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi shifokor yoki muassasa qo'shish</h3>
+            <h3 id="addItemModalTitle" class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi shifokor qo'shish</h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Mutaxassis ma'lumotlarini kiriting va galereyadan rasmlarni tanlang (Telegram botga ham yuboriladi).</p>
             
             <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Bo'limni tanlang</label>
-                    <select id="newItemCategory" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
+                    <select id="newItemCategory" onchange="syncCategorySelect(this.value)" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                         <option value="doctors">Shifokor</option>
-                        <option value="clinics">Klinika</option>
-                        <option value="pharmacies">Med-magazin / Dorixona</option>
+                        <option value="clinics">Shifoxona / Klinika</option>
+                        <option value="pharmacies">Med-magazin</option>
                     </select>
                 </div>
                 <div>
@@ -474,17 +474,23 @@
             uz: {
                 doctorsTab: "Shifokorlar", clinicsTab: "Klinikalar", pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
-                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarExperts: "O'xshash mutaxassislar"
+                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarExperts: "O'xshash mutaxassislar",
+                addDoctorBtn: "Shifokor qo'shish", addClinicBtn: "Shifoxona qo'shish", addPharmacyBtn: "Med magazin qo'shish",
+                addModalDoctorTitle: "Yangi shifokor qo'shish", addModalClinicTitle: "Yangi shifoxona qo'shish", addModalPharmacyTitle: "Yangi med magazin qo'shish"
             },
             ru: {
                 doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки",
                 experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
-                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы", similarExperts: "Похожие специалисты"
+                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы", similarExperts: "Похожие специалисты",
+                addDoctorBtn: "Добавить врача", addClinicBtn: "Добавить больницу", addPharmacyBtn: "Добавить мед магазин",
+                addModalDoctorTitle: "Добавить врача", addModalClinicTitle: "Добавить больницу", addModalPharmacyTitle: "Добавить мед магазин"
             },
             en: {
                 doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies",
                 experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
-                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarExperts: "Similar Experts"
+                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarExperts: "Similar Experts",
+                addDoctorBtn: "Add Doctor", addClinicBtn: "Add Hospital", addPharmacyBtn: "Add Med Shop",
+                addModalDoctorTitle: "Add Doctor", addModalClinicTitle: "Add Hospital", addModalPharmacyTitle: "Add Med Shop"
             }
         };
 
@@ -543,10 +549,47 @@
             let iconClass = tabName === 'clinics' ? "fa-solid fa-hospital" : tabName === 'pharmacies' ? "fa-solid fa-pills" : "fa-solid fa-user-doctor";
             let labelText = tabName === 'clinics' ? t.clinicsTab : tabName === 'pharmacies' ? t.pharmaciesTab : t.doctorsTab;
             if (titleEl) titleEl.innerHTML = `<i class="${iconClass} text-blue-600"></i><span>${labelText}</span>`;
+
+            // Dinamik tugma va modal sarlavhasini o'zgartirish
+            const btnTextEl = document.getElementById('addItemBtnText');
+            const modalTitleEl = document.getElementById('addItemModalTitle');
+            const catSelect = document.getElementById('newItemCategory');
+            if (catSelect) catSelect.value = tabName;
+
+            if (tabName === 'clinics') {
+                if (btnTextEl) btnTextEl.innerText = t.addClinicBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalClinicTitle;
+            } else if (tabName === 'pharmacies') {
+                if (btnTextEl) btnTextEl.innerText = t.addPharmacyBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalPharmacyTitle;
+            } else {
+                if (btnTextEl) btnTextEl.innerText = t.addDoctorBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalDoctorTitle;
+            }
+
             filterData();
         }
 
+        function syncCategorySelect(val) {
+            const t = translations[currentLang];
+            const btnTextEl = document.getElementById('addItemBtnText');
+            const modalTitleEl = document.getElementById('addItemModalTitle');
+
+            if (val === 'clinics') {
+                if (btnTextEl) btnTextEl.innerText = t.addClinicBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalClinicTitle;
+            } else if (val === 'pharmacies') {
+                if (btnTextEl) btnTextEl.innerText = t.addPharmacyBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalPharmacyTitle;
+            } else {
+                if (btnTextEl) btnTextEl.innerText = t.addDoctorBtn;
+                if (modalTitleEl) modalTitleEl.innerText = t.addModalDoctorTitle;
+            }
+        }
+
         function openAddItemModal() {
+            document.getElementById('newItemCategory').value = currentTab;
+            syncCategorySelect(currentTab);
             document.getElementById('addItemModal').classList.remove('hidden');
         }
 
@@ -610,7 +653,6 @@
             customItems[currentLang][category].push(newItem);
             localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
 
-            // TELEGRAM WEB APP ORQALI BOTGA YUBORISH
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
                 const botData = {
                     action: "new_item_added",
@@ -1006,7 +1048,6 @@
                 return;
             }
 
-            // TELEGRAM WEB APP ORQALI BAND QILISHNI BOTGA YUBORISH
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
                 const bookingData = {
                     action: "new_booking",
