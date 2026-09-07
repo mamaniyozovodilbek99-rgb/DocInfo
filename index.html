@@ -36,6 +36,13 @@
         .animate-scale {
             animation: scaleIn 0.2s ease-out forwards;
         }
+        /* Tilla (Gold) rang effekti TOP so'zi uchun */
+        .gold-text {
+            background: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 1px 1px rgba(0,0,0,0.1));
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
@@ -52,7 +59,7 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-1.5">
-                            <span id="brandTitle" class="text-xl font-bold tracking-tight text-brand-600 dark:text-brand-400">ShifoTop</span>
+                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">Shifo<span class="gold-text">Top</span></span>
                             <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
                         </div>
                         <span class="block text-[11px] text-gray-400 font-medium" id="userWelcome">Tibbiyot Portali</span>
@@ -81,14 +88,8 @@
                 </div>
             </div>
 
-            <!-- Controls (Appointments, Favorites, Lang & DarkMode) -->
+            <!-- Controls (Favorites, Lang & DarkMode) -->
             <div class="flex items-center space-x-3">
-                <!-- My Appointments Button -->
-                <button onclick="openAppointmentsModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Qabullarim">
-                    <i class="fa-solid fa-calendar-check text-brand-600 dark:text-brand-400 text-base"></i>
-                    <span id="appointmentCount" class="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
-                </button>
-
                 <!-- Favorites Counter Button -->
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
@@ -186,24 +187,6 @@
         </div>
     </div>
 
-    <!-- Appointments Modal (Mening yozuvlarim) -->
-    <div id="appointmentsModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col border border-gray-100 dark:border-gray-700 animate-scale">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
-                <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
-                    <i class="fa-solid fa-calendar-check text-brand-600"></i>
-                    <span>Mening qabullarim</span>
-                </h3>
-                <button onclick="closeAppointmentsModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            <div id="appointmentsList" class="overflow-y-auto space-y-3 flex-grow pr-1">
-                <!-- Appointments populated here -->
-            </div>
-        </div>
-    </div>
-
     <!-- QR Code Modal -->
     <div id="qrModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
@@ -240,19 +223,45 @@
     <!-- Footer -->
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
-            &copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.
+            &copy; 2026 Shifo<span class="gold-text">Top</span>. Barcha huquqlar himoyalangan.
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Application Logic & Telegram Mini App Integration -->
     <script>
-        // --- Telegram WebApp Initialization ---
+        // --- Telegram WebApp & CloudStorage / Data Integration ---
         let tg = window.Telegram?.WebApp;
+        let userProfile = { name: "Mehmon", telegramId: null };
+
         if (tg) {
             tg.expand();
+            tg.ready();
+            
+            // Telegram ranglar palitrasini avtomatik moslashtirish (agar mavjud bo'lsa)
+            if (tg.colorScheme === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.getElementById('themeIcon').className = "fa-solid fa-sun text-base";
+            }
+
             if (tg.initDataUnsafe?.user) {
                 const user = tg.initDataUnsafe.user;
-                document.getElementById('userWelcome').innerText = `Salom, ${user.first_name || 'Mehmon'}!`;
+                userProfile.name = user.first_name || 'Mehmon';
+                userProfile.telegramId = user.id;
+                document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
+            }
+
+            // Telegram CloudStorage orqali saralanganlarni sinxronizatsiya qilish (Integratsiya)
+            if (tg.CloudStorage) {
+                tg.CloudStorage.getItem('shifotop_favs', (err, value) => {
+                    if (!err && value) {
+                        try {
+                            favorites = JSON.parse(value);
+                            updateFavCount();
+                        } catch (e) {
+                            console.error("Cloud storage parse error", e);
+                        }
+                    }
+                });
             }
         }
 
@@ -276,7 +285,6 @@
         let currentTab = 'doctors';
         let currentLang = 'uz';
         let favorites = JSON.parse(localStorage.getItem('shifotop_favs')) || [];
-        let appointments = JSON.parse(localStorage.getItem('shifotop_appointments')) || [];
         let selectedItemForBooking = null;
 
         // --- Translations Dictionary ---
@@ -295,7 +303,7 @@
                 price: "Qabul narxi",
                 address: "Manzil",
                 call: "Bog'lanish",
-                bookBtn: "Qabulga yozilish"
+                bookBtn: "Band qilish"
             },
             ru: {
                 brandTitle: "ShifoTop",
@@ -311,7 +319,7 @@
                 price: "Цена приема",
                 address: "Адрес",
                 call: "Связаться",
-                bookBtn: "Записаться"
+                bookBtn: "Забронировать"
             },
             en: {
                 brandTitle: "ShifoTop",
@@ -327,7 +335,7 @@
                 price: "Consultation",
                 address: "Address",
                 call: "Contact",
-                bookBtn: "Book appointment"
+                bookBtn: "Book"
             }
         };
 
@@ -471,12 +479,33 @@
 
             document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
             document.getElementById('bookingModal').classList.remove('hidden');
+
+            // Telegram MainButton integratsiyasi
+            if (tg && tg.MainButton) {
+                tg.MainButton.text = "BAND QILISHNI TASDIQLASH";
+                tg.MainButton.show();
+                tg.MainButton.onClick(handleTelegramMainButtonBooking);
+            }
         }
 
         function closeBookingModal() {
             document.getElementById('bookingModal').classList.add('hidden');
             document.getElementById('bookingForm').reset();
             selectedItemForBooking = null;
+
+            if (tg && tg.MainButton) {
+                tg.MainButton.hide();
+                tg.MainButton.offClick(handleTelegramMainButtonBooking);
+            }
+        }
+
+        function handleTelegramMainButtonBooking() {
+            const form = document.getElementById('bookingForm');
+            if (form.checkValidity()) {
+                submitBooking(new Event('submit'));
+            } else {
+                form.reportValidity();
+            }
         }
 
         function submitBooking(event) {
@@ -485,64 +514,21 @@
             const phone = document.getElementById('patientPhone').value;
             const date = document.getElementById('bookingDate').value;
 
-            const newAppointment = {
-                id: 'app_' + Date.now(),
-                itemName: selectedItemForBooking.name,
-                itemSpecialty: selectedItemForBooking.specialty,
+            const bookingDetails = {
+                item: selectedItemForBooking ? selectedItemForBooking.name : 'Nomaʼlum',
                 patientName: name,
                 patientPhone: phone,
                 date: date
             };
 
-            appointments.push(newAppointment);
-            localStorage.setItem('shifotop_appointments', JSON.stringify(appointments));
-            updateAppointmentCount();
-            closeBookingModal();
-            alert("Qabulingiz muvaffaqiyatli band qilindi!");
-        }
-
-        function updateAppointmentCount() {
-            document.getElementById('appointmentCount').innerText = appointments.length;
-        }
-
-        function openAppointmentsModal() {
-            const listContainer = document.getElementById('appointmentsList');
-            listContainer.innerHTML = '';
-
-            if (appointments.length === 0) {
-                listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><i class="fa-regular fa-calendar-xmark text-4xl mb-2 opacity-40"></i><p class="text-sm">Sizda faol qabullar mavjud emas.</p></div>`;
+            // Agar Telegram ichida ochilgan bo'lsa, ma'lumotni botga yuborish yoki yopish
+            if (tg) {
+                tg.sendData(JSON.stringify(bookingDetails));
             } else {
-                appointments.forEach(app => {
-                    const row = document.createElement('div');
-                    row.className = "p-4 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-2";
-                    row.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-sm text-gray-900 dark:text-white">${app.itemName}</h4>
-                            <button onclick="deleteAppointment('${app.id}')" class="text-red-500 hover:text-red-700 p-1 rounded transition">
-                                <i class="fa-solid fa-trash-can text-xs"></i>
-                            </button>
-                        </div>
-                        <p class="text-xs text-brand-600 dark:text-brand-400 font-medium">${app.itemSpecialty}</p>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 flex justify-between pt-1 border-t border-gray-200 dark:border-gray-600">
-                            <span>Bemor: <strong>${app.patientName}</strong></span>
-                            <span>Sana: <strong class="text-brand-600 dark:text-brand-400">${app.date}</strong></span>
-                        </div>
-                    `;
-                    listContainer.appendChild(row);
-                });
+                alert(`Qabulingiz muvaffaqiyatli band qilindi!\nMutaxassis: ${bookingDetails.item}\nSana: ${date}`);
             }
-            document.getElementById('appointmentsModal').classList.remove('hidden');
-        }
 
-        function closeAppointmentsModal() {
-            document.getElementById('appointmentsModal').classList.add('hidden');
-        }
-
-        function deleteAppointment(id) {
-            appointments = appointments.filter(a => a.id !== id);
-            localStorage.setItem('shifotop_appointments', JSON.stringify(appointments));
-            updateAppointmentCount();
-            openAppointmentsModal();
+            closeBookingModal();
         }
 
         // --- Favorites Logic ---
@@ -556,7 +542,14 @@
             } else {
                 favorites.push(item);
             }
+            
             localStorage.setItem('shifotop_favs', JSON.stringify(favorites));
+            
+            // Telegram CloudStorage ga ham saqlash
+            if (tg && tg.CloudStorage) {
+                tg.CloudStorage.setItem('shifotop_favs', JSON.stringify(favorites));
+            }
+
             updateFavCount();
             filterData();
         }
@@ -641,7 +634,6 @@
         // Initial Load
         window.onload = () => {
             updateFavCount();
-            updateAppointmentCount();
             switchTab('doctors');
         };
     </script>
