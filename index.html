@@ -51,9 +51,6 @@
         .primary-bg {
             background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
         }
-        .primary-border {
-            border-color: #2563eb;
-        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
@@ -67,17 +64,17 @@
                         <i class="fa-solid fa-plus text-[10px] absolute text-blue-600 dark:text-blue-400 font-black"></i>
                     </i>
                 </div>
-                <h2 id="authTitle" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Shifo<span class="gold-gradient font-black">Top</span>'ga xush kelibsiz</h2>
-                <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
+                <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Shifo<span class="gold-gradient font-black">Top</span>'ga xush kelibsiz</h2>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
             </div>
 
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
-                    <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
                     <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 <div>
-                    <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam (+998...)</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam (+998...)</label>
                     <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                     <p class="text-[10px] text-gray-400 mt-1">Faqat O'zbekiston raqamlari (+998) qabul qilinadi.</p>
                 </div>
@@ -93,7 +90,7 @@
                     <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-wider">
                 </div>
 
-                <button type="submit" id="submitAuthBtn" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
                     Kirish va Tasdiqlash
                 </button>
             </form>
@@ -112,7 +109,7 @@
                     </div>
                     <div>
                         <div class="flex items-center space-x-0.5">
-                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">Shifo<span class="gold-gradient font-black">Top</span></span>
+                            <span class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">Shifo<span class="gold-gradient font-black">Top</span></span>
                             <i class="fa-solid fa-chevron-down text-xs text-blue-600"></i>
                         </div>
                         <span class="block text-[11px] text-blue-600 dark:text-blue-400 font-semibold tracking-wide" id="userWelcome">Tibbiyot Portali</span>
@@ -120,7 +117,7 @@
                 </div>
 
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale">
-                    <div id="menuHeaderTitle" class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-1">
@@ -141,7 +138,7 @@
                     <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
                         <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
-                            <span id="logoutMenuText">Profildan chiqish</span>
+                            <span>Profildan chiqish</span>
                         </button>
                     </div>
                 </div>
@@ -184,7 +181,7 @@
                 </div>
                 <div class="flex gap-2">
                     <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="" id="optAllRegions">Barcha hududlar</option>
+                        <option value="">Barcha hududlar</option>
                         <option value="Toshkent">Toshkent sh.</option>
                         <option value="Samarqand">Samarqand</option>
                         <option value="Buxoro">Buxoro</option>
@@ -201,7 +198,6 @@
             </h2>
             <div class="flex items-center space-x-3">
                 <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-                <!-- Shifokor qo'shish tugmasi bevosita sahifada -->
                 <button onclick="openAddItemModal()" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
                     <i class="fa-solid fa-plus"></i>
                     <span>Shifokor qo'shish</span>
@@ -209,9 +205,7 @@
             </div>
         </div>
 
-        <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards will be dynamically injected here via JS -->
-        </div>
+        <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
     <!-- Detailed Profile Modal -->
@@ -220,12 +214,11 @@
             <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
-            
             <div id="detailContentContainer"></div>
         </div>
     </div>
 
-    <!-- Add New Item Modal (Galereyadan rasm tanlash bilan) -->
+    <!-- Add New Item Modal -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
@@ -281,7 +274,6 @@
                     <input type="text" id="newItemAddress" required placeholder="Ko'cha va uy raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 
-                <!-- Galereyadan rasm tanlash (Asosiy va qo'shimcha rasmlar) -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Galereyadan rasmlarni tanlash (Asosiy va qo'shimcha)</label>
                     <input type="file" id="newItemImagesFile" accept="image/*" multiple onchange="previewSelectedImages(event)" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-xs text-gray-500 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
@@ -305,23 +297,23 @@
             <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 id="modalBookingTitle" class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
             <p id="bookingItemName" class="text-xs text-blue-700 dark:text-blue-400 font-semibold mb-4"></p>
             
             <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-4">
                 <div>
-                    <label id="labelPatientName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
                     <input type="text" id="patientName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 <div>
-                    <label id="labelPatientPhone" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz (+998...)</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz (+998...)</label>
                     <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 <div>
-                    <label id="labelBookingDate" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qabul kuni</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qabul kuni</label>
                     <input type="date" id="bookingDate" required class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
-                <button type="submit" id="submitBookingBtn" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
                     Band qilish
                 </button>
             </form>
@@ -334,8 +326,8 @@
             <button onclick="closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 id="qrModalTitle" class="font-bold text-lg mb-1 text-gray-900 dark:text-white mt-2">Profil QR-kodi</h3>
-            <p id="qrModalDesc" class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ushbu kodni skanerlash orqali mutaxassis sahifasiga o'tishingiz mumkin.</p>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white mt-2">Profil QR-kodi</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ushbu kodni skanerlash orqali mutaxassis sahifasiga o'tishingiz mumkin.</p>
             <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl inline-block border border-gray-200 dark:border-gray-700 shadow-inner mb-4">
                 <img id="qrImage" src="" alt="QR Code" class="w-48 h-48 mx-auto rounded-lg">
             </div>
@@ -347,7 +339,7 @@
     <div id="favoritesModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
-                <h3 id="favoritesModalTitle" class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
+                <h3 class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
                     <i class="fa-solid fa-heart text-red-500"></i>
                     <span>Saralanganlar</span>
                 </h3>
@@ -359,10 +351,37 @@
         </div>
     </div>
 
+    <!-- Chat Modal -->
+    <div id="chatModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative flex flex-col h-[500px] border border-gray-100 dark:border-gray-700 animate-scale">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full primary-bg text-white flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
+                    <div>
+                        <h3 id="chatDoctorName" class="font-bold text-sm text-gray-900 dark:text-white">Shifokor</h3>
+                        <span class="text-[10px] text-emerald-500 font-semibold flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block mr-1.5 animate-pulse"></span> Online</span>
+                    </div>
+                </div>
+                <button onclick="closeChatModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+            <div id="chatMessages" class="flex-grow overflow-y-auto py-4 space-y-3 pr-2 flex flex-col"></div>
+            <form id="chatForm" onsubmit="sendChatMessage(event)" class="pt-3 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                <input type="text" id="chatInputText" required placeholder="Savolingizni yozing..." class="flex-grow bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
+                <button type="submit" class="primary-bg text-white px-4 rounded-xl flex items-center justify-center shadow-md hover:opacity-95 transition">
+                    <i class="fa-solid fa-paper-plane text-sm"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
-            <span id="footerRights">&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.</span>
+            &copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.
         </div>
     </footer>
 
@@ -372,6 +391,7 @@
         let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null };
         let currentCaptchaCode = '';
         let temporarySelectedImages = [];
+        let activeChatDoctor = null;
 
         if (tg) {
             tg.expand();
@@ -395,9 +415,8 @@
         });
 
         function updateWelcomeText() {
-            const t = translations[currentLang];
             const nameToUse = userProfile.name || (currentLang === 'ru' ? 'Гость' : currentLang === 'en' ? 'Guest' : 'Mehmon');
-            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', nameToUse);
+            document.getElementById('userWelcome').innerText = translations[currentLang].welcomeUser.replace('{name}', nameToUse);
         }
 
         function generateCaptcha() {
@@ -697,14 +716,20 @@
             const t = translations[currentLang];
             const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
 
-            let imgList = item.images && item.images.length > 0 ? item.images.slice(0, 5) : [item.image || 'https://via.placeholder.com/400x300?text=Rasm+mavjud+emas'];
+            let imgList = item.images && item.images.length > 0 ? item.images : [item.image || 'https://via.placeholder.com/400x300?text=Rasm+mavjud+emas'];
             window.currentImages = imgList;
 
-            let thumbnailsHTML = imgList.length > 1 ? imgList.map((img, idx) => `
-                <button onclick="changeActiveImage(${idx})" id="thumbBtn-${idx}" class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${idx === 0 ? 'border-blue-600 scale-95' : 'border-transparent opacity-70 hover:opacity-100'}">
-                    <img src="${img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100?text=Xato'">
-                </button>
-            `).join('') : '';
+            let thumbnailsHTML = imgList.map((img, idx) => `
+                <div class="relative group/thumb flex-shrink-0">
+                    <button onclick="changeActiveImage(${idx})" id="thumbBtn-${idx}" class="w-16 h-16 rounded-xl overflow-hidden border-2 transition-all ${idx === 0 ? 'border-blue-600 scale-95' : 'border-transparent opacity-70 hover:opacity-100'}">
+                        <img src="${img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100?text=Xato'">
+                    </button>
+                    ${imgList.length > 1 ? `
+                        <button onclick="deleteImageFromItem('${id}', '${category}', ${idx})" class="absolute -top-1.5 -right-1.5 bg-red-500 text-white w-5 h-5 rounded-full text-[10px] flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition shadow" title="Rasmni o'chirish">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>` : ''}
+                </div>
+            `).join('');
 
             const container = document.getElementById('detailContentContainer');
             container.innerHTML = `
@@ -712,7 +737,18 @@
                     <img id="mainActiveImg" src="${imgList[0]}" alt="${item.name}" class="w-full h-full object-cover transition-all duration-300" onerror="this.src='https://via.placeholder.com/400x300?text=Rasm+mavjud+emas'">
                     <span id="imgCounterBadge" class="absolute top-3 right-3 bg-black/50 text-white text-xs px-2.5 py-1 rounded-full backdrop-blur-md">1 / ${imgList.length}</span>
                 </div>
-                ${imgList.length > 1 ? `<div class="flex gap-2 mb-5 overflow-x-auto pb-1">${thumbnailsHTML}</div>` : ''}
+
+                <!-- Rasmlar va yangi rasm qo'shish qismi -->
+                <div class="flex items-center gap-2 mb-5 overflow-x-auto pb-2">
+                    <div id="thumbnailsContainer" class="flex gap-2">
+                        ${thumbnailsHTML}
+                    </div>
+                    <label class="w-16 h-16 rounded-xl border-2 border-dashed border-blue-400 hover:border-blue-600 flex flex-col items-center justify-center cursor-pointer bg-blue-50/50 dark:bg-gray-700/50 text-blue-600 dark:text-blue-400 flex-shrink-0 transition hover:scale-95" title="Yangi rasm qo'shish">
+                        <i class="fa-solid fa-plus text-base mb-0.5"></i>
+                        <span class="text-[9px] font-semibold">Qo'shish</span>
+                        <input type="file" accept="image/*" multiple onchange="addNewImagesToItem(event, '${id}', '${category}')" class="hidden">
+                    </label>
+                </div>
 
                 <div class="mb-6">
                     <span class="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">${item.region}</span>
@@ -731,9 +767,51 @@
                     ${item.bio ? `<div><h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">${t.aboutDoctor}</h4><p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${item.bio}</p></div>` : ''}
                 </div>
 
+                <div class="flex gap-2 mb-6">
+                    <button onclick="closeDetailModal(); openChatModal('${item.id}', '${category}')" class="flex-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition border border-emerald-200 dark:border-emerald-800">
+                        <i class="fa-solid fa-comments"></i>
+                        <span>Onlayn Chat</span>
+                    </button>
+                </div>
+
                 <div class="flex gap-3 mb-6">
                     <a href="tel:${item.phone}" class="flex-1 bg-gray-100 dark:bg-gray-700 text-blue-700 dark:text-blue-400 font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition"><i class="fa-solid fa-phone"></i><span>${item.phone}</span></a>
                     <button onclick="closeDetailModal(); openBookingModal('${item.id}', '${category}')" class="flex-1 primary-bg text-white font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition shadow-lg shadow-blue-600/20"><i class="fa-solid fa-calendar-plus"></i><span>${t.bookBtn}</span></button>
+                </div>
+
+                <!-- Sharhlar bo'limi -->
+                <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                    <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center justify-between">
+                        <span>${t.patientReviews}</span>
+                        <span class="text-xs text-blue-600 font-normal">${item.reviews ? item.reviews.length : 0} ta sharh</span>
+                    </h4>
+
+                    <div class="space-y-3 mb-4 max-h-40 overflow-y-auto">
+                        ${item.reviews && item.reviews.length > 0 ? item.reviews.map(rev => `
+                            <div class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-xl border border-gray-100 dark:border-gray-700 text-xs">
+                                <div class="flex justify-between font-bold mb-1 text-gray-800 dark:text-gray-200">
+                                    <span>${rev.author}</span>
+                                    <span class="text-amber-500">${'★'.repeat(rev.rating)}</span>
+                                </div>
+                                <p class="text-gray-600 dark:text-gray-300">${rev.text}</p>
+                            </div>
+                        `).join('') : '<p class="text-xs text-gray-400 italic">Hali sharhlar yozilmagan. Birinchi bo\'lib fikr qoldiring!</p>'}
+                    </div>
+
+                    <form onsubmit="handleReviewSubmit(event, '${item.id}', '${category}')" class="space-y-2 bg-gray-50 dark:bg-gray-700/30 p-3 rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <div class="flex gap-2">
+                            <input type="text" id="reviewAuthor" required placeholder="Ismingiz" class="flex-grow bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-xs focus:outline-none dark:text-white">
+                            <select id="reviewRating" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-2 py-2 text-xs focus:outline-none dark:text-white font-bold text-amber-500">
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                        <textarea id="reviewText" required rows="2" placeholder="Fikr va mulohazangizni yozing..." class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-xs focus:outline-none dark:text-white"></textarea>
+                        <button type="submit" class="w-full primary-bg text-white font-semibold py-2 rounded-xl text-xs transition shadow">Sharh qoldirish</button>
+                    </form>
                 </div>
             `;
 
@@ -752,8 +830,156 @@
             });
         }
 
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.add('hidden');
+        function addNewImagesToItem(event, id, category) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            let targetItem = null;
+            if (customItems[currentLang] && customItems[currentLang][category]) {
+                targetItem = customItems[currentLang][category].find(i => i.id === id);
+            }
+
+            if (!targetItem) {
+                const baseItem = initialDbData[currentLang][category].find(i => i.id === id);
+                if (baseItem) {
+                    targetItem = JSON.parse(JSON.stringify(baseItem));
+                    if (!customItems[currentLang]) customItems[currentLang] = { doctors: [], clinics: [], pharmacies: [] };
+                    customItems[currentLang][category].push(targetItem);
+                }
+            }
+
+            if (!targetItem) return;
+
+            let loadedCount = 0;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+                    if (!targetItem.images) targetItem.images = [targetItem.image];
+                    targetItem.images.push(base64String);
+                    
+                    loadedCount++;
+                    if (loadedCount === files.length) {
+                        localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
+                        openDetailModal(id, category);
+                        filterData();
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function deleteImageFromItem(id, category, imageIndex) {
+            if (confirm("Ushbu rasmni o'chirib tashlamoqchimisiz?")) {
+                let targetItem = null;
+                if (customItems[currentLang] && customItems[currentLang][category]) {
+                    targetItem = customItems[currentLang][category].find(i => i.id === id);
+                }
+
+                if (!targetItem) {
+                    const baseItem = initialDbData[currentLang][category].find(i => i.id === id);
+                    if (baseItem) {
+                        targetItem = JSON.parse(JSON.stringify(baseItem));
+                        if (!customItems[currentLang]) customItems[currentLang] = { doctors: [], clinics: [], pharmacies: [] };
+                        customItems[currentLang][category].push(targetItem);
+                    }
+                }
+
+                if (targetItem && targetItem.images && targetItem.images.length > 1) {
+                    targetItem.images.splice(imageIndex, 1);
+                    targetItem.image = targetItem.images[0];
+                    localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
+                    openDetailModal(id, category);
+                    filterData();
+                } else {
+                    alert("Kamida bitta rasm qolishi shart!");
+                }
+            }
+        }
+
+        function openChatModal(id, category) {
+            const mergedDb = getMergedDbData();
+            const currentLangData = mergedDb[currentLang] || mergedDb['uz'];
+            activeChatDoctor = currentLangData[category].find(i => i.id === id);
+            if (!activeChatDoctor) return;
+
+            document.getElementById('chatDoctorName').innerText = activeChatDoctor.name;
+            renderChatMessages();
+            document.getElementById('chatModal').classList.remove('hidden');
+        }
+
+        function closeChatModal() {
+            document.getElementById('chatModal').classList.add('hidden');
+            activeChatDoctor = null;
+        }
+
+        function renderChatMessages() {
+            const container = document.getElementById('chatMessages');
+            if (!activeChatDoctor) return;
+            
+            if (!activeChatDoctor.messages) {
+                activeChatDoctor.messages = [
+                    { sender: 'doctor', text: `Assalomu alaykum! Men ${activeChatDoctor.name}. Sizga qanday yordam bera olaman?` }
+                ];
+            }
+
+            container.innerHTML = activeChatDoctor.messages.map(msg => `
+                <div class="max-w-[80%] p-3 rounded-2xl text-xs ${msg.sender === 'user' ? 'ml-auto primary-bg text-white rounded-br-none' : 'mr-auto bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none'}">
+                    ${msg.text}
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendChatMessage(event) {
+            event.preventDefault();
+            const input = document.getElementById('chatInputText');
+            const text = input.value.trim();
+            if (!text || !activeChatDoctor) return;
+
+            if (!activeChatDoctor.messages) activeChatDoctor.messages = [];
+            activeChatDoctor.messages.push({ sender: 'user', text: text });
+            input.value = '';
+            renderChatMessages();
+
+            setTimeout(() => {
+                activeChatDoctor.messages.push({ sender: 'doctor', text: "Xabaringiz qabul qilindi. Shifokor tez orada javob qaytaradi." });
+                renderChatMessages();
+                localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
+            }, 1000);
+        }
+
+        function handleReviewSubmit(event, id, category) {
+            event.preventDefault();
+            const author = document.getElementById('reviewAuthor').value.trim();
+            const rating = parseInt(document.getElementById('reviewRating').value);
+            const text = document.getElementById('reviewText').value.trim();
+
+            let targetItem = null;
+            if (customItems[currentLang] && customItems[currentLang][category]) {
+                targetItem = customItems[currentLang][category].find(i => i.id === id);
+            }
+            if (!targetItem) {
+                const baseItem = initialDbData[currentLang][category].find(i => i.id === id);
+                if (baseItem) {
+                    targetItem = JSON.parse(JSON.stringify(baseItem));
+                    if (!customItems[currentLang]) customItems[currentLang] = { doctors: [], clinics: [], pharmacies: [] };
+                    customItems[currentLang][category].push(targetItem);
+                }
+            }
+            
+            if (targetItem) {
+                if (!targetItem.reviews) targetItem.reviews = [];
+                targetItem.reviews.push({ author, rating, text });
+                
+                const totalRating = targetItem.reviews.reduce((acc, r) => acc + r.rating, 0);
+                targetItem.rating = (totalRating / targetItem.reviews.length).toFixed(1);
+
+                localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
+                alert("Sharhingiz muvaffaqiyatli qo'shildi!");
+                openDetailModal(id, category);
+                filterData();
+            }
         }
 
         function filterData() {
@@ -848,7 +1074,6 @@
                     listContainer.appendChild(row);
                 });
             }
-            document.getElementById('favoritesModal').classList.add('hidden');
             document.getElementById('favoritesModal').classList.remove('hidden');
         }
 
