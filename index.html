@@ -447,8 +447,38 @@
                     { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], bio: "Dorixona.", reviews: [] }
                 ]
             },
-            ru: { doctors: [], clinics: [], pharmacies: [] },
-            en: { doctors: [], clinics: [], pharmacies: [] }
+            ru: {
+                doctors: [
+                    { 
+                        id: 'dr1', name: "Др. Алишер Каримов", specialty: "Кардиолог", region: "Ташкент", experience: "12 лет", workplace: "РНЦЭМП", address: "Малая кольцевая 10", rating: 4.9, phone: "+998 90 123 45 67", 
+                        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        images: ["https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=500"],
+                        bio: "Опытный кардиолог...", reviews: []
+                    }
+                ],
+                clinics: [
+                    { id: 'cr1', name: "Shifo Med Clinic", specialty: "Многопрофильный медцентр", region: "Ташкент", workplace: "Главный филиал", address: "Чиланзар 19", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=500"], bio: "Клиника", reviews: [] }
+                ],
+                pharmacies: [
+                    { id: 'pr1', name: "Oxy Med Apteka", specialty: "Аптека 24/7", region: "Ташкент", workplace: "Центральная аптека", address: "Амир Темур 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], bio: "Аптека", reviews: [] }
+                ]
+            },
+            en: {
+                doctors: [
+                    { 
+                        id: 'de1', name: "Dr. Alisher Karimov", specialty: "Cardiologist", region: "Tashkent", experience: "12 years", workplace: "Emergency Science Center", address: "Small Ring 10", rating: 4.9, phone: "+998 90 123 45 67", 
+                        image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        images: ["https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=500"],
+                        bio: "Experienced cardiologist...", reviews: []
+                    }
+                ],
+                clinics: [
+                    { id: 'ce1', name: "Shifo Med Clinic", specialty: "Multidisciplinary Medical Center", region: "Tashkent", workplace: "Main Branch", address: "Chilonzor 19", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=500"], bio: "Clinic", reviews: [] }
+                ],
+                pharmacies: [
+                    { id: 'pe1', name: "Oxy Med Apteka", specialty: "24/7 Pharmacy", region: "Tashkent", workplace: "Central Pharmacy", address: "Amir Temur 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], bio: "Pharmacy", reviews: [] }
+                ]
+            }
         };
 
         let customItems = JSON.parse(localStorage.getItem('shifotop_custom_items')) || { uz: { doctors: [], clinics: [], pharmacies: [] }, ru: { doctors: [], clinics: [], pharmacies: [] }, en: { doctors: [], clinics: [], pharmacies: [] } };
@@ -550,7 +580,6 @@
             let labelText = tabName === 'clinics' ? t.clinicsTab : tabName === 'pharmacies' ? t.pharmaciesTab : t.doctorsTab;
             if (titleEl) titleEl.innerHTML = `<i class="${iconClass} text-blue-600"></i><span>${labelText}</span>`;
 
-            // Dinamik tugma va modal sarlavhasini o'zgartirish
             const btnTextEl = document.getElementById('addItemBtnText');
             const modalTitleEl = document.getElementById('addItemModalTitle');
             const catSelect = document.getElementById('newItemCategory');
@@ -1103,7 +1132,7 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">${fav.specialty}</p>
                             </div>
                         </div>
-                        <button onclick="toggleFavorite('${fav.id}', 'doctors'); openFavoritesModal();" class="text-red-500 hover:text-red-700 p-2.5 rounded-xl hover:bg-red-50 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
+                        <button onclick="toggleFavorite('${fav.id}', '${currentTab}'); openFavoritesModal();" class="text-red-500 hover:text-red-700 p-2.5 rounded-xl hover:bg-red-50 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
                     `;
                     listContainer.appendChild(row);
                 });
@@ -1128,7 +1157,7 @@
         function changeLanguage(lang) {
             currentLang = lang;
             const t = translations[lang];
-            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || 'Mehmon');
+            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || (lang === 'ru' ? 'Гость' : lang === 'en' ? 'Guest' : 'Mehmon'));
             document.getElementById('heroTitle').innerText = "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping";
             document.getElementById('heroSubtitle').innerText = "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.";
             document.getElementById('searchInput').placeholder = "Shifokor, klinika yoki xizmatni qidirish...";
