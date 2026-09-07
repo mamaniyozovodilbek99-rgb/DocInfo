@@ -48,4 +48,50 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             
             <div class="relative">
-                <div onclick="toggleMenuDropdown(event)" class="flex items-center space-
+                <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
+                    <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md flex items-center justify-center group-hover:bg-brand-700 transition">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-1.5">
+                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">Shifo<span class="gold-text">Top</span></span>
+                            <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+                        </div>
+                        <span class="block text-[11px] text-gray-400 font-medium" id="userWelcome">Tibbiyot Portali</span>
+                    </div>
+                </div>
+
+                <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale">
+                    <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        Bo'limlar
+                    </div>
+                    <div class="p-1.5 space-y-1">
+                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3">
+                            <i class="fa-solid fa-user-doctor w-5"></i>
+                            <span data-translate="doctorsTab">Shifokorlar</span>
+                        </button>
+                        <button onclick="switchTab('clinics')" id="menuItem-clinics" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                            <i class="fa-solid fa-hospital w-5"></i>
+                            <span data-translate="clinicsTab">Klinikalar</span>
+                        </button>
+                        <button onclick="switchTab('pharmacies')" id="menuItem-pharmacies" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                            <i class="fa-solid fa-pills w-5"></i>
+                            <span data-translate="pharmaciesTab">Med-magazinlar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
+                    <i class="fa-solid fa-heart text-red-500 text-base"></i>
+                    <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
+                </button>
+
+                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-100 dark:bg-gray-700 text-xs sm:text-sm font-medium rounded-xl px-2.5 py-2 focus:outline-none border-0 text-gray-700 dark:text-gray-200 cursor-pointer">
+                    <option value="uz">O'zbekcha</option>
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                </select>
+
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-
