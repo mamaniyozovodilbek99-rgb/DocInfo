@@ -211,7 +211,7 @@
     <!-- Detailed Profile Modal -->
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
+            <button onclick="event.stopPropagation(); closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div id="detailContentContainer"></div>
@@ -221,7 +221,7 @@
     <!-- Add New Item Modal -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
-            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+            <button onclick="event.stopPropagation(); closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 id="addItemModalTitle" class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi shifokor qo'shish</h3>
@@ -294,7 +294,7 @@
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+            <button onclick="event.stopPropagation(); closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
@@ -323,7 +323,7 @@
     <!-- QR Code Modal -->
     <div id="qrModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+            <button onclick="event.stopPropagation(); closeQrModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white mt-2">Profil QR-kodi</h3>
@@ -343,7 +343,7 @@
                     <i class="fa-solid fa-heart text-red-500"></i>
                     <span>Saralanganlar</span>
                 </h3>
-                <button onclick="closeFavoritesModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                <button onclick="event.stopPropagation(); closeFavoritesModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
@@ -564,6 +564,40 @@
             if (dropdown && !dropdown.classList.contains('hidden')) dropdown.classList.add('hidden');
         }
 
+        // Modal yopish funksiyalari (aniq va kafolatli ishlashi uchun)
+        function closeDetailModal() {
+            const modal = document.getElementById('detailModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function closeAddItemModal() {
+            const modal = document.getElementById('addItemModal');
+            if (modal) modal.classList.add('hidden');
+            const form = document.getElementById('addItemForm');
+            if (form) form.reset();
+            const preview = document.getElementById('imagePreviewContainer');
+            if (preview) preview.innerHTML = '';
+            temporarySelectedImages = [];
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            if (modal) modal.classList.add('hidden');
+            const form = document.getElementById('bookingForm');
+            if (form) form.reset();
+            selectedItemForBooking = null;
+        }
+
+        function closeQrModal() {
+            const modal = document.getElementById('qrModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function closeFavoritesModal() {
+            const modal = document.getElementById('favoritesModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
         function switchTab(tabName) {
             currentTab = tabName;
             ['doctors', 'clinics', 'pharmacies'].forEach(item => {
@@ -620,13 +654,6 @@
             document.getElementById('newItemCategory').value = currentTab;
             syncCategorySelect(currentTab);
             document.getElementById('addItemModal').classList.remove('hidden');
-        }
-
-        function closeAddItemModal() {
-            document.getElementById('addItemModal').classList.add('hidden');
-            document.getElementById('addItemForm').reset();
-            document.getElementById('imagePreviewContainer').innerHTML = '';
-            temporarySelectedImages = [];
         }
 
         function previewSelectedImages(event) {
@@ -1060,12 +1087,6 @@
             if (userProfile.contact) document.getElementById('patientPhone').value = userProfile.contact;
         }
 
-        function closeBookingModal() {
-            document.getElementById('bookingModal').classList.add('hidden');
-            document.getElementById('bookingForm').reset();
-            selectedItemForBooking = null;
-        }
-
         function submitBooking(event) {
             event.preventDefault();
             const phone = document.getElementById('patientPhone').value;
@@ -1140,18 +1161,10 @@
             document.getElementById('favoritesModal').classList.remove('hidden');
         }
 
-        function closeFavoritesModal() {
-            document.getElementById('favoritesModal').classList.add('hidden');
-        }
-
         function showQrCode(name) {
             document.getElementById('qrItemName').innerText = name;
             document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(name + ' - ShifoTop Portal')}`;
             document.getElementById('qrModal').classList.remove('hidden');
-        }
-
-        function closeQrModal() {
-            document.getElementById('qrModal').classList.add('hidden');
         }
 
         function changeLanguage(lang) {
