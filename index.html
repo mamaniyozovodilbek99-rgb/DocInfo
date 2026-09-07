@@ -207,6 +207,19 @@
         </div>
     </main>
 
+    <!-- Detailed Profile Modal (Shifokor haqida to'liq oyna & O'xshash variantlar) -->
+    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            
+            <div id="detailContentContainer">
+                <!-- Dynamic detail info injected via JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
@@ -326,47 +339,102 @@
         const dbData = {
             uz: {
                 doctors: [
-                    { id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", workplace: "Respublika shoshilinch tibbiy yordam ilmiy markazi", address: "Kichik halqa yo'li 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatr", region: "Samarqand", experience: "8 yil", workplace: "Samarqand viloyat bolalar ko'p tarmoqli tibbiyot markazi", address: "Nodirabegim ko'chasi 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurolog", region: "Buxoro", experience: "15 yil", workplace: "Buxoro viloyat shifoxonasi", address: "Ibn Sino ko'chasi 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
+                    { 
+                        id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", workplace: "Respublika shoshilinch tibbiy yordam ilmiy markazi", address: "Kichik halqa yo'li 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        bio: "Tajribali kardiolog, 12 yildan ortiq vaqt davomida yurak-qon tomir kasalliklarini davolash va profilaktikasi bilan shug'ullanib keladi. Yevropaning yetakchi kardiologiya markazlarida malaka oshirgan.",
+                        reviews: [
+                            { author: "Sardor Rahimov", rating: 5, date: "2 kun oldin", text: "Juda malakali shifokor! Muammoni tez tushuntirib, to'g'ri muolaja yozib berdilar. Tavsiya qilaman." },
+                            { author: "Zulayho Karimova", rating: 5, date: "1 hafta oldin", text: "Shifoxona sharoiti va doktorning muomalasi juda yoqdi. Rahmat!" },
+                            { author: "Bekzod Tursunov", rating: 4.8, date: "1 oy oldin", text: "O'z ishining ustasi, ortiqcha dori yozishmadi." }
+                        ]
+                    },
+                    { 
+                        id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatr", region: "Samarqand", experience: "8 yil", workplace: "Samarqand viloyat bolalar ko'p tarmoqli tibbiyot markazi", address: "Nodirabegim ko'chasi 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300",
+                        bio: "Bolalar shifokori, yosh bolalardagi turli yuqumli va allergik kasalliklarni davolashda katta tajribaga ega. Bolalar bilan tez til topishadi.",
+                        reviews: [
+                            { author: "Nigora Toshmatova", rating: 5, date: "Kecha", text: "Farzandim doktor Malika opadan qo'rqmadi ham. Juda mehribon va e'tiborli mutaxassis." },
+                            { author: "Javohirbek", rating: 4.5, date: "3 hafta oldin", text: "Maslahatlari juda yordam berdi, rahmat." }
+                        ]
+                    },
+                    { 
+                        id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurolog", region: "Buxoro", experience: "15 yil", workplace: "Buxoro viloyat shifoxonasi", address: "Ibn Sino ko'chasi 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
+                        bio: "Oliy toifali nevrolog. Asab tizimi kasalliklari, bosh og'riqlari va umurtqa pog'onasi muammolarini zamonaviy usullarda davolaydi.",
+                        reviews: [
+                            { author: "Dilshod Usmonov", rating: 5, date: "5 kun oldin", text: "Juda kuchli mutaxassis, belimdagi og'riqlar yo'qoldi." },
+                            { author: "Gulnora", rating: 5, date: "2 oy oldin", text: "Professional yondashuv uchun rahmat." }
+                        ]
+                    },
+                    { 
+                        id: 'd4', name: "Dr. Nodira Saidova", specialty: "Kardiolog", region: "Toshkent", experience: "10 yil", workplace: "1-sonli shahar klinik shifoxonasi", address: "Farg'ona yo'li 25", rating: 4.8, phone: "+998 99 111 22 33", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300",
+                        bio: "Kardiolog-aritmolog. Yurak ritmi buzilishlarini tashxislash va davolash bo'yicha mutaxassis.",
+                        reviews: [
+                            { author: "Anvar", rating: 5, date: "1 hafta oldin", text: "Ajoyib shifokor!" }
+                        ]
+                    }
                 ],
                 clinics: [
-                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'c2', name: "Samarqand Diagnostika", specialty: "Laboratoriya va UTT", region: "Samarqand", workplace: "Samarqand Diagnostika filiali", address: "Ipak Yo'li ko'chasi 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", bio: "Eng zamonaviy uskunalar bilan jihozlangan ko'p tarmoqli klinika.", reviews: [{ author: "Client", rating: 5, date: "Kecha", text: "Ajoyib klinika!" }] },
+                    { id: 'c2', name: "Samarqand Diagnostika", specialty: "Laboratoriya va UTT", region: "Samarqand", workplace: "Samarqand Diagnostika filiali", address: "Ipak Yo'li ko'chasi 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300", bio: "Tezkor va aniq tahlillar.", reviews: [{ author: "Client", rating: 4.7, date: "3 kun oldin", text: "Tezkor xizmat." }] }
                 ],
                 pharmacies: [
-                    { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'p2', name: "Darmon Farm", specialty: "Sifatli va hamyonbop dorilar", region: "Fargona", workplace: "Darmon Farm filiali", address: "Al Farg'oniy ko'chasi 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", bio: "Katta assortimentdagi dorilar.", reviews: [{ author: "Client", rating: 5, date: "Kecha", text: "Topilmaydigan dorilar ham bor ekan." }] },
+                    { id: 'p2', name: "Darmon Farm", specialty: "Sifatli va hamyonbop dorilar", region: "Fargona", workplace: "Darmon Farm filiali", address: "Al Farg'oniy ko'chasi 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300", bio: "Arzon va sifatli dorilar tarmog'i.", reviews: [{ author: "Client", rating: 4.8, date: "1 hafta oldin", text: "Narxlari ma'qul." }] }
                 ]
             },
             ru: {
                 doctors: [
-                    { id: 'd1', name: "Др. Алишер Каримов", specialty: "Кардиолог", region: "Ташкент", experience: "12 лет", workplace: "Республиканский научный центр экстренной медицинской помощи", address: "Малая кольцевая дорога 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd2', name: "Др. Малика Умарова", specialty: "Педиатр", region: "Самарканд", experience: "8 лет", workplace: "Самаркандский областной детский многопрофильный медцентр", address: "Улица Нодирабегим 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd3', name: "Др. Джамшид Рустамов", specialty: "Невролог", region: "Бухара", experience: "15 лет", workplace: "Бухарская областная больница", address: "Улица Ибн Сино 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
+                    { 
+                        id: 'd1', name: "Др. Алишер Каримов", specialty: "Кардиолог", region: "Ташкент", experience: "12 лет", workplace: "Республиканский научный центр экстренной медицинской помощи", address: "Малая кольцевая дорога 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        bio: "Опытный кардиолог...", reviews: [{ author: "Сардор", rating: 5, date: "2 дня назад", text: "Отличный врач!" }]
+                    },
+                    { 
+                        id: 'd2', name: "Др. Малика Умарова", specialty: "Педиатр", region: "Самарканд", experience: "8 лет", workplace: "Самаркандский областной детский многопрофильный медцентр", address: "Улица Нодирабегим 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300",
+                        bio: "Детский врач...", reviews: [{ author: "Нигора", rating: 5, date: "Вчера", text: "Очень добрая." }]
+                    },
+                    { 
+                        id: 'd3', name: "Др. Джамшид Рустамов", specialty: "Невролог", region: "Бухара", experience: "15 лет", workplace: "Бухарская областная больница", address: "Улица Ибн Сино 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
+                        bio: "Невролог высшей категории...", reviews: [{ author: "Дилшод", rating: 5, date: "5 дней назад", text: "Профессионал." }]
+                    },
+                    { 
+                        id: 'd4', name: "Др. Нодира Саидова", specialty: "Кардиолог", region: "Ташкент", experience: "10 лет", workplace: "Городская больница №1", address: "Ферганская дорога 25", rating: 4.8, phone: "+998 99 111 22 33", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300",
+                        bio: "Кардиолог-аритмолог...", reviews: [{ author: "Анвар", rating: 5, date: "Неделю назад", text: "Спасибо." }]
+                    }
                 ],
                 clinics: [
-                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Многопрофильный медицинский центр", region: "Ташкент", workplace: "Главное здание Shifo Med Clinic", address: "Чиланзарский район, 19-й квартал", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'c2', name: "Самарканд Диагностика", specialty: "Лаборатория и УЗИ", region: "Самарканд", workplace: "Филиал Самарканд Диагностика", address: "Улица Ипак Йули 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Многопрофильный медицинский центр", region: "Ташкент", workplace: "Главное здание Shifo Med Clinic", address: "Чиланзарский район, 19-й квартал", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", bio: "Современный центр", reviews: [{ author: "Клиент", rating: 5, date: "Вчера", text: "Отлично" }] },
+                    { id: 'c2', name: "Самарканд Диагностика", specialty: "Лаборатория и УЗИ", region: "Самарканд", workplace: "Филиал Самарканд Диагностика", address: "Улица Ипак Йули 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300", bio: "Диагностика", reviews: [{ author: "Клиент", rating: 4.6, date: "3 дня назад", text: "Быстро" }] }
                 ],
                 pharmacies: [
-                    { id: 'p1', name: "Oxy Med Apteka", specialty: "Аптека 24/7 и медицинские товары", region: "Ташкент", workplace: "Центральная аптека Oxy Med", address: "Улица Амира Темура 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'p2', name: "Darmon Farm", specialty: "Качественные и доступные лекарства", region: "Фергана", workplace: "Филиал Darmon Farm", address: "Улица Аль-Фергани 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'p1', name: "Oxy Med Apteka", specialty: "Аптека 24/7 и медицинские товары", region: "Ташкент", workplace: "Центральная аптека Oxy Med", address: "Улица Амира Темура 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", bio: "Аптека", reviews: [{ author: "Клиент", rating: 5, date: "Вчера", text: "Все есть" }] },
+                    { id: 'p2', name: "Darmon Farm", specialty: "Качественные и доступные лекарства", region: "Фергана", workplace: "Филиал Darmon Farm", address: "Улица Аль-Фергани 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300", bio: "Фарм", reviews: [{ author: "Клиент", rating: 4.7, date: "Неделю назад", text: "Хорошо" }] }
                 ]
             },
             en: {
                 doctors: [
-                    { id: 'd1', name: "Dr. Alisher Karimov", specialty: "Cardiologist", region: "Tashkent", experience: "12 years", workplace: "Republican Research Center of Emergency Medicine", address: "Small Ring Road 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatrician", region: "Samarkand", experience: "8 years", workplace: "Samarkand Regional Children's Multidisciplinary Medical Center", address: "Nodirabegim Street 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurologist", region: "Bukhara", experience: "15 years", workplace: "Bukhara Regional Hospital", address: "Ibn Sino Street 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
+                    { 
+                        id: 'd1', name: "Dr. Alisher Karimov", specialty: "Cardiologist", region: "Tashkent", experience: "12 years", workplace: "Republican Research Center of Emergency Medicine", address: "Small Ring Road 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
+                        bio: "Experienced cardiologist...", reviews: [{ author: "Sardor", rating: 5, date: "2 days ago", text: "Great doctor!" }]
+                    },
+                    { 
+                        id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatrician", region: "Samarkand", experience: "8 years", workplace: "Samarkand Regional Children's Multidisciplinary Medical Center", address: "Nodirabegim Street 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300",
+                        bio: "Pediatrician...", reviews: [{ author: "Nigora", rating: 5, date: "Yesterday", text: "Very caring." }]
+                    },
+                    { 
+                        id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurologist", region: "Bukhara", experience: "15 years", workplace: "Bukhara Regional Hospital", address: "Ibn Sino Street 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
+                        bio: "Neurologist...", reviews: [{ author: "Dilshod", rating: 5, date: "5 days ago", text: "Professional." }]
+                    },
+                    { 
+                        id: 'd4', name: "Dr. Nodira Saidova", specialty: "Cardiologist", region: "Tashkent", experience: "10 years", workplace: "City Hospital #1", address: "Fergana Road 25", rating: 4.8, phone: "+998 99 111 22 33", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300",
+                        bio: "Cardiologist...", reviews: [{ author: "Anvar", rating: 5, date: "A week ago", text: "Thanks." }]
+                    }
                 ],
                 clinics: [
-                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Multidisciplinary Medical Center", region: "Tashkent", workplace: "Shifo Med Clinic Main Building", address: "Chilonzor district, 19th quarter", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'c2', name: "Samarkand Diagnostics", specialty: "Laboratory & Ultrasound", region: "Samarkand", workplace: "Samarkand Diagnostics Branch", address: "Ipak Yuli Street 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Multidisciplinary Medical Center", region: "Tashkent", workplace: "Shifo Med Clinic Main Building", address: "Chilonzor district, 19th quarter", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", bio: "Clinic", reviews: [{ author: "Client", rating: 5, date: "Yesterday", text: "Good" }] },
+                    { id: 'c2', name: "Samarkand Diagnostics", specialty: "Laboratory & Ultrasound", region: "Samarkand", workplace: "Samarkand Diagnostics Branch", address: "Ipak Yuli Street 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300", bio: "Lab", reviews: [{ author: "Client", rating: 4.6, date: "3 days ago", text: "Fast" }] }
                 ],
                 pharmacies: [
-                    { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Pharmacy & Medical Supplies", region: "Tashkent", workplace: "Oxy Med Central Pharmacy", address: "Amir Temur Street 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
-                    { id: 'p2', name: "Darmon Farm", specialty: "Quality and Affordable Medicines", region: "Fergana", workplace: "Darmon Farm Branch", address: "Al-Fergani Street 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
+                    { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Pharmacy & Medical Supplies", region: "Tashkent", workplace: "Oxy Med Central Pharmacy", address: "Amir Temur Street 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", bio: "Pharmacy", reviews: [{ author: "Client", rating: 5, date: "Yesterday", text: "Available" }] },
+                    { id: 'p2', name: "Darmon Farm", specialty: "Quality and Affordable Medicines", region: "Fergana", workplace: "Darmon Farm Branch", address: "Al-Fergani Street 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300", bio: "Pharma", reviews: [{ author: "Client", rating: 4.7, date: "A week ago", text: "Nice" }] }
                 ]
             }
         };
@@ -408,7 +476,10 @@
                 labelAuthName: "Ism va familiyangiz",
                 labelAuthContact: "Telefon raqam (+998...)",
                 submitAuthBtn: "Kirish va Tasdiqlash",
-                footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
+                footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.",
+                aboutDoctor: "Shifokor haqida",
+                patientReviews: "Jonli sharhlar va fikrlar",
+                similarSpecialists: "Shunga o'xshash mutaxassislar"
             },
             ru: {
                 doctorsTab: "Врачи",
@@ -441,7 +512,10 @@
                 labelAuthName: "Ваше имя и фамилия",
                 labelAuthContact: "Номер телефона (+998...)",
                 submitAuthBtn: "Войти и подтвердить",
-                footerRights: "&copy; 2026 ShifoTop. Все права защищены."
+                footerRights: "&copy; 2026 ShifoTop. Все права защищены.",
+                aboutDoctor: "О враче",
+                patientReviews: "Живые отзывы пациентов",
+                similarSpecialists: "Похожие специалисты"
             },
             en: {
                 doctorsTab: "Doctors",
@@ -474,7 +548,10 @@
                 labelAuthName: "Your Full Name",
                 labelAuthContact: "Phone number (+998...)",
                 submitAuthBtn: "Sign In & Verify",
-                footerRights: "&copy; 2026 ShifoTop. All rights reserved."
+                footerRights: "&copy; 2026 ShifoTop. All rights reserved.",
+                aboutDoctor: "About Doctor",
+                patientReviews: "Live Patient Reviews",
+                similarSpecialists: "Similar Specialists"
             }
         };
 
@@ -588,7 +665,7 @@
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-hospital-user mr-2 text-blue-600 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
                             <i class="fa-solid fa-location-dot mr-2 text-blue-600 mt-0.5"></i> 
-                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-blue-700 dark:text-blue-400 underline font-medium hover:text-blue-800">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" onclick="event.stopPropagation()" class="text-blue-700 dark:text-blue-400 underline font-medium hover:text-blue-800">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
                         </div>
                     `;
                 } else {
@@ -596,13 +673,13 @@
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-building mr-2 text-blue-600 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
                             <i class="fa-solid fa-location-dot mr-2 text-blue-600 mt-0.5"></i> 
-                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-blue-700 dark:text-blue-400 underline font-medium hover:text-blue-800">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" onclick="event.stopPropagation()" class="text-blue-700 dark:text-blue-400 underline font-medium hover:text-blue-800">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
                         </div>
                     `;
                 }
 
                 card.innerHTML = `
-                    <div>
+                    <div class="cursor-pointer" onclick="openDetailModal('${item.id}', '${currentTab}')">
                         <div class="h-52 overflow-hidden relative">
                             <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
@@ -613,16 +690,16 @@
                                 ${item.region}
                             </span>
                             <div class="absolute bottom-3 right-3 flex space-x-2">
-                                <button onclick="toggleFavorite('${item.id}', '${currentTab}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-red-500 shadow hover:scale-110 transition" title="Saralashga qo'shish">
+                                <button onclick="event.stopPropagation(); toggleFavorite('${item.id}', '${currentTab}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-red-500 shadow hover:scale-110 transition" title="Saralashga qo'shish">
                                     <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-base"></i>
                                 </button>
-                                <button onclick="showQrCode('${item.name}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-gray-700 dark:text-gray-200 shadow hover:scale-110 transition" title="QR-kod">
+                                <button onclick="event.stopPropagation(); showQrCode('${item.name}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-gray-700 dark:text-gray-200 shadow hover:scale-110 transition" title="QR-kod">
                                     <i class="fa-solid fa-qrcode text-base"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="p-5">
-                            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white tracking-tight">${item.name}</h3>
+                            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white tracking-tight hover:text-blue-600 transition">${item.name}</h3>
                             <p class="text-xs font-bold text-gray-700 dark:text-gray-200 mb-3 uppercase tracking-wider">${item.specialty}</p>
                             ${specificInfo}
                         </div>
@@ -640,6 +717,132 @@
                 `;
                 grid.appendChild(card);
             });
+        }
+
+        // Shifokor tafsilotlari oynasini ochish (Jonli sharhlar va o'xshash 3 ta mutaxassis bilan)
+        function openDetailModal(id, category) {
+            const currentLangData = dbData[currentLang] || dbData['uz'];
+            const item = currentLangData[category].find(i => i.id === id);
+            if (!item) return;
+
+            const t = translations[currentLang];
+            const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
+
+            // O'xshash mutaxassislarni topish (shu bo'limdagi boshqa 3 ta element)
+            const similarList = currentLangData[category].filter(i => i.id !== id).slice(0, 3);
+
+            let reviewsHTML = '';
+            if (item.reviews && item.reviews.length > 0) {
+                item.reviews.forEach(rev => {
+                    reviewsHTML += `
+                        <div class="bg-gray-50 dark:bg-gray-700/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-1">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-xs text-gray-900 dark:text-white">${rev.author}</span>
+                                <div class="flex items-center space-x-1 text-xs text-amber-500 font-bold">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>${rev.rating}</span>
+                                    <span class="text-gray-400 font-normal ml-2">(${rev.date})</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-600 dark:text-gray-300">${rev.text}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                reviewsHTML = `<p class="text-xs text-gray-400">Hozircha sharhlar yo'q.</p>`;
+            }
+
+            let similarHTML = '';
+            if (similarList.length > 0) {
+                similarList.forEach(sim => {
+                    similarHTML += `
+                        <div onclick="openDetailModal('${sim.id}', '${category}')" class="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:border-blue-500 transition group">
+                            <img src="${sim.image}" class="w-14 h-14 rounded-xl object-cover">
+                            <div class="flex-grow min-w-0">
+                                <h4 class="font-bold text-xs text-gray-900 dark:text-white truncate group-hover:text-blue-600">${sim.name}</h4>
+                                <p class="text-[11px] text-blue-600 dark:text-blue-400 font-medium">${sim.specialty}</p>
+                                <p class="text-[10px] text-gray-400 truncate">${sim.workplace}</p>
+                            </div>
+                            <span class="text-xs font-bold text-amber-500 flex items-center pr-1">
+                                <i class="fa-solid fa-star mr-1"></i>${sim.rating}
+                            </span>
+                        </div>
+                    `;
+                });
+            }
+
+            const container = document.getElementById('detailContentContainer');
+            container.innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-5 items-center sm:items-start mb-6">
+                    <img src="${item.image}" alt="${item.name}" class="w-28 h-28 sm:w-36 sm:h-36 rounded-3xl object-cover shadow-md border-2 border-blue-500/20">
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">${item.region}</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-1">${item.name}</h2>
+                        <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">${item.specialty}</p>
+                        <div class="flex items-center justify-center sm:justify-start space-x-2 text-xs font-bold text-amber-500">
+                            <i class="fa-solid fa-star"></i>
+                            <span>${item.rating} reyting</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="bg-blue-50/50 dark:bg-gray-700/30 p-4 rounded-2xl border border-blue-100 dark:border-gray-700 text-xs space-y-2">
+                        ${item.experience ? `<div class="flex items-center"><i class="fa-solid fa-briefcase w-5 text-blue-600"></i><span class="font-semibold text-gray-700 dark:text-gray-300">${t.experience}: ${item.experience}</span></div>` : ''}
+                        <div class="flex items-start"><i class="fa-solid fa-hospital-user w-5 text-blue-600 mt-0.5"></i><span class="text-gray-700 dark:text-gray-300"><strong>${t.workplace}:</strong> ${item.workplace}</span></div>
+                        <div class="flex items-start"><i class="fa-solid fa-location-dot w-5 text-blue-600 mt-0.5"></i><span class="text-gray-700 dark:text-gray-300"><strong>${t.address}:</strong> <a href="${yandexMapUrl}" target="_blank" class="text-blue-600 underline">${item.address}</a></span></div>
+                        <div class="flex items-center"><i class="fa-solid fa-phone w-5 text-blue-600"></i><a href="tel:${item.phone}" class="font-bold text-blue-600 underline">${item.phone}</a></div>
+                    </div>
+
+                    ${item.bio ? `
+                        <div>
+                            <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">${t.aboutDoctor}</h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${item.bio}</p>
+                        </div>
+                    ` : ''}
+                </div>
+
+                <div class="flex gap-3 mb-6">
+                    <a href="tel:${item.phone}" class="flex-1 bg-gray-100 dark:bg-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-400 font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>${item.phone}</span>
+                    </a>
+                    <button onclick="closeDetailModal(); openBookingModal('${item.id}', '${category}')" class="flex-1 primary-bg hover:opacity-95 text-white font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition shadow-lg shadow-blue-600/20">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span>${t.bookBtn}</span>
+                    </button>
+                </div>
+
+                <!-- Jonli sharhlar bo'limi -->
+                <div class="mb-6">
+                    <h3 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-comments text-blue-600"></i>
+                        <span>${t.patientReviews}</span>
+                    </h3>
+                    <div class="space-y-3">
+                        ${reviewsHTML}
+                    </div>
+                </div>
+
+                <!-- O'xshash 3 ta mutaxassis variantlari -->
+                ${similarList.length > 0 ? `
+                    <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                        <h3 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
+                            <i class="fa-solid fa-user-doctor text-blue-600"></i>
+                            <span>${t.similarSpecialists}</span>
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            ${similarHTML}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
         }
 
         function filterData() {
@@ -739,7 +942,6 @@
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     `;
-                    listContainer.style.borderColor = "#2563eb";
                     listContainer.appendChild(row);
                 });
             }
@@ -764,17 +966,13 @@
             currentLang = lang;
             const t = translations[lang];
 
-            // Navbar elements update
             document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || (lang === 'ru' ? 'Гость' : lang === 'en' ? 'Guest' : 'Mehmon'));
-            document.querySelector('#userWelcome').nextElementSibling?.previousElementSibling; // portal subtext
             
-            // Hero section update
             document.getElementById('heroTitle').innerText = t.heroTitle;
             document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
             document.getElementById('searchInput').placeholder = t.searchPlaceholder;
             document.getElementById('optAllRegions').innerText = t.allRegions;
 
-            // Modals and buttons
             document.getElementById('logoutMenuText').innerText = t.logoutMenuText;
             document.getElementById('modalBookingTitle').innerText = t.modalBookingTitle;
             document.getElementById('labelPatientName').innerText = t.labelPatientName;
