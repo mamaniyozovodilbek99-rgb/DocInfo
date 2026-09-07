@@ -148,12 +148,6 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <!-- Yangi qo'shish tugmasi -->
-                <button onclick="openAddItemModal()" class="px-3 py-2 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>Qo'shish</span>
-                </button>
-
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
@@ -205,7 +199,14 @@
                 <i class="fa-solid fa-user-doctor text-blue-600"></i>
                 <span>Shifokorlar</span>
             </h2>
-            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
+            <div class="flex items-center space-x-3">
+                <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
+                <!-- Shifokor qo'shish tugmasi bevosita shifokorlar bo'limida -->
+                <button onclick="openAddItemModal()" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Shifokor qo'shish</span>
+                </button>
+            </div>
         </div>
 
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -213,27 +214,25 @@
         </div>
     </main>
 
-    <!-- Detailed Profile Modal (Shifokor haqida to'liq oyna & 5 tagacha rasm galereyasi) -->
+    <!-- Detailed Profile Modal -->
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             
-            <div id="detailContentContainer">
-                <!-- Dynamic detail info injected via JS -->
-            </div>
+            <div id="detailContentContainer"></div>
         </div>
     </div>
 
-    <!-- Add New Item Modal (Yangi Ma'lumot va Rasmlar qo'shish oynasi) -->
+    <!-- Add New Item Modal (Rasmlar va ma'lumot kiritish oynasi) -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi e'lon / obyekt qo'shish</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Portalga shifokor, klinika yoki dorixona ma'lumotlarini rasmlari bilan kiriting.</p>
+            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi shifokor yoki muassasa qo'shish</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Mutaxassis ma'lumotlari va rasmlari havolasini kiriting.</p>
             
             <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
                 <div>
@@ -265,8 +264,8 @@
                 </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ish tajribasi (masalan: 10 yil)</label>
-                        <input type="text" id="newItemExp" placeholder="10 yil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ish tajribasi</label>
+                        <input type="text" id="newItemExp" placeholder="Masalan: 10 yil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqami</label>
@@ -286,12 +285,12 @@
                     <input type="url" id="newItemMainImage" required placeholder="https://images.unsplash.com/..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qo'shimcha rasmlar havolalari (Vergul bilan ajrating, 4tagacha)</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qo'shimcha rasmlar havolalari (Vergul bilan ajrating)</label>
                     <input type="text" id="newItemExtraImages" placeholder="https://img1.com/a.jpg, https://img2.com/b.jpg" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ma'lumot / Biografiya</label>
-                    <textarea id="newItemBio" rows="2" placeholder="Mutaxassis haqida qisqacha ma'lumot..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white"></textarea>
+                    <textarea id="newItemBio" rows="2" placeholder="Mutaxassis haqida qisqacha..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white"></textarea>
                 </div>
                 <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
                     Saqlash va qo'shish
@@ -336,7 +335,7 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 id="qrModalTitle" class="font-bold text-lg mb-1 text-gray-900 dark:text-white mt-2">Profil QR-kodi</h3>
-            <p id="qrModalDesc" class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ushbu kodni skanerlash orqali mutaxassis sahifasiga tezkor o'tishingiz mumkin.</p>
+            <p id="qrModalDesc" class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ushbu kodni skanerlash orqali mutaxassis sahifasiga o'tishingiz mumkin.</p>
             <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl inline-block border border-gray-200 dark:border-gray-700 shadow-inner mb-4">
                 <img id="qrImage" src="" alt="QR Code" class="w-48 h-48 mx-auto rounded-lg">
             </div>
@@ -416,7 +415,6 @@
             return /^\+998\d{9}$/.test(cleaned);
         }
 
-        // Boshlang'ich baza ma'lumotlari
         const initialDbData = {
             uz: {
                 doctors: [
@@ -445,11 +443,9 @@
             en: { doctors: [], clinics: [], pharmacies: [] }
         };
 
-        // LocalStorage'dan qo'shilgan elementlarni yuklash yoki boshlang'ich ma'lumotni olish
         let customItems = JSON.parse(localStorage.getItem('shifotop_custom_items')) || { uz: { doctors: [], clinics: [], pharmacies: [] }, ru: { doctors: [], clinics: [], pharmacies: [] }, en: { doctors: [], clinics: [], pharmacies: [] } };
 
         function getMergedDbData() {
-            // Asl ma'lumotlar bilan foydalanuvchi qo'shganlarni birlashtirish
             let db = JSON.parse(JSON.stringify(initialDbData));
             ['uz', 'ru', 'en'].forEach(lang => {
                 if (customItems[lang]) {
@@ -470,17 +466,17 @@
             uz: {
                 doctorsTab: "Shifokorlar", clinicsTab: "Klinikalar", pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
-                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarSpecialists: "O'xshashlar"
+                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar"
             },
             ru: {
                 doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки",
                 experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
-                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы", similarSpecialists: "Похожие"
+                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы"
             },
             en: {
                 doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies",
                 experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
-                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarSpecialists: "Similar"
+                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews"
             }
         };
 
@@ -542,7 +538,7 @@
             filterData();
         }
 
-        // --- YANGI QO'SHISH FUNKSIYALARI ---
+        // QO'SHISH MODAL FUNKSIYALARI
         function openAddItemModal() {
             document.getElementById('addItemModal').classList.remove('hidden');
         }
@@ -681,33 +677,11 @@
             let imgList = item.images && item.images.length > 0 ? item.images.slice(0, 5) : [item.image || 'https://via.placeholder.com/400x300?text=Rasm+mavjud+emas'];
             window.currentImages = imgList;
 
-            const similarList = currentLangData[category].filter(i => i.id !== id).slice(0, 3);
-
-            let reviewsHTML = item.reviews && item.reviews.length > 0 ? item.reviews.map(rev => `
-                <div class="bg-gray-50 dark:bg-gray-700/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-1">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-xs text-gray-900 dark:text-white">${rev.author}</span>
-                        <span class="text-xs text-amber-500 font-bold"><i class="fa-solid fa-star"></i> ${rev.rating}</span>
-                    </div>
-                    <p class="text-xs text-gray-600 dark:text-gray-300">${rev.text}</p>
-                </div>
-            `).join('') : `<p class="text-xs text-gray-400">Hozircha sharhlar yo'q.</p>`;
-
             let thumbnailsHTML = imgList.length > 1 ? imgList.map((img, idx) => `
                 <button onclick="changeActiveImage(${idx})" id="thumbBtn-${idx}" class="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all ${idx === 0 ? 'border-blue-600 scale-95' : 'border-transparent opacity-70 hover:opacity-100'}">
                     <img src="${img}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/100?text=Xato'">
                 </button>
             `).join('') : '';
-
-            let similarHTML = similarList.map(sim => `
-                <div onclick="openDetailModal('${sim.id}', '${category}')" class="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:border-blue-500 transition group">
-                    <img src="${sim.image}" class="w-14 h-14 rounded-xl object-cover" onerror="this.src='https://via.placeholder.com/100?text=Dr'">
-                    <div class="flex-grow min-w-0">
-                        <h4 class="font-bold text-xs text-gray-900 dark:text-white truncate group-hover:text-blue-600">${sim.name}</h4>
-                        <p class="text-[11px] text-blue-600 dark:text-blue-400 font-medium">${sim.specialty}</p>
-                    </div>
-                </div>
-            `).join('');
 
             const container = document.getElementById('detailContentContainer');
             container.innerHTML = `
@@ -831,7 +805,6 @@
         function openFavoritesModal() {
             const listContainer = document.getElementById('favoritesList');
             listContainer.innerHTML = '';
-            const t = translations[currentLang];
 
             if (favorites.length === 0) {
                 listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><i class="fa-regular fa-heart text-4xl mb-2 opacity-40"></i><p class="text-sm">Saralanganlar bo'sh.</p></div>`;
@@ -852,6 +825,7 @@
                     listContainer.appendChild(row);
                 });
             }
+            document.getElementById('favoritesModal').classList.add('hidden'); // Fix open toggle logic
             document.getElementById('favoritesModal').classList.remove('hidden');
         }
 
