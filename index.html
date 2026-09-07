@@ -59,7 +59,7 @@
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
-                <!-- Ko'k rangli yurak logotipi -->
+                <!-- Logoni yonidagi "Shifo" so'zi ko'k rangga o'zgartirildi -->
                 <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
                     <i class="fa-solid fa-heart-pulse text-2xl"></i>
                 </div>
@@ -102,12 +102,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
-                    <!-- Sarlavhadagi ko'k rangli logotip -->
+                    <!-- Sarlavhadagi logotip -->
                     <div class="primary-bg text-white p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition relative shadow-blue-600/20">
                         <i class="fa-solid fa-heart-pulse text-base"></i>
                     </div>
                     <div>
                         <div class="flex items-center space-x-0.5">
+                            <!-- Logoni yonidagi "Shifo" so'zi ko'k qilindi -->
                             <span class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">
                                 <span class="text-blue-600 dark:text-blue-500">Shifo</span><span class="gold-gradient font-black">Top</span>
                             </span>
@@ -209,7 +210,7 @@
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- Detailed Profile Modal -->
+    <!-- Detailed Profile Modal (2-oyna) -->
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="event.stopPropagation(); closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10">
@@ -451,7 +452,7 @@
                         images: ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=500"],
                         bio: "Oliy toifali kardiolog, jarroh.", 
                         reviews: [
-                            { author: "Dilshod K.", rating: 5, date: "10iyun, 2026", text: "Rahmat, juda professional yondashuv." }
+                            { author: "Dilshod K.", rating: 5, date: "10 Iyun, 2026", text: "Rahmat, juda professional yondashuv." }
                         ] 
                     },
                     { 
@@ -465,10 +466,50 @@
                     }
                 ],
                 clinics: [
-                    { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=500"], bio: "Zamonaviy klinika.", reviews: [{ author: "Kamol", rating: 5, date: "11 Iyul, 2026", text: "Klinika juda toza va shinam." }] }
+                    { 
+                        id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", 
+                        image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Zamonaviy klinika.", 
+                        reviews: [{ author: "Kamol", rating: 5, date: "11 Iyul, 2026", text: "Klinika juda toza va shinam." }] 
+                    },
+                    { 
+                        id: 'c2', name: "MedLife Diagnostic", specialty: "Diagnostika markazi", region: "Toshkent", workplace: "MedLife filial", address: "Amir Temur shoh ko'chasi", rating: 4.8, phone: "+998 71 200 00 02", 
+                        image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Engso'nggi rusumdagi uskunalar.", 
+                        reviews: [{ author: "Savlat", rating: 5, date: "01 Avgust, 2026", text: "Tez va aniq tekshiruv." }] 
+                    },
+                    { 
+                        id: 'c3', name: "Cardio Plus Klinika", specialty: "Kardiologiya markazi", region: "Toshkent", workplace: "Cardio Plus", address: "Yunusobod", rating: 4.7, phone: "+998 71 200 00 03", 
+                        image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Yurak kasalliklari bo'yicha ixtisoslashgan.", 
+                        reviews: [{ author: "Gulnora", rating: 4, date: "05 Avgust, 2026", text: "Shifokorlar malakali." }] 
+                    }
                 ],
                 pharmacies: [
-                    { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], bio: "Dorixona.", reviews: [{ author: "Sardor", rating: 5, date: "02 Avgust, 2026", text: "Dorilar doim topiladi." }] }
+                    { 
+                        id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", 
+                        image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Dorixona.", 
+                        reviews: [{ author: "Sardor", rating: 5, date: "02 Avgust, 2026", text: "Dorilar doim topiladi." }] 
+                    },
+                    { 
+                        id: 'p2', name: "Grand Pharm", specialty: "Tibbiy mahsulotlar", region: "Toshkent", workplace: "Grand Pharm filial", address: "Chilonzor", rating: 4.8, phone: "+998 71 201 01 02", 
+                        image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Sifatli dorilar tarmog'i.", 
+                        reviews: [{ author: "Zafar", rating: 5, date: "10 Avgust, 2026", text: "Narxlari maqbul." }] 
+                    },
+                    { 
+                        id: 'p3', name: "Darmon Apteka", specialty: "Arzon dorilar", region: "Toshkent", workplace: "Darmon", address: "Mirzo Ulug'bek", rating: 4.7, phone: "+998 71 201 01 03", 
+                        image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=300", 
+                        images: ["https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=500"], 
+                        bio: "Keng assortiment.", 
+                        reviews: [{ author: "Malika", rating: 4, date: "12 Avgust, 2026", text: "Xizmat ko'rsatish yaxshi." }] 
+                    }
                 ]
             },
             ru: { doctors: [], clinics: [], pharmacies: [] },
@@ -498,7 +539,7 @@
             uz: {
                 doctorsTab: "Shifokorlar", clinicsTab: "Klinikalar", pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
-                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Bemorlar fikrlari (Sharhlar)", similarExperts: "O'xshash mutaxassislar",
+                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Odamlarning fikrlari (Sharhlar)", similarExperts: "O'xshash mutaxassislar",
                 addDoctorBtn: "Shifokor qo'shish", addClinicBtn: "Shifoxona qo'shish", addPharmacyBtn: "Med magazin qo'shish",
                 addModalDoctorTitle: "Yangi shifokor qo'shish", addModalClinicTitle: "Yangi shifoxona qo'shish", addModalPharmacyTitle: "Yangi med magazin qo'shish",
                 heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
@@ -509,7 +550,7 @@
             ru: {
                 doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки",
                 experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
-                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы пациентов", similarExperts: "Похожие специалисты",
+                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О враче", patientReviews: "Отзывы людей", similarExperts: "Похожие специалисты",
                 addDoctorBtn: "Добавить врача", addClinicBtn: "Добавить больницу", addPharmacyBtn: "Добавить мед магазин",
                 addModalDoctorTitle: "Добавить врача", addModalClinicTitle: "Добавить больницу", addModalPharmacyTitle: "Добавить мед магазин",
                 heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
@@ -520,7 +561,7 @@
             en: {
                 doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies",
                 experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
-                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Patient Reviews", similarExperts: "Similar Experts",
+                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "People's Reviews", similarExperts: "Similar Experts",
                 addDoctorBtn: "Add Doctor", addClinicBtn: "Add Hospital", addPharmacyBtn: "Add Med Shop",
                 addModalDoctorTitle: "Add Doctor", addModalClinicTitle: "Add Hospital", addModalPharmacyTitle: "Add Med Shop",
                 heroTitle: "Find the best doctors and clinics in Uzbekistan",
@@ -769,7 +810,7 @@
             let imgList = item.images && item.images.length > 0 ? item.images : [item.image];
             window.currentImages = imgList;
 
-            // O'xshash mutaxassislarni topish (shu bo'limdagi boshqa 3 ta element)
+            // O'xshash mutaxassislar / o'xshash obyektlar (3 tasi)
             let allCategoryItems = currentLangData[category] || [];
             let similarItems = allCategoryItems.filter(i => i.id !== id).slice(0, 3);
 
@@ -786,7 +827,7 @@
                 similarItems.forEach(sim => {
                     similarHtml += `
                         <div onclick="openDetailModal('${sim.id}', '${category}')" class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:border-blue-500 transition flex flex-col items-center text-center">
-                            <img src="${sim.image}" class="w-14 h-14 rounded-full object-cover mb-2 shadow">
+                            <img src="${sim.image}" class="w-14 h-14 rounded-full object-cover mb-2 shadow" onerror="this.src='https://via.placeholder.com/100?text=Foto'">
                             <h5 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">${sim.name}</h5>
                             <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1">${sim.specialty}</p>
                         </div>
@@ -795,7 +836,7 @@
                 similarHtml += `</div></div>`;
             }
 
-            // Odamlarning fikrlari / sharhlar qismi
+            // Odamlarning fikrlari (Sharhlar)
             let reviewsHtml = '';
             let itemReviews = item.reviews || [];
             if (itemReviews.length > 0) {
@@ -830,7 +871,7 @@
                             <i class="fa-solid fa-comments text-blue-600"></i>
                             <span>${t.patientReviews}</span>
                         </h4>
-                        <p class="text-xs text-gray-400 italic">Hozircha sharhlar mavjud emas.</p>
+                        <p class="text-xs text-gray-400 italic">Hozircha fikrlar mavjud emas.</p>
                     </div>
                 `;
             }
@@ -838,7 +879,7 @@
             const container = document.getElementById('detailContentContainer');
             container.innerHTML = `
                 <div class="w-full h-64 bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden mb-3 shadow-sm border border-gray-100 dark:border-gray-700 relative">
-                    <img id="mainActiveImg" src="${imgList[0]}" alt="${item.name}" class="w-full h-full object-cover transition-all duration-300">
+                    <img id="mainActiveImg" src="${imgList[0]}" alt="${item.name}" class="w-full h-full object-cover transition-all duration-300" onerror="this.src='https://via.placeholder.com/500?text=Rasm'">
                 </div>
                 <div class="mb-6">
                     <span class="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">${item.region}</span>
@@ -902,7 +943,7 @@
         function submitBooking(event) {
             event.preventDefault();
             const phone = document.getElementById('patientPhone').value;
-            const date = document.getElementById('bookingDate').value;
+            const date = document.getElementById('bookingDate5') ? document.getElementById('bookingDate5').value : document.getElementById('bookingDate').value;
             const time = document.getElementById('bookingTime').value;
             const patientName = document.getElementById('patientName').value;
 
@@ -918,7 +959,7 @@
         function toggleFavorite(id, category) {
             const mergedDb = getMergedDbData();
             const currentLangData = mergedDb[currentLang] || mergedDb['uz'];
-            let item = currentLangData[category].find(i => i.id === id);
+            let item = currentLangData[category].fiter ? null : currentLangData[category].find(i => i.id === id);
             if (!item) return;
 
             const index = favorites.findIndex(f => f.id === id);
@@ -989,7 +1030,7 @@
                 icon.className = "fa-solid fa-moon text-base";
             } else {
                 html.classList.add('dark');
-                icon.className = "fa-solid fa-sun text-base";
+                icon.className = "fa-solid fa-sun text-base`;
             }
         }
     </script>
