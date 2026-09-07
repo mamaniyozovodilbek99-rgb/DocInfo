@@ -237,7 +237,6 @@
             tg.expand();
             tg.ready();
             
-            // Telegram ranglar palitrasini avtomatik moslashtirish (agar mavjud bo'lsa)
             if (tg.colorScheme === 'dark') {
                 document.documentElement.classList.add('dark');
                 document.getElementById('themeIcon').className = "fa-solid fa-sun text-base";
@@ -250,7 +249,6 @@
                 document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
             }
 
-            // Telegram CloudStorage orqali saralanganlarni sinxronizatsiya qilish (Integratsiya)
             if (tg.CloudStorage) {
                 tg.CloudStorage.getItem('shifotop_favs', (err, value) => {
                     if (!err && value) {
@@ -265,20 +263,20 @@
             }
         }
 
-        // --- Mock Database & State ---
+        // --- Mock Database & State (With Workplace & Address for Yandex Maps) ---
         const dbData = {
             doctors: [
-                { id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", rating: 4.9, price: "150,000 so'm", phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
-                { id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatr", region: "Samarqand", experience: "8 yil", rating: 4.7, price: "100,000 so'm", phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
-                { id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurolog", region: "Buxoro", experience: "15 yil", rating: 4.8, price: "120,000 so'm", phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
+                { id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", workplace: "Respublika shoshilinch tibbiy yordam ilmiy markazi", address: "Kichik halqa yo'li 10", rating: 4.9, phone: "+998 90 123 45 67", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300" },
+                { id: 'd2', name: "Dr. Malika Umarova", specialty: "Pediatr", region: "Samarqand", experience: "8 yil", workplace: "Samarqand viloyat bolalar ko'p tarmoqli tibbiyot markazi", address: "Nodirabegim ko'chasi 15", rating: 4.7, phone: "+998 91 987 65 43", image: "https://images.unsplash.com/photo-1594824813572-230d7b003a27?auto=format&fit=crop&q=80&w=300" },
+                { id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Neurolog", region: "Buxoro", experience: "15 yil", workplace: "Buxoro viloyat shifoxonasi", address: "Ibn Sino ko'chasi 1", rating: 4.8, phone: "+998 93 456 78 90", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300" }
             ],
             clinics: [
-                { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", rating: 4.9, address: "Chilonzor tumani, 19-mavze", phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
-                { id: 'c2', name: "Samarqand Diagnostika", specialty: "Laboratoriya va UTT", region: "Samarqand", rating: 4.6, address: "Ipak Yo'li ko'chasi 45", phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
+                { id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300" },
+                { id: 'c2', name: "Samarqand Diagnostika", specialty: "Laboratoriya va UTT", region: "Samarqand", workplace: "Samarqand Diagnostika filiali", address: "Ipak Yo'li ko'chasi 45", rating: 4.6, phone: "+998 66 230 00 02", image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300" }
             ],
             pharmacies: [
-                { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", rating: 4.9, address: "Amir Temur ko'chasi 12", phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
-                { id: 'p2', name: "Darmon Farm", specialty: "Sifatli va hamyonbop dorilar", region: "Fargona", rating: 4.7, address: "Al Farg'oniy ko'chasi 8", phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
+                { id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300" },
+                { id: 'p2', name: "Darmon Farm", specialty: "Sifatli va hamyonbop dorilar", region: "Fargona", workplace: "Darmon Farm filiali", address: "Al Farg'oniy ko'chasi 8", rating: 4.7, phone: "+998 73 244 55 66", image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300" }
             ]
         };
 
@@ -300,8 +298,9 @@
                 clinicsTab: "Klinikalar",
                 pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba",
-                price: "Qabul narxi",
+                workplace: "Ish joyi",
                 address: "Manzil",
+                yandexMap: "Yandeks Xaritada ko'rish",
                 call: "Bog'lanish",
                 bookBtn: "Band qilish"
             },
@@ -316,8 +315,9 @@
                 clinicsTab: "Клиники",
                 pharmaciesTab: "Аптеки",
                 experience: "Стаж",
-                price: "Цена приема",
+                workplace: "Место работы",
                 address: "Адрес",
+                yandexMap: "Открыть в Яндекс Картах",
                 call: "Связаться",
                 bookBtn: "Забронировать"
             },
@@ -332,8 +332,9 @@
                 clinicsTab: "Clinics",
                 pharmaciesTab: "Pharmacies",
                 experience: "Experience",
-                price: "Consultation",
+                workplace: "Workplace",
                 address: "Address",
+                yandexMap: "View on Yandex Maps",
                 call: "Contact",
                 bookBtn: "Book"
             }
@@ -403,14 +404,25 @@
                 const t = translations[currentLang];
                 const isFav = favorites.some(f => f.id === item.id);
 
+                // Yandex Maps URL generator query
+                const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
+
                 if (currentTab === 'doctors') {
                     specificInfo = `
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center"><i class="fa-solid fa-briefcase mr-2 text-brand-500"></i> ${t.experience}: <span class="font-semibold ml-1 text-gray-700 dark:text-gray-300">${item.experience}</span></div>
-                        <div class="text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3 flex items-center"><i class="fa-solid fa-tag mr-2"></i> ${t.price}: <span class="ml-1">${item.price}</span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-hospital-user mr-2 text-brand-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
+                            <i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> 
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-brand-600 dark:text-brand-400 underline font-medium hover:text-brand-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                        </div>
                     `;
                 } else {
                     specificInfo = `
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start"><i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> <span>${t.address}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.address}</strong></span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-building mr-2 text-brand-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
+                            <i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> 
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-brand-600 dark:text-brand-400 underline font-medium hover:text-brand-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                        </div>
                     `;
                 }
 
@@ -464,7 +476,7 @@
             let list = dbData[currentTab] || [];
 
             const filtered = list.filter(item => {
-                const matchesQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query);
+                const matchesQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query) || item.workplace.toLowerCase().includes(query);
                 const matchesRegion = region === "" || item.region === region;
                 return matchesQuery && matchesRegion;
             });
@@ -480,7 +492,6 @@
             document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
             document.getElementById('bookingModal').classList.remove('hidden');
 
-            // Telegram MainButton integratsiyasi
             if (tg && tg.MainButton) {
                 tg.MainButton.text = "BAND QILISHNI TASDIQLASH";
                 tg.MainButton.show();
@@ -521,7 +532,6 @@
                 date: date
             };
 
-            // Agar Telegram ichida ochilgan bo'lsa, ma'lumotni botga yuborish yoki yopish
             if (tg) {
                 tg.sendData(JSON.stringify(bookingDetails));
             } else {
@@ -545,7 +555,6 @@
             
             localStorage.setItem('shifotop_favs', JSON.stringify(favorites));
             
-            // Telegram CloudStorage ga ham saqlash
             if (tg && tg.CloudStorage) {
                 tg.CloudStorage.setItem('shifotop_favs', JSON.stringify(favorites));
             }
