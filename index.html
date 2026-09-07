@@ -36,11 +36,19 @@
         .animate-scale {
             animation: scaleIn 0.2s ease-out forwards;
         }
+        /* Captcha fon dizayni uchun chiziqlar va shovqin effektlari */
+        .captcha-bg {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+            user-select: none;
+            letter-spacing: 6px;
+            font-family: monospace;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish & SMS Tasdiqlash) -->
+    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish, SMS va Captcha) -->
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
@@ -51,7 +59,7 @@
                 <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun telefon raqam yoki elektron pochta orqali ro'yxatdan o'ting</p>
             </div>
 
-            <!-- 1-Qadam: Ma'lumot kiritish -->
+            <!-- 1-Qadam: Ma'lumot kiritish va Captcha -->
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
                     <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
@@ -61,8 +69,23 @@
                     <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam yoki elektron pochta</label>
                     <input type="text" id="authContact" required placeholder="+998 90 123 45 67 yoki example@gmail.com" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
                 </div>
+
+                <!-- Harfli/Raqamli Captcha bloki -->
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
+                    <div class="flex items-center space-x-3 mb-2">
+                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-brand-700 dark:text-brand-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic">
+                            <!-- JS orqali generatsiya qilinadi -->
+                        </div>
+                        <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Kodni yangilash">
+                            <i class="fa-solid fa-rotate-right text-sm"></i>
+                        </button>
+                    </div>
+                    <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white uppercase tracking-wider">
+                </div>
+
                 <button type="submit" id="submitAuthBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
-                    Kod olish
+                    SMS kod olish
                 </button>
             </form>
 
@@ -80,7 +103,7 @@
                     Tasdiqlash va kirish
                 </button>
                 <button type="button" onclick="backToAuthForm()" class="w-full text-xs text-gray-500 hover:text-brand-600 dark:hover:text-brand-400 py-1 transition">
-                    Raqamni o'zgartirish
+                    Raqamni yoki ma'lumotlarni o'zgartirish
                 </button>
             </form>
         </div>
@@ -280,6 +303,7 @@
         let tg = window.Telegram?.WebApp;
         let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null, telegramId: null };
         let tempAuthData = { name: '', contact: '' };
+        let currentCaptchaCode = '';
 
         if (tg) {
             tg.expand();
@@ -316,6 +340,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             if (!userProfile.contact) {
                 document.getElementById('authModal').classList.remove('hidden');
+                generateCaptcha();
             } else {
                 document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name || 'Mehmon'}!`;
                 document.getElementById('authModal').classList.add('hidden');
@@ -323,6 +348,20 @@
             updateFavCount();
             switchTab('doctors');
         });
+
+        // --- Captcha Generator ---
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            currentCaptchaCode = code;
+            
+            // Vizual ko'rinishni biroz buzibroq/chiroyli qilib joylash
+            const box = document.getElementById('captchaBox');
+            box.innerText = code.split('').join(' ');
+        }
 
         // --- Multi-language Mock Database ---
         const dbData = {
@@ -408,10 +447,10 @@
                 favoritesModalTitle: "Saralanganlar",
                 emptyFavorites: "Saralanganlar bo'sh.",
                 authTitle: "ShifoTop'ga xush kelibsiz",
-                authSubtitle: "Davom etish uchun telefon raqam yoki elektron pochta kiriting",
+                authSubtitle: "Davom etish uchun telefon raqam va rasmdagi kodni kiriting",
                 labelAuthName: "Ism va familiyangiz",
                 labelAuthContact: "Telefon raqam yoki elektron pochta",
-                submitAuthBtn: "Kod olish",
+                submitAuthBtn: "SMS kod olish",
                 labelSmsCode: "SMS kodni kiriting",
                 submitSmsBtn: "Tasdiqlash va kirish",
                 footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
@@ -444,10 +483,10 @@
                 favoritesModalTitle: "Избранное",
                 emptyFavorites: "Список избранного пуст.",
                 authTitle: "Добро пожаловать в ShifoTop",
-                authSubtitle: "Введите номер телефона или email для продолжения",
+                authSubtitle: "Введите номер телефона и код с картинки для продолжения",
                 labelAuthName: "Ваше имя и фамилия",
                 labelAuthContact: "Номер телефона или email",
-                submitAuthBtn: "Получить код",
+                submitAuthBtn: "Получить SMS-код",
                 labelSmsCode: "Введите SMS-код",
                 submitSmsBtn: "Подтвердить и войти",
                 footerRights: "&copy; 2026 ShifoTop. Все права защищены."
@@ -480,29 +519,39 @@
                 favoritesModalTitle: "Favorites",
                 emptyFavorites: "Favorites list is empty.",
                 authTitle: "Welcome to ShifoTop",
-                authSubtitle: "Enter your phone number or email to continue",
+                authSubtitle: "Enter your phone number and image code to continue",
                 labelAuthName: "Your Full Name",
                 labelAuthContact: "Phone number or email",
-                submitAuthBtn: "Get Code",
+                submitAuthBtn: "Get SMS Code",
                 labelSmsCode: "Enter SMS Code",
                 submitSmsBtn: "Verify & Sign In",
                 footerRights: "&copy; 2026 ShifoTop. All rights reserved."
             }
         };
 
-        // --- Authentication & SMS Flow ---
+        // --- Authentication & Captcha/SMS Flow ---
         function handleAuthSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('authName').value.trim();
             const contact = document.getElementById('authContact').value.trim();
+            const userInputCaptcha = document.getElementById('captchaInput').value.trim().toUpperCase();
+
+            // Captcha tekshiruvi
+            if (userInputCaptcha !== currentCaptchaCode) {
+                alert("Xato! Rasmdagi kod noto'g'ri kiritildi. Iltimos, qaytadan urinib ko'ring.");
+                generateCaptcha();
+                document.getElementById('captchaInput').value = '';
+                document.getElementById('captchaInput').focus();
+                return;
+            }
 
             if (name && contact) {
                 tempAuthData = { name, contact };
-                // 1-bosqichdan keyin SMS kod kiritish oynasiga o'tish
+                // Captcha to'g'ri bo'lsa, SMS kod kiritish oynasiga o'tish
                 document.getElementById('authForm').classList.add('hidden');
                 document.getElementById('smsForm').classList.remove('hidden');
                 document.getElementById('sentContactDisplay').innerText = contact;
-                document.getElementById('smsCodeInput').value = '7777'; // Qulaylik uchun avto to'ldirish
+                document.getElementById('smsCodeInput').value = '7777'; // Qulaylik uchun demo kod
                 document.getElementById('smsCodeInput').focus();
             }
         }
@@ -510,6 +559,8 @@
         function backToAuthForm() {
             document.getElementById('smsForm').classList.add('hidden');
             document.getElementById('authForm').classList.remove('hidden');
+            generateCaptcha();
+            document.getElementById('captchaInput').value = '';
         }
 
         function handleSmsSubmit(event) {
@@ -546,13 +597,15 @@
             // Menuni yopish
             document.getElementById('menuDropdown').classList.add('hidden');
 
-            // Formani tozalab, yana kirish oynasini chiqarish
+            // Formani tozalab, yana kirish oynasini va yangi captcha chiqarish
             document.getElementById('authName').value = '';
             document.getElementById('authContact').value = '';
+            document.getElementById('captchaInput').value = '';
             document.getElementById('smsCodeInput').value = '';
             document.getElementById('smsForm').classList.add('hidden');
             document.getElementById('authForm').classList.remove('hidden');
             document.getElementById('authModal').classList.remove('hidden');
+            generateCaptcha();
         }
 
         // --- Dropdown Menu Control ---
