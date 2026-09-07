@@ -36,7 +36,6 @@
         .animate-scale {
             animation: scaleIn 0.2s ease-out forwards;
         }
-        /* Captcha fon dizayni uchun chiziqlar va shovqin effektlari */
         .captcha-bg {
             background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
             user-select: none;
@@ -48,8 +47,8 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- Authentication Modal (Faqat UZB raqam va Captcha tekshiruvi) -->
-    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <!-- Authentication Modal -->
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
                 <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
@@ -59,7 +58,6 @@
                 <p id="authSubtitle" class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
             </div>
 
-            <!-- Ro'yxatdan o'tish Formasi -->
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
                     <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
@@ -71,13 +69,10 @@
                     <p class="text-[10px] text-gray-400 mt-1">Faqat O'zbekiston raqamlari (+998) qabul qilinadi.</p>
                 </div>
 
-                <!-- Harfli/Raqamli Captcha bloki -->
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
                     <div class="flex items-center space-x-3 mb-2">
-                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-brand-700 dark:text-brand-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic">
-                            <!-- JS orqali generatsiya qilinadi -->
-                        </div>
+                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-brand-700 dark:text-brand-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic"></div>
                         <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Kodni yangilash">
                             <i class="fa-solid fa-rotate-right text-sm"></i>
                         </button>
@@ -95,8 +90,6 @@
     <!-- Header / Navbar -->
     <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 border-b border-gray-100 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            
-            <!-- Logo & Brand Dropdown Trigger -->
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
                     <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md flex items-center justify-center group-hover:bg-brand-700 transition">
@@ -111,7 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Dropdown Menu Box -->
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale">
                     <div id="menuHeaderTitle" class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
@@ -131,7 +123,6 @@
                         </button>
                     </div>
 
-                    <!-- Profildan chiqish tugmasi menu qatorining eng pastida -->
                     <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
                         <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
@@ -141,22 +132,18 @@
                 </div>
             </div>
 
-            <!-- Controls (Favorites, Lang & DarkMode) -->
             <div class="flex items-center space-x-3">
-                <!-- Favorites Counter Button -->
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
 
-                <!-- Language Selector -->
                 <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-100 dark:bg-gray-700 text-xs sm:text-sm font-medium rounded-xl px-2.5 py-2 focus:outline-none border-0 text-gray-700 dark:text-gray-200 cursor-pointer">
                     <option value="uz">O'zbekcha</option>
                     <option value="ru">Русский</option>
                     <option value="en">English</option>
                 </select>
 
-                <!-- Theme Toggle -->
                 <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Rejimni o'zgartirish">
                     <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
                 </button>
@@ -166,8 +153,6 @@
 
     <!-- Main Content Container -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-
-        <!-- Hero Search Section -->
         <div class="bg-gradient-to-r from-brand-600 via-indigo-600 to-indigo-800 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
                 <i class="fa-solid fa-stethoscope"></i>
@@ -177,7 +162,6 @@
                 <p id="heroSubtitle" class="text-indigo-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
             </div>
             
-            <!-- Search Bar & Filters -->
             <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10">
                 <div class="flex items-center px-3 flex-grow bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2 sm:py-0">
                     <i class="fa-solid fa-search text-gray-400 mr-3"></i>
@@ -195,23 +179,20 @@
             </div>
         </div>
 
-        <!-- Active Section Indicator Title -->
         <div class="flex items-center justify-between px-2">
             <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
                 <i class="fa-solid fa-user-doctor text-brand-600"></i>
                 <span>Shifokorlar</span>
             </h2>
-            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-full"></span>
+            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-full">0 ta natija</span>
         </div>
 
-        <!-- Dynamic Content Grid -->
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Cards will be dynamically injected here via JS -->
         </div>
-
     </main>
 
-    <!-- Booking Modal (Qabulga yozilish) -->
+    <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
             <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
@@ -267,9 +248,7 @@
                     <i class="fa-solid fa-xmark text-sm"></i>
                 </button>
             </div>
-            <div id="favoritesList" class="overflow-y-auto space-y-3 flex-grow pr-1">
-                <!-- Fav items populated here -->
-            </div>
+            <div id="favoritesList" class="overflow-y-auto space-y-3 flex-grow pr-1"></div>
         </div>
     </div>
 
@@ -280,45 +259,21 @@
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic & Telegram Mini App Integration -->
+    <!-- JavaScript Application Logic -->
     <script>
-        // --- Telegram WebApp & Data Integration ---
         let tg = window.Telegram?.WebApp;
-        let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null, telegramId: null };
+        let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null };
         let currentCaptchaCode = '';
 
         if (tg) {
             tg.expand();
             tg.ready();
-            
             if (tg.colorScheme === 'dark') {
                 document.documentElement.classList.add('dark');
                 document.getElementById('themeIcon').className = "fa-solid fa-sun text-base";
             }
-
-            if (tg.initDataUnsafe?.user && !userProfile.contact) {
-                const user = tg.initDataUnsafe.user;
-                userProfile.name = user.first_name || 'Mehmon';
-                userProfile.telegramId = user.id;
-                userProfile.contact = `Telegram ID: ${user.id}`;
-                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
-            }
-
-            if (tg.CloudStorage) {
-                tg.CloudStorage.getItem('shifotop_favs', (err, value) => {
-                    if (!err && value) {
-                        try {
-                            favorites = JSON.parse(value);
-                            updateFavCount();
-                        } catch (e) {
-                            console.error("Cloud storage parse error", e);
-                        }
-                    }
-                });
-            }
         }
 
-        // Check authentication status on startup
         window.addEventListener('DOMContentLoaded', () => {
             if (!userProfile.contact) {
                 document.getElementById('authModal').classList.remove('hidden');
@@ -331,7 +286,6 @@
             switchTab('doctors');
         });
 
-        // --- Captcha Generator ---
         function generateCaptcha() {
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
             let code = '';
@@ -339,21 +293,15 @@
                 code += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             currentCaptchaCode = code;
-            
             const box = document.getElementById('captchaBox');
-            box.innerText = code.split('').join(' ');
+            if (box) box.innerText = code.split('').join(' ');
         }
 
-        // --- Uzbek Phone Number Validation (+998 and 9 digits) ---
         function validateUzbekPhone(phone) {
-            // Remove spaces, dashes, brackets to check pure string numbers
             const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-            // Regular expression for Uzbek phone: must start with +998 followed by exactly 9 digits
-            const uzbPhoneRegex = /^\+998\d{9}$/;
-            return uzbPhoneRegex.test(cleaned);
+            return /^\+998\d{9}$/.test(cleaned);
         }
 
-        // --- Multi-language Mock Database ---
         const dbData = {
             uz: {
                 doctors: [
@@ -407,23 +355,14 @@
         let favorites = JSON.parse(localStorage.getItem('shifotop_favs')) || [];
         let selectedItemForBooking = null;
 
-        // --- Translations Dictionary ---
         const translations = {
             uz: {
-                brandTitle: "ShifoTop",
-                userWelcome: "Tibbiyot Portali",
-                heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
-                heroSubtitle: "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.",
-                searchPlaceholder: "Shifokor, klinika yoki xizmatni qidirish...",
-                allRegions: "Barcha hududlar",
                 doctorsTab: "Shifokorlar",
                 clinicsTab: "Klinikalar",
                 pharmaciesTab: "Med-magazinlar",
                 experience: "Tajriba",
                 workplace: "Ish joyi",
                 address: "Manzil",
-                yandexMap: "Yandeks Xaritada ko'rish",
-                call: "Bog'lanish",
                 bookBtn: "Band qilish",
                 sectionsTitle: "Bo'limlar",
                 logoutMenuText: "Profildan chiqish",
@@ -444,20 +383,12 @@
                 footerRights: "&copy; 2026 ShifoTop. Barcha huquqlar himoyalangan."
             },
             ru: {
-                brandTitle: "ShifoTop",
-                userWelcome: "Медицинский портал",
-                heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
-                heroSubtitle: "Квалифицированные специалисты, современные клиники и аптеки в одном месте.",
-                searchPlaceholder: "Поиск врача, клиники или услуги...",
-                allRegions: "Все регионы",
                 doctorsTab: "Врачи",
                 clinicsTab: "Клиники",
                 pharmaciesTab: "Аптеки",
                 experience: "Стаж",
                 workplace: "Место работы",
                 address: "Адрес",
-                yandexMap: "Открыть в Яндекс Картах",
-                call: "Связаться",
                 bookBtn: "Забронировать",
                 sectionsTitle: "Разделы",
                 logoutMenuText: "Выйти из профиля",
@@ -478,20 +409,12 @@
                 footerRights: "&copy; 2026 ShifoTop. Все права защищены."
             },
             en: {
-                brandTitle: "ShifoTop",
-                userWelcome: "Medical Portal",
-                heroTitle: "Find the best doctors and clinics in Uzbekistan",
-                heroSubtitle: "Qualified specialists, modern clinics and pharmacies all in one place.",
-                searchPlaceholder: "Search doctor, clinic or service...",
-                allRegions: "All regions",
                 doctorsTab: "Doctors",
                 clinicsTab: "Clinics",
                 pharmaciesTab: "Pharmacies",
                 experience: "Experience",
                 workplace: "Workplace",
                 address: "Address",
-                yandexMap: "View on Yandex Maps",
-                call: "Contact",
                 bookBtn: "Book",
                 sectionsTitle: "Sections",
                 logoutMenuText: "Sign Out",
@@ -513,52 +436,37 @@
             }
         };
 
-        // --- Authentication & Strict Uzbek Phone + Captcha Flow ---
         function handleAuthSubmit(event) {
             event.preventDefault();
             const name = document.getElementById('authName').value.trim();
             const contact = document.getElementById('authContact').value.trim();
             const userInputCaptcha = document.getElementById('captchaInput').value.trim().toUpperCase();
 
-            // 1. Validate Uzbek Phone Number strictly (+998 format, 9 digits following)
             if (!validateUzbekPhone(contact)) {
-                alert("Xato! Faqat to'g'ri O'zbekiston telefon raqami (+998 bilan boshlanadigan va 9 ta raqamdan iborat) kiritilishi shart. Qisqa yoki boshqa davlat raqamlari qabul qilinmaydi.");
+                alert("Xato! Faqat to'g'ri O'zbekiston telefon raqami (+998 bilan boshlanadigan va 9 ta raqamdan iborat) kiritilishi shart.");
                 document.getElementById('authContact').focus();
                 return;
             }
 
-            // 2. Validate Captcha
             if (userInputCaptcha !== currentCaptchaCode) {
-                alert("Xato! Rasmdagi kod (Captcha) noto'g'ri kiritildi. Iltimos, qaytadan urinib ko'ring.");
+                alert("Xato! Rasmdagi kod (Captcha) noto'g'ri kiritildi.");
                 generateCaptcha();
                 document.getElementById('captchaInput').value = '';
                 document.getElementById('captchaInput').focus();
                 return;
             }
 
-            // Success Registration / Login
-            userProfile = {
-                name: name,
-                contact: contact,
-                telegramId: null
-            };
+            userProfile = { name: name, contact: contact };
             localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
 
             document.getElementById('userWelcome').innerText = `Salom, ${userProfile.name}!`;
             document.getElementById('authModal').classList.add('hidden');
-
-            // Pre-fill booking inputs if necessary
-            document.getElementById('patientName').value = userProfile.name;
-            document.getElementById('patientPhone').value = userProfile.contact;
         }
 
-        // --- Profildan chiqish funksiyasi ---
         function logoutProfile() {
             localStorage.removeItem('shifotop_user');
-            userProfile = { name: null, contact: null, telegramId: null };
-            
+            userProfile = { name: null, contact: null };
             document.getElementById('menuDropdown').classList.add('hidden');
-
             document.getElementById('authName').value = '';
             document.getElementById('authContact').value = '';
             document.getElementById('captchaInput').value = '';
@@ -566,11 +474,9 @@
             generateCaptcha();
         }
 
-        // --- Dropdown Menu Control ---
         function toggleMenuDropdown(event) {
             event.stopPropagation();
-            const dropdown = document.getElementById('menuDropdown');
-            dropdown.classList.toggle('hidden');
+            document.getElementById('menuDropdown').classList.toggle('hidden');
         }
 
         function closeAllDropdowns(event) {
@@ -580,17 +486,16 @@
             }
         }
 
-        // --- Tab Management ---
         function switchTab(tabName) {
             currentTab = tabName;
-            
-            const items = ['doctors', 'clinics', 'pharmacies'];
-            items.forEach(item => {
+            ['doctors', 'clinics', 'pharmacies'].forEach(item => {
                 const btn = document.getElementById(`menuItem-${item}`);
-                if (item === tabName) {
-                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3";
-                } else {
-                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
+                if (btn) {
+                    if (item === tabName) {
+                        btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3";
+                    } else {
+                        btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
+                    }
                 }
             });
 
@@ -606,16 +511,20 @@
                 iconClass = "fa-solid fa-pills";
                 labelText = t.pharmaciesTab;
             }
-            titleEl.innerHTML = `<i class="${iconClass} text-brand-600"></i><span>${labelText}</span>`;
+            if (titleEl) {
+                titleEl.innerHTML = `<i class="${iconClass} text-brand-600"></i><span>${labelText}</span>`;
+            }
 
             filterData();
         }
 
-        // --- Render Content Cards ---
         function renderContent(data) {
             const grid = document.getElementById('contentGrid');
+            if (!grid) return;
             grid.innerHTML = '';
-            document.getElementById('resultCountBadge').innerText = `${data.length} ta natija`;
+            
+            const badge = document.getElementById('resultCountBadge');
+            if (badge) badge.innerText = `${data.length} ta natija`;
 
             if (data.length === 0) {
                 grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-400 bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700"><i class="fa-solid fa-folder-open text-4xl mb-3 opacity-40"></i><p class="text-sm font-medium">Hech qanday ma'lumot topilmadi.</p></div>`;
@@ -691,12 +600,15 @@
             });
         }
 
-        // --- Filter Function ---
         function filterData() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const region = document.getElementById('regionFilter').value;
+            const searchInput = document.getElementById('searchInput');
+            const regionFilter = document.getElementById('regionFilter');
+            
+            const query = searchInput ? searchInput.value.toLowerCase() : '';
+            const region = regionFilter ? regionFilter.value : '';
 
-            let list = dbData[currentLang][currentTab] || [];
+            const currentLangData = dbData[currentLang] || dbData['uz'];
+            let list = currentLangData[currentTab] || [];
 
             const filtered = list.filter(item => {
                 const matchesQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query) || item.workplace.toLowerCase().includes(query);
@@ -707,46 +619,22 @@
             renderContent(filtered);
         }
 
-        // --- Booking Management ---
         function openBookingModal(id, category) {
-            selectedItemForBooking = dbData[currentLang][category].find(i => i.id === id);
+            const currentLangData = dbData[currentLang] || dbData['uz'];
+            selectedItemForBooking = currentLangData[category].find(i => i.id === id);
             if (!selectedItemForBooking) return;
 
             document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
             document.getElementById('bookingModal').classList.remove('hidden');
 
-            if (userProfile.name) {
-                document.getElementById('patientName').value = userProfile.name;
-            }
-            if (userProfile.contact) {
-                document.getElementById('patientPhone').value = userProfile.contact;
-            }
-
-            if (tg && tg.MainButton) {
-                tg.MainButton.text = translations[currentLang].submitBookingBtn.toUpperCase();
-                tg.MainButton.show();
-                tg.MainButton.onClick(handleTelegramMainButtonBooking);
-            }
+            if (userProfile.name) document.getElementById('patientName').value = userProfile.name;
+            if (userProfile.contact) document.getElementById('patientPhone').value = userProfile.contact;
         }
 
         function closeBookingModal() {
             document.getElementById('bookingModal').classList.add('hidden');
             document.getElementById('bookingForm').reset();
             selectedItemForBooking = null;
-
-            if (tg && tg.MainButton) {
-                tg.MainButton.hide();
-                tg.MainButton.offClick(handleTelegramMainButtonBooking);
-            }
-        }
-
-        function handleTelegramMainButtonBooking() {
-            const form = document.getElementById('bookingForm');
-            if (form.checkValidity()) {
-                submitBooking(new Event('submit'));
-            } else {
-                form.reportValidity();
-            }
         }
 
         function submitBooking(event) {
@@ -755,31 +643,18 @@
             const phone = document.getElementById('patientPhone').value;
             const date = document.getElementById('bookingDate').value;
 
-            // Optional check for patient phone too
             if (!validateUzbekPhone(phone)) {
                 alert("Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting (+998...)");
                 return;
             }
 
-            const bookingDetails = {
-                item: selectedItemForBooking ? selectedItemForBooking.name : 'Nomaʼlum',
-                patientName: name,
-                patientPhone: phone,
-                date: date
-            };
-
-            if (tg) {
-                tg.sendData(JSON.stringify(bookingDetails));
-            } else {
-                alert(`Qabulingiz muvaffaqiyatli band qilindi!\nMutaxassis: ${bookingDetails.item}\nSana: ${date}`);
-            }
-
+            alert(`Qabulingiz muvaffaqiyatli band qilindi!\nMutaxassis: ${selectedItemForBooking ? selectedItemForBooking.name : ''}\nSana: ${date}`);
             closeBookingModal();
         }
 
-        // --- Favorites Logic ---
         function toggleFavorite(id, category) {
-            let item = dbData[currentLang][category].find(i => i.id === id);
+            const currentLangData = dbData[currentLang] || dbData['uz'];
+            let item = currentLangData[category].find(i => i.id === id);
             if (!item) return;
 
             const index = favorites.findIndex(f => f.id === id);
@@ -790,17 +665,13 @@
             }
             
             localStorage.setItem('shifotop_favs', JSON.stringify(favorites));
-            
-            if (tg && tg.CloudStorage) {
-                tg.CloudStorage.setItem('shifotop_favs', JSON.stringify(favorites));
-            }
-
             updateFavCount();
             filterData();
         }
 
         function updateFavCount() {
-            document.getElementById('favCount').innerText = favorites.length;
+            const favCount = document.getElementById('favCount');
+            if (favCount) favCount.innerText = favorites.length;
         }
 
         function openFavoritesModal() {
@@ -836,11 +707,9 @@
             document.getElementById('favoritesModal').classList.add('hidden');
         }
 
-        // --- QR Code Modal Logic ---
         function showQrCode(name) {
             document.getElementById('qrItemName').innerText = name;
-            const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(name + ' - ShifoTop Portal')}`;
-            document.getElementById('qrImage').src = qrApi;
+            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(name + ' - ShifoTop Portal')}`;
             document.getElementById('qrModal').classList.remove('hidden');
         }
 
@@ -848,43 +717,23 @@
             document.getElementById('qrModal').classList.add('hidden');
         }
 
-        // --- Language Switcher ---
         function changeLanguage(lang) {
             currentLang = lang;
             const t = translations[lang];
 
-            document.getElementById('heroTitle').innerText = t.heroTitle;
-            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
-            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-            document.getElementById('optAllRegions').innerText = t.allRegions;
-            
-            document.querySelector('#menuItem-doctors span').innerText = t.doctorsTab;
-            document.querySelector('#menuItem-clinics span').innerText = t.clinicsTab;
-            document.querySelector('#menuItem-pharmacies span').innerText = t.pharmaciesTab;
-            document.getElementById('menuHeaderTitle').innerText = t.sectionsTitle;
             document.getElementById('logoutMenuText').innerText = t.logoutMenuText;
-
             document.getElementById('modalBookingTitle').innerText = t.modalBookingTitle;
             document.getElementById('labelPatientName').innerText = t.labelPatientName;
             document.getElementById('labelPatientPhone').innerText = t.labelPatientPhone;
             document.getElementById('labelBookingDate').innerText = t.labelBookingDate;
             document.getElementById('submitBookingBtn').innerText = t.submitBookingBtn;
-
             document.getElementById('qrModalTitle').innerText = t.qrModalTitle;
             document.getElementById('qrModalDesc').innerText = t.qrModalDesc;
-            document.getElementById('favoritesModalTitle').innerHTML = `<i class="fa-solid fa-heart text-red-500"></i><span>${t.favoritesModalTitle}</span>`;
-
-            document.getElementById('authTitle').innerText = t.authTitle;
-            document.getElementById('authSubtitle').innerText = t.authSubtitle;
-            document.getElementById('labelAuthName').innerText = t.labelAuthName;
-            document.getElementById('labelAuthContact').innerText = t.labelAuthContact;
-            document.getElementById('submitAuthBtn').innerText = t.submitAuthBtn;
             document.getElementById('footerRights').innerHTML = t.footerRights;
 
             switchTab(currentTab);
         }
 
-        // --- Dark Mode Toggle ---
         function toggleDarkMode() {
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
