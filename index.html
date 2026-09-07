@@ -51,7 +51,7 @@
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
+                <div class="w-16 h-16 bg-amber-50 dark:bg-amber-900/40 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
                     <i class="fa-solid fa-stethoscope"></i>
                 </div>
                 <h2 id="authTitle" class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">Shifo<span style="color: #d97706;">Top</span>'ga xush kelibsiz</h2>
@@ -61,26 +61,26 @@
             <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
                 <div>
                     <label id="labelAuthName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
-                    <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 dark:text-white">
                 </div>
                 <div>
                     <label id="labelAuthContact" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam (+998...)</label>
-                    <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 dark:text-white">
                     <p class="text-[10px] text-gray-400 mt-1">Faqat O'zbekiston raqamlari (+998) qabul qilinadi.</p>
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
                     <div class="flex items-center space-x-3 mb-2">
-                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-brand-700 dark:text-brand-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic"></div>
+                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-amber-700 dark:text-amber-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic"></div>
                         <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Kodni yangilash">
                             <i class="fa-solid fa-rotate-right text-sm"></i>
                         </button>
                     </div>
-                    <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500 dark:text-white uppercase tracking-wider">
+                    <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 dark:text-white uppercase tracking-wider">
                 </div>
 
-                <button type="submit" id="submitAuthBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-brand-600/20 mt-2">
+                <button type="submit" id="submitAuthBtn" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-600/20 mt-2">
                     Kirish va Tasdiqlash
                 </button>
             </form>
@@ -92,15 +92,15 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
-                    <div class="bg-brand-600 text-white p-2 rounded-xl shadow-md flex items-center justify-center group-hover:bg-brand-700 transition">
-                        <i class="fa-solid fa-bars text-lg"></i>
+                    <div class="bg-gradient-to-br from-amber-400 to-amber-600 text-white p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition">
+                        <i class="fa-solid fa-crown text-sm"></i>
                     </div>
                     <div>
                         <div class="flex items-center space-x-0.5">
-                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-brand-600 dark:text-brand-400">Shifo<span style="color: #d97706;">Top</span></span>
-                            <i class="fa-solid fa-chevron-down text-xs text-gray-400"></i>
+                            <span id="brandTitle" class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white">Shifo<span style="color: #d97706;">Top</span></span>
+                            <i class="fa-solid fa-chevron-down text-xs text-amber-500"></i>
                         </div>
-                        <span class="block text-[11px] text-gray-400 font-medium" id="userWelcome">Tibbiyot Portali</span>
+                        <span class="block text-[11px] text-amber-600 dark:text-amber-400 font-semibold tracking-wide" id="userWelcome">Tibbiyot Portali</span>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-1">
-                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3">
+                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center space-x-3">
                             <i class="fa-solid fa-user-doctor w-5"></i>
                             <span data-translate="doctorsTab">Shifokorlar</span>
                         </button>
@@ -153,18 +153,18 @@
 
     <!-- Main Content Container -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <div class="bg-gradient-to-r from-brand-600 via-indigo-600 to-indigo-800 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+        <div class="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
                 <i class="fa-solid fa-stethoscope"></i>
             </div>
             <div class="relative z-10 max-w-2xl">
                 <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
-                <p id="heroSubtitle" class="text-indigo-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
+                <p id="heroSubtitle" class="text-amber-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
             </div>
             
-            <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10">
+            <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10 border border-amber-200/50 dark:border-gray-700">
                 <div class="flex items-center px-3 flex-grow bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2 sm:py-0">
-                    <i class="fa-solid fa-search text-gray-400 mr-3"></i>
+                    <i class="fa-solid fa-search text-amber-500 mr-3"></i>
                     <input type="text" id="searchInput" oninput="filterData()" placeholder="Shifokor, klinika yoki xizmatni qidirish..." class="w-full bg-transparent border-0 focus:outline-none text-gray-800 dark:text-gray-100 text-sm placeholder-gray-400">
                 </div>
                 <div class="flex gap-2">
@@ -181,10 +181,10 @@
 
         <div class="flex items-center justify-between px-2">
             <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
-                <i class="fa-solid fa-user-doctor text-brand-600"></i>
+                <i class="fa-solid fa-user-doctor text-amber-500"></i>
                 <span>Shifokorlar</span>
             </h2>
-            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 rounded-full">0 ta natija</span>
+            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-full">0 ta natija</span>
         </div>
 
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -199,22 +199,22 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 id="modalBookingTitle" class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
-            <p id="bookingItemName" class="text-xs text-brand-600 dark:text-brand-400 font-semibold mb-4"></p>
+            <p id="bookingItemName" class="text-xs text-amber-600 dark:text-amber-400 font-semibold mb-4"></p>
             
             <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-4">
                 <div>
                     <label id="labelPatientName" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz</label>
-                    <input type="text" id="patientName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="text" id="patientName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 dark:text-white">
                 </div>
                 <div>
                     <label id="labelPatientPhone" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz (+998...)</label>
-                    <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 dark:text-white">
                 </div>
                 <div>
                     <label id="labelBookingDate" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Qabul kuni</label>
-                    <input type="date" id="bookingDate" required class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-500 dark:text-white">
+                    <input type="date" id="bookingDate" required class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-amber-500 dark:text-white">
                 </div>
-                <button type="submit" id="submitBookingBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-brand-600/20">
+                <button type="submit" id="submitBookingBtn" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-amber-600/20">
                     Band qilish
                 </button>
             </form>
@@ -232,7 +232,7 @@
             <div class="bg-gray-50 dark:bg-gray-900 p-4 rounded-2xl inline-block border border-gray-200 dark:border-gray-700 shadow-inner mb-4">
                 <img id="qrImage" src="" alt="QR Code" class="w-48 h-48 mx-auto rounded-lg">
             </div>
-            <div id="qrItemName" class="font-bold text-sm text-brand-600 dark:text-brand-400"></div>
+            <div id="qrItemName" class="font-bold text-sm text-amber-600 dark:text-amber-400"></div>
         </div>
     </div>
 
@@ -492,7 +492,7 @@
                 const btn = document.getElementById(`menuItem-${item}`);
                 if (btn) {
                     if (item === tabName) {
-                        btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center space-x-3";
+                        btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 flex items-center space-x-3";
                     } else {
                         btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
                     }
@@ -512,7 +512,7 @@
                 labelText = t.pharmaciesTab;
             }
             if (titleEl) {
-                titleEl.innerHTML = `<i class="${iconClass} text-brand-600"></i><span>${labelText}</span>`;
+                titleEl.innerHTML = `<i class="${iconClass} text-amber-500"></i><span>${labelText}</span>`;
             }
 
             filterData();
@@ -533,7 +533,7 @@
 
             data.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col justify-between group";
+                card.className = "bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-amber-200 dark:hover:border-amber-700/50 transition-all duration-300 flex flex-col justify-between group";
 
                 let specificInfo = '';
                 const t = translations[currentLang];
@@ -542,19 +542,19 @@
 
                 if (currentTab === 'doctors') {
                     specificInfo = `
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center"><i class="fa-solid fa-briefcase mr-2 text-brand-500"></i> ${t.experience}: <span class="font-semibold ml-1 text-gray-700 dark:text-gray-300">${item.experience}</span></div>
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-hospital-user mr-2 text-brand-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center"><i class="fa-solid fa-briefcase mr-2 text-amber-500"></i> ${t.experience}: <span class="font-semibold ml-1 text-gray-700 dark:text-gray-300">${item.experience}</span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-hospital-user mr-2 text-amber-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
-                            <i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> 
-                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-brand-600 dark:text-brand-400 underline font-medium hover:text-brand-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                            <i class="fa-solid fa-location-dot mr-2 text-amber-500 mt-0.5"></i> 
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-amber-600 dark:text-amber-400 underline font-medium hover:text-amber-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
                         </div>
                     `;
                 } else {
                     specificInfo = `
-                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-building mr-2 text-brand-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-start"><i class="fa-solid fa-building mr-2 text-amber-500 mt-0.5"></i> <span>${t.workplace}: <strong class="text-gray-700 dark:text-gray-300 font-normal">${item.workplace}</strong></span></div>
                         <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
-                            <i class="fa-solid fa-location-dot mr-2 text-brand-500 mt-0.5"></i> 
-                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-brand-600 dark:text-brand-400 underline font-medium hover:text-brand-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
+                            <i class="fa-solid fa-location-dot mr-2 text-amber-500 mt-0.5"></i> 
+                            <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" class="text-amber-600 dark:text-amber-400 underline font-medium hover:text-amber-700">${item.address} <i class="fa-solid fa-external-link-alt text-[10px]"></i></a></span>
                         </div>
                     `;
                 }
@@ -567,7 +567,7 @@
                             <span class="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-xs font-bold px-3 py-1 rounded-full text-amber-500 shadow flex items-center">
                                 <i class="fa-solid fa-star mr-1"></i>${item.rating}
                             </span>
-                            <span class="absolute top-3 left-3 bg-brand-600/90 backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full shadow">
+                            <span class="absolute top-3 left-3 bg-amber-500/90 backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full shadow">
                                 ${item.region}
                             </span>
                             <div class="absolute bottom-3 right-3 flex space-x-2">
@@ -581,16 +581,16 @@
                         </div>
                         <div class="p-5">
                             <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white tracking-tight">${item.name}</h3>
-                            <p class="text-xs text-brand-600 dark:text-brand-400 mb-3 font-semibold uppercase tracking-wider">${item.specialty}</p>
+                            <p class="text-xs text-amber-600 dark:text-amber-400 mb-3 font-semibold uppercase tracking-wider">${item.specialty}</p>
                             ${specificInfo}
                         </div>
                     </div>
                     <div class="p-5 pt-0 flex gap-2">
-                        <a href="tel:${item.phone}" class="flex-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-brand-50 dark:hover:bg-brand-900/30 text-brand-600 dark:text-brand-400 border border-gray-200/80 dark:border-gray-700 font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition">
+                        <a href="tel:${item.phone}" class="flex-1 bg-gray-50 dark:bg-gray-700/50 hover:bg-amber-50 dark:hover:bg-amber-900/30 text-amber-600 dark:text-amber-400 border border-gray-200/80 dark:border-gray-700 font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition">
                             <i class="fa-solid fa-phone"></i>
                             <span>${item.phone}</span>
                         </a>
-                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-md shadow-brand-600/20">
+                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-md shadow-amber-600/20">
                             <i class="fa-solid fa-calendar-plus"></i>
                             <span>${t.bookBtn}</span>
                         </button>
@@ -697,6 +697,7 @@
                             <i class="fa-solid fa-trash-can text-sm"></i>
                         </button>
                     `;
+                    listContainer.style.borderColor = "#f59e0b";
                     listContainer.appendChild(row);
                 });
             }
@@ -738,6 +739,7 @@
             const html = document.documentElement;
             const icon = document.getElementById('themeIcon');
             if (html.classList.contains('dark')) {
+                html.classList.remove('html.dark');
                 html.classList.remove('dark');
                 icon.className = "fa-solid fa-moon text-base";
             } else {
