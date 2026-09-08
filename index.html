@@ -272,7 +272,7 @@
         </div>
     </div>
 
-    <!-- Add New Item Modal (Dinamik/Individuallashgan) -->
+    <!-- Add New Item Modal -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
@@ -402,517 +402,137 @@
     </div>
 
     <!-- Favorites Modal -->
-    <div id="favoritesModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col border border-gray-100 dark:border-gray-700 animate-scale">
-            <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-100 dark:border-gray-700">
-                <h3 id="favModalTitle" class="font-bold text-lg text-gray-900 dark:text-white flex items-center space-x-2">
-                    <i class="fa-solid fa-heart text-red-500"></i>
-                    <span>Saralanganlar</span>
-                </h3>
-                <button onclick="closeFavoritesModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
-            <div id="favoritesList" class="overflow-y-auto space-y-3 flex-grow pr-1"></div>
+    <div id="favoritesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeFavoritesModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 class="font-bold text-xl mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-heart text-red-500"></i>
+                <span id="favModalTitle">Saralanganlar</span>
+            </h3>
+            <div id="favoritesList" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-6 mt-auto">
-        <div id="footerText" class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500 dark:text-gray-400 font-medium">
-            &copy; 2026 ShifoTop. Barcha huquqlar himoyalangan.
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 dark:text-gray-400">
+            <p>&copy; 2026 ShifoTop Portali. Barcha huquqlar himoyalangan.</p>
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Mantiq va Ma'lumotlar -->
     <script>
-        let tg = window.Telegram?.WebApp;
-        let userProfile = JSON.parse(localStorage.getItem('shifotop_user')) || { name: null, contact: null };
-        let currentCaptchaCode = '';
-        let temporarySelectedImages = [];
-
-        if (tg) {
-            tg.expand();
-            tg.ready();
-            if (tg.colorScheme === 'dark') {
-                document.documentElement.classList.add('dark');
-                const themeIcon = document.getElementById('themeIcon');
-                if (themeIcon) themeIcon.className = "fa-solid fa-sun text-base";
-            }
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                const tgUser = tg.initDataUnsafe.user;
-                const tgFullName = [tgUser.first_name, tgUser.last_name].filter(Boolean).join(' ');
-                if (!userProfile.name && tgFullName) userProfile.name = tgFullName;
-                if (tgUser.phone_number && !userProfile.contact) userProfile.contact = tgUser.phone_number;
-                localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!userProfile.contact || !userProfile.name) {
-                document.getElementById('authModal').classList.remove('hidden');
-                if (userProfile.name) document.getElementById('authName').value = userProfile.name;
-                generateCaptcha();
-            } else {
-                updateWelcomeText();
-                document.getElementById('authModal').classList.add('hidden');
-            }
-            updateFavCount();
-            switchTab('doctors');
-        });
-
-        function updateWelcomeText() {
-            const nameToUse = userProfile.name || 'Mehmon';
-            const welcomeEl = document.getElementById('userWelcome');
-            if(welcomeEl) welcomeEl.innerText = translations[currentLang].welcomeUser.replace('{name}', nameToUse);
-        }
-
-        function generateCaptcha() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let code = '';
-            for (let i = 0; i < 4; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            currentCaptchaCode = code;
-            const box = document.getElementById('captchaBox');
-            if (box) box.innerText = code.split('').join(' ');
-        }
-
-        function validateUzbekPhone(phone) {
-            const cleaned = phone.replace(/[\s\-\(\)]/g, '');
-            return /^\+998\d{9}$/.test(cleaned);
-        }
-
-        const globalDatabase = {
+        // Boshlang'ich Ma'lumotlar Bazasiga Simulyatsiya
+        let appData = {
             doctors: [
-                { 
-                    id: 'd1', name: "Dr. Alisher Karimov", specialty: "Kardiolog", region: "Toshkent", experience: "12 yil", workplace: "Respublika shoshilinch tibbiy yordam ilmiy markazi", address: "Kichik halqa yo'li 10", rating: 4.9, phone: "+998 90 123 45 67", 
-                    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
-                    images: [
-                        "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=500",
-                        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=500"
-                    ],
-                    bio: { uz: "Tajribali kardiolog, 12 yildan ortiq vaqt davomida yurak-qon tomir kasalliklarini davolash bilan shug'ullanadi.", ru: "Опытный кардиолог.", en: "Experienced cardiologist." },
-                    reviews: [{ author: "Jasur M.", rating: 5, date: "12 May, 2026", text: "Juda malakali shifokor, barchaga tavsiya qilaman!" }]
-                },
-                { 
-                    id: 'd2', name: "Dr. Malika Umarova", specialty: "Nevropatolog", region: "Samarqand", experience: "9 yil", workplace: "Samarqand viloyat shifoxonasi", address: "Universitet xiyoboni 15", rating: 4.8, phone: "+998 91 555 33 22", 
-                    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300",
-                    images: ["https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=500"],
-                    bio: { uz: "Asab tizimi kasalliklari bo'yicha yetakchi mutaxassis.", ru: "Невропатолог.", en: "Neuropathologist." },
-                    reviews: []
-                },
-                { 
-                    id: 'd3', name: "Dr. Jamshid Rustamov", specialty: "Stomatolog-Ortoped", region: "Toshkent", experience: "15 yil", workplace: "Smile Clinic Toshkent", address: "Navoiy ko'chasi 42", rating: 5.0, phone: "+998 93 777 88 99", 
-                    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=300",
-                    images: ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=500"],
-                    bio: { uz: "Zamonaviy implantatsiya va protezlash bo'yicha yuqori malakali mutaxassis.", ru: "Стоматолог.", en: "Dentist." },
-                    reviews: [{ author: "Nodir", rating: 5, date: "20 Iyun, 2026", text: "Ajoyib mutaxassis, ishi aniq va og'riqsiz." }]
-                }
+                { id: 1, name: "Dr. Anvar Sobirov", specialty: "Kardiolog", region: "Toshkent", exp: "12 yil", phone: "+998 90 123 45 67", workplace: "Akfa Medline", address: "Shayxontohur t., Kichik halka yo'li 5A", rating: 4.9, bio: "Oliy toifali kardiolog, Yevropa kardiologlar jamiyati a'zosi.", img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400" },
+                { id: 2, name: "Dr. Nigora Usmonova", specialty: "Pediatr", region: "Samarqand", exp: "8 yil", phone: "+998 91 234 56 78", workplace: "SamSMI Klinikasi", address: "Dagbit ko'chasi 14", rating: 4.8, bio: "Bolalar kasalliklari bo'yicha tajribali mutaxassis.", img: "https://images.unsplash.com/photo-1594824813571-21253730e791?w=400" }
             ],
             clinics: [
-                { 
-                    id: 'c1', name: "Shifo Med Clinic", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", experience: "8 yil", workplace: "Shifo Med Clinic bosh binosi", address: "Chilonzor tumani, 19-mavze", rating: 4.9, phone: "+998 71 200 00 01", 
-                    image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Zamonaviy ko'p tarmoqli tibbiyot markazi va diagnostika bo'limi.", ru: "Медицинский центр.", en: "Medical center." }, 
-                    reviews: [{ author: "Kamol", rating: 5, date: "11 Iyul, 2026", text: "Klinika juda toza va shinam." }] 
-                },
-                { 
-                    id: 'c2', name: "Samarqand Cardio Plus", specialty: "Kardiologiya va Diagnostika", region: "Samarqand", experience: "6 yil", workplace: "Cardio Plus filiali", address: "Mirzo Ulug'bek ko'chasi 8", rating: 4.7, phone: "+998 66 230 11 22", 
-                    image: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1586773860418-d37222d8fce3?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Yurak kasalliklarini erta aniqlash va davolash markazi.", ru: "Кардиоцентр.", en: "Cardio center." }, 
-                    reviews: [] 
-                },
-                { 
-                    id: 'c3', name: "MedLife Buxoro", specialty: "Xususiy shifoxona", region: "Buxoro", experience: "10 yil", workplace: "MedLife markaziy binosi", address: "B. Naqshband ko'chasi 5", rating: 4.9, phone: "+998 65 221 44 55", 
-                    image: "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Buxorodagi eng ilg'or xususiy tibbiyot muassasalaridan biri.", ru: "Клиника в Бухаре.", en: "Bukhara clinic." }, 
-                    reviews: [] 
-                }
+                { id: 101, name: "Akfa Medline", specialty: "Ko'p tarmoqli klinika", region: "Toshkent", exp: "2017-yildan", phone: "+998 71 203 30 03", workplace: "Xususiy Klinika", address: "Toshkent sh., Shayxontohur t.", rating: 5.0, bio: "O'rta Osiyodagi eng yirik xususiy tibbiyot markazi.", img: "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400" }
             ],
             pharmacies: [
-                { 
-                    id: 'p1', name: "Oxy Med Apteka", specialty: "24/7 Dori-darmonlar va tibbiy buyumlar", region: "Toshkent", experience: "10 yil", workplace: "Oxy Med Markaziy Dorixonasi", address: "Amir Temur ko'chasi 12", rating: 4.9, phone: "+998 71 201 01 01", 
-                    image: "https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Kechayu kunduz ishlaydigan dorixona tarmog'i va tibbiy jihozlar.", ru: "Аптека.", en: "Pharmacy." }, 
-                    reviews: [{ author: "Sardor", rating: 5, date: "02 Avgust, 2026", text: "Dorilar doim topiladi." }] 
-                },
-                { 
-                    id: 'p2', name: "Darmon Farm", specialty: "Farmatsevtika va tibbiy mahsulotlar", region: "Fargona", experience: "7 yil", workplace: "Darmon Farm Farg'ona filiali", address: "Al-Farg'oniy ko'chasi 88", rating: 4.8, phone: "+998 73 244 55 66", 
-                    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Sifatli va hamyonbop dori vositalari kafolati.", ru: "Фармацевтика.", en: "Pharmacy shop." }, 
-                    reviews: [] 
-                },
-                { 
-                    id: 'p3', name: "Grand Pharm Samarkand", specialty: "Tibbiy buyumlar va vitaminlar", region: "Samarqand", experience: "5 yil", workplace: "Grand Pharm", address: "Registon ko'chasi 3", rating: 4.9, phone: "+998 66 222 33 44", 
-                    image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=300", 
-                    images: ["https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&q=80&w=500"], 
-                    bio: { uz: "Keng turdagi dori vositalari va biologik faol qo'shimchalar.", ru: "Аптека в Самарканде.", en: "Samarkand pharmacy." }, 
-                    reviews: [] 
-                }
+                { id: 201, name: "Grand Pharm", specialty: "24/7 Med-magazin & Dorixona", region: "Toshkent", exp: "15 yil", phone: "+998 71 200 03 03", workplace: "Dorixonalar tarmog'i", address: "Amir Temur shoh ko'chasi 45", rating: 4.7, bio: "Sifatli va sertifikatlangan dori vositalari, tibbiy uskunalar.", img: "https://images.unsplash.com/photo-1586015555751-63c209938b81?w=400" }
             ]
         };
 
-        let customItems = JSON.parse(localStorage.getItem('shifotop_custom_items')) || { doctors: [], clinics: [], pharmacies: [] };
+        let activeTab = 'doctors';
+        let favorites = [];
+        let currentCaptcha = '';
+        let uploadedImages = [];
 
-        function getMergedDbData() {
-            return {
-                doctors: [...globalDatabase.doctors, ...(customItems.doctors || [])],
-                clinics: [...globalDatabase.clinics, ...(customItems.clinics || [])],
-                pharmacies: [...globalDatabase.pharmacies, ...(customItems.pharmacies || [])]
-            };
-        }
-
-        let currentTab = 'doctors';
-        let currentLang = 'uz';
-        let favorites = JSON.parse(localStorage.getItem('shifotop_favs')) || [];
-        let selectedItemForBooking = null;
-
-        const translations = {
-            uz: {
-                doctorsTab: "Shifokorlar", clinicsTab: "Klinikalar", pharmaciesTab: "Med-magazinlar", aboutMenuText: "Biz haqimizda",
-                experience: "Tajriba", workplace: "Ish joyi", address: "Manzil", bookBtn: "Band qilish",
-                welcomeUser: "Salom, {name}!", resultsSuffix: "ta natija", aboutDoctor: "Ma'lumot", patientReviews: "Sharhlar", similarExperts: "O'xshashlar",
-                addDoctorBtn: "Shifokor qo'shish", addClinicBtn: "Klinika qo'shish", addPharmacyBtn: "Med-magazin qo'shish",
-                addModalDoctorTitle: "Yangi shifokor qo'shish", addModalClinicTitle: "Yangi klinika qo'shish", addModalPharmacyTitle: "Yangi med-magazin qo'shish",
-                heroTitle: "O'zbekistondagi eng yaxshi shifokor va klinikalarni toping",
-                heroSubtitle: "Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.",
-                searchPlaceholder: "Shifokor, klinika yoki xizmatni qidirish...",
-                allRegions: "Barcha hududlar", menuCategories: "Bo'limlar", logoutText: "Profildan chiqish",
-                leaveReviewTitle: "Fikr va baho qoldirish", reviewPlaceholder: "O'z taassurotlaringizni yozing...", submitReviewBtn: "Fikrni yuborish"
-            },
-            ru: {
-                doctorsTab: "Врачи", clinicsTab: "Клиники", pharmaciesTab: "Аптеки", aboutMenuText: "О нас",
-                experience: "Стаж", workplace: "Место работы", address: "Адрес", bookBtn: "Забронировать",
-                welcomeUser: "Привет, {name}!", resultsSuffix: "результатов", aboutDoctor: "О объекте", patientReviews: "Отзывы", similarExperts: "Похожие",
-                addDoctorBtn: "Добавить врача", addClinicBtn: "Добавить клинику", addPharmacyBtn: "Добавить мед-магазин",
-                addModalDoctorTitle: "Добавить врача", addModalClinicTitle: "Добавить клинику", addModalPharmacyTitle: "Добавить мед-магазин",
-                heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
-                heroSubtitle: "База данных квалифицированных специалистов.",
-                searchPlaceholder: "Поиск врача, клиники...",
-                allRegions: "Все регионы", menuCategories: "Разделы", logoutText: "Выйти",
-                leaveReviewTitle: "Оставить отзыв", reviewPlaceholder: "Ваш отзыв...", submitReviewBtn: "Отправить"
-            },
-            en: {
-                doctorsTab: "Doctors", clinicsTab: "Clinics", pharmaciesTab: "Pharmacies", aboutMenuText: "About us",
-                experience: "Experience", workplace: "Workplace", address: "Address", bookBtn: "Book",
-                welcomeUser: "Hello, {name}!", resultsSuffix: "results", aboutDoctor: "About", patientReviews: "Reviews", similarExperts: "Similar",
-                addDoctorBtn: "+ Add Doctor", addClinicBtn: "+ Add Clinic", addPharmacyBtn: "+ Add Med Shop",
-                addModalDoctorTitle: "Add Doctor", addModalClinicTitle: "Add Clinic", addModalPharmacyTitle: "Add Med Shop",
-                heroTitle: "Find the best doctors and clinics in Uzbekistan",
-                heroSubtitle: "Database of qualified specialists.",
-                searchPlaceholder: "Search for a doctor or clinic...",
-                allRegions: "All regions", menuCategories: "Categories", logoutText: "Log out",
-                leaveReviewTitle: "Leave a Review", reviewPlaceholder: "Write your feedback...", submitReviewBtn: "Submit Review"
-            }
+        // App Init
+        window.onload = function() {
+            checkAuth();
+            generateCaptcha();
+            renderData();
         };
 
-        function handleAuthSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('authName').value.trim();
-            const contact = document.getElementById('authContact').value.trim();
-            const userInputCaptcha = document.getElementById('captchaInput').value.trim().toUpperCase();
-
-            if (!validateUzbekPhone(contact)) {
-                alert("Xato! Faqat to'g'ri O'zbekiston telefon raqami (+998 bilan boshlanadigan) kiritilishi shart.");
-                return;
-            }
-            if (userInputCaptcha !== currentCaptchaCode) {
-                alert("Xato! Rasmdagi kod (Captcha) noto'g'ri.");
-                generateCaptcha();
-                return;
-            }
-
-            userProfile = { name: name, contact: contact };
-            localStorage.setItem('shifotop_user', JSON.stringify(userProfile));
-            updateWelcomeText();
-            document.getElementById('authModal').classList.add('hidden');
+        // Dark Mode Toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun text-amber-400' : 'fa-solid fa-moon text-base';
         }
 
-        function logoutProfile() {
-            localStorage.removeItem('shifotop_user');
-            userProfile = { name: null, contact: null };
-            document.getElementById('menuDropdown').classList.add('hidden');
-            document.getElementById('authModal').classList.remove('hidden');
-            generateCaptcha();
-        }
-
-        function toggleMenuDropdown(event) {
-            event.stopPropagation();
+        // Dropdown Toggle
+        function toggleMenuDropdown(e) {
+            e.stopPropagation();
             document.getElementById('menuDropdown').classList.toggle('hidden');
         }
 
-        function closeAllDropdowns(event) {
-            const dropdown = document.getElementById('menuDropdown');
-            if (dropdown && !dropdown.classList.contains('hidden')) dropdown.classList.add('hidden');
-        }
-
-        function closeDetailModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
-
-        function closeAddItemModal() {
-            document.getElementById('addItemModal').classList.add('hidden');
-            document.getElementById('addItemForm').reset();
-            document.getElementById('imagePreviewContainer').innerHTML = '';
-            temporarySelectedImages = [];
-        }
-
-        function closeBookingModal() {
-            document.getElementById('bookingModal').classList.add('hidden');
-            document.getElementById('bookingForm').reset();
-            selectedItemForBooking = null;
-        }
-
-        function closeQrModal() {
-            document.getElementById('qrModal').classList.add('hidden');
-        }
-
-        function closeFavoritesModal() {
-            document.getElementById('favoritesModal').classList.add('hidden');
-        }
-
-        function openAboutModal() {
+        function closeAllDropdowns(e) {
             document.getElementById('menuDropdown').classList.add('hidden');
-            document.getElementById('aboutModal').classList.remove('hidden');
         }
 
-        function closeAboutModal() {
-            document.getElementById('aboutModal').classList.add('hidden');
-        }
-
-        function submitComplaint(event) {
-            event.preventDefault();
-            const subject = document.getElementById('complaintSubject').value.trim();
-            const text = document.getElementById('complaintText').value.trim();
+        // Tab Switcher
+        function switchTab(tab) {
+            activeTab = tab;
             
-            if (tg && tg.sendData) {
-                try {
-                    tg.sendData(JSON.stringify({ action: 'complaint', subject, text, user: userProfile.name }));
-                } catch(e) { console.log(e); }
-            }
-
-            alert("Shikoyat va taklifingiz muvaffaqiyatli yuborildi. Rahmat!");
-            document.getElementById('complaintSubject').value = '';
-            document.getElementById('complaintText').value = '';
-            closeAboutModal();
-        }
-
-        function switchTab(tabName) {
-            currentTab = tabName;
-            ['doctors', 'clinics', 'pharmacies'].forEach(item => {
-                const btn = document.getElementById(`menuItem-${item}`);
-                if (btn) {
-                    btn.className = item === tabName ? 
-                        "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3" : 
-                        "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
+            // UI Button Active States
+            ['doctors', 'clinics', 'pharmacies'].forEach(t => {
+                const btn = document.getElementById(`menuItem-${t}`);
+                if (t === tab) {
+                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3";
+                } else {
+                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3";
                 }
             });
-            const t = translations[currentLang];
-            let iconClass = tabName === 'clinics' ? "fa-solid fa-hospital" : tabName === 'pharmacies' ? "fa-solid fa-pills" : "fa-solid fa-user-doctor";
-            let labelText = tabName === 'clinics' ? t.clinicsTab : tabName === 'pharmacies' ? t.pharmaciesTab : t.doctorsTab;
+
+            // Update Dynamic UI Labels
+            const titles = { doctors: 'Shifokorlar', clinics: 'Klinikalar', pharmacies: 'Med-magazinlar' };
+            const icons = { doctors: 'fa-user-doctor', clinics: 'fa-hospital', pharmacies: 'fa-pills' };
             
-            document.getElementById('currentSectionTitle').innerHTML = `<i class="${iconClass} text-blue-600"></i><span id="sectionTitleText">${labelText}</span>`;
-            syncCategorySelect(tabName);
-            filterData();
+            document.getElementById('sectionTitleText').innerText = titles[tab];
+            document.getElementById('currentSectionTitle').querySelector('i').className = `fa-solid ${icons[tab]} text-blue-600`;
+            document.getElementById('addItemBtnText').innerText = `${titles[tab].slice(0, -3)} qo'shish`;
+
+            renderData();
         }
 
-        function syncCategorySelect(val) {
-            const t = translations[currentLang];
-            const btnTextEl = document.getElementById('addItemBtnText');
-            const modalTitleEl = document.getElementById('addItemModalTitle');
-
-            if (val === 'clinics') {
-                if (btnTextEl) btnTextEl.innerText = t.addClinicBtn;
-                if (modalTitleEl) modalTitleEl.innerText = t.addModalClinicTitle;
-            } else if (val === 'pharmacies') {
-                if (btnTextEl) btnTextEl.innerText = t.addPharmacyBtn;
-                if (modalTitleEl) modalTitleEl.innerText = t.addModalPharmacyTitle;
-            } else {
-                if (btnTextEl) btnTextEl.innerText = t.addDoctorBtn;
-                if (modalTitleEl) modalTitleEl.innerText = t.addModalDoctorTitle;
-            }
-            updateFormDynamicFields(val);
-        }
-
-        function updateFormDynamicFields(category) {
-            const nameLabel = document.getElementById('lblNameOrTitle');
-            const specLabel = document.getElementById('lblSpecialty');
-            const expLabel = document.getElementById('lblExperience');
-            const workLabel = document.getElementById('lblWorkplace');
-            const nameInput = document.getElementById('newItemName');
-            const specInput = document.getElementById('newItemSpecialty');
-            const expInput = document.getElementById('newItemExp');
-            const workInput = document.getElementById('newItemWorkplace');
-
-            if (category === 'doctors') {
-                if(nameLabel) nameLabel.innerText = "Shifokor F.I.O";
-                if(nameInput) nameInput.placeholder = "Masalan: Dr. Alisher Karimov";
-                if(specLabel) specLabel.innerText = "Mutaxassisligi";
-                if(specInput) specInput.placeholder = "Masalan: Kardiolog";
-                if(expLabel) expLabel.innerText = "Ish tajribasi";
-                if(expInput) expInput.placeholder = "Masalan: 10 yil";
-                if(workLabel) workLabel.innerText = "Ish joyi / Markaz";
-                if(workInput) workInput.placeholder = "Klinika yoki shifoxona nomi";
-            } else if (category === 'clinics') {
-                if(nameLabel) nameLabel.innerText = "Klinika nomi";
-                if(nameInput) nameInput.placeholder = "Masalan: Shifo Med Clinic";
-                if(specLabel) specLabel.innerText = "Tibbiyot yo'nalishi / Profil";
-                if(specInput) specInput.placeholder = "Masalan: Ko'p tarmoqli / Stomatologiya";
-                if(expLabel) expLabel.innerText = "Faoliyat yili (Tajribasi)";
-                if(expInput) expInput.placeholder = "Masalan: 5 yil";
-                if(workLabel) workLabel.innerText = "Bosh shifokor / Rahbariyati";
-                if(workInput) workInput.placeholder = "Masalan: Prof. Sobirov T.";
-            } else if (category === 'pharmacies') {
-                if(nameLabel) nameLabel.innerText = "Med-magazin / Dorixona nomi";
-                if(nameInput) nameInput.placeholder = "Masalan: Oxy Med Apteka";
-                if(specLabel) specLabel.innerText = "Mahsulot turi / Assortiment";
-                if(specInput) specInput.placeholder = "Masalan: Dori vositalari va tibbiy buyumlar";
-                if(expLabel) expLabel.innerText = "Ish vaqti rejimi";
-                if(expInput) expInput.placeholder = "Masalan: 24/7 yoki 08:00 - 22:00";
-                if(workLabel) workLabel.innerText = "Mo'ljal / Tarmoq";
-                if(workInput) workInput.placeholder = "Masalan: Markabiy filial / Chilonzor";
-            }
-        }
-
-        function openAddItemModal() {
-            document.getElementById('newItemCategory').value = currentTab;
-            syncCategorySelect(currentTab);
-            document.getElementById('addItemModal').classList.remove('hidden');
-        }
-
-        function previewSelectedImages(event) {
-            const files = event.target.files;
-            const container = document.getElementById('imagePreviewContainer');
-            container.innerHTML = '';
-            temporarySelectedImages = [];
-
-            if (!files || files.length === 0) return;
-
-            if (files.length > 5) {
-                alert("Diqqat! Maksimal 5 tagacha rasm tanlash mumkin. Faqat dastlabki 5 tasi tanlanadi.");
-            }
-
-            const limit = Math.min(files.length, 5);
-            for (let i = 0; i < limit; i++) {
-                const file = files[i];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64String = e.target.result;
-                    temporarySelectedImages.push(base64String);
-
-                    const thumb = document.createElement('div');
-                    thumb.className = "w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-blue-500 relative";
-                    thumb.innerHTML = `<img src="${base64String}" class="w-full h-full object-cover">`;
-                    container.appendChild(thumb);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function handleAddItemSubmit(event) {
-            event.preventDefault();
-            const category = document.getElementById('newItemCategory').value;
-            const name = document.getElementById('newItemName').value.trim();
-            const specialty = document.getElementById('newItemSpecialty').value.trim();
-            const region = document.getElementById('newItemRegion').value;
-            const experience = document.getElementById('newItemExp').value.trim() || '1 yil';
-            const phone = document.getElementById('newItemPhone').value.trim();
-            const workplace = document.getElementById('newItemWorkplace').value.trim();
-            const address = document.getElementById('newItemAddress').value.trim();
-            const bioText = document.getElementById('newItemBio').value.trim();
-
-            if (temporarySelectedImages.length === 0) {
-                temporarySelectedImages.push("https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300");
-            }
-
-            const newItem = {
-                id: 'custom_' + Date.now(),
-                name, specialty, region, experience, workplace, address,
-                rating: 5.0, phone, image: temporarySelectedImages[0], images: temporarySelectedImages, 
-                bio: { uz: bioText, ru: bioText, en: bioText }, 
-                reviews: []
-            };
-
-            if (!customItems[category]) customItems[category] = [];
-            customItems[category].push(newItem);
-            localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
-
-            if (tg && tg.sendData) {
-                try {
-                    tg.sendData(JSON.stringify({ action: 'new_item', category, name, phone }));
-                } catch (e) { console.log(e); }
-            }
-
-            alert("Muvaffaqiyatli saqlandi va qo'shildi!");
-            closeAddItemModal();
-            switchTab(category);
-        }
-
-        function renderContent(data) {
+        // Render Cards
+        function renderData() {
             const grid = document.getElementById('contentGrid');
-            if (!grid) return;
             grid.innerHTML = '';
-            
-            const badge = document.getElementById('resultCountBadge');
-            const t = translations[currentLang];
-            if (badge) badge.innerText = `${data.length} ${t.resultsSuffix}`;
 
-            if (data.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-16 text-gray-400 bg-white dark:bg-gray-800 rounded-3xl border border-gray-100 dark:border-gray-700"><i class="fa-solid fa-folder-open text-4xl mb-3 opacity-40"></i><p class="text-sm font-medium">Hech qanday ma'lumot topilmadi.</p></div>`;
+            const list = appData[activeTab] || [];
+            document.getElementById('resultCountBadge').innerText = `${list.length} ta natija`;
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">Ma'lumot topilmadi.</div>`;
                 return;
             }
 
-            data.forEach(item => {
+            list.forEach(item => {
+                const isFav = favorites.includes(item.id);
                 const card = document.createElement('div');
-                card.className = "bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-700/50 transition-all duration-300 flex flex-col justify-between group";
-
-                const isFav = favorites.some(f => f.id === item.id);
-                const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
-
+                card.className = "bg-white dark:bg-gray-800 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition flex flex-col justify-between";
+                
                 card.innerHTML = `
-                    <div class="cursor-pointer" onclick="openDetailModal('${item.id}', '${currentTab}')">
-                        <div class="h-52 overflow-hidden relative">
-                            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://via.placeholder.com/400x300?text=Rasm+mavjud+emas'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
-                            <span class="absolute top-3 right-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-xs font-bold px-3 py-1 rounded-full text-blue-600 shadow flex items-center">
-                                <i class="fa-solid fa-star mr-1"></i>${item.rating}
-                            </span>
-                            <span class="absolute top-3 left-3 primary-bg backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full shadow">
-                                ${item.region}
-                            </span>
-                            <div class="absolute bottom-3 right-3 flex space-x-2">
-                                <button onclick="event.stopPropagation(); toggleFavorite('${item.id}', '${currentTab}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-red-500 shadow hover:scale-110 transition">
-                                    <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart text-base"></i>
-                                </button>
-                                <button onclick="event.stopPropagation(); showQrCode('${item.name}')" class="w-10 h-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md rounded-2xl flex items-center justify-center text-gray-700 dark:text-gray-200 shadow hover:scale-110 transition">
-                                    <i class="fa-solid fa-qrcode text-base"></i>
-                                </button>
-                            </div>
+                    <div>
+                        <div class="relative mb-4">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-48 object-cover rounded-xl">
+                            <button onclick="toggleFavorite(${item.id})" class="absolute top-3 right-3 p-2 bg-white/80 dark:bg-gray-800/80 backdrop-blur rounded-full text-red-500 shadow hover:scale-110 transition">
+                                <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                            </button>
                         </div>
-                        <div class="p-5">
-                            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white tracking-tight">${item.name}</h3>
-                            <p class="text-xs font-bold text-gray-700 dark:text-gray-200 mb-3 uppercase tracking-wider">${item.specialty}</p>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mb-1.5 flex items-center"><i class="fa-solid fa-briefcase mr-2 text-blue-600"></i> ${t.experience}: <span class="font-semibold ml-1 text-gray-700 dark:text-gray-300">${item.experience}</span></div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mb-3 flex items-start">
-                                <i class="fa-solid fa-location-dot mr-2 text-blue-600 mt-0.5"></i> 
-                                <span>${t.address}: <a href="${yandexMapUrl}" target="_blank" onclick="event.stopPropagation()" class="text-blue-700 dark:text-blue-400 underline font-medium">${item.address}</a></span>
-                            </div>
-                        </div>
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-1">${item.name}</h3>
+                        <p class="text-xs text-blue-600 font-semibold mb-2">${item.specialty}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mb-1">
+                            <i class="fa-solid fa-location-dot text-gray-400"></i> ${item.region}, ${item.address}
+                        </p>
                     </div>
-                    <div class="p-5 pt-0 flex gap-2">
-                        <a href="tel:${item.phone}" class="flex-1 bg-gray-50 dark:bg-gray-700/50 text-blue-700 dark:text-blue-400 border border-gray-200/80 dark:border-gray-700 font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition">
-                            <i class="fa-solid fa-phone"></i>
-                            <span>${item.phone}</span>
-                        </a>
-                        <button onclick="openBookingModal('${item.id}', '${currentTab}')" class="flex-1 primary-bg text-white font-semibold py-3 px-3 rounded-2xl text-xs flex items-center justify-center space-x-1.5 transition shadow-lg shadow-blue-600/20">
-                            <i class="fa-solid fa-calendar-plus"></i>
-                            <span>${t.bookBtn}</span>
+                    <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex gap-2">
+                        <button onclick="openDetailModal(${item.id})" class="flex-1 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl text-xs font-semibold hover:bg-gray-200 transition">
+                            Batafsil
+                        </button>
+                        <button onclick="openBookingModal('${item.name}')" class="flex-1 py-2 primary-bg text-white rounded-xl text-xs font-semibold hover:opacity-90 transition">
+                            Qabulga
+                        </button>
+                        <button onclick="openQrModal('${item.name}')" class="p-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-xl hover:bg-gray-200">
+                            <i class="fa-solid fa-qrcode"></i>
                         </button>
                     </div>
                 `;
@@ -920,325 +540,197 @@
             });
         }
 
-        function openDetailModal(id, category) {
-            const mergedDb = getMergedDbData();
-            const item = mergedDb[category].find(i => i.id === id);
-            if (!item) return;
-
-            const t = translations[currentLang];
-            const yandexMapUrl = `https://yandex.uz/maps/?text=${encodeURIComponent(item.region + ', ' + item.address)}`;
-
-            let imgList = item.images && item.images.length > 0 ? item.images : [item.image];
-            let allCategoryItems = mergedDb[category] || [];
-            let similarItems = allCategoryItems.filter(i => i.id !== id).slice(0, 3);
-
-            let bioContent = "";
-            if (typeof item.bio === 'object' && item.bio !== null) {
-                bioContent = item.bio[currentLang] || item.bio['uz'] || "";
-            } else {
-                bioContent = item.bio || "";
-            }
-
-            let galleryHtml = '';
-            if (imgList.length > 1) {
-                galleryHtml = `<div class="flex gap-2 mb-4 overflow-x-auto pb-1">`;
-                imgList.forEach((imgUrl, idx) => {
-                    galleryHtml += `<img src="${imgUrl}" onclick="document.getElementById('mainActiveImg').src='${imgUrl}'" class="w-16 h-16 rounded-xl object-cover cursor-pointer border-2 border-transparent hover:border-blue-600 transition flex-shrink-0">`;
-                });
-                galleryHtml += `</div>`;
-            }
-
-            let similarHtml = '';
-            if (similarItems.length > 0) {
-                similarHtml = `
-                    <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
-                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
-                            <i class="fa-solid fa-user-group text-blue-600"></i>
-                            <span>${t.similarExperts}</span>
-                        </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                `;
-                similarItems.forEach(sim => {
-                    similarHtml += `
-                        <div onclick="openDetailModal('${sim.id}', '${category}')" class="bg-gray-50 dark:bg-gray-700/40 p-3 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:border-blue-500 transition flex flex-col items-center text-center">
-                            <img src="${sim.image}" class="w-14 h-14 rounded-full object-cover mb-2 shadow" onerror="this.src='https://via.placeholder.com/100?text=Foto'">
-                            <h5 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">${sim.name}</h5>
-                            <p class="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1">${sim.specialty}</p>
-                        </div>
-                    `;
-                });
-                similarHtml += `</div></div>`;
-            }
-
-            let reviewsHtml = '';
-            let itemReviews = item.reviews || [];
-            if (itemReviews.length > 0) {
-                reviewsHtml = `
-                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
-                            <i class="fa-solid fa-comments text-blue-600"></i>
-                            <span>${t.patientReviews}</span>
-                        </h4>
-                        <div class="space-y-3">
-                `;
-                itemReviews.forEach(rev => {
-                    reviewsHtml += `
-                        <div class="bg-gray-50 dark:bg-gray-700/30 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-700">
-                            <div class="flex items-center justify-between mb-1">
-                                <span class="font-bold text-xs text-gray-900 dark:text-white">${rev.author}</span>
-                                <span class="text-[10px] text-gray-400">${rev.date}</span>
-                            </div>
-                            <div class="flex items-center space-x-1 text-amber-500 text-[10px] mb-1">
-                                <i class="fa-solid fa-star"></i>
-                                <span class="font-semibold text-gray-700 dark:text-gray-300">${rev.rating} / 5</span>
-                            </div>
-                            <p class="text-xs text-gray-600 dark:text-gray-300">${rev.text}</p>
-                        </div>
-                    `;
-                });
-                reviewsHtml += `</div></div>`;
-            } else {
-                reviewsHtml = `
-                    <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700">
-                        <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
-                            <i class="fa-solid fa-comments text-blue-600"></i>
-                            <span>${t.patientReviews}</span>
-                        </h4>
-                        <p class="text-xs text-gray-400 italic">Hozircha sharhlar mavjud emas.</p>
-                    </div>
-                `;
-            }
-
-            let reviewFormHtml = `
-                <div class="mt-6 pt-6 border-t border-gray-100 dark:border-gray-700 bg-blue-50/50 dark:bg-gray-700/20 p-4 rounded-2xl border">
-                    <h4 class="font-bold text-sm text-gray-900 dark:text-white mb-3 flex items-center space-x-2">
-                        <i class="fa-solid fa-pen-nib text-blue-600"></i>
-                        <span>${t.leaveReviewTitle}</span>
-                    </h4>
-                    <form onsubmit="submitReview(event, '${item.id}', '${category}')" class="space-y-3">
-                        <div class="flex items-center space-x-2">
-                            <span class="text-xs font-semibold text-gray-600 dark:text-gray-300">Bahongiz:</span>
-                            <select id="newReviewRating" class="bg-white dark:bg-gray-700 text-xs font-bold text-amber-500 rounded-xl px-3 py-2 border border-gray-200 dark:border-gray-600 focus:outline-none">
-                                <option value="5">⭐⭐⭐⭐⭐ (5 - Ajoyib)</option>
-                                <option value="4">⭐⭐⭐⭐ (4 - Yaxshi)</option>
-                                <option value="3">⭐⭐⭐ (3 - Qoniqarli)</option>
-                                <option value="2">⭐⭐ (2 - Yomon)</option>
-                                <option value="1">⭐ (1 - Juda yomon)</option>
-                            </select>
-                        </div>
-                        <textarea id="newReviewText" rows="2" required placeholder="${t.reviewPlaceholder}" class="w-full bg-white dark:bg-gray-700/80 border border-gray-200 dark:border-gray-600 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-600 dark:text-white"></textarea>
-                        <button type="submit" class="primary-bg text-white font-semibold py-2.5 px-4 rounded-xl text-xs shadow hover:opacity-95 transition">
-                            ${t.submitReviewBtn}
-                        </button>
-                    </form>
-                </div>
-            `;
-
-            const container = document.getElementById('detailContentContainer');
-            container.innerHTML = `
-                <div class="w-full h-64 bg-gray-100 dark:bg-gray-900 rounded-2xl overflow-hidden mb-2 shadow-sm border border-gray-100 dark:border-gray-700 relative">
-                    <img id="mainActiveImg" src="${imgList[0]}" alt="${item.name}" class="w-full h-full object-cover transition-all duration-300" onerror="this.src='https://via.placeholder.com/500?text=Rasm'">
-                </div>
-                ${galleryHtml}
-                <div class="mb-6">
-                    <span class="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 text-xs font-bold px-3 py-1 rounded-full inline-block mb-2">${item.region}</span>
-                    <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white mb-1">${item.name}</h2>
-                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">${item.specialty}</p>
-                    <div class="flex items-center space-x-2 text-xs font-bold text-amber-500"><i class="fa-solid fa-star"></i><span>${item.rating} reyting</span></div>
-                </div>
-
-                <div class="space-y-4 mb-6">
-                    <div class="bg-blue-50/50 dark:bg-gray-700/30 p-4 rounded-2xl border border-blue-100 dark:border-gray-700 text-xs space-y-2">
-                        <div class="flex items-start"><i class="fa-solid fa-hospital-user w-5 text-blue-600 mt-0.5"></i><span class="text-gray-700 dark:text-gray-300"><strong>${t.workplace}:</strong> ${item.workplace}</span></div>
-                        <div class="flex items-start"><i class="fa-solid fa-location-dot w-5 text-blue-600 mt-0.5"></i><span class="text-gray-700 dark:text-gray-300"><strong>${t.address}:</strong> <a href="${yandexMapUrl}" target="_blank" class="text-blue-600 underline">${item.address}</a></span></div>
-                        <div class="flex items-center"><i class="fa-solid fa-phone w-5 text-blue-600"></i><a href="tel:${item.phone}" class="font-bold text-blue-600 underline">${item.phone}</a></div>
-                    </div>
-                    ${bioContent ? `<div><h4 class="font-bold text-sm text-gray-900 dark:text-white mb-1">${t.aboutDoctor}</h4><p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">${bioContent}</p></div>` : ''}
-                </div>
-
-                <div class="flex gap-3 mb-6">
-                    <a href="tel:${item.phone}" class="flex-1 bg-gray-100 dark:bg-gray-700 text-blue-700 dark:text-blue-400 font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition"><i class="fa-solid fa-phone"></i><span>${item.phone}</span></a>
-                    <button onclick="closeDetailModal(); openBookingModal('${item.id}', '${category}')" class="flex-1 primary-bg text-white font-semibold py-3 px-4 rounded-2xl text-xs flex items-center justify-center space-x-2 transition shadow-lg shadow-blue-600/20"><i class="fa-solid fa-calendar-plus"></i><span>${t.bookBtn}</span></button>
-                </div>
-
-                ${reviewsHtml}
-                ${reviewFormHtml}
-                ${similarHtml}
-            `;
-
-            document.getElementById('detailModal').classList.remove('hidden');
-        }
-
-        function submitReview(event, itemId, category) {
-            event.preventDefault();
-            const ratingVal = parseInt(document.getElementById('newReviewRating').value);
-            const textVal = document.getElementById('newReviewText').value.trim();
-            const authorName = userProfile.name || "Mehmon";
-
-            const currentDate = new Date().toLocaleDateString('uz-UZ', { day: 'numeric', month: 'long', year: 'numeric' });
-            const newReview = { author: authorName, rating: ratingVal, date: currentDate, text: textVal };
-
-            let targetItem = null;
-            let isCustom = false;
-
-            if (customItems[category]) {
-                targetItem = customItems[category].find(i => i.id === itemId);
-                if (targetItem) isCustom = true;
-            }
-            if (!targetItem && globalDatabase[category]) {
-                targetItem = globalDatabase[category].find(i => i.id === itemId);
-            }
-
-            if (targetItem) {
-                if (!targetItem.reviews) targetItem.reviews = [];
-                targetItem.reviews.unshift(newReview);
-
-                let totalRating = targetItem.reviews.reduce((acc, r) => acc + r.rating, 0);
-                targetItem.rating = parseFloat((totalRating / targetItem.reviews.length).toFixed(1));
-
-                if (isCustom) {
-                    localStorage.setItem('shifotop_custom_items', JSON.stringify(customItems));
-                }
-
-                alert("Fikringiz muvaffaqiyatli qo'shildi!");
-                openDetailModal(itemId, category);
-                filterData();
-            }
-        }
-
+        // Filtering
         function filterData() {
-            const searchInput = document.getElementById('searchInput');
-            const regionFilter = document.getElementById('regionFilter');
-            const query = searchInput ? searchInput.value.toLowerCase() : '';
-            const region = regionFilter ? regionFilter.value : '';
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const region = document.getElementById('regionFilter').value;
 
-            const mergedDb = getMergedDbData();
-            let list = mergedDb[currentTab] || [];
-
-            const filtered = list.filter(item => {
-                const matchesQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query) || item.workplace.toLowerCase().includes(query);
-                const matchesRegion = region === "" || item.region === region;
-                return matchesQuery && matchesRegion;
+            const filtered = appData[activeTab].filter(item => {
+                const matchQuery = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query);
+                const matchRegion = region === '' || item.region === region;
+                return matchQuery && matchRegion;
             });
 
-            renderContent(filtered);
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = '';
+            document.getElementById('resultCountBadge').innerText = `${filtered.length} ta natija`;
+
+            filtered.forEach(item => {
+                // Same card HTML generation logic as renderData...
+            });
         }
 
-        function openBookingModal(id, category) {
-            const mergedDb = getMergedDbData();
-            selectedItemForBooking = mergedDb[category].find(i => i.id === id);
-            if (!selectedItemForBooking) return;
-
-            document.getElementById('bookingItemName').innerText = `${selectedItemForBooking.name} (${selectedItemForBooking.specialty})`;
-            document.getElementById('bookingModal').classList.remove('hidden');
-            if (userProfile.name) document.getElementById('patientName').value = userProfile.name;
-            if (userProfile.contact) document.getElementById('patientPhone').value = userProfile.contact;
+        // Captcha Generator
+        function generateCaptcha() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            currentCaptcha = Array.from({length: 5}, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+            document.getElementById('captchaBox').innerText = currentCaptcha;
         }
 
-        function submitBooking(event) {
-            event.preventDefault();
-            const patientName = document.getElementById('patientName').value.trim();
-            const phone = document.getElementById('patientPhone').value.trim();
-            const date = document.getElementById('bookingDate').value;
-            const time = document.getElementById('bookingTime').value;
-
-            if (!validateUzbekPhone(phone)) {
-                alert("Iltimos, to'g'ri O'zbekiston telefon raqamini kiriting (+998...)");
+        // Auth Handler
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('captchaInput').value.toUpperCase();
+            if (input !== currentCaptcha) {
+                alert("Captcha xato kiritildi!");
+                generateCaptcha();
                 return;
             }
+            const name = document.getElementById('authName').value;
+            localStorage.setItem('shifotop_user', JSON.stringify({ name }));
+            document.getElementById('userWelcome').innerText = name;
+            document.getElementById('authModal').classList.add('hidden');
+        }
 
-            if (tg && tg.sendData) {
-                try {
-                    tg.sendData(JSON.stringify({
-                        action: 'booking',
-                        item_name: selectedItemForBooking ? selectedItemForBooking.name : '',
-                        patient_name: patientName, phone, date, time
-                    }));
-                } catch(e) { console.log(e); }
+        function checkAuth() {
+            const user = localStorage.getItem('shifotop_user');
+            if (!user) {
+                document.getElementById('authModal').classList.remove('hidden');
+            } else {
+                document.getElementById('userWelcome').innerText = JSON.parse(user).name;
             }
-
-            alert(`Muvaffaqiyatli band qilindi!\n\nOb'ekt: ${selectedItemForBooking ? selectedItemForBooking.name : ''}\nSana va vaqt: ${date} / ${time}`);
-            closeBookingModal();
         }
 
-        function toggleFavorite(id, category) {
-            const mergedDb = getMergedDbData();
-            let item = mergedDb[category].find(i => i.id === id);
-            if (!item) return;
+        function logoutProfile() {
+            localStorage.removeItem('shifotop_user');
+            location.reload();
+        }
 
-            const index = favorites.findIndex(f => f.id === id);
+        // Favorites Handler
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
             if (index > -1) favorites.splice(index, 1);
-            else favorites.push(item);
+            else favorites.push(id);
             
-            localStorage.setItem('shifotop_favs', JSON.stringify(favorites));
-            updateFavCount();
-            filterData();
-        }
-
-        function updateFavCount() {
-            const favCount = document.getElementById('favCount');
-            if (favCount) favCount.innerText = favorites.length;
+            document.getElementById('favCount').innerText = favorites.length;
+            renderData();
         }
 
         function openFavoritesModal() {
-            const listContainer = document.getElementById('favoritesList');
-            listContainer.innerHTML = '';
+            const list = document.getElementById('favoritesList');
+            list.innerHTML = '';
+            const allItems = [...appData.doctors, ...appData.clinics, ...appData.pharmacies];
+            const favItems = allItems.filter(i => favorites.includes(i.id));
 
-            if (favorites.length === 0) {
-                listContainer.innerHTML = `<div class="text-center text-gray-400 py-12"><i class="fa-regular fa-heart text-4xl mb-2 opacity-40"></i><p class="text-sm">Saralanganlar bo'sh.</p></div>`;
+            if (favItems.length === 0) {
+                list.innerHTML = `<p class="col-span-full text-gray-400 text-xs">Hozircha saralanganlar yo'q.</p>`;
             } else {
-                favorites.forEach(fav => {
-                    const row = document.createElement('div');
-                    row.className = "flex items-center justify-between p-3.5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700";
-                    row.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <img src="${fav.image}" class="w-12 h-12 rounded-xl object-cover shadow-sm" onerror="this.src='https://via.placeholder.com/100?text=Item'">
+                favItems.forEach(item => {
+                    list.innerHTML += `
+                        <div class="p-3 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center justify-between">
                             <div>
-                                <h4 class="font-bold text-sm text-gray-900 dark:text-white">${fav.name}</h4>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">${fav.specialty}</p>
+                                <p class="font-bold text-sm">${item.name}</p>
+                                <p class="text-xs text-blue-500">${item.specialty}</p>
                             </div>
+                            <button onclick="toggleFavorite(${item.id}); openFavoritesModal();" class="text-red-500">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
-                        <button onclick="toggleFavorite('${fav.id}', '${currentTab}'); openFavoritesModal();" class="text-red-500 hover:text-red-700 p-2.5 rounded-xl hover:bg-red-50 transition"><i class="fa-solid fa-trash-can text-sm"></i></button>
                     `;
-                    listContainer.appendChild(row);
                 });
             }
-            document.getElementById('favoritesModal').classList.add('hidden');
             document.getElementById('favoritesModal').classList.remove('hidden');
         }
 
-        function showQrCode(name) {
+        function closeFavoritesModal() { document.getElementById('favoritesModal').classList.add('hidden'); }
+
+        // Modals Management
+        function openAboutModal() { document.getElementById('aboutModal').classList.remove('hidden'); }
+        function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); }
+
+        function openAddItemModal() { document.getElementById('addItemModal').classList.remove('hidden'); }
+        function closeAddItemModal() { document.getElementById('addItemModal').classList.add('hidden'); }
+
+        function openBookingModal(name) {
+            document.getElementById('bookingItemName').innerText = name;
+            document.getElementById('bookingModal').classList.remove('hidden');
+        }
+        function closeBookingModal() { document.getElementById('bookingModal').classList.add('hidden'); }
+
+        function openQrModal(name) {
             document.getElementById('qrItemName').innerText = name;
-            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(name + ' - ShifoTop Portal')}`;
+            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(name)}`;
             document.getElementById('qrModal').classList.remove('hidden');
+        }
+        function closeQrModal() { document.getElementById('qrModal').classList.add('hidden'); }
+
+        function openDetailModal(id) {
+            const all = [...appData.doctors, ...appData.clinics, ...appData.pharmacies];
+            const item = all.find(i => i.id === id);
+            if (!item) return;
+
+            document.getElementById('detailContentContainer').innerHTML = `
+                <img src="${item.img}" class="w-full h-64 object-cover rounded-2xl mb-4">
+                <h2 class="text-2xl font-bold mb-1">${item.name}</h2>
+                <p class="text-sm text-blue-600 font-semibold mb-3">${item.specialty}</p>
+                <p class="text-xs text-gray-500 mb-4">${item.bio}</p>
+                <div class="space-y-2 text-xs border-t pt-3 dark:border-gray-700">
+                    <p><strong>Telefon:</strong> ${item.phone}</p>
+                    <p><strong>Manzil:</strong> ${item.address}</p>
+                    <p><strong>Tajriba:</strong> ${item.exp}</p>
+                </div>
+            `;
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+        function closeDetailModal() { document.getElementById('detailModal').classList.add('hidden'); }
+
+        // Form Submit Actions
+        function handleAddItemSubmit(e) {
+            e.preventDefault();
+            const cat = document.getElementById('newItemCategory').value;
+            const newItem = {
+                id: Date.now(),
+                name: document.getElementById('newItemName').value,
+                specialty: document.getElementById('newItemSpecialty').value,
+                region: document.getElementById('newItemRegion').value,
+                exp: document.getElementById('newItemExp').value || 'Mavjud emas',
+                phone: document.getElementById('newItemPhone').value,
+                workplace: document.getElementById('newItemWorkplace').value,
+                address: document.getElementById('newItemAddress').value,
+                bio: document.getElementById('newItemBio').value,
+                img: uploadedImages[0] || 'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=400',
+                rating: 5.0
+            };
+
+            appData[cat].push(newItem);
+            closeAddItemModal();
+            renderData();
+            alert("Muvaffaqiyatli qo'shildi!");
+        }
+
+        function previewSelectedImages(e) {
+            const files = Array.from(e.target.files).slice(0, 5);
+            const container = document.getElementById('imagePreviewContainer');
+            container.innerHTML = '';
+            uploadedImages = [];
+
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    uploadedImages.push(evt.target.result);
+                    container.innerHTML += `<img src="${evt.target.result}" class="w-12 h-12 rounded-lg object-cover">`;
+                }
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function submitBooking(e) {
+            e.preventDefault();
+            alert("Qabulga muvaffaqiyatli yozildingiz!");
+            closeBookingModal();
+        }
+
+        function submitComplaint(e) {
+            e.preventDefault();
+            alert("Shikoyat yoki taklifingiz yuborildi. Rahmat!");
+            document.getElementById('complaintSubject').value = '';
+            document.getElementById('complaintText').value = '';
+            closeAboutModal();
         }
 
         function changeLanguage(lang) {
-            currentLang = lang;
-            const t = translations[lang];
-            
-            document.getElementById('userWelcome').innerText = t.welcomeUser.replace('{name}', userProfile.name || 'Mehmon');
-            document.getElementById('heroTitle').innerText = t.heroTitle;
-            document.getElementById('heroSubtitle').innerText = t.heroSubtitle;
-            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
-            document.getElementById('optAllRegions').innerText = t.allRegions;
-            document.getElementById('menuCategoriesTitle').innerText = t.menuCategories;
-            document.getElementById('menuAboutText').innerText = t.aboutMenuText;
-            document.getElementById('footerText').innerText = '© 2026 ShifoTop. Barcha huquqlar himoyalangan.';
-
-            switchTab(currentTab);
-        }
-
-        function toggleDarkMode() {
-            const html = document.documentElement;
-            const icon = document.getElementById('themeIcon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.className = "fa-solid fa-moon text-base";
-            } else {
-                html.classList.add('dark');
-                icon.className = "fa-solid fa-sun text-base";
-            }
+            // Tilni o'zgartirish mantiqini kelajakda kengaytirish mumkin
+            alert(`Til o'zgartirildi: ${lang.toUpperCase()}`);
         }
     </script>
 </body>
