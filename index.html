@@ -80,7 +80,7 @@
                 Oʻzbekistondagi eng sara shifokorlar, zamonaviy klinikalar va med-magazinlar katalogi.
             </p>
 
-            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-white text-blue-700 hover:bg-blue-50 font-bold py-3.5 rounded-2xl text-sm transition shadow-xl transform hover:-translate-y-0.5">
+            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-white text-blue-700 hover:bg-blue-50 font-bold py-3.5 rounded-2xl text-sm transition shadow-xl transform hover:-translate-y-0.5 cursor-pointer">
                 Ilovaga kirish <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
             </button>
         </div>
@@ -124,7 +124,7 @@
                     <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-wider">
                 </div>
 
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2 cursor-pointer">
                     Kirish va Tasdiqlash
                 </button>
             </form>
@@ -186,7 +186,7 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Saralanganlar">
+                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center cursor-pointer" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
@@ -197,7 +197,7 @@
                     <option value="en">English</option>
                 </select>
 
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Rejimni o'zgartirish">
+                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center cursor-pointer" title="Rejimni o'zgartirish">
                     <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
                 </button>
             </div>
@@ -232,4 +232,36 @@
             </div>
         </div>
 
-        <div class="flex
+        <div class="flex items-center justify-between px-2">
+            <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
+                <i class="fa-solid fa-user-doctor text-blue-600"></i>
+                <span id="sectionTitleText">Shifokorlar</span>
+            </h2>
+            <div class="flex items-center space-x-3">
+                <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
+                <button onclick="openAddItemModal()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md cursor-pointer">
+                    <i class="fa-solid fa-plus"></i>
+                    <span id="addItemBtnText">Shifokor qo'shish</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </main>
+
+    <!-- BIZ HAQIMIZDA MODALI -->
+    <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
+            <button onclick="closeAboutModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-white border border-gray-100 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                    <i class="fa-solid fa-heart-pulse text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 dark:text-white">ShifoTop haqida</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">O'zbekistondagi eng qulay tibbiy ma'lumotlar platformasi.</p>
+            </div>
+            <div class="space-y-3 mb-6">
+                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-blue-600 text-xs font-semibold">
+                    <i class="fa-brands fa-telegram text-lg w-8"></i> Telegram bot
