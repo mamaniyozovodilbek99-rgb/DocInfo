@@ -33,9 +33,18 @@
             from { transform: scale(0.95); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-        .animate-scale {
-            animation: scaleIn 0.2s ease-out forwards;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes pulseSlow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-scale { animation: scaleIn 0.3s ease-out forwards; }
+        .animate-fade { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-pulse-slow { animation: pulseSlow 3s infinite ease-in-out; }
+
         .gold-gradient {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             -webkit-background-clip: text;
@@ -54,20 +63,41 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
+    <!-- INTRO / ANIMATED WELCOME SCREEN (Reklamniy / Skromniy Splash) -->
+    <div id="introScreen" class="fixed inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 z-50 flex flex-col items-center justify-center p-6 text-white text-center transition-opacity duration-500">
+        <div class="animate-fade max-w-md w-full flex flex-col items-center">
+            <div class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse-slow">
+                <i class="fa-solid fa-heart-pulse text-4xl text-white"></i>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">
+                <span class="text-white">Shifo</span><span class="gold-gradient font-black">Top</span>
+            </h1>
+            <p class="text-blue-100 text-sm sm:text-base font-normal mb-8 max-w-sm leading-relaxed">
+                Oʻzbekistondagi eng sara shifokorlar, zamonaviy klinikalar va med-magazinlar yagona platformada.
+            </p>
+            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-white text-blue-700 hover:bg-blue-50 font-bold py-4 rounded-2xl text-sm transition shadow-xl transform hover:-translate-y-0.5">
+                Ilovaga kirish <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+            </button>
+        </div>
+        <div class="absolute bottom-6 text-xs text-blue-200/60 font-medium">
+            © 2026 ShifoTop. Barcha huquqlar himoyalangan.
+        </div>
+    </div>
+
     <!-- Authentication Modal (Kirish / SMS Verification) -->
-    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             
             <!-- STEP 1: Registration / Login Form -->
             <div id="authStep1">
                 <div class="text-center mb-6">
                     <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
-                        <i class="fa-solid fa-heart-pulse text-2xl"></i>
+                        <i class="fa-solid fa-user-shield text-2xl"></i>
                     </div>
                     <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                        <span class="text-blue-600 dark:text-blue-500">Shifo</span><span class="gold-gradient font-black">Top</span>'ga xush kelibsiz
+                        Ro'yxatdan o'tish
                     </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun O'zbekiston telefon raqamingiz va rasmdagi kodni kiriting</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Telefon raqamingiz va rasmdagi kodni kiriting</p>
                 </div>
 
                 <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
@@ -89,7 +119,7 @@
                                 <i class="fa-solid fa-rotate-right text-base"></i>
                             </button>
                         </div>
-                        <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-widest font-mono">
+                        <input type="text" id="captchaInput" required placeholder="Kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-widest font-mono">
                     </div>
 
                     <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
@@ -103,13 +133,22 @@
                 <div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-200 dark:border-blue-700">
                     <i class="fa-solid fa-message text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">SMS Tasdiqlash</h3>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">SMS Kodni Tasdiqlash</h3>
                 <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                    <span id="sentPhoneSpan" class="font-bold text-gray-800 dark:text-gray-200"></span> raqamiga yuborilgan 4 xonali tasdiqlash kodini kiriting.
+                    <span id="sentPhoneSpan" class="font-bold text-gray-800 dark:text-gray-200"></span> raqamiga yuborilgan tasdiqlash kodini kiriting.
                 </p>
 
-                <div id="demoOtpAlert" class="bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700/50 p-3 rounded-xl mb-4 text-xs text-amber-800 dark:text-amber-300 font-medium animate-pulse">
-                    <i class="fa-solid fa-circle-info mr-1"></i> Sizning SMS kodingiz: <strong id="generatedOtpCode" class="text-sm font-black underline"></strong>
+                <!-- Aniq ko'rinadigan Demo SMS Alert -->
+                <div class="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 p-4 rounded-2xl mb-4 text-left">
+                    <div class="flex items-center space-x-2 text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>SMS Shlyuzi (Simulyatsiya):</span>
+                    </div>
+                    <p class="text-xs text-gray-600 dark:text-gray-300">
+                        Hozirgi test rejimida telefoningizga real SMS bormaydi. Tasdiqlash kodi quyida ko'rsatilgan:
+                    </p>
+                    <div class="mt-2 text-center bg-white dark:bg-gray-800 py-2 rounded-xl border border-blue-100 dark:border-gray-700 text-xl font-mono font-black text-blue-600 dark:text-blue-400 tracking-widest" id="generatedOtpCode">
+                    </div>
                 </div>
 
                 <form onsubmit="handleOtpSubmit(event)" class="space-y-4">
@@ -118,11 +157,11 @@
                     </div>
 
                     <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
-                        Kodni Tasdiqlash va Kirish
+                        Tasdiqlash va Kirish
                     </button>
 
                     <button type="button" onclick="backToStep1()" class="text-xs text-gray-500 hover:text-blue-600 dark:text-gray-400 transition mt-2 flex items-center justify-center mx-auto">
-                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Telefon raqamni o'zgartirish
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Raqamni o'zgartirish
                     </button>
                 </form>
             </div>
@@ -131,7 +170,7 @@
     </div>
 
     <!-- Header / Navbar -->
-    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 border-b border-gray-100 dark:border-gray-700">
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-30 border-b border-gray-100 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
@@ -151,32 +190,32 @@
 
                 <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale">
-                    <div id="menuCategoriesTitle" class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                    <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-1">
-                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3">
+                        <button onclick="switchTab('doctors')" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3">
                             <i class="fa-solid fa-user-doctor w-5"></i>
-                            <span data-translate="doctorsTab">Shifokorlar</span>
+                            <span>Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" id="menuItem-clinics" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                        <button onclick="switchTab('clinics')" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
                             <i class="fa-solid fa-hospital w-5"></i>
-                            <span data-translate="clinicsTab">Klinikalar</span>
+                            <span>Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" id="menuItem-pharmacies" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
                             <i class="fa-solid fa-pills w-5"></i>
-                            <span data-translate="pharmaciesTab">Med-magazinlar</span>
+                            <span>Med-magazinlar</span>
                         </button>
                         <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
                             <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
-                            <span id="menuAboutText">Biz haqimizda</span>
+                            <span>Biz haqimizda</span>
                         </button>
                     </div>
 
                     <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
                         <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
-                            <span data-translate="logoutText">Profildan chiqish</span>
+                            <span>Profildan chiqish</span>
                         </button>
                     </div>
                 </div>
@@ -187,13 +226,6 @@
                     <i class="fa-solid fa-heart text-red-500 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
-
-                <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-gray-100 dark:bg-gray-700 text-xs sm:text-sm font-medium rounded-xl px-2.5 py-2 focus:outline-none border-0 text-gray-700 dark:text-gray-200 cursor-pointer">
-                    <option value="uz">O'zbekcha</option>
-                    <option value="ru">Русский</option>
-                    <option value="en">English</option>
-                </select>
-
                 <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition flex items-center justify-center" title="Rejimni o'zgartirish">
                     <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
                 </button>
@@ -204,12 +236,9 @@
     <!-- Main Content Container -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="primary-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
-                <i class="fa-solid fa-heart-pulse"></i>
-            </div>
             <div class="relative z-10 max-w-2xl">
-                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
-                <p id="heroSubtitle" class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
+                <h1 class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
+                <p class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar va zamonaviy klinikalar katalogi.</p>
             </div>
             
             <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10 border border-blue-200/50 dark:border-gray-700">
@@ -219,7 +248,7 @@
                 </div>
                 <div class="flex gap-2">
                     <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="" id="optAllRegions">Barcha hududlar</option>
+                        <option value="">Barcha hududlar</option>
                         <option value="Toshkent">Toshkent sh.</option>
                         <option value="Samarqand">Samarqand</option>
                         <option value="Buxoro">Buxoro</option>
@@ -230,151 +259,34 @@
         </div>
 
         <div class="flex items-center justify-between px-2">
-            <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
+            <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
                 <i class="fa-solid fa-user-doctor text-blue-600"></i>
                 <span id="sectionTitleText">Shifokorlar</span>
             </h2>
-            <div class="flex items-center space-x-3">
-                <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-                <button onclick="openAddItemModal()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md">
-                    <i class="fa-solid fa-plus"></i>
-                    <span id="addItemBtnText">Shifokor qo'shish</span>
-                </button>
-            </div>
+            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
         </div>
 
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
     <!-- BIZ HAQIMIZDA MODALI -->
-    <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAboutModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
-                    <i class="fa-solid fa-heart-pulse text-2xl"></i>
-                </div>
-                <h3 id="aboutModalTitle" class="text-xl font-extrabold text-gray-900 dark:text-white">ShifoTop haqida</h3>
-                <p id="aboutModalSub" class="text-xs text-gray-500 dark:text-gray-400 mt-1">O'zbekistondagi eng qulay tibbiy ma'lumotlar va qidiruv platformasi.</p>
-            </div>
-
-            <div class="space-y-3 mb-6">
-                <a href="https://instagram.com/shifotop" target="_blank" class="flex items-center p-3.5 bg-pink-50 dark:bg-pink-900/20 rounded-2xl border border-pink-100 dark:border-pink-900/40 text-pink-600 dark:text-pink-400 font-semibold text-xs hover:scale-[1.01] transition">
-                    <i class="fa-brands fa-instagram text-lg w-8"></i>
-                    <span>Instagram sahifamiz (@shifotop)</span>
-                </a>
-                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/40 text-blue-600 dark:text-blue-400 font-semibold text-xs hover:scale-[1.01] transition">
-                    <i class="fa-brands fa-telegram text-lg w-8"></i>
-                    <span>Bog'lanish uchun Telegram botimiz</span>
-                </a>
-            </div>
-
-            <div class="bg-gray-50 dark:bg-gray-700/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
-                <h4 id="complaintsTitle" class="font-bold text-sm text-gray-900 dark:text-white mb-2 flex items-center space-x-2">
-                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
-                    <span>Shikoyatlar va takliflar</span>
-                </h4>
-                <p id="complaintsSub" class="text-[11px] text-gray-500 dark:text-gray-400 mb-3">Xizmat sifatini oshirish bo'yicha fikr yoki taklifingizni yozing.</p>
-                <form onsubmit="submitComplaint(event)" class="space-y-3">
-                    <input type="text" id="complaintSubject" required placeholder="Mavzu" class="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2.5 text-xs focus:outline-none focus:border-blue-600 dark:text-white">
-                    <textarea id="complaintText" rows="3" required placeholder="Matn..." class="w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-600 dark:text-white"></textarea>
-                    <button type="submit" id="submitComplaintBtn" class="w-full primary-bg text-white font-semibold py-2.5 rounded-xl text-xs shadow hover:opacity-95 transition">
-                        Yuborish
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Add Item Modal -->
-    <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
-            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <h3 id="addItemModalTitle" class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi ob'ekt qo'shish</h3>
-            
-            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3 mt-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Bo'limni tanlang</label>
-                    <select id="newItemCategory" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white cursor-pointer">
-                        <option value="doctors">Shifokor</option>
-                        <option value="clinics">Shifoxona / Klinika</option>
-                        <option value="pharmacies">Med-magazin</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Nomi (F.I.O yoki Muassasa nomi)</label>
-                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Mutaxassisligi</label>
-                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Hudud</label>
-                        <select id="newItemRegion" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white cursor-pointer">
-                            <option value="Toshkent">Toshkent sh.</option>
-                            <option value="Samarqand">Samarqand</option>
-                            <option value="Buxoro">Buxoro</option>
-                            <option value="Fargona">Farg'ona</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ish tajribasi</label>
-                        <input type="text" id="newItemExp" placeholder="10 yil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqami</label>
-                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">To'liq manzil</label>
-                    <input type="text" id="newItemAddress" required placeholder="Ko'cha va uy raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                </div>
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
-                    Saqlash va Qo'shish
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+            <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
-            <p id="bookingItemName" class="text-xs text-blue-700 dark:text-blue-400 font-semibold mb-4"></p>
-            
-            <form id="bookingForm" onsubmit="submitBooking(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ismingiz</label>
-                    <input type="text" id="patientName" required placeholder="Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqamingiz</label>
-                    <input type="tel" id="patientPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                </div>
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
-                    Band qilish
-                </button>
-            </form>
+            <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">ShifoTop haqida</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">O'zbekistondagi tibbiyot muassasalari va mutaxassislari katalogi.</p>
+            <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 text-xs font-semibold">
+                <i class="fa-brands fa-telegram text-base mr-3"></i> Telegram botimiz orqali bog'laning
+            </a>
         </div>
     </div>
 
     <!-- Favorites Modal -->
     <div id="favoritesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
+            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
@@ -398,18 +310,31 @@
                 { id: 2, name: "Dr. Nigora Yusupova", specialty: "Pediatr", region: "Samarqand", exp: "8 yil", phone: "+998 93 987 65 43", address: "Registon ko'chasi 14", img: "https://images.unsplash.com/photo-1594824813566-88855ce78341?w=400" }
             ],
             clinics: [
-                { id: 101, name: "Akfa Medline", specialty: "Köp tarmoqli klinika", region: "Toshkent", phone: "+998 71 203 30 03", address: "Olmazor tumani, Kichik xalka yo'li", img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400" }
+                { id: 101, name: "Akfa Medline", specialty: "Ko'p tarmoqli klinika", region: "Toshkent", phone: "+998 71 203 30 03", address: "Olmazor tumani", img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400" }
             ],
             pharmacies: []
         };
 
         window.onload = function() {
-            drawCaptcha();
             checkUserSession();
             renderGrid();
         };
 
-        // Draw Canvas Captcha with Grid Matrix & Noise Dots
+        // Intro screen tugmasi bosilganda
+        function startAppFromIntro() {
+            document.getElementById('introScreen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('introScreen').classList.add('hidden');
+                // Agar foydalanuvchi oldin kirmagan bo'lsa auth modalni ochamiz
+                const saved = localStorage.getItem('shifotop_user');
+                if (!saved) {
+                    document.getElementById('authModal').classList.remove('hidden');
+                    drawCaptcha();
+                }
+            }, 500);
+        }
+
+        // Draw Canvas Captcha
         function drawCaptcha() {
             const canvas = document.getElementById('captchaCanvas');
             const ctx = canvas.getContext('2d');
@@ -423,7 +348,6 @@
             ctx.fillStyle = '#f3f4f6';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Grid Matrix Lines
             ctx.strokeStyle = '#e5e7eb';
             ctx.lineWidth = 1;
             for (let x = 0; x < canvas.width; x += 12) {
@@ -433,7 +357,6 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
-            // Noise Dots
             for (let i = 0; i < 110; i++) {
                 ctx.fillStyle = Math.random() > 0.5 ? '#9ca3af' : '#6b7280';
                 ctx.beginPath();
@@ -441,10 +364,8 @@
                 ctx.fill();
             }
 
-            // Text Rendering
             ctx.font = 'italic bold 26px monospace';
             ctx.textBaseline = 'middle';
-
             for (let i = 0; i < generatedCaptchaText.length; i++) {
                 ctx.save();
                 const x = 18 + i * 32;
@@ -454,16 +375,6 @@
                 ctx.fillStyle = '#374151';
                 ctx.fillText(generatedCaptchaText[i], 0, 0);
                 ctx.restore();
-            }
-
-            // Lines
-            ctx.strokeStyle = '#6b7280';
-            ctx.lineWidth = 1.5;
-            for (let i = 0; i < 2; i++) {
-                ctx.beginPath();
-                ctx.moveTo(Math.random() * 20, Math.random() * canvas.height);
-                ctx.lineTo(canvas.width - Math.random() * 20, Math.random() * canvas.height);
-                ctx.stroke();
             }
         }
 
@@ -516,6 +427,7 @@
             const saved = localStorage.getItem('shifotop_user');
             if (saved) {
                 currentUser = JSON.parse(saved);
+                document.getElementById('introScreen').classList.add('hidden');
                 document.getElementById('authModal').classList.add('hidden');
                 updateUserUI();
             }
@@ -535,16 +447,15 @@
         function renderGrid() {
             const container = document.getElementById('contentGrid');
             const data = sampleData[currentTab] || [];
-            
             document.getElementById('resultCountBadge').innerText = `${data.length} ta natija`;
 
             if (data.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-medium">Bu bo'limda hozircha ma'lumot mavjud emas.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-medium">Ma'lumot mavjud emas</div>`;
                 return;
             }
 
             container.innerHTML = data.map(item => `
-                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between hover:shadow-xl transition">
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between">
                     <div>
                         <div class="relative">
                             <img src="${item.img}" class="w-full h-48 object-cover rounded-2xl mb-4">
@@ -558,7 +469,7 @@
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${item.phone}</span>
-                        <button onclick="openBookingModal('${item.name}')" class="px-3.5 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow hover:opacity-95 transition">Qabulga yozilish</button>
+                        <button onclick="alert('Qabulga yozilish oynasi')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow">Yozilish</button>
                     </div>
                 </div>
             `).join('');
@@ -567,7 +478,6 @@
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const region = document.getElementById('regionFilter').value;
-            
             const original = sampleData[currentTab] || [];
             const filtered = original.filter(item => {
                 const matchesSearch = item.name.toLowerCase().includes(query) || item.specialty.toLowerCase().includes(query);
@@ -577,12 +487,10 @@
 
             const container = document.getElementById('contentGrid');
             document.getElementById('resultCountBadge').innerText = `${filtered.length} ta natija`;
-
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-medium">Sizning qidiruvingiz bo'yicha hech narsa topilmadi.</div>`;
+                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">Hech narsa topilmadi</div>`;
                 return;
             }
-
             container.innerHTML = filtered.map(item => `
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between">
                     <div>
@@ -593,18 +501,15 @@
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${item.phone}</span>
-                        <button onclick="openBookingModal('${item.name}')" class="px-3.5 py-2 primary-bg text-white text-xs font-bold rounded-xl">Qabulga yozilish</button>
+                        <button onclick="alert('Qabulga yozilish oynasi')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl">Yozilish</button>
                     </div>
                 </div>
             `).join('');
         }
 
         function toggleFav(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-            } else {
-                favorites.push(id);
-            }
+            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+            else favorites.push(id);
             document.getElementById('favCount').innerText = favorites.length;
             renderGrid();
         }
@@ -613,76 +518,21 @@
             currentTab = tab;
             document.getElementById('sectionTitleText').innerText = tab === 'doctors' ? 'Shifokorlar' : tab === 'clinics' ? 'Klinikalar' : 'Med-magazinlar';
             renderGrid();
+            closeAllDropdowns();
         }
 
         function toggleMenuDropdown(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('hidden'); }
         function closeAllDropdowns() { document.getElementById('menuDropdown').classList.add('hidden'); }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-
         function openAboutModal() { document.getElementById('aboutModal').classList.remove('hidden'); }
         function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); }
-
-        function openAddItemModal() { document.getElementById('addItemModal').classList.remove('hidden'); }
-        function closeAddItemModal() { document.getElementById('addItemModal').classList.add('hidden'); }
-
-        function openBookingModal(name) {
-            document.getElementById('bookingItemName').innerText = name;
-            document.getElementById('bookingModal').classList.remove('hidden');
-        }
-        function closeBookingModal() { document.getElementById('bookingModal').classList.add('hidden'); }
-
         function openFavoritesModal() {
             const list = document.getElementById('favoritesList');
-            if (favorites.length === 0) {
-                list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">Saralanganlar ro'yxati bo'sh.</p>`;
-            } else {
-                list.innerHTML = favorites.map(id => {
-                    const item = sampleData.doctors.concat(sampleData.clinics).find(x => x.id === id);
-                    return item ? `<div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-xs font-bold flex justify-between items-center">
-                        <span>${item.name}</span>
-                        <button onclick="toggleFav(${item.id}); openFavoritesModal();" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
-                    </div>` : '';
-                }).join('');
-            }
+            if (favorites.length === 0) list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">Bo'sh</p>`;
+            else list.innerHTML = favorites.map(id => `<div class="p-2 bg-gray-50 dark:bg-gray-700 rounded-xl text-xs font-bold">Element #${id}</div>`).join('');
             document.getElementById('favoritesModal').classList.remove('hidden');
         }
         function closeFavoritesModal() { document.getElementById('favoritesModal').classList.add('hidden'); }
-
-        function handleAddItemSubmit(e) {
-            e.preventDefault();
-            const cat = document.getElementById('newItemCategory').value;
-            const name = document.getElementById('newItemName').value;
-            const spec = document.getElementById('newItemSpecialty').value;
-            const region = document.getElementById('newItemRegion').value;
-            const phone = document.getElementById('newItemPhone').value;
-            const addr = document.getElementById('newItemAddress').value;
-
-            sampleData[cat].unshift({
-                id: Date.now(),
-                name: name,
-                specialty: spec,
-                region: region,
-                phone: phone,
-                address: addr,
-                img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400"
-            });
-
-            closeAddItemModal();
-            renderGrid();
-            alert("Muvaffaqiyatli qo'shildi!");
-        }
-
-        function submitBooking(e) {
-            e.preventDefault();
-            closeBookingModal();
-            alert("Qabulga qabul qilindingiz! Tez orada operator aloqaga chiqadi.");
-        }
-
-        function submitComplaint(e) {
-            e.preventDefault();
-            closeAboutModal();
-            alert("Rahmat! Shikoyatingiz ko'rib chiqish uchun yuborildi.");
-        }
     </script>
 </body>
 </html>
