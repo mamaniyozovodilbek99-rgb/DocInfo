@@ -121,11 +121,32 @@
                             <i class="fa-solid fa-rotate-right text-sm"></i>
                         </button>
                     </div>
-                    <input type="text" id="captchaInput" required placeholder="Rasmdagi kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-wider">
+                    <input type="text" id="captchaInput" required placeholder="Kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-wider">
                 </div>
 
                 <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2 cursor-pointer">
                     Kirish va Tasdiqlash
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal (Faqat Admin kirishi uchun) -->
+    <div id="adminLoginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 text-center">
+            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-lock text-xl"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Dostupi</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Shifokor qo'shish uchun admin parolini kiriting.</p>
+            
+            <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
+                <input type="password" id="adminPasswordInput" required placeholder="Admin parol (masalan: admin123)" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center">
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
+                    Tasdiqlash va Kirish
                 </button>
             </form>
         </div>
@@ -157,27 +178,26 @@
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-1">
-                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3">
+                        <button onclick="switchTab('doctors')" id="menuItem-doctors" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-user-doctor w-5"></i>
                             <span data-translate="doctorsTab">Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" id="menuItem-clinics" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                        <button onclick="switchTab('clinics')" id="menuItem-clinics" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-hospital w-5"></i>
                             <span data-translate="clinicsTab">Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" id="menuItem-pharmacies" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                        <button onclick="switchTab('pharmacies')" id="menuItem-pharmacies" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-pills w-5"></i>
                             <span data-translate="pharmaciesTab">Med-magazinlar</span>
                         </button>
-                        <!-- BIZ HAQIMIZDA -->
-                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3">
+                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
                             <span id="menuAboutText">Biz haqimizda</span>
                         </button>
                     </div>
 
                     <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
-                        <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3">
+                        <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-right-from-bracket w-5"></i>
                             <span data-translate="logoutText">Profildan chiqish</span>
                         </button>
@@ -239,9 +259,9 @@
             </h2>
             <div class="flex items-center space-x-3">
                 <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-                <button onclick="openAddItemModal()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md cursor-pointer">
+                <button onclick="checkAdminAccess()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md cursor-pointer">
                     <i class="fa-solid fa-plus"></i>
-                    <span id="addItemBtnText">Shifokor qo'shish</span>
+                    <span id="addItemBtnText">Shifokor qo'shish (Admin)</span>
                 </button>
             </div>
         </div>
@@ -280,13 +300,13 @@
         </div>
     </div>
 
-    <!-- Add New Item Modal -->
+    <!-- Add New Item Modal (Admin uchun) -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi ob'ekt qo'shish</h3>
+            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi ob'ekt qo'shish (Admin)</h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Ma'lumotlarni kiriting.</p>
             
             <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
@@ -386,6 +406,7 @@
         let currentUser = null;
         let currentTab = 'doctors';
         let favorites = [];
+        let isAdminLoggedIn = false; // Admin huquqi
 
         const sampleData = {
             doctors: [
@@ -491,6 +512,35 @@
             location.reload();
         }
 
+        // ADMIN DOSTUPINI TEKSHIRISH
+        function checkAdminAccess() {
+            if (isAdminLoggedIn) {
+                document.getElementById('addItemModal').classList.remove('hidden');
+            } else {
+                document.getElementById('adminLoginModal').classList.remove('hidden');
+            }
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('adminLoginModal').classList.add('hidden');
+        }
+
+        function verifyAdminPassword(e) {
+            e.preventDefault();
+            const pass = document.getElementById('adminPasswordInput').value;
+            
+            // Admin paroli (buni o'zingiz xohlagan parolga o'zgartirishingiz mumkin, masalan: 'shifotop2026')
+            if (pass === 'admin123') {
+                isAdminLoggedIn = true;
+                closeAdminLoginModal();
+                document.getElementById('adminPasswordInput').value = '';
+                document.getElementById('addItemModal').classList.remove('hidden');
+            } else {
+                alert("Noto'g'ri admin paroli! Iltimos, qaytadan urinib ko'ring.");
+                document.getElementById('adminPasswordInput').value = '';
+            }
+        }
+
         function renderGrid() {
             const container = document.getElementById('contentGrid');
             const data = sampleData[currentTab] || [];
@@ -585,7 +635,6 @@
         function openAboutModal() { document.getElementById('aboutModal').classList.remove('hidden'); }
         function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); }
         
-        function openAddItemModal() { document.getElementById('addItemModal').classList.remove('hidden'); }
         function closeAddItemModal() { document.getElementById('addItemModal').classList.add('hidden'); }
 
         function openBookingModal(name) {
