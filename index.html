@@ -34,17 +34,18 @@
             to { transform: scale(1); opacity: 1; }
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes pulseSlow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
         .animate-scale { animation: scaleIn 0.3s ease-out forwards; }
-        .animate-fade { animation: fadeIn 0.6s ease-out forwards; }
-        .animate-pulse-slow { animation: pulseSlow 3s infinite ease-in-out; }
+        .animate-fade { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
 
+        /* Tilla rang (Gold Gradient) */
         .gold-gradient {
             background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
             -webkit-background-clip: text;
@@ -63,41 +64,46 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- INTRO / ANIMATED WELCOME SCREEN (Reklamniy / Skromniy Splash) -->
-    <div id="introScreen" class="fixed inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-900 z-50 flex flex-col items-center justify-center p-6 text-white text-center transition-opacity duration-500">
+    <!-- SKROMNIY VA CHIROYLI ANIMATSIYALI INTRO (SPLASH) EKRANI -->
+    <div id="introScreen" class="fixed inset-0 bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 z-50 flex flex-col items-center justify-center p-6 text-white text-center transition-all duration-700">
         <div class="animate-fade max-w-md w-full flex flex-col items-center">
-            <div class="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl animate-pulse-slow">
-                <i class="fa-solid fa-heart-pulse text-4xl text-white"></i>
+            
+            <!-- Qizil Yurak va Tilla Top logosi -->
+            <div class="w-24 h-24 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl animate-float">
+                <i class="fa-solid fa-heart-pulse text-4xl text-red-500 filter drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]"></i>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-black tracking-tight mb-3">
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
                 <span class="text-white">Shifo</span><span class="gold-gradient font-black">Top</span>
             </h1>
-            <p class="text-blue-100 text-sm sm:text-base font-normal mb-8 max-w-sm leading-relaxed">
-                Oʻzbekistondagi eng sara shifokorlar, zamonaviy klinikalar va med-magazinlar yagona platformada.
+            
+            <p class="text-gray-300 text-xs sm:text-sm font-normal mb-8 max-w-xs leading-relaxed opacity-90">
+                Oʻzbekistondagi eng sara shifokorlar va zamonaviy klinikalar yagona platformasi.
             </p>
-            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-white text-blue-700 hover:bg-blue-50 font-bold py-4 rounded-2xl text-sm transition shadow-xl transform hover:-translate-y-0.5">
+
+            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-2xl text-sm transition shadow-lg shadow-blue-600/30 transform hover:-translate-y-0.5">
                 Ilovaga kirish <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
             </button>
         </div>
-        <div class="absolute bottom-6 text-xs text-blue-200/60 font-medium">
-            © 2026 ShifoTop. Barcha huquqlar himoyalangan.
+
+        <div class="absolute bottom-6 text-[11px] text-gray-400 font-medium tracking-wide">
+            © 2026 ShifoTop • Barcha huquqlar himoyalangan.
         </div>
     </div>
 
-    <!-- Authentication Modal (Kirish / SMS Verification) -->
+    <!-- Authentication Modal (Kirish / Ro'yxatdan o'tish) -->
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             
-            <!-- STEP 1: Registration / Login Form -->
             <div id="authStep1">
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
-                        <i class="fa-solid fa-user-shield text-2xl"></i>
+                    <div class="w-16 h-16 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-red-500/20">
+                        <i class="fa-solid fa-heart-pulse text-2xl"></i>
                     </div>
                     <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                        Ro'yxatdan o'tish
+                        <span class="text-blue-600 dark:text-blue-500">Shifo</span><span class="gold-gradient font-black">Top</span>'ga xush kelibsiz
                     </h2>
-                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Telefon raqamingiz va rasmdagi kodni kiriting</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun ma'lumotlaringizni kiriting</p>
                 </div>
 
                 <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
@@ -110,12 +116,12 @@
                         <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
                     </div>
 
-                    <!-- Professional Canvas Captcha Section -->
+                    <!-- Canvas Captcha -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
                         <div class="flex items-center space-x-3 mb-2">
-                            <canvas id="captchaCanvas" width="220" height="60" class="flex-grow shadow-inner" onclick="drawCaptcha()"></canvas>
-                            <button type="button" onclick="drawCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Kodni yangilash">
+                            <canvas id="captchaCanvas" width="220" height="50" class="flex-grow shadow-inner" onclick="drawCaptcha()"></canvas>
+                            <button type="button" onclick="drawCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Yangilash">
                                 <i class="fa-solid fa-rotate-right text-base"></i>
                             </button>
                         </div>
@@ -123,49 +129,10 @@
                     </div>
 
                     <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2">
-                        SMS Kodni Olish
+                        Kirish
                     </button>
                 </form>
             </div>
-
-            <!-- STEP 2: SMS OTP Verification -->
-            <div id="authStep2" class="hidden text-center">
-                <div class="w-16 h-16 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-200 dark:border-blue-700">
-                    <i class="fa-solid fa-message text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">SMS Kodni Tasdiqlash</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-                    <span id="sentPhoneSpan" class="font-bold text-gray-800 dark:text-gray-200"></span> raqamiga yuborilgan tasdiqlash kodini kiriting.
-                </p>
-
-                <!-- Aniq ko'rinadigan Demo SMS Alert -->
-                <div class="bg-blue-50 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700 p-4 rounded-2xl mb-4 text-left">
-                    <div class="flex items-center space-x-2 text-xs font-bold text-blue-700 dark:text-blue-300 mb-1">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span>SMS Shlyuzi (Simulyatsiya):</span>
-                    </div>
-                    <p class="text-xs text-gray-600 dark:text-gray-300">
-                        Hozirgi test rejimida telefoningizga real SMS bormaydi. Tasdiqlash kodi quyida ko'rsatilgan:
-                    </p>
-                    <div class="mt-2 text-center bg-white dark:bg-gray-800 py-2 rounded-xl border border-blue-100 dark:border-gray-700 text-xl font-mono font-black text-blue-600 dark:text-blue-400 tracking-widest" id="generatedOtpCode">
-                    </div>
-                </div>
-
-                <form onsubmit="handleOtpSubmit(event)" class="space-y-4">
-                    <div>
-                        <input type="text" id="otpInput" maxlength="4" required placeholder="• • • •" class="w-full text-center text-2xl font-mono font-bold tracking-[1rem] bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl py-3 focus:outline-none focus:border-blue-600 dark:text-white">
-                    </div>
-
-                    <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20">
-                        Tasdiqlash va Kirish
-                    </button>
-
-                    <button type="button" onclick="backToStep1()" class="text-xs text-gray-500 hover:text-blue-600 dark:text-gray-400 transition mt-2 flex items-center justify-center mx-auto">
-                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Raqamni o'zgartirish
-                    </button>
-                </form>
-            </div>
-
         </div>
     </div>
 
@@ -174,7 +141,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
                 <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
-                    <div class="primary-bg text-white p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition relative shadow-blue-600/20">
+                    <div class="bg-red-50 dark:bg-red-900/20 text-red-500 p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition relative">
                         <i class="fa-solid fa-heart-pulse text-base"></i>
                     </div>
                     <div>
@@ -269,7 +236,7 @@
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- BIZ HAQIMIZDA MODALI -->
+    <!-- Modals -->
     <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
             <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
@@ -277,13 +244,9 @@
             </button>
             <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-white">ShifoTop haqida</h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">O'zbekistondagi tibbiyot muassasalari va mutaxassislari katalogi.</p>
-            <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400 text-xs font-semibold">
-                <i class="fa-brands fa-telegram text-base mr-3"></i> Telegram botimiz orqali bog'laning
-            </a>
         </div>
     </div>
 
-    <!-- Favorites Modal -->
     <div id="favoritesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
             <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition">
@@ -299,7 +262,6 @@
     <!-- JavaScript Logic -->
     <script>
         let generatedCaptchaText = '';
-        let generatedOtp = '';
         let currentUser = null;
         let currentTab = 'doctors';
         let favorites = [];
@@ -320,21 +282,19 @@
             renderGrid();
         };
 
-        // Intro screen tugmasi bosilganda
         function startAppFromIntro() {
-            document.getElementById('introScreen').style.opacity = '0';
+            const intro = document.getElementById('introScreen');
+            intro.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('introScreen').classList.add('hidden');
-                // Agar foydalanuvchi oldin kirmagan bo'lsa auth modalni ochamiz
+                intro.classList.add('hidden');
                 const saved = localStorage.getItem('shifotop_user');
                 if (!saved) {
                     document.getElementById('authModal').classList.remove('hidden');
                     drawCaptcha();
                 }
-            }, 500);
+            }, 700);
         }
 
-        // Draw Canvas Captcha
         function drawCaptcha() {
             const canvas = document.getElementById('captchaCanvas');
             const ctx = canvas.getContext('2d');
@@ -357,18 +317,18 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
-            for (let i = 0; i < 110; i++) {
+            for (let i = 0; i < 90; i++) {
                 ctx.fillStyle = Math.random() > 0.5 ? '#9ca3af' : '#6b7280';
                 ctx.beginPath();
                 ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1.2, 0, Math.PI * 2);
                 ctx.fill();
             }
 
-            ctx.font = 'italic bold 26px monospace';
+            ctx.font = 'italic bold 24px monospace';
             ctx.textBaseline = 'middle';
             for (let i = 0; i < generatedCaptchaText.length; i++) {
                 ctx.save();
-                const x = 18 + i * 32;
+                const x = 16 + i * 32;
                 const y = canvas.height / 2 + (Math.random() * 6 - 3);
                 ctx.translate(x, y);
                 ctx.rotate(Math.random() * 0.4 - 0.2);
@@ -391,36 +351,12 @@
 
             const name = document.getElementById('authName').value;
             const phone = document.getElementById('authContact').value;
-
-            generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
             currentUser = { name, phone };
-
-            document.getElementById('sentPhoneSpan').innerText = phone;
-            document.getElementById('generatedOtpCode').innerText = generatedOtp;
-
-            document.getElementById('authStep1').classList.add('hidden');
-            document.getElementById('authStep2').classList.remove('hidden');
-        }
-
-        function handleOtpSubmit(e) {
-            e.preventDefault();
-            const inputOtp = document.getElementById('otpInput').value.trim();
-
-            if (inputOtp !== generatedOtp) {
-                alert("SMS tasdiqlash kodi xato!");
-                return;
-            }
 
             localStorage.setItem('shifotop_user', JSON.stringify(currentUser));
             document.getElementById('authModal').classList.add('hidden');
             updateUserUI();
             alert("Muvaffaqiyatli kirdingiz!");
-        }
-
-        function backToStep1() {
-            document.getElementById('authStep2').classList.add('hidden');
-            document.getElementById('authStep1').classList.remove('hidden');
-            drawCaptcha();
         }
 
         function checkUserSession() {
@@ -469,7 +405,7 @@
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${item.phone}</span>
-                        <button onclick="alert('Qabulga yozilish oynasi')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow">Yozilish</button>
+                        <button onclick="alert('Qabulga yozilish')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow">Yozilish</button>
                     </div>
                 </div>
             `).join('');
@@ -501,7 +437,7 @@
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
                         <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${item.phone}</span>
-                        <button onclick="alert('Qabulga yozilish oynasi')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl">Yozilish</button>
+                        <button onclick="alert('Yozilish')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl">Yozilish</button>
                     </div>
                 </div>
             `).join('');
