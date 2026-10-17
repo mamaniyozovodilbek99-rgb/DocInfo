@@ -157,7 +157,7 @@
         </div>
     </div>
 
-    <!-- Header / Navbar (Birinchi rasm talabi bo'yicha ko'k rangda) -->
+    <!-- Header / Navbar (Ko'k rangda) -->
     <header class="primary-bg text-white shadow-sm sticky top-0 z-40 border-b border-blue-400/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
@@ -176,7 +176,7 @@
                     </div>
                 </div>
 
-                <!-- Dropdown Menu (Ikkinchi rasm talabi bo'yicha admin paneli oddiy foydalanuvchilardan yashirilgan) -->
+                <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale text-gray-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
@@ -194,8 +194,12 @@
                             <i class="fa-solid fa-pills w-5"></i>
                             <span>Med-magazinlar</span>
                         </button>
+                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3 cursor-pointer">
+                            <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
+                            <span>Biz haqimizda</span>
+                        </button>
                         
-                        <!-- Ro'yxatdan o'tish (Siz kimsiz? tanlovi orqali) -->
+                        <!-- Ro'yxatdan o'tish -->
                         <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-blue-50 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer border-t border-gray-100 dark:border-gray-700 mt-1">
                             <i class="fa-solid fa-user-plus w-5"></i>
                             <span>Ro'yxatdan o'tish</span>
@@ -212,8 +216,8 @@
             </div>
 
             <div class="flex items-center space-x-3">
-                <!-- Maxfiy admin kirish tugmasi -->
-                <button onclick="openAdminLoginModal()" class="text-[10px] text-blue-200 hover:text-white cursor-pointer px-2 py-1 bg-white/10 rounded-lg" title="Admin">Admin</button>
+                <!-- Maxfiy admin kirish tugmasi (Ichki qismi oq, yozuvi ko'k) -->
+                <button onclick="openAdminLoginModal()" class="text-xs font-bold text-blue-600 bg-white px-3 py-1.5 rounded-xl shadow hover:bg-gray-100 transition cursor-pointer" title="Admin">Admin</button>
 
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center cursor-pointer" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-400 text-base"></i>
@@ -233,8 +237,8 @@
                 <i class="fa-solid fa-heart-pulse"></i>
             </div>
             <div class="relative z-10 max-w-2xl">
-                <h1 class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
-                <p class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar va zamonaviy klinikalar katalogi.</p>
+                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va klinikalarni toping</h1>
+                <p id="heroSubtitle" class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Malakali mutaxassislar, zamonaviy klinikalar va dorixonalar ma'lumotlar bazasi bir joyda.</p>
             </div>
             
             <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10 border border-blue-200/50 dark:border-gray-700">
@@ -244,7 +248,7 @@
                 </div>
                 <div class="flex gap-2">
                     <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="">Barcha hududlar</option>
+                        <option value="" id="optAllRegions">Barcha hududlar</option>
                         <option value="Toshkent">Toshkent sh.</option>
                         <option value="Samarqand">Samarqand</option>
                         <option value="Buxoro">Buxoro</option>
@@ -255,20 +259,53 @@
         </div>
 
         <div class="flex items-center justify-between px-2">
-            <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
+            <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
                 <i class="fa-solid fa-user-doctor text-blue-600"></i>
                 <span id="sectionTitleText">Shifokorlar</span>
             </h2>
-            <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
+            <div class="flex items-center space-x-3">
+                <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
+            </div>
         </div>
 
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- Ma'lumot qo'shish Modal (Tanlangan bo'lim bo'yicha to'ldirilib adminga yuboriladi) -->
+    <!-- BIZ HAQIMIZDA MODALI -->
+    <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
+            <button onclick="closeAboutModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 bg-white border border-gray-100 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                    <i class="fa-solid fa-heart-pulse text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 dark:text-white">ShifoTop haqida</h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">O'zbekistondagi eng qulay tibbiy ma'lumotlar platformasi.</p>
+            </div>
+            <div class="space-y-3 mb-6">
+                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-blue-600 text-xs font-semibold">
+                    <i class="fa-brands fa-telegram text-lg w-8"></i> Telegram botimiz orqali bog'laning
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Profile Modal -->
+    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-10 cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div id="detailContentContainer"></div>
+        </div>
+    </div>
+
+    <!-- Add New Item Modal (Tanlangan bo'lim bo'yicha to'ldirilib adminga yuboriladi) -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
-            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white" id="modalFormTitle">Ma'lumotlarni qo'shish</h3>
@@ -323,7 +360,7 @@
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Qabulga yozilish</h3>
@@ -331,7 +368,7 @@
             <form onsubmit="submitBooking(event)" class="space-y-4">
                 <input type="text" required placeholder="Ism va familiyangiz" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
                 <input type="tel" required placeholder="Telefon raqamingiz" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                <button type="submit" class="w-full primary-bg text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg cursor-pointer">Band qilish</button>
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg cursor-pointer">Band qilish</button>
             </form>
         </div>
     </div>
@@ -339,7 +376,7 @@
     <!-- Favorites Modal -->
     <div id="favoritesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
@@ -453,7 +490,11 @@
 
         function logoutProfile() {
             localStorage.removeItem('shifotop_user');
-            location.reload();
+            const uw = document.getElementById('userWelcome');
+            if(uw) uw.innerText = "Tibbiyot Portali";
+            currentUser = null;
+            closeAllDropdowns();
+            alert("Profildan muvaffaqiyatli chiqdingiz!");
         }
 
         // Admin paneliga kirish (Maxfiy)
