@@ -33,18 +33,9 @@
             from { transform: scale(0.95); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        .animate-scale {
+            animation: scaleIn 0.2s ease-out forwards;
         }
-        @keyframes floatSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .animate-scale { animation: scaleIn 0.2s ease-out forwards; }
-        .animate-fade { animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-float { animation: floatSlow 3.5s ease-in-out infinite; }
-
         .captcha-bg {
             background: linear-gradient(135deg, #eff6ff 0%, #f3f4f6 100%);
             user-select: none;
@@ -64,37 +55,11 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- SKROMNIY VA CHIROYLI ANIMATSIYALI INTRO (SPLASH) EKRANI -->
-    <div id="introScreen" class="fixed inset-0 primary-bg z-50 flex flex-col items-center justify-center p-6 text-white text-center transition-all duration-700">
-        <div class="animate-fade max-w-md w-full flex flex-col items-center">
-            
-            <div class="w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-2xl animate-float border border-white/20">
-                <i class="fa-solid fa-heart-pulse text-4xl text-red-500 filter drop-shadow-[0_0_12px_rgba(239,68,68,0.5)]"></i>
-            </div>
-
-            <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-                <span class="text-white">Shifo</span><span class="gold-gradient font-black">Top</span>
-            </h1>
-            
-            <p class="text-blue-100 text-xs sm:text-sm font-normal mb-8 max-w-xs leading-relaxed">
-                Oʻzbekistondagi eng sara shifokorlar, zamonaviy klinikalar va med-magazinlar katalogi.
-            </p>
-
-            <button onclick="startAppFromIntro()" class="w-full max-w-xs bg-white text-blue-700 hover:bg-blue-50 font-bold py-3.5 rounded-2xl text-sm transition shadow-xl transform hover:-translate-y-0.5 cursor-pointer">
-                Ilovaga kirish <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
-            </button>
-        </div>
-
-        <div class="absolute bottom-6 text-[11px] text-blue-200/80 font-medium tracking-wide">
-            © 2026 ShifoTop • Barcha huquqlar himoyalangan.
-        </div>
-    </div>
-
     <!-- Authentication Modal -->
     <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
             <div class="text-center mb-6">
-                <div class="w-16 h-16 bg-white border border-gray-100 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
                     <i class="fa-solid fa-heart-pulse text-2xl"></i>
                 </div>
                 <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
@@ -117,7 +82,7 @@
                     <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
                     <div class="flex items-center space-x-3 mb-2">
                         <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-blue-700 dark:text-blue-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic"></div>
-                        <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition" title="Kodni yangilash">
+                        <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-xl transition cursor-pointer" title="Kodni yangilash">
                             <i class="fa-solid fa-rotate-right text-sm"></i>
                         </button>
                     </div>
@@ -131,7 +96,7 @@
         </div>
     </div>
 
-    <!-- Admin Login Modal (Faqat Admin kirishi uchun) -->
+    <!-- Admin Login Modal -->
     <div id="adminLoginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 text-center">
             <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
@@ -140,15 +105,32 @@
             <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
                 <i class="fa-solid fa-lock text-xl"></i>
             </div>
-            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Dostupi</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Shifokor qo'shish uchun admin parolini kiriting.</p>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Paneli</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Arizalarni ko'rish uchun parolni kiriting (admin123).</p>
             
             <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
-                <input type="password" id="adminPasswordInput" required placeholder="Admin parol (masalan: admin123)" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center">
+                <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center">
                 <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
-                    Tasdiqlash va Kirish
+                    Kirish
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Admin Moderation Panel Modal -->
+    <div id="adminPanelModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-blue-600"></i> Admin Moderatsiya Paneli
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Shifokor va klinikalardan kelib tushgan yangi arizalar.</p>
+            
+            <div id="pendingListContainer" class="space-y-4">
+                <!-- Arizalar shu yerga chiqadi -->
+            </div>
         </div>
     </div>
 
@@ -193,6 +175,11 @@
                         <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
                             <span id="menuAboutText">Biz haqimizda</span>
+                        </button>
+                        <!-- Admin Panel menyusi -->
+                        <button onclick="openAdminLoginModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl font-medium text-sm transition hover:bg-amber-50 dark:hover:bg-amber-900/20 text-amber-600 dark:text-amber-400 flex items-center space-x-3 cursor-pointer border-t border-gray-100 dark:border-gray-700 mt-1">
+                            <i class="fa-solid fa-shield-halved w-5"></i>
+                            <span>Admin Panel</span>
                         </button>
                     </div>
 
@@ -259,9 +246,10 @@
             </h2>
             <div class="flex items-center space-x-3">
                 <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-                <button onclick="checkAdminAccess()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md cursor-pointer">
+                <!-- Shifokor o'z ma'lumotini kiritib yuborishi uchun tugma -->
+                <button onclick="openAddItemModal()" id="addItemBtn" class="px-3.5 py-1.5 rounded-xl primary-bg text-white text-xs font-bold hover:opacity-95 transition flex items-center space-x-1.5 shadow-md cursor-pointer">
                     <i class="fa-solid fa-plus"></i>
-                    <span id="addItemBtnText">Shifokor qo'shish (Admin)</span>
+                    <span id="addItemBtnText">Ma'lumot qo'shish</span>
                 </button>
             </div>
         </div>
@@ -300,14 +288,14 @@
         </div>
     </div>
 
-    <!-- Add New Item Modal (Admin uchun) -->
+    <!-- Add New Item Modal (Shifokor/Klinika o'z ma'lumotini to'ldirib yuborishi uchun) -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Yangi ob'ekt qo'shish (Admin)</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Ma'lumotlarni kiriting.</p>
+            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white">Ma'lumotlarni qo'shish uchun ariza</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Ma'lumotlaringiz admin tomonidan tekshirilgandan so'ng saytda e'lon qilinadi.</p>
             
             <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
                 <div>
@@ -356,7 +344,7 @@
                     <textarea id="newItemBio" rows="2" placeholder="Qisqacha ma'lumot..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white"></textarea>
                 </div>
                 <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg mt-2 cursor-pointer">
-                    Saqlash va Qo'shish
+                    Adminga yuborish
                 </button>
             </form>
         </div>
@@ -406,8 +394,8 @@
         let currentUser = null;
         let currentTab = 'doctors';
         let favorites = [];
-        let isAdminLoggedIn = false; // Admin huquqi
 
+        // Asosiy tasdiqlangan ma'lumotlar bazasi
         const sampleData = {
             doctors: [
                 { id: 1, name: "Dr. Alisher Qodirov", specialty: "Kardiolog", region: "Toshkent", exp: "12 yil", phone: "+998 90 123 45 67", address: "Shayxontohur tumani", bio: "Oliy toifali kardiolog mutaxassis.", img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400" },
@@ -418,6 +406,9 @@
             ],
             pharmacies: []
         };
+
+        // Adminga kelib tushgan va moderatsiyadagi arizalar
+        let pendingSubmissions = [];
 
         const translations = {
             uz: {
@@ -512,32 +503,81 @@
             location.reload();
         }
 
-        // ADMIN DOSTUPINI TEKSHIRISH
-        function checkAdminAccess() {
-            if (isAdminLoggedIn) {
-                document.getElementById('addItemModal').classList.remove('hidden');
-            } else {
-                document.getElementById('adminLoginModal').classList.remove('hidden');
-            }
+        // Admin paneliga kirish
+        function openAdminLoginModal() {
+            closeAllDropdowns();
+            document.getElementById('adminLoginModal').classList.remove('hidden');
         }
-
         function closeAdminLoginModal() {
             document.getElementById('adminLoginModal').classList.add('hidden');
         }
-
         function verifyAdminPassword(e) {
             e.preventDefault();
             const pass = document.getElementById('adminPasswordInput').value;
-            
-            // Admin paroli (buni o'zingiz xohlagan parolga o'zgartirishingiz mumkin, masalan: 'shifotop2026')
             if (pass === 'admin123') {
-                isAdminLoggedIn = true;
                 closeAdminLoginModal();
                 document.getElementById('adminPasswordInput').value = '';
-                document.getElementById('addItemModal').classList.remove('hidden');
+                openAdminPanel();
             } else {
-                alert("Noto'g'ri admin paroli! Iltimos, qaytadan urinib ko'ring.");
+                alert("Noto'g'ri parol! (Standart parol: admin123)");
                 document.getElementById('adminPasswordInput').value = '';
+            }
+        }
+
+        function openAdminPanel() {
+            renderPendingList();
+            document.getElementById('adminPanelModal').classList.remove('hidden');
+        }
+        function closeAdminPanel() {
+            document.getElementById('adminPanelModal').classList.add('hidden');
+        }
+
+        // Adminga kelgan arizalarni chiqarish
+        function renderPendingList() {
+            const container = document.getElementById('pendingListContainer');
+            if (pendingSubmissions.length === 0) {
+                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha tekshiruvni kutayotgan arizalar yo'q.</p>`;
+                return;
+            }
+
+            container.innerHTML = pendingSubmissions.map((item, index) => `
+                <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-600 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <span class="text-[10px] font-bold px-2.5 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
+                        <h4 class="font-bold text-base text-gray-900 dark:text-white mt-1">${item.name}</h4>
+                        <p class="text-xs text-blue-600 dark:text-blue-400 font-medium">${item.specialty} • ${item.region}</p>
+                        <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-phone mr-1"></i>${item.phone} | <i class="fa-solid fa-location-dot mr-1"></i>${item.address}</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border">${item.bio || 'Ma\'lumot yo\'q'}</p>
+                    </div>
+                    <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
+                        <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl transition cursor-pointer shadow">
+                            <i class="fa-solid fa-check mr-1"></i> Maqullash
+                        </button>
+                        <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-4 rounded-xl transition cursor-pointer shadow">
+                            <i class="fa-solid fa-xmark mr-1"></i> Rad etish / To'g'rilash
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Admin maqullaganda
+        function approveSubmission(index) {
+            const item = pendingSubmissions[index];
+            sampleData[item.category].unshift(item);
+            pendingSubmissions.splice(index, 1);
+            renderPendingList();
+            renderGrid();
+            alert("Ariza maqullandi va ilovada e'lon qilindi!");
+        }
+
+        // Admin rad etganda yoki to'g'rilash haqida ogohlantirish yuborganda
+        function rejectSubmission(index) {
+            const reason = prompt("Shifokorga yuboriladigan xabar / rad etish sababini yozing:", "Ma'lumotlar xato yoki to'liq emas, iltimos to'g'rilang.");
+            if (reason !== null) {
+                pendingSubmissions.splice(index, 1);
+                renderPendingList();
+                alert(`Ariza rad etildi. Ogohlantirish yuborildi: "${reason}"`);
             }
         }
 
@@ -635,6 +675,7 @@
         function openAboutModal() { document.getElementById('aboutModal').classList.remove('hidden'); }
         function closeAboutModal() { document.getElementById('aboutModal').classList.add('hidden'); }
         
+        function openAddItemModal() { document.getElementById('addItemModal').classList.remove('hidden'); }
         function closeAddItemModal() { document.getElementById('addItemModal').classList.add('hidden'); }
 
         function openBookingModal(name) {
@@ -679,6 +720,7 @@
         }
         function closeFavoritesModal() { document.getElementById('favoritesModal').classList.add('hidden'); }
 
+        // Shifokor ma'lumotlarini to'ldirib Adminga yuborishi
         function handleAddItemSubmit(e) {
             e.preventDefault();
             const cat = document.getElementById('newItemCategory').value;
@@ -689,15 +731,17 @@
             const addr = document.getElementById('newItemAddress').value;
             const bio = document.getElementById('newItemBio').value;
 
-            sampleData[cat].unshift({
+            const newItem = {
                 id: Date.now(),
+                category: cat,
                 name, specialty: spec, region, phone, address: addr, bio,
                 img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400"
-            });
+            };
 
+            pendingSubmissions.push(newItem); // Adminga yuborildi
             closeAddItemModal();
-            renderGrid();
-            alert("Muvaffaqiyatli qo'shildi!");
+            document.getElementById('addItemForm').reset();
+            alert("Ma'lumotlaringiz adminga yuborildi! Admin tasdiqlagach, ilovada ko'rinishni boshlaydi.");
         }
 
         function submitBooking(e) {
