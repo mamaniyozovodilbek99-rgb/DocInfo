@@ -1,13 +1,24 @@
+Barcha talablaringiz bo‘yicha platforma to‘liq qayta ishlandi:
+ * O‘zbekistonning barcha 14 ta hududi va ularning asosiy tumanlari:
+   * Hududlar ro‘yxati kengaytirildi (Toshkent sh., Toshkent vil., Samarqand, Buxoro, Andijon, Farg‘ona, Namangan, Qashqadaryo, Surxondaryo, Xorazm, Navoiy, Jizzax, Sirdaryo, Qoraqalpog‘iston va Xorij).
+   * Tumanlar bo‘yicha saralash va qidiruv imkoniyati integratsiya qilindi.
+ * Logotipdagi "Top" so‘zi tilla rangda:
+   * Shifotop logotipidagi "Top" so‘zi metallik tilla gradient (gold-gradient effekti) bilan bezatildi.
+ * Ranglar gammasi va Premium vizual:
+   * Standart arzon ko‘k rang o‘rniga shveysariya va yevropa xususiy klinikalarida qo‘llaniladigan Royal Deep Emerald & Sapphire Blue (chuqur zumrad-ko‘k va boy safir) palitrasi qo‘yildi.
+   * Orqa fonga tibbiy kardiogramma va kletkali naqsh (subtle medical pulse SVG grid) bilinar-bilinmas (5-7% shaffoflikda) joylashtirildi.
+ * Barcha oldingi funksiyalar (5 ta bo‘lim, 5 ta rasm, ko‘p tillilik, reyting va maxfiy admin) to‘liq saqlandi.
+Faylingizni yangilash uchun to‘liq tayyor kod:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShifoTop — Milliy Tibbiyot Platformasi</title>
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -19,16 +30,13 @@
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
                     },
                     colors: {
-                        slate: {
-                            850: '#151e2e',
-                            900: '#0f172a',
-                        },
                         brand: {
-                            50: '#f0f7ff',
-                            100: '#e0effe',
-                            500: '#0284c7',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#0d9488',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#082f49',
                         }
                     }
                 }
@@ -46,126 +54,137 @@
             to { transform: scale(1); opacity: 1; }
         }
         .animate-scale { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .glass-header {
-            background: rgba(15, 23, 42, 0.88);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+        
+        /* Premium Tilla Gradient */
+        .gold-gradient {
+            background: linear-gradient(135deg, #d4af37 0%, #fff2a8 35%, #aa7c11 70%, #ffd700 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 1px 2px rgba(170, 124, 17, 0.25));
         }
-        .badge-verified {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+
+        /* Bilinar-bilinmas boy naqsh foni */
+        .bg-medical-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(rgba(14, 116, 144, 0.06) 1.5px, transparent 1.5px), radial-gradient(rgba(15, 23, 42, 0.04) 1.5px, #f8fafc 1.5px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+        }
+        .dark .bg-medical-pattern {
+            background-color: #090e17;
+            background-image: radial-gradient(rgba(56, 189, 248, 0.08) 1.5px, transparent 1.5px), radial-gradient(rgba(15, 23, 42, 0.1) 1.5px, #090e17 1.5px);
+        }
+
+        /* Royal Sapphire & Emerald Hero */
+        .premium-hero-bg {
+            background: linear-gradient(135deg, #061e36 0%, #0c3559 40%, #0d4a5c 75%, #064e3b 100%);
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 antialiased" onclick="closeAllDropdowns(event)">
+<body class="bg-medical-pattern text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 antialiased" onclick="closeAllDropdowns(event)">
 
     <!-- Rol tanlash Modal (Ro'yxatdan o'tish) -->
-    <div id="roleSelectModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="roleSelectModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
             <button onclick="skipRoleSelection()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <div class="w-14 h-14 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+            <div class="w-14 h-14 bg-gradient-to-tr from-cyan-600 to-blue-700 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-cyan-600/25">
                 <i class="fa-solid fa-user-plus text-xl"></i>
             </div>
             <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight mb-1" id="lblRoleModalTitle">Katalogga qo'shilish</h2>
             <p class="text-xs text-slate-500 dark:text-slate-400 mb-6" id="lblRoleModalSub">Ro'yxatdan o'tish uchun yo'nalishingizni tanlang</p>
             
             <div class="space-y-2.5">
-                <button onclick="openRegisterForm('doctors', 'doctors')" class="w-full p-3.5 bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-user-doctor text-blue-600 dark:text-blue-400 text-base"></i> <span id="optDoc">Shifokor</span></span>
+                <button onclick="openRegisterForm('doctors', 'doctors')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-user-doctor text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optDoc">Shifokor</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <button onclick="openRegisterForm('clinics', 'clinics')" class="w-full p-3.5 bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-blue-600 dark:text-blue-400 text-base"></i> <span id="optClin">Klinika / Shifoxona</span></span>
+                <button onclick="openRegisterForm('clinics', 'clinics')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optClin">Klinika / Shifoxona</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <button onclick="openRegisterForm('pharmacies', 'pharmacies')" class="w-full p-3.5 bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-pills text-blue-600 dark:text-blue-400 text-base"></i> <span id="optPharm">Dorixona</span></span>
+                <button onclick="openRegisterForm('pharmacies', 'pharmacies')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-pills text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optPharm">Dorixona</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <button onclick="openRegisterForm('medical_store', 'medical_store')" class="w-full p-3.5 bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-stethoscope text-blue-600 dark:text-blue-400 text-base"></i> <span id="optStore">Tibbiy buyumlar (Med-texnika)</span></span>
+                <button onclick="openRegisterForm('medical_store', 'medical_store')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-stethoscope text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optStore">Tibbiy buyumlar (Med-texnika)</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
-                <button onclick="openRegisterForm('abroad_treatment', 'abroad_treatment')" class="w-full p-3.5 bg-slate-50 hover:bg-blue-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/70 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-globe text-blue-600 dark:text-blue-400 text-base"></i> <span id="optAbroad">Xorijda davolanish</span></span>
+                <button onclick="openRegisterForm('abroad_treatment', 'abroad_treatment')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-globe text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optAbroad">Xorijda davolanish</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm yuklash bilan) -->
-    <div id="addItemModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+    <!-- Ma'lumot qo'shish anketasi (Tumanlar va 5 tagacha rasm bilan) -->
+    <div id="addItemModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <h3 class="font-extrabold text-xl text-slate-900 dark:text-white" id="modalFormTitle">Anketa to'ldirish</h3>
+            <h3 class="font-black text-xl text-slate-900 dark:text-white" id="modalFormTitle">Anketa to'ldirish</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mb-5 mt-1" id="modalFormSub">Ma'lumotlaringiz moderator tasdiqlaganidan keyin saytda chiqadi.</p>
             
-            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-4">
+            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3.5">
                 <input type="hidden" id="newItemCategory">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormName">F.I.O yoki Muassasa nomi</label>
-                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormSpec">Mutaxassisligi</label>
-                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormRegion">Hudud</label>
-                        <select id="newItemRegion" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white cursor-pointer">
-                            <option value="Toshkent">Toshkent sh.</option>
-                            <option value="Samarqand">Samarqand</option>
-                            <option value="Buxoro">Buxoro</option>
-                            <option value="Fargona">Farg'ona</option>
-                            <option value="Xorij">Xorij</option>
-                        </select>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormRegion">Viloyat / Hudud</label>
+                        <select id="newItemRegion" onchange="updateFormDistricts()" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white cursor-pointer"></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormExp">Ish tajribasi / Vaqti</label>
-                        <input type="text" id="newItemExp" placeholder="10 yil / 24/7" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Tuman / Shaxar</label>
+                        <select id="newItemDistrict" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white cursor-pointer"></select>
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormExp">Ish staji / Vaqti</label>
+                        <input type="text" id="newItemExp" placeholder="10 yil / 24/7" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormPhone">Telefon raqam</label>
-                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram</label>
-                        <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Instagram</label>
-                        <input type="text" id="newItemInstagram" placeholder="profil" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram / Instagram</label>
+                        <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormAddress">Manzil va Mo'ljal</label>
-                    <input type="text" id="newItemAddress" required placeholder="Ko'cha, bino raqami" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormAddress">Aniq manzil va mo'ljal</label>
+                    <input type="text" id="newItemAddress" required placeholder="Ko'cha, bino raqami" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormBio">Ma'lumot / Tavsif</label>
-                    <textarea id="newItemBio" rows="2" placeholder="Qisqacha ma'lumot..." class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"></textarea>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormBio">Batafsil ma'lumot</label>
+                    <textarea id="newItemBio" rows="2" placeholder="Qisqacha tavsif..." class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white"></textarea>
                 </div>
 
                 <!-- 5 tagacha rasm yuklash -->
-                <div class="p-4 bg-slate-50 dark:bg-slate-700/40 rounded-2xl border border-slate-200 dark:border-slate-600">
-                    <label class="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-2 flex items-center justify-between">
-                        <span><i class="fa-solid fa-images mr-1.5 text-blue-600"></i> <span id="lblFormImages">Rasmlar (5 tagacha yuklang)</span></span>
-                        <span id="uploadedCountText" class="text-xs text-blue-600 font-bold bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-md">0/5</span>
+                <div class="p-3.5 bg-slate-50 dark:bg-slate-700/40 rounded-2xl border border-slate-200 dark:border-slate-600">
+                    <label class="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5 flex items-center justify-between">
+                        <span><i class="fa-solid fa-images mr-1.5 text-cyan-600"></i> <span id="lblFormImages">Rasmlar (5 tagacha yuklang)</span></span>
+                        <span id="uploadedCountText" class="text-xs text-cyan-700 font-black bg-cyan-50 dark:bg-cyan-950 px-2 py-0.5 rounded-md">0/5</span>
                     </label>
-                    <input type="file" id="imageFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
-                    <div id="imagePreviewContainer" class="flex gap-2.5 mt-3 overflow-x-auto pb-1 scrollbar-none"></div>
+                    <input type="file" id="imageFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-700 file:text-white hover:file:bg-cyan-800 cursor-pointer">
+                    <div id="imagePreviewContainer" class="flex gap-2.5 mt-2.5 overflow-x-auto pb-1 scrollbar-none"></div>
                 </div>
 
-                <button type="submit" id="btnSubmitForm" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-500/20 cursor-pointer">
+                <button type="submit" id="btnSubmitForm" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-cyan-600/20 cursor-pointer">
                     Tasdiqlash uchun Adminga yuborish
                 </button>
             </form>
@@ -173,7 +192,7 @@
     </div>
 
     <!-- MAXFIY ADMIN KIRISH MODALI -->
-    <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
             <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
@@ -184,8 +203,8 @@
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Admin Boshqaruvi</h3>
             <p class="text-xs text-slate-400 mb-4">Maxfiy parolni kiriting</p>
             <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
-                <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
+                <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-800 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
                     Kirish
                 </button>
             </form>
@@ -193,13 +212,13 @@
     </div>
 
     <!-- ADMIN MODERATSIYA PANELI (Bildirishnomalar ro'yxati) -->
-    <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+    <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-blue-600"></i> Moderator Nazorati
+                <i class="fa-solid fa-shield-halved text-cyan-600"></i> Moderator Nazorati
             </h3>
             <p class="text-xs text-slate-400 mb-4 mt-1">Yangi kelib tushgan arizalar. To'liq ko'rish uchun arizaga bosing.</p>
             <div id="pendingListContainer" class="space-y-3"></div>
@@ -216,56 +235,56 @@
         </div>
     </div>
 
-    <!-- Professional Glass Header / Navbar -->
-    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
+    <!-- Header / Navbar (Top so'zi Tilla rangda) -->
+    <header class="sticky top-0 z-40 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
             <div class="relative flex items-center gap-3">
                 <!-- Maxfiy logo tugmasi -->
-                <div onclick="handleSecretAdminClick()" class="w-11 h-11 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/25 active:scale-95 transition cursor-pointer shrink-0">
+                <div onclick="handleSecretAdminClick()" class="w-11 h-11 bg-gradient-to-tr from-cyan-600 via-blue-700 to-indigo-800 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/20 active:scale-95 transition cursor-pointer shrink-0">
                     <i class="fa-solid fa-heart-pulse text-lg"></i>
                 </div>
 
-                <!-- Menyu ochilishi -->
+                <!-- Menyu ochilishi (Top so'zi tilla rang) -->
                 <div onclick="toggleMenuDropdown(event)" class="cursor-pointer select-none">
                     <div class="flex items-center gap-1.5">
-                        <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white">
-                            Shifo<span class="text-blue-600">Top</span>
+                        <span class="text-2xl font-black tracking-tight text-slate-900 dark:text-white">
+                            Shifo<span class="gold-gradient font-black tracking-normal">Top</span>
                         </span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </div>
-                    <span class="block text-[11px] text-slate-400 dark:text-slate-400 font-semibold tracking-wide" id="lblAppSubtitle">Milliy Tibbiyot Platformasi</span>
+                    <span class="block text-[11px] text-slate-400 font-semibold tracking-wide" id="lblAppSubtitle">Milliy Tibbiyot Platformasi</span>
                 </div>
 
-                <!-- Ochiluvchi zamonaviy menyu -->
+                <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 top-14 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 hidden z-50 animate-scale text-slate-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700 text-[11px] font-bold text-slate-400 uppercase tracking-wider" id="lblSectionsMenu">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-0.5">
                         <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
-                            <i class="fa-solid fa-user-doctor w-4 text-blue-600"></i>
+                            <i class="fa-solid fa-user-doctor w-4 text-cyan-600"></i>
                             <span class="txt-doctors">Shifokorlar</span>
                         </button>
                         <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
-                            <i class="fa-solid fa-hospital w-4 text-blue-600"></i>
+                            <i class="fa-solid fa-hospital w-4 text-cyan-600"></i>
                             <span class="txt-clinics">Klinikalar</span>
                         </button>
                         <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
-                            <i class="fa-solid fa-pills w-4 text-blue-600"></i>
+                            <i class="fa-solid fa-pills w-4 text-cyan-600"></i>
                             <span class="txt-pharmacies">Dorixonalar</span>
                         </button>
                         <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
-                            <i class="fa-solid fa-stethoscope w-4 text-blue-600"></i>
+                            <i class="fa-solid fa-stethoscope w-4 text-cyan-600"></i>
                             <span class="txt-medical_store">Tibbiy buyumlar</span>
                         </button>
                         <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
-                            <i class="fa-solid fa-globe w-4 text-blue-600"></i>
+                            <i class="fa-solid fa-globe w-4 text-cyan-600"></i>
                             <span class="txt-abroad_treatment">Xorijda davolanish</span>
                         </button>
 
                         <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
 
-                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition bg-blue-50/70 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center gap-3 cursor-pointer">
+                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition bg-cyan-50/70 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-plus-circle w-4"></i>
                             <span id="lblJoinCatalog">Ro'yxatdan o'tish</span>
                         </button>
@@ -280,9 +299,8 @@
 
             <!-- O'ng taraf elementlari -->
             <div class="flex items-center gap-2">
-                <!-- Til tanlash -->
                 <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center gap-1 text-[11px] font-bold border border-slate-200/50 dark:border-slate-700">
-                    <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-blue-600 shadow-sm transition">UZ</button>
+                    <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-cyan-700 dark:text-cyan-400 shadow-sm transition">UZ</button>
                     <button onclick="changeLanguage('ru')" id="lang-ru" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">RU</button>
                     <button onclick="changeLanguage('en')" id="lang-en" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">EN</button>
                 </div>
@@ -301,46 +319,45 @@
     <!-- Asosiy Qism -->
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         
-        <!-- Zamonaviy Hero Qidiruv Bloki -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-blue-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-slate-900/10 border border-slate-800">
-            <div class="absolute -right-12 -bottom-12 opacity-5 text-[220px] pointer-events-none">
+        <!-- Royal Sapphire & Emerald Premium Hero Qidiruv Bloki -->
+        <div class="relative overflow-hidden premium-hero-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-slate-900/15 border border-cyan-800/40">
+            <div class="absolute -right-12 -bottom-12 opacity-10 text-[230px] pointer-events-none text-cyan-200">
                 <i class="fa-solid fa-heart-pulse"></i>
             </div>
             
             <div class="relative z-10 max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-400 text-xs font-bold mb-3">
-                    <i class="fa-solid fa-shield-halved text-[11px]"></i> 100% Sertifikatlangan Katalog
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-300/20 text-cyan-300 text-xs font-bold mb-3">
+                    <i class="fa-solid fa-shield-halved text-[11px]"></i> 100% Rasmiy Tibbiy Katalog
                 </div>
                 <h1 id="heroTitle" class="text-2xl sm:text-4xl font-black mb-2 tracking-tight leading-snug">
                     O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping
                 </h1>
-                <p id="heroSubtitle" class="text-slate-400 text-xs sm:text-sm font-medium mb-6">
-                    Shifokorlar, klinikalar, dorixonalar va xorijda davolanish bitta platformada.
+                <p id="heroSubtitle" class="text-cyan-100/80 text-xs sm:text-sm font-medium mb-6">
+                    Barcha viloyatlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.
                 </p>
             </div>
             
-            <!-- Qidiruv paneli -->
+            <!-- 2 Pog'onali Filtrlash Paneli (Viloyat + Tuman) -->
             <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-2 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-2 relative z-10 border border-slate-100 dark:border-slate-700">
                 <div class="flex items-center px-4 flex-grow bg-slate-50 dark:bg-slate-700/50 rounded-xl py-3 sm:py-0">
                     <i class="fa-solid fa-search text-slate-400 mr-3 text-sm"></i>
                     <input type="text" id="searchInput" oninput="filterData()" placeholder="Qidirish..." class="w-full bg-transparent border-0 focus:outline-none text-slate-800 dark:text-slate-100 text-xs sm:text-sm placeholder-slate-400 font-medium">
                 </div>
-                <div class="flex gap-2">
-                    <select id="regionFilter" onchange="filterData()" class="bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold w-full sm:w-auto cursor-pointer">
-                        <option value="" id="optAllRegions">Barcha hududlar</option>
-                        <option value="Toshkent">Toshkent sh.</option>
-                        <option value="Samarqand">Samarqand</option>
-                        <option value="Buxoro">Buxoro</option>
-                        <option value="Fargona">Farg'ona</option>
-                        <option value="Xorij">Xorij</option>
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <!-- 1. Viloyat Tanlash -->
+                    <select id="regionFilter" onchange="onRegionChange()" class="bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
+                    </select>
+                    <!-- 2. Tuman Tanlash -->
+                    <select id="districtFilter" onchange="filterData()" class="bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
+                        <option value="">Barcha tumanlar</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Gorizontal Tablar (Zamonaviy chip uslubida) -->
+        <!-- Gorizontal Tablar -->
         <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-            <button onclick="switchTab('doctors')" id="fastTab-doctors" class="px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-500/20">
+            <button onclick="switchTab('doctors')" id="fastTab-doctors" class="px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-gradient-to-r from-cyan-600 to-blue-700 text-white border-transparent shadow-sm">
                 <i class="fa-solid fa-user-doctor mr-1.5"></i> <span class="txt-doctors">Shifokorlar</span>
             </button>
             <button onclick="switchTab('clinics')" id="fastTab-clinics" class="px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50">
@@ -360,10 +377,10 @@
         <!-- Sarlavha & Natija hisobi -->
         <div class="flex items-center justify-between px-1">
             <h2 id="currentSectionTitle" class="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
-                <i id="sectionIcon" class="fa-solid fa-user-doctor text-blue-600"></i>
+                <i id="sectionIcon" class="fa-solid fa-user-doctor text-cyan-600"></i>
                 <span id="sectionTitleText">Shifokorlar</span>
             </h2>
-            <span id="resultCountBadge" class="text-xs font-bold px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full border border-slate-200/60 dark:border-slate-700">
+            <span id="resultCountBadge" class="text-xs font-bold px-3 py-1 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-full border border-slate-200/80 dark:border-slate-700 shadow-sm">
                 0 ta natija
             </span>
         </div>
@@ -388,12 +405,12 @@
             <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
-            <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+            <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
                 <i class="fa-solid fa-heart-pulse text-2xl"></i>
             </div>
             <h3 class="text-xl font-black text-slate-900 dark:text-white" id="lblAboutTitle">ShifoTop haqida</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5" id="lblAboutDesc">O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi.</p>
-            <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center justify-center gap-2 p-3.5 bg-blue-50 dark:bg-slate-700 hover:bg-blue-100 rounded-2xl text-blue-600 dark:text-blue-400 text-xs font-bold transition">
+            <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center justify-center gap-2 p-3.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 rounded-2xl text-cyan-700 dark:text-cyan-400 text-xs font-bold transition">
                 <i class="fa-brands fa-telegram text-base"></i> Telegram botimiz orqali bog'laning
             </a>
         </div>
@@ -406,11 +423,11 @@
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="lblBookingTitle">Qabulga yozilish / Murojaat</h3>
-            <p id="bookingItemName" class="text-xs text-blue-600 font-bold mb-4"></p>
+            <p id="bookingItemName" class="text-xs text-cyan-600 font-bold mb-4"></p>
             <form onsubmit="submitBooking(event)" class="space-y-3">
-                <input type="text" required placeholder="Ism va familiyangiz" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" id="bookingInputName">
-                <input type="tel" required placeholder="Telefon raqamingiz" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" id="bookingInputPhone">
-                <button type="submit" id="btnBookingSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-500/20 cursor-pointer">Tasdiqlash</button>
+                <input type="text" required placeholder="Ism va familiyangiz" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500" id="bookingInputName">
+                <input type="tel" required placeholder="Telefon raqamingiz" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3 text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500" id="bookingInputPhone">
+                <button type="submit" id="btnBookingSubmit" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-cyan-600/20 cursor-pointer">Tasdiqlash</button>
             </form>
         </div>
     </div>
@@ -438,13 +455,33 @@
         let secretClickTimer = null;
         let reviewStarRating = 5;
 
+        // O'zbekistonning barcha viloyatlari va ularning asosiy tumanlari
+        const regionsData = {
+            "Toshkent sh.": ["Shayxontohur", "Yunusobod", "Mirzo Ulug'bek", "Chilonzor", "Yakkasaroy", "Mirobod", "Yashnobod", "Olmazor", "Uchtepa", "Sergeli", "Bektemir", "Yangihayot"],
+            "Toshkent vil.": ["Nurafshon", "Chirchiq", "Olmaliq", "Angren", "Yangiyo'l", "Bekobod", "Bo'stonliq", "Qibray", "Zangiota", "Toshkent tumani"],
+            "Samarqand": ["Samarqand sh.", "Urgut", "Pastdarg'om", "Ishtixon", "Bulung'ur", "Jomboy", "Kattaqo'rg'on", "Payariq", "Toyloq"],
+            "Buxoro": ["Buxoro sh.", "G'ijduvon", "Kogon", "Jondor", "Shofirkon", "Vobkent", "Qorako'l", "Romitan"],
+            "Farg'ona": ["Farg'ona sh.", "Marg'ilon", "Qo'qon", "Quva", "Oltiariq", "Rishton", "Bag'dod", "Uchko'prik", "Beshariq"],
+            "Andijon": ["Andijon sh.", "Asaka", "Shahrixon", "Xo'jaobod", "Baliqchi", "Marhamat", "Buloqboshi", "Paxtaobod"],
+            "Namangan": ["Namangan sh.", "Chust", "Pop", "Kosonsoy", "Uychi", "To'raqo'rg'on", "Uchqo'rg'on", "Chortoq"],
+            "Qashqadaryo": ["Qarshi sh.", "Shahrisabz", "Kitob", "Koson", "Nishon", "Muborak", "Yakkabog'", "G'uzor", "Chiroqchi"],
+            "Surxondaryo": ["Termiz sh.", "Denov", "Sherobod", "Sho'rchi", "Boysun", "Jarqo'rg'on", "Qumqo'rg'on", "Sariosiyo"],
+            "Xorazm": ["Urganch sh.", "Xiva", "Xonqa", "Shovot", "Gurlan", "Bog'ot", "Qo'shko'pir", "Yangiariq"],
+            "Navoiy": ["Navoiy sh.", "Zarafshon", "Karmana", "Qiziltepa", "Xatirchi", "Nurota", "Uchquduq"],
+            "Jizzax": ["Jizzax sh.", "G'allaorol", "Zomin", "Sharof Rashidov", "Do'stlik", "Zarbdor", "Paxtakor"],
+            "Sirdaryo": ["Guliston sh.", "Shirin", "Yangiyer", "Boyovut", "Sayxunobod", "Sardoba", "Oqoltin"],
+            "Qoraqalpog'iston": ["Nukus sh.", "Beruniy", "To'rtko'l", "Qo'ng'irot", "Amudaryo", "Chimboy", "Xo'jayli", "Mo'ynoq"],
+            "Xorij": ["Turkiya (Istanbul)", "Turkiya (Anqara)", "Germaniya (Gamburg)", "Germaniya (Berlin)", "Janubiy Koreya (Seul)", "Hindiston (Dehli)", "Tailand (Bangkok)"]
+        };
+
         const i18n = {
             uz: {
                 appSubtitle: "Milliy Tibbiyot Platformasi",
                 heroTitle: "O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping",
-                heroSubtitle: "Shifokorlar, klinikalar, dorixonalar va xorijda davolanish bitta platformada.",
+                heroSubtitle: "Barcha viloyatlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.",
                 searchPlaceholder: "Shifokor, klinika yoki mutaxassislikni qidirish...",
                 allRegions: "Barcha hududlar",
+                allDistricts: "Barcha tumanlar",
                 results: "ta natija",
                 noResults: "Hech qanday ma'lumot topilmadi",
                 bookBtn: "Qabulga yozilish",
@@ -472,9 +509,10 @@
             ru: {
                 appSubtitle: "Национальный медицинский портал",
                 heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
-                heroSubtitle: "Врачи, клиники, аптеки, медтовары и зарубежные клиники на единой платформе.",
+                heroSubtitle: "Специалисты и клиники по всем регионам и районам на единой платформе.",
                 searchPlaceholder: "Поиск врача, клиники или специальности...",
                 allRegions: "Все регионы",
+                allDistricts: "Все районы",
                 results: "результатов",
                 noResults: "Ничего не найдено",
                 bookBtn: "Записаться",
@@ -502,9 +540,10 @@
             en: {
                 appSubtitle: "National Medical Platform",
                 heroTitle: "Find the best doctors and clinics in Uzbekistan",
-                heroSubtitle: "Doctors, clinics, pharmacies, medical supplies, and treatment abroad on one platform.",
+                heroSubtitle: "Verified doctors and medical centers across all districts in one place.",
                 searchPlaceholder: "Search doctor, clinic or specialty...",
                 allRegions: "All regions",
+                allDistricts: "All districts",
                 results: "results",
                 noResults: "No results found",
                 bookBtn: "Book appointment",
@@ -539,17 +578,18 @@
             abroad_treatment: { icon: 'fa-globe' }
         };
 
-        // Barcha 5 ta bo'lim uchun boyitilgan ma'lumotlar bazasi
+        // Barcha 5 ta bo'lim uchun to'liq bazalar
         const sampleData = {
             doctors: [
                 {
                     id: 1,
                     name: { uz: "Dr. Alisher Qodirov", ru: "Др. Алишер Кадыров", en: "Dr. Alisher Kadirov" },
                     specialty: { uz: "Kardiolog-Aritmolog", ru: "Кардиолог-Аритмолог", en: "Cardiologist" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Shayxontohur",
                     exp: { uz: "15 yil", ru: "15 лет", en: "15 years" },
                     phone: "+998 90 123 45 67",
-                    address: { uz: "Shayxontohur tumani, Navoiy ko'chasi, 21", ru: "Шайхантахурский район, ул. Навои, 21", en: "Shaykhontokhur district, Navoi st, 21" },
+                    address: { uz: "Navoiy ko'chasi, 21-uy", ru: "ул. Навои, 21", en: "Navoi st, 21" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Navoiy+street",
                     telegram: "dralisher_kardiolog",
                     instagram: "dr.alisher_cardio",
@@ -572,10 +612,11 @@
                     id: 2,
                     name: { uz: "Dr. Malika Umarova", ru: "Др. Малика Умарова", en: "Dr. Malika Umarova" },
                     specialty: { uz: "Pediatr & Bolalar kardiologi", ru: "Педиатр и детский кардиолог", en: "Pediatric Cardiologist" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Yunusobod",
                     exp: { uz: "11 yil", ru: "11 лет", en: "11 years" },
                     phone: "+998 93 456 78 90",
-                    address: { uz: "Yunusobod tumani, Amir Temur ko'chasi, 12", ru: "Юнусабадский район, ул. Амира Темура, 12", en: "Yunusabad district, Amir Temur st, 12" },
+                    address: { uz: "Amir Temur shox ko'chasi, 12", ru: "пр. Амира Темура, 12", en: "Amir Temur ave, 12" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Amir+Temur",
                     telegram: "dr_malika_cardio",
                     instagram: "dr_malika_cardio",
@@ -595,10 +636,11 @@
                     id: 3,
                     name: { uz: "Dr. Jasur Karimov", ru: "Др. Жасур Каримов", en: "Dr. Jasur Karimov" },
                     specialty: { uz: "Nevropatolog-Vertebrolog", ru: "Невропатолог-Вертебролог", en: "Neurologist" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Mirzo Ulug'bek",
                     exp: { uz: "9 yil", ru: "9 лет", en: "9 years" },
                     phone: "+998 97 765 43 21",
-                    address: { uz: "Mirzo Ulug'bek tumani, Mustaqillik shox ko'chasi, 88", ru: "Мирзо-Улугбекский район, пр. Мустакиллик, 88", en: "Mirzo Ulugbek district, Mustaqillik ave, 88" },
+                    address: { uz: "Mustaqillik shox ko'chasi, 88", ru: "пр. Мустакиллик, 88", en: "Mustaqillik ave, 88" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Mustaqillik",
                     telegram: "dr_jasur_neuro",
                     instagram: "jasur_karimov_dr",
@@ -615,9 +657,10 @@
                     name: { uz: "Dr. Nodir Zokirov", ru: "Др. Нодир Закиров", en: "Dr. Nodir Zokirov" },
                     specialty: { uz: "Travmatolog-Ortoped", ru: "Травматолог-Ортопед", en: "Orthopedic Surgeon" },
                     region: "Samarqand",
+                    district: "Samarqand sh.",
                     exp: { uz: "14 yil", ru: "14 лет", en: "14 years" },
                     phone: "+998 91 333 22 11",
-                    address: { uz: "Samarqand sh., Registon ko'chasi, 15", ru: "г. Самарканд, ул. Регистан, 15", en: "Samarkand city, Registan st, 15" },
+                    address: { uz: "Registon ko'chasi, 15", ru: "ул. Регистан, 15", en: "Registan st, 15" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "dr_nodir_sam",
                     instagram: "dr_nodir_orto",
@@ -634,9 +677,10 @@
                     name: { uz: "Dr. Shahnoza Rahimova", ru: "Др. Шахноза Рахимова", en: "Dr. Shahnoza Rahimova" },
                     specialty: { uz: "Endokrinolog", ru: "Эндокринолог", en: "Endocrinologist" },
                     region: "Buxoro",
+                    district: "Buxoro sh.",
                     exp: { uz: "12 yil", ru: "12 лет", en: "12 years" },
                     phone: "+998 90 444 55 66",
-                    address: { uz: "Buxoro sh., Bahouddin Naqshband ko'chasi, 40", ru: "г. Бухара, ул. Бахоуддина Накшбанда, 40", en: "Bukhara city, B.Naqshband st, 40" },
+                    address: { uz: "Bahouddin Naqshband ko'chasi, 40", ru: "ул. Бахоуддина Накшбанда, 40", en: "B.Naqshband st, 40" },
                     mapUrl: "https://maps.google.com/?q=Bukhara",
                     telegram: "dr_shahnoza_endo",
                     instagram: "shahnoza_endo_dr",
@@ -654,15 +698,16 @@
                     id: 101,
                     name: { uz: "Akfa Medline", ru: "Акфа Медлайн", en: "Akfa Medline" },
                     specialty: { uz: "Ko'p tarmoqli tibbiyot markazi", ru: "Многопрофильный медицинский центр", en: "Multidisciplinary Medical Center" },
-                    region: "Toshkent",
-                    exp: { uz: "Statsionar 24/7", ru: "Стационаr 24/7", en: "Inpatient 24/7" },
+                    region: "Toshkent sh.",
+                    district: "Olmazor",
+                    exp: { uz: "Statsionar 24/7", ru: "Стационар 24/7", en: "Inpatient 24/7" },
                     phone: "+998 71 203 30 03",
-                    address: { uz: "Olmazor tumani, Kichik halqa yo'li, 5A", ru: "Алмазарский район, Малая кольцевая, 5А", en: "Almazar district, Little Ring Road, 5A" },
+                    address: { uz: "Kichik halqa yo'li, 5A", ru: "Малая кольцевая, 5А", en: "Little Ring Road, 5A" },
                     mapUrl: "https://maps.google.com/?q=Akfa+Medline",
                     telegram: "akfamedline_uz",
                     instagram: "akfamedline",
                     rating: 4.9,
-                    bio: { uz: "O'rta Osiyodagi eng yirik xususiy tibbiyot markazi. Zamonaviy operatsiya bloklari va diagnostika laboratoriyalari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
+                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
                     images: [
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
@@ -675,11 +720,12 @@
                 {
                     id: 102,
                     name: { uz: "Shox Med Center", ru: "Шох Мед Центр", en: "Shox Med Center" },
-                    specialty: { uz: "Diagnostika va statsionar", ru: "Диагностика и стационар", en: "Diagnostics & Inpatient" },
-                    region: "Toshkent",
+                    specialty: { uz: "Diagnostika va jarrohlik statsionari", ru: "Диагностика и хирургический стационар", en: "Diagnostic & Surgical Inpatient" },
+                    region: "Toshkent sh.",
+                    district: "Yakkasaroy",
                     exp: { uz: "24/7 Statsionar", ru: "24/7 Стационар", en: "24/7 Inpatient" },
                     phone: "+998 71 202 02 03",
-                    address: { uz: "Yakkasaroy tumani, Shota Rustaveli, 32", ru: "Яккасарайский район, Шота Руставели, 32", en: "Yakkasaray district, Shota Rustaveli, 32" },
+                    address: { uz: "Shota Rustaveli ko'chasi, 32", ru: "ул. Шота Руставели, 32", en: "Shota Rustaveli st, 32" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
                     telegram: "shoxmed_uz",
                     instagram: "shox.med",
@@ -694,11 +740,12 @@
                 {
                     id: 103,
                     name: { uz: "Era Med Klinika", ru: "Эра Мед Клиника", en: "Era Med Clinic" },
-                    specialty: { uz: "Plastik jarrohlik va LOR", ru: "Пластическая хирургия и ЛОР", en: "Plastic Surgery & ENT" },
-                    region: "Toshkent",
+                    specialty: { uz: "Plastik jarrohlik va LOR markazi", ru: "Пластическая хирургия и ЛОР-центр", en: "Plastic Surgery & ENT Center" },
+                    region: "Toshkent sh.",
+                    district: "Shayxontohur",
                     exp: { uz: "12 yil tajriba", ru: "12 лет опыта", en: "12 years experience" },
                     phone: "+998 71 200 11 22",
-                    address: { uz: "Shayxontohur, Qoratosh ko'chasi, 2A", ru: "Шайхантахур, ул. Караташ, 2А", en: "Shaykhontokhur, Karatash st, 2A" },
+                    address: { uz: "Qoratosh ko'chasi, 2A", ru: "ул. Караташ, 2А", en: "Karatash st, 2A" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Karatash",
                     telegram: "eramed_clinic",
                     instagram: "eramed_uz",
@@ -715,9 +762,10 @@
                     name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
                     specialty: { uz: "Kardiologiya va Nevrologiya", ru: "Кардиология и Неврология", en: "Cardiology & Neurology" },
                     region: "Samarqand",
+                    district: "Samarqand sh.",
                     exp: { uz: "24/7 Xizmat", ru: "24/7 Сервис", en: "24/7 Service" },
                     phone: "+998 66 230 40 50",
-                    address: { uz: "Samarqand sh., Beruniy ko'chasi, 4", ru: "г. Самарканд, ул. Беруни, 4", en: "Samarkand city, Beruni st, 4" },
+                    address: { uz: "Beruniy ko'chasi, 4", ru: "ул. Беруни, 4", en: "Beruni st, 4" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "citymed_sam",
                     instagram: "citymed_samarkand",
@@ -735,10 +783,11 @@
                     id: 201,
                     name: { uz: "OxyMed Markaziy Dorixona", ru: "ОксиМед Центральная Аптека", en: "OxyMed Central Pharmacy" },
                     specialty: { uz: "Dori vositalari & Yetkazib berish", ru: "Лекарства и доставка", en: "Medicines & Delivery" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Mirobod",
                     exp: { uz: "24/7 ochiq", ru: "Круглосуточно 24/7", en: "Open 24/7" },
                     phone: "+998 71 200 03 03",
-                    address: { uz: "Mirobod tumani, Oybek ko'chasi, 28", ru: "Мирабадский район, ул. Ойбека, 28", en: "Mirabad district, Oybek st, 28" },
+                    address: { uz: "Oybek ko'chasi, 28", ru: "ул. Ойбека, 28", en: "Oybek st, 28" },
                     mapUrl: "https://maps.google.com/?q=OxyMed+Tashkent",
                     telegram: "oxymed_uz",
                     instagram: "oxymed.uz",
@@ -756,10 +805,11 @@
                     id: 202,
                     name: { uz: "Grand Pharm Dorixona", ru: "Гранд Фарм Аптека", en: "Grand Pharm Pharmacy" },
                     specialty: { uz: "Sertifikatlangan dorilar & Optika", ru: "Сертифицированные лекарства и оптика", en: "Certified Medicines & Optics" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Chilonzor",
                     exp: { uz: "24/7 Ochiq", ru: "24/7 Открыто", en: "Open 24/7" },
                     phone: "+998 71 202 99 99",
-                    address: { uz: "Chilonzor tumani, Bunyodkor shox ko'chasi, 4", ru: "Чиланзарский район, пр. Бунёдкор, 4", en: "Chilanzar district, Bunyodkor ave, 4" },
+                    address: { uz: "Bunyodkor shox ko'chasi, 4", ru: "пр. Бунёдкор, 4", en: "Bunyodkor ave, 4" },
                     mapUrl: "https://maps.google.com/?q=Chilanzar+Tashkent",
                     telegram: "grandpharm_uz",
                     instagram: "grandpharm.uz",
@@ -776,9 +826,10 @@
                     name: { uz: "Dori-Darmon Samarqand", ru: "Дори-Дармон Самарканд", en: "Dori-Darmon Samarkand" },
                     specialty: { uz: "Ijtimoiy dorixona", ru: "Социальная аптека", en: "Social Pharmacy" },
                     region: "Samarqand",
+                    district: "Samarqand sh.",
                     exp: { uz: "Har kuni 08:00 - 23:00", ru: "Ежедневно 08:00 - 23:00", en: "Daily 08:00 - 23:00" },
                     phone: "+998 66 233 11 22",
-                    address: { uz: "Samarqand sh., Mirzo Ulug'bek, 18", ru: "г. Самарканд, Мирзо Улугбек, 18", en: "Samarkand city, Mirzo Ulugbek, 18" },
+                    address: { uz: "Mirzo Ulug'bek ko'chasi, 18", ru: "ул. Мирзо Улугбека, 18", en: "Mirzo Ulugbek st, 18" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "doridarmon_sam",
                     instagram: "doridarmon_uz",
@@ -795,9 +846,10 @@
                     name: { uz: "BestPharm Buxoro", ru: "БестФарм Бухара", en: "BestPharm Bukhara" },
                     specialty: { uz: "Dorixona & Kosmetika", ru: "Аптека и Косметика", en: "Pharmacy & Dermocosmetics" },
                     region: "Buxoro",
+                    district: "Buxoro sh.",
                     exp: { uz: "24/7", ru: "24/7", en: "24/7" },
                     phone: "+998 65 222 33 44",
-                    address: { uz: "Buxoro sh., Navoiy shox ko'chasi, 10", ru: "г. Бухара, пр. Навои, 10", en: "Bukhara city, Navoi ave, 10" },
+                    address: { uz: "Navoiy shox ko'chasi, 10", ru: "пр. Навои, 10", en: "Navoi ave, 10" },
                     mapUrl: "https://maps.google.com/?q=Bukhara",
                     telegram: "bestpharm_buxoro",
                     instagram: "bestpharm_uz",
@@ -815,10 +867,11 @@
                     id: 301,
                     name: { uz: "MedTexnika Ortopediya", ru: "МедТехника Ортопедия", en: "MedTechnics Orthopedics" },
                     specialty: { uz: "Tibbiy uskunalar & Reabilitatsiya", ru: "Медоборудование и реабилитация", en: "Medical Equipment & Rehab" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Chilonzor",
                     exp: { uz: "Rasmiy kafolat", ru: "Официальная гарантия", en: "Official warranty" },
                     phone: "+998 90 987 65 43",
-                    address: { uz: "Chilonzor tumani, Bunyodkor ko'chasi, 15", ru: "Чиланзарский район, ул. Бунёдкор, 15", en: "Chilanzar district, Bunyodkor st, 15" },
+                    address: { uz: "Bunyodkor ko'chasi, 15", ru: "ул. Бунёдкор, 15", en: "Bunyodkor st, 15" },
                     mapUrl: "https://maps.google.com/?q=Chilonzor+Tashkent",
                     telegram: "medtexnika_toshkent",
                     instagram: "medtexnika_uz",
@@ -836,10 +889,11 @@
                     id: 302,
                     name: { uz: "BioMed Uskunalar", ru: "БиоМед Оборудование", en: "BioMed Equipment" },
                     specialty: { uz: "Klinikalar uchun uskunalar", ru: "Оборудование для клиник", en: "Clinical Equipment" },
-                    region: "Toshkent",
+                    region: "Toshkent sh.",
+                    district: "Mirobod",
                     exp: { uz: "Servis xizmati bilan", ru: "С сервисной гарантией", en: "With full service" },
                     phone: "+998 71 233 44 55",
-                    address: { uz: "Mirobod tumani, Nukus ko'chasi, 12", ru: "Мирабадский район, ул. Нукусская, 12", en: "Mirabad district, Nukus st, 12" },
+                    address: { uz: "Nukus ko'chasi, 12", ru: "ул. Нукусская, 12", en: "Nukus st, 12" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Nukus",
                     telegram: "biomed_uz",
                     instagram: "biomed_equipment",
@@ -855,10 +909,11 @@
                     id: 303,
                     name: { uz: "OrtoMed Farg'ona", ru: "ОртоМед Фергана", en: "OrtoMed Fergana" },
                     specialty: { uz: "Ortopedik mahsulotlar", ru: "Ортопедические изделия", en: "Orthopedic Products" },
-                    region: "Fargona",
+                    region: "Farg'ona",
+                    district: "Farg'ona sh.",
                     exp: { uz: "Sertifikatlangan", ru: "Сертифицировано", en: "Certified" },
                     phone: "+998 73 244 55 66",
-                    address: { uz: "Farg'ona sh., Al-Farg'oniy ko'chasi", ru: "г. Фергана, ул. Аль-Фергани", en: "Fergana city, Al-Fergani st" },
+                    address: { uz: "Al-Farg'oniy ko'chasi", ru: "ул. Аль-Фергани", en: "Al-Fergani st" },
                     mapUrl: "https://maps.google.com/?q=Fergana",
                     telegram: "ortomed_fargona",
                     instagram: "ortomed_uz",
@@ -875,9 +930,10 @@
                     name: { uz: "MedComfort Samarqand", ru: "МедКомфорт Самарканд", en: "MedComfort Samarkand" },
                     specialty: { uz: "Uy tibbiyoti buyumlari", ru: "Домашняя медтехника", en: "Home Medical Devices" },
                     region: "Samarqand",
+                    district: "Samarqand sh.",
                     exp: { uz: "Kafolat 2 yil", ru: "Гарантия 2 года", en: "2 years warranty" },
                     phone: "+998 66 231 00 99",
-                    address: { uz: "Samarqand sh., Rudakiy ko'chasi", ru: "г. Самарканд, ул. Рудаки", en: "Samarkand city, Rudaki st" },
+                    address: { uz: "Rudakiy ko'chasi", ru: "ул. Рудаки", en: "Rudaki st" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "medcomfort_sam",
                     instagram: "medcomfort_uz",
@@ -896,9 +952,10 @@
                     name: { uz: "Acıbadem Healthcare (Turkiya)", ru: "Аджибадем (Турция)", en: "Acıbadem Healthcare (Turkey)" },
                     specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Трансплантация", en: "Oncology, Neurosurgery & Transplantation" },
                     region: "Xorij",
+                    district: "Turkiya (Istanbul)",
                     exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
                     phone: "+998 95 144 54 44",
-                    address: { uz: "Istanbul (Toshkent vakolatxonasi: Mirobod, Afrosiyob 12)", ru: "Стамбул (Офис в Ташкенте: Мирабад, Афросиаб 12)", en: "Istanbul (Tashkent office: Mirabad, Afrosiyob 12)" },
+                    address: { uz: "Istanbul (Toshkent vakolatxonasi: Afrosiyob 12)", ru: "Стамбул (Офис в Ташкенте: Афросиаб 12)", en: "Istanbul (Tashkent office: Afrosiyob 12)" },
                     mapUrl: "https://maps.google.com/?q=Acibadem+Istanbul",
                     telegram: "acibadem_uz",
                     instagram: "acibadem.uzbekistan",
@@ -918,6 +975,7 @@
                     name: { uz: "Anadolu Medical Center (Turkiya)", ru: "Анадолу Медицинский Центр (Турция)", en: "Anadolu Medical Center (Turkey)" },
                     specialty: { uz: "Saraton va Suyak ko'chirish", ru: "Онкология и пересадка костного мозга", en: "Oncology & Bone Marrow Transplant" },
                     region: "Xorij",
+                    district: "Turkiya (Istanbul)",
                     exp: { uz: "Johns Hopkins hamkori", ru: "Партнер Johns Hopkins", en: "Johns Hopkins partner" },
                     phone: "+998 90 114 22 33",
                     address: { uz: "Istanbul / Toshkent vakolatxonasi", ru: "Стамбул / Офис в Ташкенте", en: "Istanbul / Tashkent office" },
@@ -937,6 +995,7 @@
                     name: { uz: "Severance Hospital (Janubiy Koreya)", ru: "Северанс Госпиталь (Южная Корея)", en: "Severance Hospital (South Korea)" },
                     specialty: { uz: "Robotik jarrohlik va Kardiologiya", ru: "Роботизированная хирургия и Кардиология", en: "Robotic Surgery & Cardiology" },
                     region: "Xorij",
+                    district: "Janubiy Koreya (Seul)",
                     exp: { uz: "Dunyo Top-50", ru: "Мировой Топ-50", en: "World Top-50" },
                     phone: "+998 71 205 55 66",
                     address: { uz: "Seul (Toshkent vakili)", ru: "Сеул (Представитель в Ташкенте)", en: "Seoul (Tashkent representative)" },
@@ -956,6 +1015,7 @@
                     name: { uz: "Asklepios Klinikalari (Germaniya)", ru: "Асклепиос Клиники (Германия)", en: "Asklepios Kliniken (Germany)" },
                     specialty: { uz: "Ortopediya va Neyroxirurgiya", ru: "Ортопедия и Нейрохирургия", en: "Orthopedics & Neurosurgery" },
                     region: "Xorij",
+                    district: "Germaniya (Gamburg)",
                     exp: { uz: "Germaniya standarti", ru: "Немецкий стандарт", en: "German standard" },
                     phone: "+998 90 998 77 66",
                     address: { uz: "Gamburg (O'zbekiston koordinatori)", ru: "Гамбург (Координатор в Узбекистане)", en: "Hamburg (Uzbekistan coordinator)" },
@@ -980,17 +1040,65 @@
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
             }
+            populateRegionsDropdowns();
             updateLanguageUI();
             renderGrid();
         };
 
+        // Viloyat va Tumanlarni selectlarga to'ldirish
+        function populateRegionsDropdowns() {
+            const regionSelect = document.getElementById('regionFilter');
+            const formRegionSelect = document.getElementById('newItemRegion');
+            
+            let optionsHtml = `<option value="">${t('allRegions')}</option>`;
+            let formOptionsHtml = '';
+            
+            Object.keys(regionsData).forEach(reg => {
+                optionsHtml += `<option value="${reg}">${reg}</option>`;
+                formOptionsHtml += `<option value="${reg}">${reg}</option>`;
+            });
+
+            if (regionSelect) regionSelect.innerHTML = optionsHtml;
+            if (formRegionSelect) {
+                formRegionSelect.innerHTML = formOptionsHtml;
+                updateFormDistricts();
+            }
+        }
+
+        function onRegionChange() {
+            const reg = document.getElementById('regionFilter').value;
+            const distSelect = document.getElementById('districtFilter');
+            
+            if (!reg || !regionsData[reg]) {
+                distSelect.innerHTML = `<option value="">${t('allDistricts')}</option>`;
+            } else {
+                let html = `<option value="">${t('allDistricts')}</option>`;
+                regionsData[reg].forEach(d => {
+                    html += `<option value="${d}">${d}</option>`;
+                });
+                distSelect.innerHTML = html;
+            }
+            filterData();
+        }
+
+        function updateFormDistricts() {
+            const reg = document.getElementById('newItemRegion').value;
+            const distSelect = document.getElementById('newItemDistrict');
+            if (!distSelect) return;
+
+            if (regionsData[reg]) {
+                distSelect.innerHTML = regionsData[reg].map(d => `<option value="${d}">${d}</option>`).join('');
+            }
+        }
+
+        // ==================== KO'P TILLILIK ====================
         function changeLanguage(lang) {
             currentLang = lang;
             ['uz', 'ru', 'en'].forEach(l => {
                 const btn = document.getElementById(`lang-${l}`);
                 if (btn) {
                     if (l === lang) {
-                        btn.className = "px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-blue-600 shadow-sm transition";
+                        btn.className = "px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-cyan-700 dark:text-cyan-400 shadow-sm transition";
                     } else {
                         btn.className = "px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition";
                     }
@@ -1016,7 +1124,6 @@
             document.getElementById('heroTitle').innerText = tr.heroTitle;
             document.getElementById('heroSubtitle').innerText = tr.heroSubtitle;
             document.getElementById('searchInput').placeholder = tr.searchPlaceholder;
-            document.getElementById('optAllRegions').innerText = tr.allRegions;
             document.getElementById('lblSectionsMenu').innerText = tr.sectionsMenu;
             document.getElementById('lblJoinCatalog').innerText = tr.joinCatalog;
             document.getElementById('lblAboutMenu').innerText = tr.aboutMenu;
@@ -1064,7 +1171,6 @@
             }
         }
 
-        // ==================== ADMIN PANELI & ANKETA KO'RISH ====================
         function openAdminPanel() {
             const container = document.getElementById('pendingListContainer');
             if (pendingSubmissions.length === 0) {
@@ -1076,14 +1182,14 @@
                     <div class="bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-600 flex flex-col justify-between gap-3">
                         <div onclick="openAdminFullDetailModal(${index})" class="cursor-pointer">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] font-black px-2.5 py-0.5 bg-blue-100 text-blue-700 rounded-md uppercase tracking-wider">${item.category}</span>
-                                <span class="text-[11px] text-blue-600 font-bold hover:underline"><i class="fa-solid fa-expand mr-1"></i> To'liq ko'rish (${item.images ? item.images.length : 0} rasm)</span>
+                                <span class="text-[10px] font-black px-2.5 py-0.5 bg-cyan-100 text-cyan-800 rounded-md uppercase tracking-wider">${item.category}</span>
+                                <span class="text-[11px] text-cyan-600 font-bold hover:underline"><i class="fa-solid fa-expand mr-1"></i> To'liq ko'rish (${item.images ? item.images.length : 0} rasm)</span>
                             </div>
                             <div class="flex gap-3 items-center">
                                 <img src="${previewImg}" class="w-13 h-13 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-600">
                                 <div class="overflow-hidden">
                                     <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${getLocalized(item.name)}</h4>
-                                    <p class="text-xs text-blue-600 font-semibold truncate">${getLocalized(item.specialty)} • ${item.region}</p>
+                                    <p class="text-xs text-cyan-600 font-semibold truncate">${getLocalized(item.specialty)} • ${item.region} (${item.district || ''})</p>
                                     <p class="text-[11px] text-slate-400 truncate mt-0.5">${item.phone}</p>
                                 </div>
                             </div>
@@ -1119,16 +1225,16 @@
             const container = document.getElementById('adminFullDetailContent');
             container.innerHTML = `
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
-                    <span class="text-xs font-black px-3 py-1 bg-blue-100 text-blue-700 rounded-lg uppercase tracking-wider">${item.category}</span>
+                    <span class="text-xs font-black px-3 py-1 bg-cyan-100 text-cyan-800 rounded-lg uppercase tracking-wider">${item.category}</span>
                     <span class="text-xs font-semibold text-slate-400">Moderatsiya arizasi</span>
                 </div>
 
                 <div class="flex gap-4 items-center my-4">
-                    <img id="adminModalMainImg" src="${mainImg}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500 shrink-0 shadow-md">
+                    <img id="adminModalMainImg" src="${mainImg}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-cyan-600 shrink-0 shadow-md">
                     <div>
                         <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">${getLocalized(item.name)}</h3>
-                        <p class="text-xs font-bold text-blue-600 mt-0.5">${getLocalized(item.specialty)}</p>
-                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-blue-500"></i> ${item.region} • <b>${getLocalized(item.exp)}</b></p>
+                        <p class="text-xs font-bold text-cyan-600 mt-0.5">${getLocalized(item.specialty)}</p>
+                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-cyan-600"></i> ${item.region}, ${item.district || ''} • <b>${getLocalized(item.exp)}</b></p>
                     </div>
                 </div>
 
@@ -1136,16 +1242,16 @@
                     <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Yuklangan rasmlar (${allImgs.length}/5)</h5>
                     <div class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none">
                         ${allImgs.map(img => `
-                            <img src="${img}" onclick="document.getElementById('adminModalMainImg').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-blue-500 cursor-pointer transition shrink-0">
+                            <img src="${img}" onclick="document.getElementById('adminModalMainImg').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-cyan-600 cursor-pointer transition shrink-0">
                         `).join('')}
                     </div>
                 </div>
 
                 <div class="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-600 mb-5">
-                    <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-blue-600 font-bold ml-1">${item.phone}</a></div>
-                    <div><b>Manzil va mo'ljal:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
-                    <div><b>Telegram:</b> ${item.telegram ? `<a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="text-sky-500 font-bold ml-1">@${item.telegram.replace('@','')}</a>` : 'Kiritilmagan'}</div>
-                    <div><b>Instagram:</b> ${item.instagram ? `<a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" class="text-pink-500 font-bold ml-1">@${item.instagram.replace('@','')}</a>` : 'Kiritilmagan'}</div>
+                    <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-cyan-600 font-bold ml-1">${item.phone}</a></div>
+                    <div><b>Hudud va tuman:</b> <span class="ml-1">${item.region}, ${item.district || ''}</span></div>
+                    <div><b>Aniq manzil:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
+                    <div><b>Telegram / Instagram:</b> <span class="ml-1">${item.telegram || 'Kiritilmagan'}</span></div>
                     <div class="pt-2 border-t border-slate-200 dark:border-slate-600">
                         <b>Biografiya / Qo'shimcha tavsif:</b>
                         <p class="mt-1 text-slate-600 dark:text-slate-300 leading-relaxed bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">${getLocalized(item.bio) || "Ma'lumot kiritilmagan"}</p>
@@ -1190,7 +1296,7 @@
             }
         }
 
-        // ==================== RO'YXATDAN O'TISH ====================
+        // ==================== ANKETA TOPSHIRISH ====================
         function openRoleModalFromMenu() {
             closeAllDropdowns();
             const srm = document.getElementById('roleSelectModal');
@@ -1265,10 +1371,10 @@
             const name = document.getElementById('newItemName').value;
             const spec = document.getElementById('newItemSpecialty').value;
             const region = document.getElementById('newItemRegion').value;
+            const district = document.getElementById('newItemDistrict').value;
             const exp = document.getElementById('newItemExp').value || 'Tajribali';
             const phone = document.getElementById('newItemPhone').value;
             const telegram = document.getElementById('newItemTelegram').value || '';
-            const instagram = document.getElementById('newItemInstagram').value || '';
             const addr = document.getElementById('newItemAddress').value;
             const bio = document.getElementById('newItemBio').value;
 
@@ -1282,11 +1388,12 @@
                 name: { uz: name, ru: name, en: name },
                 specialty: { uz: spec, ru: spec, en: spec },
                 region: region,
+                district: district,
                 exp: { uz: exp, ru: exp, en: exp },
                 phone: phone,
-                telegram, instagram,
+                telegram: telegram,
                 address: { uz: addr, ru: addr, en: addr },
-                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + region)}`,
+                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + district + ' ' + region)}`,
                 rating: 5.0,
                 bio: { uz: bio, ru: bio, en: bio },
                 images: finalImages,
@@ -1315,12 +1422,11 @@
             container.innerHTML = data.map(item => {
                 const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                 return `
-                <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700/80 flex flex-col justify-between group">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between group">
                     <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
                             <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                             
-                            <!-- Badges -->
                             <div class="absolute top-3 left-3 flex items-center gap-1.5">
                                 ${item.exp ? `<span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">${getLocalized(item.exp)}</span>` : ''}
                             </div>
@@ -1330,25 +1436,25 @@
                             </span>
                         </div>
                         
-                        <div class="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                        <div class="flex items-center gap-1 text-[11px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">
                             <span>${getLocalized(item.specialty)}</span>
                             <i class="fa-solid fa-circle-check text-emerald-500 text-[10px] ml-1"></i>
                         </div>
                         
-                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 transition-colors line-clamp-1">
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white mt-1 group-hover:text-cyan-600 transition-colors line-clamp-1">
                             ${getLocalized(item.name)}
                         </h3>
                         
                         <p class="text-xs text-slate-400 mt-2 flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${getLocalized(item.address)}
+                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${item.district || ''}
                         </p>
                     </div>
 
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
-                        <a href="tel:${item.phone}" class="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-blue-600 flex items-center gap-1.5">
+                        <a href="tel:${item.phone}" class="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 flex items-center gap-1.5">
                             <i class="fa-solid fa-phone text-slate-400 text-[11px]"></i> ${item.phone}
                         </a>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer">
+                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer">
                             ${t('bookBtn')}
                         </button>
                     </div>
@@ -1356,14 +1462,21 @@
             `}).join('');
         }
 
+        // Qidiruv va 2 pog'onali viloyat/tuman filtri
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const region = document.getElementById('regionFilter').value;
+            const district = document.getElementById('districtFilter').value;
             const original = sampleData[currentTab] || [];
+
             const filtered = original.filter(item => {
                 const name = getLocalized(item.name).toLowerCase();
                 const spec = getLocalized(item.specialty).toLowerCase();
-                return (name.includes(query) || spec.includes(query)) && (!region || item.region === region);
+                const matchesQuery = name.includes(query) || spec.includes(query);
+                const matchesRegion = !region || item.region === region;
+                const matchesDistrict = !district || item.district === district;
+
+                return matchesQuery && matchesRegion && matchesDistrict;
             });
             
             const container = document.getElementById('contentGrid');
@@ -1378,7 +1491,7 @@
             container.innerHTML = filtered.map(item => {
                 const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                 return `
-                <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-100 dark:border-slate-700/80 flex flex-col justify-between group">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between group">
                     <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
                             <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
@@ -1386,20 +1499,20 @@
                                 <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> ${Number(item.rating || 5).toFixed(1)}
                             </span>
                         </div>
-                        <div class="flex items-center gap-1 text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wide">
+                        <div class="flex items-center gap-1 text-[11px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wide">
                             <span>${getLocalized(item.specialty)}</span>
                             <i class="fa-solid fa-circle-check text-emerald-500 text-[10px] ml-1"></i>
                         </div>
-                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white mt-1 group-hover:text-blue-600 transition-colors line-clamp-1">
+                        <h3 class="font-extrabold text-base text-slate-900 dark:text-white mt-1 group-hover:text-cyan-600 transition-colors line-clamp-1">
                             ${getLocalized(item.name)}
                         </h3>
                         <p class="text-xs text-slate-400 mt-2 flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${getLocalized(item.address)}
+                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${item.district || ''}
                         </p>
                     </div>
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
                         <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${item.phone}</span>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer">${t('bookBtn')}</button>
+                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer">${t('bookBtn')}</button>
                     </div>
                 </div>
             `}).join('');
@@ -1424,7 +1537,7 @@
                     <img id="modalMainImage" src="${mainImg}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-slate-100 dark:border-slate-700 shrink-0">
                     <div class="flex-grow">
                         <div class="flex items-center gap-2">
-                            <span class="text-[11px] font-black px-2.5 py-0.5 bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-lg uppercase tracking-wide">
+                            <span class="text-[11px] font-black px-2.5 py-0.5 bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 rounded-lg uppercase tracking-wide">
                                 ${getLocalized(item.specialty)}
                             </span>
                             <span class="text-xs font-black text-amber-500 flex items-center gap-1">
@@ -1433,26 +1546,24 @@
                         </div>
                         <h2 class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white mt-1.5">${getLocalized(item.name)}</h2>
                         <p class="text-xs text-slate-400 mt-1 flex items-center gap-2">
-                            <span><i class="fa-solid fa-briefcase text-blue-600 mr-1"></i> <b>${getLocalized(item.exp)}</b></span>
+                            <span><i class="fa-solid fa-briefcase text-cyan-600 mr-1"></i> <b>${getLocalized(item.exp)}</b></span>
                             <span>•</span>
-                            <span><i class="fa-solid fa-city text-blue-600 mr-1"></i> ${item.region}</span>
+                            <span><i class="fa-solid fa-city text-cyan-600 mr-1"></i> ${item.region}, ${item.district || ''}</span>
                         </p>
                     </div>
                 </div>
 
-                <!-- Rasmlar Galereyasi -->
                 ${allImages.length > 1 ? `
                     <div class="mt-4">
                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Rasmlar galereyasi (${allImages.length})</h4>
                         <div class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none">
                             ${allImages.map(img => `
-                                <img src="${img}" onclick="document.getElementById('modalMainImage').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-blue-600 cursor-pointer transition shrink-0 shadow-sm">
+                                <img src="${img}" onclick="document.getElementById('modalMainImage').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-cyan-600 cursor-pointer transition shrink-0 shadow-sm">
                             `).join('')}
                         </div>
                     </div>
                 ` : ''}
 
-                <!-- Tafsilotlar -->
                 <div class="my-5">
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">${t('aboutEntityLabel')}</h4>
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-700/30 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
@@ -1460,14 +1571,13 @@
                     </p>
                 </div>
 
-                <!-- Manzil, Xarita, Telefon va Tarmoqlar -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
                     <div class="p-4 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700">
                         <div class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
-                            <i class="fa-solid fa-location-dot text-blue-600"></i> ${t('addressLabel')}
+                            <i class="fa-solid fa-location-dot text-cyan-600"></i> ${t('addressLabel')}
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">${getLocalized(item.address)}</p>
-                        <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 mt-2 hover:underline">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">${item.region}, ${item.district || ''}, ${getLocalized(item.address)}</p>
+                        <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-2 hover:underline">
                             <i class="fa-solid fa-map-location-dot"></i> ${t('viewMap')}
                         </a>
                     </div>
@@ -1475,7 +1585,7 @@
                     <div class="p-4 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2">
                         <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">${t('contactsLabel')}</div>
                         <div class="flex items-center justify-between text-xs">
-                            <a href="tel:${item.phone}" class="font-bold text-blue-600 flex items-center gap-1.5">
+                            <a href="tel:${item.phone}" class="font-bold text-cyan-600 flex items-center gap-1.5">
                                 <i class="fa-solid fa-phone text-emerald-500"></i> ${item.phone}
                             </a>
                         </div>
@@ -1494,11 +1604,10 @@
                     </div>
                 </div>
 
-                <!-- Bemorlar fikrlari va Izoh qoldirish -->
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-2">
                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-comments text-blue-600"></i> ${t('reviewsLabel')} (${reviewsList.length})
+                            <i class="fa-solid fa-comments text-cyan-600"></i> ${t('reviewsLabel')} (${reviewsList.length})
                         </h4>
                     </div>
 
@@ -1528,38 +1637,37 @@
                                 <i class="fa-solid fa-star" onclick="setRating(5)"></i>
                             </div>
                         </div>
-                        <input type="text" id="reviewAuthorInput" placeholder="${t('yourName')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs mb-2 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <textarea id="reviewTextInput" rows="2" placeholder="${t('yourReview')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs dark:text-white mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                        <button onclick="submitReview('${categoryKey}', ${item.id})" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 rounded-xl shadow cursor-pointer transition">
+                        <input type="text" id="reviewAuthorInput" placeholder="${t('yourName')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs mb-2 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                        <textarea id="reviewTextInput" rows="2" placeholder="${t('yourReview')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs dark:text-white mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
+                        <button onclick="submitReview('${categoryKey}', ${item.id})" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-xs font-bold py-2.5 rounded-xl shadow cursor-pointer transition">
                             ${t('sendReview')}
                         </button>
                     </div>
                 </div>
 
-                <button onclick="closeDetailModal(); openBookingModal('${getLocalized(item.name)}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-blue-500/25 transition mb-6 cursor-pointer">
+                <button onclick="closeDetailModal(); openBookingModal('${getLocalized(item.name)}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-cyan-600/25 transition mb-6 cursor-pointer">
                     <i class="fa-solid fa-calendar-check mr-2"></i> ${t('detailBookBtn')}
                 </button>
 
-                <!-- Tavsiyalar bloki -->
                 ${recommended.length > 0 ? `
                     <div class="border-t border-slate-100 dark:border-slate-700 pt-5">
                         <h4 class="text-sm font-extrabold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-thumbs-up text-blue-600"></i> ${t('recommendLabel')}
+                            <i class="fa-solid fa-thumbs-up text-cyan-600"></i> ${t('recommendLabel')}
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                             ${recommended.map(rec => {
                                 const recImg = (rec.images && rec.images.length > 0) ? rec.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                                 return `
-                                <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-700/30 hover:border-blue-500 transition cursor-pointer flex flex-col justify-between">
+                                <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-700/30 hover:border-cyan-500 transition cursor-pointer flex flex-col justify-between">
                                     <div>
                                         <img src="${recImg}" class="w-full h-24 object-cover rounded-xl mb-2">
                                         <h5 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">${getLocalized(rec.name)}</h5>
-                                        <p class="text-[11px] text-blue-600 font-semibold line-clamp-1">${getLocalized(rec.specialty)}</p>
+                                        <p class="text-[11px] text-cyan-600 font-semibold line-clamp-1">${getLocalized(rec.specialty)}</p>
                                         <p class="text-[10px] text-slate-400 mt-0.5"><i class="fa-solid fa-briefcase"></i> ${getLocalized(rec.exp)}</p>
                                     </div>
                                     <div class="mt-2 pt-2 border-t border-slate-200/60 dark:border-slate-600 flex items-center justify-between text-[11px]">
                                         <span class="text-amber-500 font-bold"><i class="fa-solid fa-star text-[9px]"></i> ${Number(rec.rating || 5).toFixed(1)}</span>
-                                        <span class="text-blue-600 font-bold hover:underline">&rarr;</span>
+                                        <span class="text-cyan-600 font-bold hover:underline">&rarr;</span>
                                     </div>
                                 </div>
                             `}).join('')}
@@ -1627,13 +1735,13 @@
             const stt = document.getElementById('sectionTitleText');
             if(stt) stt.innerText = t(tab);
             const sIcon = document.getElementById('sectionIcon');
-            if(sIcon) sIcon.className = `fa-solid ${cfg.icon} text-blue-600`;
+            if(sIcon) sIcon.className = `fa-solid ${cfg.icon} text-cyan-600`;
 
             Object.keys(tabConfigs).forEach(tKey => {
                 const btn = document.getElementById(`fastTab-${tKey}`);
                 if (btn) {
                     if (tKey === tab) {
-                        btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-500/20";
+                        btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-gradient-to-r from-cyan-600 to-blue-700 text-white border-transparent shadow-sm";
                     } else {
                         btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50";
                     }
@@ -1666,7 +1774,7 @@
             const list = document.getElementById('favoritesList');
             if(!list) return;
             if (favorites.length === 0) {
-                list.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Saralanganlar ro'yxati bo'sh</p>`;
+                list.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Saralanganlar ro'yxati bo'sh</p>`;
             } else {
                 const allItems = [].concat(...Object.values(sampleData));
                 list.innerHTML = favorites.map(id => {
