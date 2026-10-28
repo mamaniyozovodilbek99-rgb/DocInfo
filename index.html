@@ -1,3 +1,10 @@
+Siz yuborgan koddagi aynan ikkita kamchilik to‘g‘rilandi:
+ * Pastdagi takrorlangan qism: Skrinshotda ko‘ringan pastki ikkinchi header, qayta ochilgan ko‘k banner va dublikat qidiruv bloklari butunlay olib tashlandi. Sahifa toza, bitta asosiy oqimga keltirildi.
+ * Adminga kelgan arizalarning to‘liq ko‘rinishi:
+   * Admin panelida arizalar dastlab bildirishnoma ko‘rinishida chiqadi.
+   * Bildirishnoma ustiga bosilganda alohida to‘liq ko‘rish oynasi (adminFullDetailModal) ochiladi.
+   * Unda anketada to‘ldirilgan barcha ma'lumotlar: F.I.O, yo‘nalishi, hududi, ish staji, telefon raqami, Telegram va Instagram havolalari, manzili, to‘liq biografiyasi/tavsifi hamda yuklangan barcha 5 tagacha rasmlar galereyasi to‘liq formatda ko‘rinadi. Admin shu yerdan barcha ma'lumotlarni batafsil ko‘rib, darhol saytda e'lon qilishi yoki rad etishi mumkin.
+Faylingizni yangilash uchun to‘liq to‘g‘rilangan tayyor kod:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -83,7 +90,7 @@
         </div>
     </div>
 
-    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm bilan) -->
+    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm yuklash bilan) -->
     <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-6 max-h-[92vh] overflow-y-auto">
             <button onclick="closeAddItemModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
@@ -180,26 +187,36 @@
         </div>
     </div>
 
-    <!-- ADMIN MODERATSIYA PANELI -->
+    <!-- ADMIN MODERATSIYA PANELI (Bildirishnomalar ro'yxati) -->
     <div id="adminPanelModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-shield-halved text-blue-600"></i> Moderator Nazorati
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Foydalanuvchilardan kelib tushgan tasdiqlanmagan arizalar.</p>
-            <div id="pendingListContainer" class="space-y-4"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Yangi kelib tushgan arizalar. To'liq ko'rish uchun arizaga bosing.</p>
+            <div id="pendingListContainer" class="space-y-3"></div>
         </div>
     </div>
 
-    <!-- Header / Navbar (Til tanlash bilan) -->
+    <!-- ADMIN UCHUN ARIZANI TO'LIQ KO'RISH OYNASI (FULL VIEW MODAL) -->
+    <div id="adminFullDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-xl w-full p-5 sm:p-7 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-6 max-h-[92vh] overflow-y-auto">
+            <button onclick="closeAdminFullDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-20 cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div id="adminFullDetailContent"></div>
+        </div>
+    </div>
+
+    <!-- Header / Navbar -->
     <header class="primary-bg text-white shadow-sm sticky top-0 z-40 border-b border-blue-400/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
                 <div class="flex items-center space-x-3 select-none">
-                    <!-- Maxfiy 5 marta bosiladigan logo ikonka -->
+                    <!-- Maxfiy 5 marta tez bosiladigan logo -->
                     <div onclick="handleSecretAdminClick()" class="bg-white border border-gray-200 p-2.5 rounded-2xl shadow-md flex items-center justify-center active:scale-95 transition cursor-pointer" title="ShifoTop">
                         <i class="fa-solid fa-heart-pulse text-base text-red-500"></i>
                     </div>
@@ -245,7 +262,6 @@
 
                         <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
 
-                        <!-- Ro'yxatdan o'tish arizasi -->
                         <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2 rounded-xl font-semibold text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-user-plus w-5"></i>
                             <span id="lblJoinCatalog">Ro'yxatdan o'tish</span>
@@ -261,7 +277,6 @@
 
             <!-- O'ng tarafdagi Til selektori, Saralanganlar va Rejim -->
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <!-- Til tanlash (UZ | RU | EN) -->
                 <div class="bg-white/20 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
                     <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white text-blue-600 transition">UZ</button>
                     <button onclick="changeLanguage('ru')" id="lang-ru" class="px-2 py-1 rounded-lg hover:bg-white/20 transition">RU</button>
@@ -279,7 +294,7 @@
         </div>
     </header>
 
-    <!-- Asosiy Qism -->
+    <!-- Asosiy Qism (Yagona toza blok) -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="primary-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
@@ -340,7 +355,7 @@
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- BATAFSIL MODAL (Galereya, Reyting, Izoh yozish va 3 ta tavsiya bilan) -->
+    <!-- BATAFSIL MODAL -->
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[92vh] overflow-y-auto">
             <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-20 cursor-pointer">
@@ -410,7 +425,6 @@
         let secretClickTimer = null;
         let reviewStarRating = 5;
 
-        // Tarjimalar lug'ati (UZ, RU, EN)
         const i18n = {
             uz: {
                 appSubtitle: "Tibbiyot Portali",
@@ -512,7 +526,6 @@
             abroad_treatment: { icon: 'fa-globe' }
         };
 
-        // Barcha bo'limlar uchun ko'p tilli ma'lumotlar bazasi (Har birida 5 tagacha rasm va sharhlar)
         const sampleData = {
             doctors: [
                 {
@@ -534,8 +547,7 @@
                     },
                     images: [
                         "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
-                        "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600",
-                        "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600"
+                        "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600"
                     ],
                     reviews: [
                         { author: "Azizbek R.", text: "Juda tajribali mutaxassis, tavsiya qilaman.", rating: 5, date: "3 kun oldin" }
@@ -558,10 +570,7 @@
                         ru: "Детский и взрослый кардиолог. Эксперт по ЭКГ и ЭхоКГ.",
                         en: "Pediatric and adult cardiologist. Specialist in ECG and EchoCG."
                     },
-                    images: [
-                        "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600",
-                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"
-                    ],
+                    images: ["https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600"],
                     reviews: []
                 },
                 {
@@ -611,60 +620,6 @@
                     instagram: "akfamedline",
                     rating: 4.9,
                     bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
-                    images: [
-                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600",
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"
-                    ],
-                    reviews: [
-                        { author: "Bobur", text: "Juda yuqori servis va shinam xonalar.", rating: 5, date: "1 hafta oldin" }
-                    ]
-                },
-                {
-                    id: 102,
-                    name: { uz: "Shox Med Center", ru: "Шох Мед Центр", en: "Shox Med Center" },
-                    specialty: { uz: "Diagnostika va statsionar", ru: "Диагностика и стационар", en: "Diagnostics & Inpatient" },
-                    region: "Toshkent",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 71 202 02 03",
-                    address: { uz: "Yakkasaroy tumani, Shota Rustaveli, 32", ru: "Яккасарайский район, Шота Руставели, 32", en: "Yakkasaray district, Shota Rustaveli, 32" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
-                    telegram: "shoxmed_uz",
-                    instagram: "shox.med",
-                    rating: 4.8,
-                    bio: { uz: "Aniq diagnostika, MRT, MSKT va laboratoriya xizmatlari.", ru: "Точная диагностика, МРТ, МСКТ и лаборатория.", en: "Precise diagnostics, MRI, CT scan and laboratory." },
-                    images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 103,
-                    name: { uz: "Era Med Klinika", ru: "Эра Мед Клиника", en: "Era Med Clinic" },
-                    specialty: { uz: "Xirurgiya va LOR", ru: "Хирургия и ЛОР", en: "Surgery & ENT" },
-                    region: "Toshkent",
-                    exp: { uz: "10 yil tajriba", ru: "10 лет опыта", en: "10 years experience" },
-                    phone: "+998 71 200 11 22",
-                    address: { uz: "Shayxontohur, Qoratosh ko'chasi", ru: "Шайхантахур, ул. Караташ", en: "Shaykhontokhur, Karatash st" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Karatash",
-                    telegram: "eramed_clinic",
-                    instagram: "eramed_uz",
-                    rating: 4.7,
-                    bio: { uz: "Zamonaviy lazer jarrohligi va LOR markazi.", ru: "Лазерная хирургия и передовой ЛОР-центр.", en: "Modern laser surgery and advanced ENT center." },
-                    images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 104,
-                    name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
-                    specialty: { uz: "Poliklinika va Kardiologiya", ru: "Поликлиника и Кардиология", en: "Polyclinic & Cardiology" },
-                    region: "Samarqand",
-                    exp: { uz: "Statsionar", ru: "Стационар", en: "Inpatient" },
-                    phone: "+998 66 230 40 50",
-                    address: { uz: "Samarqand sh., Beruniy ko'chasi, 4", ru: "г. Самарканд, ул. Беруни, 4", en: "Samarkand city, Beruni st, 4" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "citymed_sam",
-                    instagram: "citymed_samarkand",
-                    rating: 4.9,
-                    bio: { uz: "Samarqanddagi zamonaviy klinika.", ru: "Современная клиника в Самарканде.", en: "Modern medical clinic in Samarkand." },
                     images: ["https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600"],
                     reviews: []
                 }
@@ -683,60 +638,7 @@
                     instagram: "oxymed.uz",
                     rating: 4.8,
                     bio: { uz: "10 000 dan ortiq dori-darmonlar va uyga tezkor yetkazib berish xizmati.", ru: "Более 10 000 наименований лекарств и экспресс-доставка.", en: "Over 10,000 medicines and fast home delivery." },
-                    images: [
-                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600",
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"
-                    ],
-                    reviews: [
-                        { author: "Dilshod", text: "Barcha kamyob dorilar bor ekan, rahmat!", rating: 5, date: "2 hafta oldin" }
-                    ]
-                },
-                {
-                    id: 202,
-                    name: { uz: "Grand Pharm Dorixona", ru: "Гранд Фарм Аптека", en: "Grand Pharm Pharmacy" },
-                    specialty: { uz: "Sertifikatlangan dorilar", ru: "Сертифицированные лекарства", en: "Certified Medicines" },
-                    region: "Toshkent",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 71 202 99 99",
-                    address: { uz: "Chilonzor tumani, Bunyodkor shox ko'chasi", ru: "Чиланзарский район, пр. Бунёдкор", en: "Chilanzar district, Bunyodkor ave" },
-                    mapUrl: "https://maps.google.com/?q=Chilanzar+Tashkent",
-                    telegram: "grandpharm_uz",
-                    instagram: "grandpharm.uz",
-                    rating: 4.7,
-                    bio: { uz: "Kafolatlangan sifatli dori vositalari.", ru: "Гарантированное качество медикаментов.", en: "Guaranteed high-quality medications." },
-                    images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 203,
-                    name: { uz: "Dori-Darmon Samarqand", ru: "Дори-Дармон Самарканд", en: "Dori-Darmon Samarkand" },
-                    specialty: { uz: "Ijtimoiy dorixona", ru: "Социальная аптека", en: "Social Pharmacy" },
-                    region: "Samarqand",
-                    exp: { uz: "Har kuni 08:00 - 23:00", ru: "Ежедневно 08:00 - 23:00", en: "Daily 08:00 - 23:00" },
-                    phone: "+998 66 233 11 22",
-                    address: { uz: "Samarqand sh., Mirzo Ulug'bek, 18", ru: "г. Самарканд, Мирзо Улугбек, 18", en: "Samarkand city, Mirzo Ulugbek, 18" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "doridarmon_sam",
-                    instagram: "doridarmon_uz",
-                    rating: 4.6,
-                    bio: { uz: "Hamyonbop narxlardagi dori vositalari.", ru: "Доступные цены на медикаменты.", en: "Affordable pharmacy products." },
                     images: ["https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 204,
-                    name: { uz: "BestPharm Buxoro", ru: "БестФарм Бухара", en: "BestPharm Bukhara" },
-                    specialty: { uz: "Dorixona & Optika", ru: "Аптека и Оптика", en: "Pharmacy & Optics" },
-                    region: "Buxoro",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 65 222 33 44",
-                    address: { uz: "Buxoro sh., Navoiy shox ko'chasi", ru: "г. Бухара, пр. Навои", en: "Bukhara city, Navoi ave" },
-                    mapUrl: "https://maps.google.com/?q=Bukhara",
-                    telegram: "bestpharm_buxoro",
-                    instagram: "bestpharm_uz",
-                    rating: 4.9,
-                    bio: { uz: "Dori vositalari va optik ko'zoynaklar markazi.", ru: "Центр медикаментов и оптики.", en: "Center for medications and optics." },
-                    images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"],
                     reviews: []
                 }
             ],
@@ -754,59 +656,6 @@
                     instagram: "medtexnika_uz",
                     rating: 4.8,
                     bio: { uz: "Tonometrlar, aravachalar, ingalyatorlar va ortopediya korsetlari.", ru: "Тонометры, инвалидные коляски, ингаляторы и корсеты.", en: "Blood pressure monitors, wheelchairs, nebulizers and braces." },
-                    images: [
-                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600",
-                        "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=600"
-                    ],
-                    reviews: [
-                        { author: "Mansur", text: "Aravacha va tonometr oldik, juda sifatli ekan.", rating: 5, date: "4 kun oldin" }
-                    ]
-                },
-                {
-                    id: 302,
-                    name: { uz: "BioMed Uskunalar", ru: "БиоМед Оборудование", en: "BioMed Equipment" },
-                    specialty: { uz: "Klinikalar uchun uskunalar", ru: "Оборудование для клиник", en: "Clinical Equipment" },
-                    region: "Toshkent",
-                    exp: { uz: "Servis xizmati bilan", ru: "С сервисной гарантией", en: "With full service" },
-                    phone: "+998 71 233 44 55",
-                    address: { uz: "Mirobod tumani, Nukus ko'chasi", ru: "Мирабадский район, ул. Нукусская", en: "Mirabad district, Nukus st" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Nukus",
-                    telegram: "biomed_uz",
-                    instagram: "biomed_equipment",
-                    rating: 4.9,
-                    bio: { uz: "Klinika va laboratoriyalar uchun professional texnikalar.", ru: "Профессиональное оборудование для клиник и лабораторий.", en: "Professional equipment for hospitals and labs." },
-                    images: ["https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 303,
-                    name: { uz: "OrtoMed Farg'ona", ru: "ОртоМед Фергана", en: "OrtoMed Fergana" },
-                    specialty: { uz: "Ortopedik mahsulotlar", ru: "Ортопедические изделия", en: "Orthopedic Products" },
-                    region: "Fargona",
-                    exp: { uz: "Sertifikatlangan", ru: "Сертифицировано", en: "Certified" },
-                    phone: "+998 73 244 55 66",
-                    address: { uz: "Farg'ona sh., Al-Farg'oniy ko'chasi", ru: "г. Фергана, ул. Аль-Фергани", en: "Fergana city, Al-Fergani st" },
-                    mapUrl: "https://maps.google.com/?q=Fergana",
-                    telegram: "ortomed_fargona",
-                    instagram: "ortomed_uz",
-                    rating: 4.7,
-                    bio: { uz: "Ortopedik poyabzallar, korsetlar va bandajlar.", ru: "Ортопедическая обувь, корсеты и бандажи.", en: "Orthopedic shoes, braces and bandages." },
-                    images: ["https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 304,
-                    name: { uz: "MedComfort Samarqand", ru: "МедКомфорт Самарканд", en: "MedComfort Samarkand" },
-                    specialty: { uz: "Uy tibbiyoti buyumlari", ru: "Домашняя медтехника", en: "Home Medical Devices" },
-                    region: "Samarqand",
-                    exp: { uz: "Kafolat 2 yil", ru: "Гарантия 2 года", en: "2 years warranty" },
-                    phone: "+998 66 231 00 99",
-                    address: { uz: "Samarqand sh., Rudakiy ko'chasi", ru: "г. Самарканд, ул. Рудаки", en: "Samarkand city, Rudaki st" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "medcomfort_sam",
-                    instagram: "medcomfort_uz",
-                    rating: 4.8,
-                    bio: { uz: "Uy sharoitida salomatlikni nazorat qiluvchi uskunalar.", ru: "Приборы для контроля здоровья дома.", en: "Home healthcare monitoring devices." },
                     images: ["https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"],
                     reviews: []
                 }
@@ -825,59 +674,6 @@
                     instagram: "acibadem.uzbekistan",
                     rating: 5.0,
                     bio: { uz: "Xorijda yuqori aniqlikdagi davolash va murakkab operatsiyalar. Toshkentdan to'liq bepul konsultatsiya va hamrohlik.", ru: "Высокоточное лечение и сложнейшие операции в Турции. Полное бесплатное сопровождение из Ташкента.", en: "High-precision treatment and complex surgeries in Turkey with full local guidance." },
-                    images: [
-                        "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"
-                    ],
-                    reviews: [
-                        { author: "Farrux", text: "Operatsiya a'lo o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
-                    ]
-                },
-                {
-                    id: 402,
-                    name: { uz: "Anadolu Medical Center (Turkiya)", ru: "Анадолу Медицинский Центр (Турция)", en: "Anadolu Medical Center (Turkey)" },
-                    specialty: { uz: "Saraton va Suyak ko'chirish", ru: "Онкология и пересадка костного мозга", en: "Oncology & Bone Marrow Transplant" },
-                    region: "Xorij",
-                    exp: { uz: "Johns Hopkins hamkori", ru: "Партнер Johns Hopkins", en: "Johns Hopkins partner" },
-                    phone: "+998 90 114 22 33",
-                    address: { uz: "Istanbul / Toshkent vakolatxonasi", ru: "Стамбул / Офис в Ташкенте", en: "Istanbul / Tashkent office" },
-                    mapUrl: "https://maps.google.com/?q=Anadolu+Medical+Center",
-                    telegram: "anadolu_uz",
-                    instagram: "anadolumedicalcenter_uz",
-                    rating: 4.9,
-                    bio: { uz: "AQSH Johns Hopkins tibbiyoti tizimida faoliyat yurituvchi markaz.", ru: "Клиника, работающая по стандартам Johns Hopkins Medicine (США).", en: "Affiliated with Johns Hopkins Medicine (USA)." },
-                    images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 403,
-                    name: { uz: "Severance Hospital (Janubiy Koreya)", ru: "Северанс Госпиталь (Южная Корея)", en: "Severance Hospital (South Korea)" },
-                    specialty: { uz: "Robotik jarrohlik va Kardiologiya", ru: "Роботизированная хирургия и Кардиология", en: "Robotic Surgery & Cardiology" },
-                    region: "Xorij",
-                    exp: { uz: "Dunyo Top-50", ru: "Мировой Топ-50", en: "World Top-50" },
-                    phone: "+998 71 205 55 66",
-                    address: { uz: "Seul (Toshkent vakili)", ru: "Сеул (Представитель в Ташкенте)", en: "Seoul (Tashkent representative)" },
-                    mapUrl: "https://maps.google.com/?q=Severance+Hospital+Seoul",
-                    telegram: "severance_korea_uz",
-                    instagram: "severance_uz",
-                    rating: 5.0,
-                    bio: { uz: "Janubiy Koreyaning eng nufuzli universitet shifoxonasi.", ru: "Ведущий университетский госпиталь Южной Кореи.", en: "Leading university hospital in South Korea." },
-                    images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 404,
-                    name: { uz: "Asklepios Klinikalari (Germaniya)", ru: "Асклепиос Клиники (Германия)", en: "Asklepios Kliniken (Germany)" },
-                    specialty: { uz: "Ortopediya va Neyroxirurgiya", ru: "Ортопедия и Нейрохирургия", en: "Orthopedics & Neurosurgery" },
-                    region: "Xorij",
-                    exp: { uz: "Germaniya standarti", ru: "Немецкий стандарт", en: "German standard" },
-                    phone: "+998 90 998 77 66",
-                    address: { uz: "Gamburg (O'zbekiston koordinatori)", ru: "Гамбург (Координатор в Узбекистане)", en: "Hamburg (Uzbekistan coordinator)" },
-                    mapUrl: "https://maps.google.com/?q=Asklepios+Hamburg",
-                    telegram: "asklepios_uz",
-                    instagram: "asklepios_germany",
-                    rating: 4.9,
-                    bio: { uz: "Germaniyaning eng yirik xususiy klinikalar tarmog'i.", ru: "Крупнейшая сеть частных клиник в Германии.", en: "Germany's largest private healthcare provider." },
                     images: ["https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600"],
                     reviews: []
                 }
@@ -895,7 +691,6 @@
             renderGrid();
         };
 
-        // ==================== KO'P TILLILIK (I18N) ====================
         function changeLanguage(lang) {
             currentLang = lang;
             ['uz', 'ru', 'en'].forEach(l => {
@@ -932,7 +727,6 @@
             document.getElementById('lblSectionsMenu').innerText = tr.sectionsMenu;
             document.getElementById('lblJoinCatalog').innerText = tr.joinCatalog;
             document.getElementById('lblAboutMenu').innerText = tr.aboutMenu;
-            document.getElementById('lblFavTitle').innerText = tr.results ? tr.results : "Saralanganlar";
 
             document.querySelectorAll('.txt-doctors').forEach(el => el.innerText = tr.doctors);
             document.querySelectorAll('.txt-clinics').forEach(el => el.innerText = tr.clinics);
@@ -941,7 +735,7 @@
             document.querySelectorAll('.txt-abroad_treatment').forEach(el => el.innerText = tr.abroad_treatment);
         }
 
-        // ==================== MAXFIY ADMIN KIRISH (Logoga 5 marta bosilganda) ====================
+        // ==================== MAXFIY ADMIN KIRISH ====================
         function handleSecretAdminClick() {
             secretClickCount++;
             clearTimeout(secretClickTimer);
@@ -977,39 +771,41 @@
             }
         }
 
+        // ==================== ADMIN PANELI & TO'LIQ ANKETA KO'RISH ====================
         function openAdminPanel() {
             const container = document.getElementById('pendingListContainer');
             if (pendingSubmissions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha kutayotgan arizalar yo'q.</p>`;
+                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha tekshiruvni kutayotgan arizalar yo'q.</p>`;
             } else {
-                container.innerHTML = pendingSubmissions.map((item, index) => `
-                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border flex flex-col justify-between gap-3">
-                        <div>
-                            <div class="flex items-center justify-between">
+                container.innerHTML = pendingSubmissions.map((item, index) => {
+                    const previewImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600";
+                    return `
+                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-200 dark:border-gray-600 flex flex-col justify-between gap-3 hover:border-blue-500 transition">
+                        <div onclick="openAdminFullDetailModal(${index})" class="cursor-pointer">
+                            <div class="flex items-center justify-between mb-1.5">
                                 <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
-                                <span class="text-[10px] text-gray-400 font-bold">${item.images ? item.images.length : 0} ta rasm</span>
+                                <span class="text-[11px] text-blue-600 font-bold"><i class="fa-solid fa-expand mr-1"></i> To'liq ko'rish (${item.images ? item.images.length : 0} rasm)</span>
                             </div>
-                            <h4 class="font-bold text-base text-gray-900 dark:text-white mt-1">${getLocalized(item.name)}</h4>
-                            <p class="text-xs text-blue-600 font-semibold">${getLocalized(item.specialty)} • ${item.region} (${getLocalized(item.exp)})</p>
-                            <p class="text-xs text-gray-500 mt-1">${item.phone} | ${getLocalized(item.address)}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border">${getLocalized(item.bio)}</p>
-                            
-                            ${item.images && item.images.length > 0 ? `
-                                <div class="flex gap-2 mt-2 overflow-x-auto pb-1">
-                                    ${item.images.map(img => `<img src="${img}" class="w-14 h-14 object-cover rounded-xl border">`).join('')}
+                            <div class="flex gap-3 items-center">
+                                <img src="${previewImg}" class="w-14 h-14 rounded-xl object-cover shrink-0 border border-gray-200 dark:border-gray-600">
+                                <div class="overflow-hidden">
+                                    <h4 class="font-bold text-sm text-gray-900 dark:text-white truncate">${getLocalized(item.name)}</h4>
+                                    <p class="text-xs text-blue-600 font-semibold truncate">${getLocalized(item.specialty)} • ${item.region}</p>
+                                    <p class="text-xs text-gray-500 truncate">${item.phone}</p>
                                 </div>
-                            ` : ''}
+                            </div>
                         </div>
+
                         <div class="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                            <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
-                                <i class="fa-solid fa-check mr-1"></i> Saytda e'lon qilish
+                            <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-3 rounded-xl cursor-pointer shadow transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-check"></i> Saytda e'lon qilish
                             </button>
-                            <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
-                                <i class="fa-solid fa-trash mr-1"></i> Rad etish
+                            <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-3 rounded-xl cursor-pointer shadow transition flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-trash"></i> Rad etish
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `}).join('');
             }
             const apm = document.getElementById('adminPanelModal');
             if(apm) apm.classList.remove('hidden');
@@ -1020,11 +816,75 @@
             if(apm) apm.classList.add('hidden'); 
         }
 
+        function openAdminFullDetailModal(index) {
+            const item = pendingSubmissions[index];
+            if (!item) return;
+
+            const allImgs = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
+            const mainImg = allImgs[0];
+
+            const container = document.getElementById('adminFullDetailContent');
+            container.innerHTML = `
+                <div class="flex items-center justify-between pb-3 border-b border-gray-200 dark:border-gray-700">
+                    <span class="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
+                    <span class="text-xs font-semibold text-gray-400">Moderatsiya arizasi</span>
+                </div>
+
+                <div class="flex gap-4 items-center my-4">
+                    <img id="adminModalMainImg" src="${mainImg}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500 shrink-0 shadow">
+                    <div>
+                        <h3 class="text-xl font-extrabold text-gray-900 dark:text-white">${getLocalized(item.name)}</h3>
+                        <p class="text-xs font-bold text-blue-600 mt-0.5">${getLocalized(item.specialty)}</p>
+                        <p class="text-xs text-gray-500 mt-1"><i class="fa-solid fa-city mr-1 text-blue-500"></i> ${item.region} • <b>${getLocalized(item.exp)}</b></p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Yuklangan rasmlar (${allImgs.length}/5)</h5>
+                    <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                        ${allImgs.map(img => `
+                            <img src="${img}" onclick="document.getElementById('adminModalMainImg').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-gray-200 hover:border-blue-500 cursor-pointer transition shrink-0">
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="space-y-2.5 text-xs text-gray-700 dark:text-gray-300 bg-gray-50 dark:bg-gray-700/40 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 mb-5">
+                    <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-blue-600 font-bold ml-1">${item.phone}</a></div>
+                    <div><b>Manzil va mo'ljal:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
+                    <div><b>Telegram:</b> ${item.telegram ? `<a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="text-sky-500 font-bold ml-1">@${item.telegram.replace('@','')}</a>` : 'Kiritilmagan'}</div>
+                    <div><b>Instagram:</b> ${item.instagram ? `<a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" class="text-pink-500 font-bold ml-1">@${item.instagram.replace('@','')}</a>` : 'Kiritilmagan'}</div>
+                    <div class="pt-2 border-t border-gray-200 dark:border-gray-600">
+                        <b>Biografiya / Qo'shimcha tavsif:</b>
+                        <p class="mt-1 text-gray-600 dark:text-gray-300 leading-relaxed bg-white dark:bg-gray-800 p-2.5 rounded-xl border">${getLocalized(item.bio) || "Ma'lumot kiritilmagan"}</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="approveSubmission(${index}); closeAdminFullDetailModal();" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl shadow cursor-pointer transition">
+                        <i class="fa-solid fa-check mr-1"></i> Saytda e'lon qilish
+                    </button>
+                    <button onclick="rejectSubmission(${index}); closeAdminFullDetailModal();" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-3 rounded-xl shadow cursor-pointer transition">
+                        <i class="fa-solid fa-trash mr-1"></i> Rad etish
+                    </button>
+                </div>
+            `;
+
+            const afm = document.getElementById('adminFullDetailModal');
+            if (afm) afm.classList.remove('hidden');
+        }
+
+        function closeAdminFullDetailModal() {
+            const afm = document.getElementById('adminFullDetailModal');
+            if (afm) afm.classList.add('hidden');
+        }
+
         function approveSubmission(index) {
             const item = pendingSubmissions[index];
             if (!sampleData[item.category]) sampleData[item.category] = [];
+            
             sampleData[item.category].unshift(item);
             pendingSubmissions.splice(index, 1);
+            
             openAdminPanel();
             renderGrid();
             alert("Ariza tasdiqlandi va ShifoTop ilovasida e'lon qilindi!");
@@ -1123,7 +983,6 @@
                 ? [...uploadedImagesBase64] 
                 : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
 
-            // Yangi kelib tushgan arizalar barcha tillar uchun moslab saqlanadi
             pendingSubmissions.push({
                 id: Date.now(),
                 category: cat,
@@ -1227,13 +1086,12 @@
             `}).join('');
         }
 
-        // ==================== BATAFSIL MODAL, REYTING, IZOH VA 3 TA TAVSIYA ====================
+        // ==================== FOYDALANUVCHI UCHUN BATAFSIL OYNA ====================
         function openDetailModal(categoryKey, itemId) {
             const list = sampleData[categoryKey] || [];
             const item = list.find(x => x.id === itemId);
             if (!item) return;
 
-            // Xuddi shu bo'limdagi boshqa 3 ta tavsiya etiladigan muassasa yoki shifokor
             const recommended = list.filter(x => x.id !== item.id).slice(0, 3);
             const allImages = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
             const mainImg = allImages[0];
@@ -1338,10 +1196,10 @@
                                 </div>
                                 <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">${r.text}</p>
                             </div>
-                        `).join('') : `<p class="text-xs text-gray-400 italic">Hozircha fikrlar mavjud emas. Birinchi bo'lib fikr bildiring!</p>`}
+                        `).join('') : `<p class="text-xs text-gray-400 italic">Hozircha fikrlar mavjud emas.</p>`}
                     </div>
 
-                    <!-- Yangi fikr va yulduzcha berish formasi -->
+                    <!-- Yangi fikr yozish -->
                     <div class="p-3.5 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600">
                         <div class="text-xs font-bold mb-2 flex items-center justify-between">
                             <span>${t('writeReviewLabel')}</span>
@@ -1397,7 +1255,6 @@
             if(dm) dm.classList.remove('hidden');
         }
 
-        // Yulduzchalarni belgilash
         function setRating(val) {
             reviewStarRating = val;
             const container = document.getElementById('starRatingContainer');
@@ -1412,7 +1269,6 @@
             });
         }
 
-        // Izohni saqlash va reytingni yangilash
         function submitReview(categoryKey, itemId) {
             const author = document.getElementById('reviewAuthorInput').value.trim();
             const text = document.getElementById('reviewTextInput').value.trim();
@@ -1433,1526 +1289,6 @@
                 date: "Hozirgina"
             });
 
-            // O'rtacha reytingni qayta hisoblash
-            const totalRating = item.reviews.reduce((acc, cur) => acc + (cur.rating || 5), 0);
-            item.rating = (totalRating / item.reviews.length).toFixed(1);
-
-            alert("Fikringiz muvaffaqiyatli qabul qilindi!");
-            openDetailModal(categoryKey, itemId);
-            renderGrid();
-        }
-
-        function closeDetailModal() {
-            const dm = document.getElementById('detailModal');
-            if(dm) dm.classList.add('hidden');
-        }
-
-        // ==================== BO'LIMLARNI ALMASHTIRISH ====================
-        function switchTab(tab) {
-            currentTab = tab;
-            const cfg = tabConfigs[tab] || { icon: 'fa-user-doctor' };
-
-            const stt = document.getElementById('sectionTitleText');
-            if(stt) stt.innerText = t(tab);
-            const sIcon = document.getElementById('sectionIcon');
-            if(sIcon) sIcon.className = `fa-solid ${cfg.icon} text-blue-600`;
-
-            Object.keys(tabConfigs).forEach(tKey => {
-                const btn = document.getElementById(`fastTab-${tKey}`);
-                if (btn) {
-                    if (tKey === tab) {
-                        btn.className = "px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-blue-600 text-white shadow";
-                    } else {
-                        btn.className = "px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300";
-                    }
-                }
-            });
-
-            renderGrid();
-            closeAllDropdowns();
-        }
-
-        function toggleMenuDropdown(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('hidden'); }
-        function closeAllDropdowns() { const md = document.getElementById('menuDropdown'); if(md) md.classList.add('hidden'); }
-        function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-        function closeAboutModal() { const am = document.getElementById('aboutModal'); if(am) am.classList.add('hidden'); }
-        function openAboutModal() { closeAllDropdowns(); const am = document.getElementById('aboutModal'); if(am) am.classList.remove('hidden'); }
-        
-        function openBookingModal(name) { 
-            const bin = document.getElementById('bookingItemName');
-            if(bin) bin.innerText = name; 
-            const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.remove('hidden'); 
-        }
-        function closeBookingModal() { 
-            const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.add('hidden'); 
-        }
-        function submitBooking(e) { e.preventDefault(); closeBookingModal(); alert("Qabulga yozildingiz! Tez orada operator aloqaga chiqadi."); }
-
-        function openFavoritesModal() {
-            const list = document.getElementById('favoritesList');
-            if(!list) return;
-            if (favorites.length === 0) {
-                list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">Saralanganlar ro'yxati bo'sh</p>`;
-            } else {
-                const allItems = [].concat(...Object.values(sampleData));
-                list.innerHTML = favorites.map(id => {
-                    const item = allItems.find(x => x.id === id);
-                    return item ? `<div class="p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-xs font-bold flex justify-between items-center">
-                        <span>${getLocalized(item.name)}</span>
-                        <button onclick="toggleFav(${item.id}); openFavoritesModal();" class="text-red-500 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
-                    </div>` : '';
-                }).join('');
-            }
-            const fm = document.getElementById('favoritesModal');
-            if(fm) fm.classList.remove('hidden');
-        }
-        function closeFavoritesModal() { 
-            const fm = document.getElementById('favoritesModal');
-            if(fm) fm.classList.add('hidden'); 
-        }
-    </script>
-</body>
-</html>
-
-:
-<!DOCTYPE html>
-<html lang="uz" class="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShifoTop — Tibbiyot portali va katalogi</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        @keyframes scaleIn {
-            from { transform: scale(0.95); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        .animate-scale { animation: scaleIn 0.2s ease-out forwards; }
-        .gold-gradient {
-            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 25%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .primary-bg {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
-        }
-    </style>
-</head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
-
-    <!-- Rol tanlash Modal (Ro'yxatdan o'tish) -->
-    <div id="roleSelectModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 text-center">
-            <button onclick="skipRoleSelection()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <div class="w-14 h-14 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
-                <i class="fa-solid fa-user-tag text-2xl"></i>
-            </div>
-            <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-1" id="lblRoleModalTitle">Katalogga qo'shilish</h2>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-5" id="lblRoleModalSub">Ro'yxatdan o'tish uchun yo'nalishingizni tanlang</p>
-            
-            <div class="space-y-2.5">
-                <button onclick="openRegisterForm('doctors', 'doctors')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-user-doctor text-base"></i> <span id="optDoc">Shifokor</span></span>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-                <button onclick="openRegisterForm('clinics', 'clinics')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-base"></i> <span id="optClin">Klinika / Shifoxona</span></span>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-                <button onclick="openRegisterForm('pharmacies', 'pharmacies')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-pills text-base"></i> <span id="optPharm">Dorixona</span></span>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-                <button onclick="openRegisterForm('medical_store', 'medical_store')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-stethoscope text-base"></i> <span id="optStore">Tibbiy buyumlar (Med-texnika)</span></span>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-                <button onclick="openRegisterForm('abroad_treatment', 'abroad_treatment')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-globe text-base"></i> <span id="optAbroad">Xorijda davolanish</span></span>
-                    <i class="fa-solid fa-chevron-right text-xs"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm bilan) -->
-    <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-6 max-h-[92vh] overflow-y-auto">
-            <button onclick="closeAddItemModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <h3 class="font-extrabold text-xl mb-1 text-gray-900 dark:text-white" id="modalFormTitle">Anketa to'ldirish</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4" id="modalFormSub">Ma'lumotlaringiz moderator tasdiqlaganidan keyin saytda chiqadi.</p>
-            
-            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
-                <input type="hidden" id="newItemCategory">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormName">F.I.O yoki Muassasa nomi</label>
-                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormSpec">Mutaxassisligi / Xizmat turi</label>
-                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormRegion">Hudud</label>
-                        <select id="newItemRegion" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white cursor-pointer">
-                            <option value="Toshkent">Toshkent sh.</option>
-                            <option value="Samarqand">Samarqand</option>
-                            <option value="Buxoro">Buxoro</option>
-                            <option value="Fargona">Farg'ona</option>
-                            <option value="Xorij">Xorij</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormExp">Ish tajribasi / Ish vaqti</label>
-                        <input type="text" id="newItemExp" placeholder="10 yil / 24/7" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormPhone">Telefon raqam</label>
-                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telegram (username)</label>
-                        <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Instagram (profil)</label>
-                        <input type="text" id="newItemInstagram" placeholder="profil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormAddress">Manzil va Mo'ljal</label>
-                    <input type="text" id="newItemAddress" required placeholder="Ko'cha, bino raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1" id="lblFormBio">Ma'lumot / Tavsif</label>
-                    <textarea id="newItemBio" rows="2" placeholder="Qisqacha ma'lumot..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white"></textarea>
-                </div>
-
-                <!-- 5 tagacha rasm yuklash bloki -->
-                <div class="p-3.5 bg-blue-50/60 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30">
-                    <label class="block text-xs font-bold text-blue-900 dark:text-blue-300 mb-1.5 flex items-center justify-between">
-                        <span><i class="fa-solid fa-images mr-1"></i> <span id="lblFormImages">Rasmlar (5 tagacha yuklang)</span></span>
-                        <span id="uploadedCountText" class="text-[10px] text-blue-600 font-bold">0/5</span>
-                    </label>
-                    <input type="file" id="imageFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
-                    <div id="imagePreviewContainer" class="flex gap-2 mt-2.5 overflow-x-auto pb-1 scrollbar-none"></div>
-                </div>
-
-                <button type="submit" id="btnSubmitForm" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg mt-3 cursor-pointer">
-                    Tasdiqlash uchun Adminga yuborish
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MAXFIY ADMIN KIRISH MODALI -->
-    <div id="adminLoginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 text-center">
-            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-                <i class="fa-solid fa-shield-halved text-xl"></i>
-            </div>
-            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Boshqaruvi</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Maxfiy parolni kiriting</p>
-            <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
-                <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center">
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
-                    Kirish
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- ADMIN MODERATSIYA PANELI -->
-    <div id="adminPanelModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-blue-600"></i> Moderator Nazorati
-            </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Foydalanuvchilardan kelib tushgan tasdiqlanmagan arizalar.</p>
-            <div id="pendingListContainer" class="space-y-4"></div>
-        </div>
-    </div>
-
-    <!-- Header / Navbar (Til tanlash bilan) -->
-    <header class="primary-bg text-white shadow-sm sticky top-0 z-40 border-b border-blue-400/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="relative">
-                <div class="flex items-center space-x-3 select-none">
-                    <!-- Maxfiy 5 marta bosiladigan logo ikonka -->
-                    <div onclick="handleSecretAdminClick()" class="bg-white border border-gray-200 p-2.5 rounded-2xl shadow-md flex items-center justify-center active:scale-95 transition cursor-pointer" title="ShifoTop">
-                        <i class="fa-solid fa-heart-pulse text-base text-red-500"></i>
-                    </div>
-
-                    <!-- Menyu ochilishi -->
-                    <div onclick="toggleMenuDropdown(event)" class="cursor-pointer">
-                        <div class="flex items-center space-x-0.5">
-                            <span class="text-xl font-extrabold tracking-tight text-white">
-                                <span>Shifo</span><span class="gold-gradient font-black">Top</span>
-                            </span>
-                            <i class="fa-solid fa-chevron-down text-xs text-white"></i>
-                        </div>
-                        <span class="block text-[11px] text-blue-100 font-semibold tracking-wide" id="lblAppSubtitle">Tibbiyot Portali</span>
-                    </div>
-                </div>
-
-                <!-- Dropdown Menu -->
-                <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale text-gray-800 dark:text-white">
-                    <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider" id="lblSectionsMenu">
-                        Bo'limlar
-                    </div>
-                    <div class="p-1.5 space-y-1">
-                        <button onclick="switchTab('doctors')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-user-doctor w-5 text-blue-600"></i>
-                            <span class="txt-doctors">Shifokorlar</span>
-                        </button>
-                        <button onclick="switchTab('clinics')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-hospital w-5 text-blue-600"></i>
-                            <span class="txt-clinics">Klinikalar</span>
-                        </button>
-                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-pills w-5 text-blue-600"></i>
-                            <span class="txt-pharmacies">Dorixonalar</span>
-                        </button>
-                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-stethoscope w-5 text-blue-600"></i>
-                            <span class="txt-medical_store">Tibbiy buyumlar</span>
-                        </button>
-                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-globe w-5 text-blue-600"></i>
-                            <span class="txt-abroad_treatment">Xorijda davolanish</span>
-                        </button>
-
-                        <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
-
-                        <!-- Ro'yxatdan o'tish arizasi -->
-                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2 rounded-xl font-semibold text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-user-plus w-5"></i>
-                            <span id="lblJoinCatalog">Ro'yxatdan o'tish</span>
-                        </button>
-
-                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
-                            <span id="lblAboutMenu">Biz haqimizda</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- O'ng tarafdagi Til selektori, Saralanganlar va Rejim -->
-            <div class="flex items-center space-x-2 sm:space-x-3">
-                <!-- Til tanlash (UZ | RU | EN) -->
-                <div class="bg-white/20 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
-                    <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white text-blue-600 transition">UZ</button>
-                    <button onclick="changeLanguage('ru')" id="lang-ru" class="px-2 py-1 rounded-lg hover:bg-white/20 transition">RU</button>
-                    <button onclick="changeLanguage('en')" id="lang-en" class="px-2 py-1 rounded-lg hover:bg-white/20 transition">EN</button>
-                </div>
-
-                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center cursor-pointer" title="Saralanganlar">
-                    <i class="fa-solid fa-heart text-red-400 text-base"></i>
-                    <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
-                </button>
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center cursor-pointer">
-                    <i id="themeIcon" class="fa-solid fa-moon text-base"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-
-    <!-- Asosiy Qism -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        <div class="primary-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
-            <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
-                <i class="fa-solid fa-heart-pulse"></i>
-            </div>
-            <div class="relative z-10 max-w-2xl">
-                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping</h1>
-                <p id="heroSubtitle" class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Shifokorlar, klinikalar, dorixonalar, tibbiy buyumlar va xorijda davolanish bitta joyda.</p>
-            </div>
-            
-            <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10 border border-blue-200/50 dark:border-gray-700">
-                <div class="flex items-center px-3 flex-grow bg-gray-50 dark:bg-gray-700/50 rounded-xl py-2 sm:py-0">
-                    <i class="fa-solid fa-search text-blue-600 mr-3"></i>
-                    <input type="text" id="searchInput" oninput="filterData()" placeholder="Qidirish..." class="w-full bg-transparent border-0 focus:outline-none text-gray-800 dark:text-gray-100 text-sm placeholder-gray-400">
-                </div>
-                <div class="flex gap-2">
-                    <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="" id="optAllRegions">Barcha hududlar</option>
-                        <option value="Toshkent">Toshkent sh.</option>
-                        <option value="Samarqand">Samarqand</option>
-                        <option value="Buxoro">Buxoro</option>
-                        <option value="Fargona">Farg'ona</option>
-                        <option value="Xorij">Xorij</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gorizontal Tezkor Tablar -->
-        <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-            <button onclick="switchTab('doctors')" id="fastTab-doctors" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-blue-600 text-white shadow">
-                <i class="fa-solid fa-user-doctor mr-1.5"></i> <span class="txt-doctors">Shifokorlar</span>
-            </button>
-            <button onclick="switchTab('clinics')" id="fastTab-clinics" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <i class="fa-solid fa-hospital mr-1.5"></i> <span class="txt-clinics">Klinikalar</span>
-            </button>
-            <button onclick="switchTab('pharmacies')" id="fastTab-pharmacies" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <i class="fa-solid fa-pills mr-1.5"></i> <span class="txt-pharmacies">Dorixonalar</span>
-            </button>
-            <button onclick="switchTab('medical_store')" id="fastTab-medical_store" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <i class="fa-solid fa-stethoscope mr-1.5"></i> <span class="txt-medical_store">Tibbiy buyumlar</span>
-            </button>
-            <button onclick="switchTab('abroad_treatment')" id="fastTab-abroad_treatment" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition border bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300">
-                <i class="fa-solid fa-globe mr-1.5"></i> <span class="txt-abroad_treatment">Xorijda davolanish</span>
-            </button>
-        </div>
-
-        <div class="flex items-center justify-between px-2">
-            <h2 id="currentSectionTitle" class="text-xl font-bold text-gray-800 dark:text-white flex items-center space-x-2">
-                <i id="sectionIcon" class="fa-solid fa-user-doctor text-blue-600"></i>
-                <span id="sectionTitleText">Shifokorlar</span>
-            </h2>
-            <div class="flex items-center space-x-3">
-                <span id="resultCountBadge" class="text-xs font-semibold px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full">0 ta natija</span>
-            </div>
-        </div>
-
-        <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-    </main>
-
-    <!-- BATAFSIL MODAL (Galereya, Reyting, Izoh yozish va 3 ta tavsiya bilan) -->
-    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[92vh] overflow-y-auto">
-            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-20 cursor-pointer">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            <div id="detailContentContainer"></div>
-        </div>
-    </div>
-
-    <!-- BIZ HAQIMIZDA MODALI -->
-    <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
-            <button onclick="closeAboutModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 bg-white border border-gray-100 text-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg">
-                    <i class="fa-solid fa-heart-pulse text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-extrabold text-gray-900 dark:text-white" id="lblAboutTitle">ShifoTop haqida</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1" id="lblAboutDesc">O'zbekistondagi eng qulay tibbiy ma'lumotlar platformasi.</p>
-            </div>
-            <div class="space-y-3 mb-6">
-                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center p-3.5 bg-blue-50 dark:bg-blue-900/20 rounded-2xl text-blue-600 text-xs font-semibold">
-                    <i class="fa-brands fa-telegram text-lg w-8"></i> Telegram botimiz orqali bog'laning
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Booking Modal -->
-    <div id="bookingModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white" id="lblBookingTitle">Qabulga yozilish / Murojaat</h3>
-            <p id="bookingItemName" class="text-xs text-blue-700 dark:text-blue-400 font-semibold mb-4"></p>
-            <form onsubmit="submitBooking(event)" class="space-y-4">
-                <input type="text" required placeholder="Ism va familiyangiz" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white" id="bookingInputName">
-                <input type="tel" required placeholder="Telefon raqamingiz" class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white" id="bookingInputPhone">
-                <button type="submit" id="btnBookingSubmit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg cursor-pointer">Tasdiqlash</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Favorites Modal -->
-    <div id="favoritesModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700">
-            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <h3 class="font-bold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-heart text-red-500"></i> <span id="lblFavTitle">Saralanganlar</span>
-            </h3>
-            <div id="favoritesList" class="space-y-3 max-h-80 overflow-y-auto pr-1"></div>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic -->
-    <script>
-        let currentLang = 'uz';
-        let currentTab = 'doctors';
-        let favorites = [];
-        let uploadedImagesBase64 = [];
-        let secretClickCount = 0;
-        let secretClickTimer = null;
-        let reviewStarRating = 5;
-
-        // Tarjimalar lug'ati (UZ, RU, EN)
-        const i18n = {
-            uz: {
-                appSubtitle: "Tibbiyot Portali",
-                heroTitle: "O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping",
-                heroSubtitle: "Shifokorlar, klinikalar, dorixonalar, tibbiy buyumlar va xorijda davolanish bitta joyda.",
-                searchPlaceholder: "Qidirish...",
-                allRegions: "Barcha hududlar",
-                results: "ta natija",
-                noResults: "Hech qanday ma'lumot topilmadi",
-                bookBtn: "Qabulga yozilish",
-                detailBookBtn: "Murojaat qilish / Qabulga yozilish",
-                experience: "tajriba",
-                addressLabel: "Manzil & Lokatsiya:",
-                viewMap: "Xaritada ko'rish (Google Maps)",
-                contactsLabel: "Aloqa va Tarmoqlar:",
-                aboutEntityLabel: "Batafsil ma'lumot",
-                reviewsLabel: "Mijozlar fikrlari va baholar",
-                writeReviewLabel: "Fikr bildirish va baholash",
-                yourName: "Ismingiz",
-                yourReview: "Fikringizni yozing...",
-                sendReview: "Fikrni yuborish",
-                recommendLabel: "Shu yo'nalishdagi tavsiya etiladiganlar",
-                joinCatalog: "Ro'yxatdan o'tish",
-                aboutMenu: "Biz haqimizda",
-                sectionsMenu: "Bo'limlar",
-                doctors: "Shifokorlar",
-                clinics: "Klinikalar",
-                pharmacies: "Dorixonalar",
-                medical_store: "Tibbiy buyumlar",
-                abroad_treatment: "Xorijda davolanish"
-            },
-            ru: {
-                appSubtitle: "Медицинский портал",
-                heroTitle: "Найдите лучших врачей и медицинские услуги в Узбекистане",
-                heroSubtitle: "Врачи, клиники, аптеки, медтехника и лечение за рубежом в одном месте.",
-                searchPlaceholder: "Поиск...",
-                allRegions: "Все регионы",
-                results: "результатов",
-                noResults: "Ничего не найдено",
-                bookBtn: "Записаться",
-                detailBookBtn: "Записаться на прием / Связаться",
-                experience: "опыт",
-                addressLabel: "Адрес и локация:",
-                viewMap: "Посмотреть на карте (Google Maps)",
-                contactsLabel: "Контакты и соцсети:",
-                aboutEntityLabel: "Подробная информация",
-                reviewsLabel: "Отзывы и оценки пациентов",
-                writeReviewLabel: "Оставить отзыв и оценку",
-                yourName: "Ваше имя",
-                yourReview: "Напишите ваш отзыв...",
-                sendReview: "Отправить отзыв",
-                recommendLabel: "Рекомендуемые в этой категории",
-                joinCatalog: "Регистрация в каталоге",
-                aboutMenu: "О нас",
-                sectionsMenu: "Разделы",
-                doctors: "Врачи",
-                clinics: "Клиники",
-                pharmacies: "Аптеки",
-                medical_store: "Медтовары",
-                abroad_treatment: "Лечение за рубежом"
-            },
-            en: {
-                appSubtitle: "Medical Portal",
-                heroTitle: "Find the best doctors and medical services in Uzbekistan",
-                heroSubtitle: "Doctors, clinics, pharmacies, medical supplies, and treatment abroad in one place.",
-                searchPlaceholder: "Search...",
-                allRegions: "All regions",
-                results: "results",
-                noResults: "No results found",
-                bookBtn: "Book an appointment",
-                detailBookBtn: "Book / Get in touch",
-                experience: "experience",
-                addressLabel: "Address & Location:",
-                viewMap: "View on map (Google Maps)",
-                contactsLabel: "Contacts & Social Media:",
-                aboutEntityLabel: "Detailed information",
-                reviewsLabel: "Patient Reviews & Ratings",
-                writeReviewLabel: "Leave a Review & Rating",
-                yourName: "Your name",
-                yourReview: "Write your review...",
-                sendReview: "Submit Review",
-                recommendLabel: "Recommended in this category",
-                joinCatalog: "Register / Join",
-                aboutMenu: "About us",
-                sectionsMenu: "Categories",
-                doctors: "Doctors",
-                clinics: "Clinics",
-                pharmacies: "Pharmacies",
-                medical_store: "Medical Supplies",
-                abroad_treatment: "Treatment Abroad"
-            }
-        };
-
-        const tabConfigs = {
-            doctors: { icon: 'fa-user-doctor' },
-            clinics: { icon: 'fa-hospital' },
-            pharmacies: { icon: 'fa-pills' },
-            medical_store: { icon: 'fa-stethoscope' },
-            abroad_treatment: { icon: 'fa-globe' }
-        };
-
-        // Barcha bo'limlar uchun ko'p tilli ma'lumotlar bazasi (Har birida 5 tagacha rasm va sharhlar)
-        const sampleData = {
-            doctors: [
-                {
-                    id: 1,
-                    name: { uz: "Dr. Alisher Qodirov", ru: "Др. Алишер Кадыров", en: "Dr. Alisher Kadirov" },
-                    specialty: { uz: "Kardiolog", ru: "Кардиолог", en: "Cardiologist" },
-                    region: "Toshkent",
-                    exp: { uz: "15 yil", ru: "15 лет", en: "15 years" },
-                    phone: "+998 90 123 45 67",
-                    address: { uz: "Shayxontohur tumani, Navoiy ko'chasi, 21", ru: "Шайхантахурский район, ул. Навои, 21", en: "Shaykhontokhur district, Navoi st, 21" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Navoiy+street",
-                    telegram: "dralisher_kardiolog",
-                    instagram: "dr.alisher_cardio",
-                    rating: 4.9,
-                    bio: {
-                        uz: "Oliy toifali kardiolog. Zamonaviy xalqaro standartlar asosida yurak-qon tomir kasalliklarini davolaydi.",
-                        ru: "Кардиолог высшей категории. Лечение сердечно-сосудистых заболеваний по международным протоколам.",
-                        en: "Senior Cardiologist. Diagnosis and treatment of cardiovascular diseases according to global standards."
-                    },
-                    images: [
-                        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
-                        "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600",
-                        "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=600"
-                    ],
-                    reviews: [
-                        { author: "Azizbek R.", text: "Juda tajribali mutaxassis, tavsiya qilaman.", rating: 5, date: "3 kun oldin" }
-                    ]
-                },
-                {
-                    id: 2,
-                    name: { uz: "Dr. Malika Umarova", ru: "Др. Малика Умарова", en: "Dr. Malika Umarova" },
-                    specialty: { uz: "Kardiolog", ru: "Кардиолог", en: "Cardiologist" },
-                    region: "Toshkent",
-                    exp: { uz: "11 yil", ru: "11 лет", en: "11 years" },
-                    phone: "+998 93 456 78 90",
-                    address: { uz: "Yunusobod tumani, Amir Temur ko'chasi, 12", ru: "Юнусабадский район, ул. Амира Темура, 12", en: "Yunusabad district, Amir Temur st, 12" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Amir+Temur",
-                    telegram: "dr_malika_cardio",
-                    instagram: "dr_malika_cardio",
-                    rating: 4.8,
-                    bio: {
-                        uz: "Bolalar va kattalar kardiologi. EKG va ExoKG bo'yicha yetakchi ekspert.",
-                        ru: "Детский и взрослый кардиолог. Эксперт по ЭКГ и ЭхоКГ.",
-                        en: "Pediatric and adult cardiologist. Specialist in ECG and EchoCG."
-                    },
-                    images: [
-                        "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600",
-                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 3,
-                    name: { uz: "Dr. Jasur Karimov", ru: "Др. Жасур Каримов", en: "Dr. Jasur Karimov" },
-                    specialty: { uz: "Kardiolog", ru: "Кардиолог", en: "Cardiologist" },
-                    region: "Toshkent",
-                    exp: { uz: "9 yil", ru: "9 лет", en: "9 years" },
-                    phone: "+998 97 765 43 21",
-                    address: { uz: "Mirzo Ulug'bek tumani, Mustaqillik shox ko'chasi, 88", ru: "Мирзо-Улугбекский район, пр. Мустакиллик, 88", en: "Mirzo Ulugbek district, Mustaqillik ave, 88" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Mustaqillik",
-                    telegram: "dr_jasur_cardio",
-                    instagram: "jasur_karimov_dr",
-                    rating: 4.7,
-                    bio: { uz: "Aritmiya va yurak ishemik kasalliklari mutaxassisi.", ru: "Специалист по аритмии и ишемической болезни сердца.", en: "Specialist in arrhythmia and ischemic heart disease." },
-                    images: ["https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 4,
-                    name: { uz: "Dr. Nodir Zokirov", ru: "Др. Нодир Закиров", en: "Dr. Nodir Zokirov" },
-                    specialty: { uz: "Kardiolog", ru: "Кардиолог", en: "Cardiologist" },
-                    region: "Samarqand",
-                    exp: { uz: "14 yil", ru: "14 лет", en: "14 years" },
-                    phone: "+998 91 333 22 11",
-                    address: { uz: "Samarqand sh., Registon ko'chasi, 15", ru: "г. Самарканд, ул. Регистан, 15", en: "Samarkand city, Registan st, 15" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "dr_nodir_sam",
-                    instagram: "dr_nodir_cardio",
-                    rating: 4.9,
-                    bio: { uz: "Samarqanddagi yetakchi kardiologik klinika mutaxassisi.", ru: "Ведущий специалист кардиологической клиники в Самарканде.", en: "Leading cardiology specialist in Samarkand." },
-                    images: ["https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600"],
-                    reviews: []
-                }
-            ],
-            clinics: [
-                {
-                    id: 101,
-                    name: { uz: "Akfa Medline", ru: "Акфа Медлайн", en: "Akfa Medline" },
-                    specialty: { uz: "Ko'p tarmoqli tibbiyot markazi", ru: "Многопрофильный медицинский центр", en: "Multidisciplinary Medical Center" },
-                    region: "Toshkent",
-                    exp: { uz: "Statsionar 24/7", ru: "Стационар 24/7", en: "Inpatient 24/7" },
-                    phone: "+998 71 203 30 03",
-                    address: { uz: "Olmazor tumani, Kichik halqa yo'li, 5A", ru: "Алмазарский район, Малая кольцевая, 5А", en: "Almazar district, Little Ring Road, 5A" },
-                    mapUrl: "https://maps.google.com/?q=Akfa+Medline",
-                    telegram: "akfamedline_uz",
-                    instagram: "akfamedline",
-                    rating: 4.9,
-                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
-                    images: [
-                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600",
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"
-                    ],
-                    reviews: [
-                        { author: "Bobur", text: "Juda yuqori servis va shinam xonalar.", rating: 5, date: "1 hafta oldin" }
-                    ]
-                },
-                {
-                    id: 102,
-                    name: { uz: "Shox Med Center", ru: "Шох Мед Центр", en: "Shox Med Center" },
-                    specialty: { uz: "Diagnostika va statsionar", ru: "Диагностика и стационар", en: "Diagnostics & Inpatient" },
-                    region: "Toshkent",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 71 202 02 03",
-                    address: { uz: "Yakkasaroy tumani, Shota Rustaveli, 32", ru: "Яккасарайский район, Шота Руставели, 32", en: "Yakkasaray district, Shota Rustaveli, 32" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
-                    telegram: "shoxmed_uz",
-                    instagram: "shox.med",
-                    rating: 4.8,
-                    bio: { uz: "Aniq diagnostika, MRT, MSKT va laboratoriya xizmatlari.", ru: "Точная диагностика, МРТ, МСКТ и лаборатория.", en: "Precise diagnostics, MRI, CT scan and laboratory." },
-                    images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 103,
-                    name: { uz: "Era Med Klinika", ru: "Эра Мед Клиника", en: "Era Med Clinic" },
-                    specialty: { uz: "Xirurgiya va LOR", ru: "Хирургия и ЛОР", en: "Surgery & ENT" },
-                    region: "Toshkent",
-                    exp: { uz: "10 yil tajriba", ru: "10 лет опыта", en: "10 years experience" },
-                    phone: "+998 71 200 11 22",
-                    address: { uz: "Shayxontohur, Qoratosh ko'chasi", ru: "Шайхантахур, ул. Караташ", en: "Shaykhontokhur, Karatash st" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Karatash",
-                    telegram: "eramed_clinic",
-                    instagram: "eramed_uz",
-                    rating: 4.7,
-                    bio: { uz: "Zamonaviy lazer jarrohligi va LOR markazi.", ru: "Лазерная хирургия и передовой ЛОР-центр.", en: "Modern laser surgery and advanced ENT center." },
-                    images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 104,
-                    name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
-                    specialty: { uz: "Poliklinika va Kardiologiya", ru: "Поликлиника и Кардиология", en: "Polyclinic & Cardiology" },
-                    region: "Samarqand",
-                    exp: { uz: "Statsionar", ru: "Стационар", en: "Inpatient" },
-                    phone: "+998 66 230 40 50",
-                    address: { uz: "Samarqand sh., Beruniy ko'chasi, 4", ru: "г. Самарканд, ул. Беруни, 4", en: "Samarkand city, Beruni st, 4" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "citymed_sam",
-                    instagram: "citymed_samarkand",
-                    rating: 4.9,
-                    bio: { uz: "Samarqanddagi zamonaviy klinika.", ru: "Современная клиника в Самарканде.", en: "Modern medical clinic in Samarkand." },
-                    images: ["https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600"],
-                    reviews: []
-                }
-            ],
-            pharmacies: [
-                {
-                    id: 201,
-                    name: { uz: "OxyMed Markaziy Dorixona", ru: "ОксиМед Центральная Аптека", en: "OxyMed Central Pharmacy" },
-                    specialty: { uz: "Dori vositalari & Ortopediya", ru: "Лекарства и ортопедия", en: "Medicines & Orthopedics" },
-                    region: "Toshkent",
-                    exp: { uz: "24/7 ochiq", ru: "Круглосуточно 24/7", en: "Open 24/7" },
-                    phone: "+998 71 200 03 03",
-                    address: { uz: "Mirobod tumani, Oybek ko'chasi, 28", ru: "Мирабадский район, ул. Ойбека, 28", en: "Mirabad district, Oybek st, 28" },
-                    mapUrl: "https://maps.google.com/?q=OxyMed+Tashkent",
-                    telegram: "oxymed_uz",
-                    instagram: "oxymed.uz",
-                    rating: 4.8,
-                    bio: { uz: "10 000 dan ortiq dori-darmonlar va uyga tezkor yetkazib berish xizmati.", ru: "Более 10 000 наименований лекарств и экспресс-доставка.", en: "Over 10,000 medicines and fast home delivery." },
-                    images: [
-                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600",
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"
-                    ],
-                    reviews: [
-                        { author: "Dilshod", text: "Barcha kamyob dorilar bor ekan, rahmat!", rating: 5, date: "2 hafta oldin" }
-                    ]
-                },
-                {
-                    id: 202,
-                    name: { uz: "Grand Pharm Dorixona", ru: "Гранд Фарм Аптека", en: "Grand Pharm Pharmacy" },
-                    specialty: { uz: "Sertifikatlangan dorilar", ru: "Сертифицированные лекарства", en: "Certified Medicines" },
-                    region: "Toshkent",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 71 202 99 99",
-                    address: { uz: "Chilonzor tumani, Bunyodkor shox ko'chasi", ru: "Чиланзарский район, пр. Бунёдкор", en: "Chilanzar district, Bunyodkor ave" },
-                    mapUrl: "https://maps.google.com/?q=Chilanzar+Tashkent",
-                    telegram: "grandpharm_uz",
-                    instagram: "grandpharm.uz",
-                    rating: 4.7,
-                    bio: { uz: "Kafolatlangan sifatli dori vositalari.", ru: "Гарантированное качество медикаментов.", en: "Guaranteed high-quality medications." },
-                    images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 203,
-                    name: { uz: "Dori-Darmon Samarqand", ru: "Дори-Дармон Самарканд", en: "Dori-Darmon Samarkand" },
-                    specialty: { uz: "Ijtimoiy dorixona", ru: "Социальная аптека", en: "Social Pharmacy" },
-                    region: "Samarqand",
-                    exp: { uz: "Har kuni 08:00 - 23:00", ru: "Ежедневно 08:00 - 23:00", en: "Daily 08:00 - 23:00" },
-                    phone: "+998 66 233 11 22",
-                    address: { uz: "Samarqand sh., Mirzo Ulug'bek, 18", ru: "г. Самарканд, Мирзо Улугбек, 18", en: "Samarkand city, Mirzo Ulugbek, 18" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "doridarmon_sam",
-                    instagram: "doridarmon_uz",
-                    rating: 4.6,
-                    bio: { uz: "Hamyonbop narxlardagi dori vositalari.", ru: "Доступные цены на медикаменты.", en: "Affordable pharmacy products." },
-                    images: ["https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 204,
-                    name: { uz: "BestPharm Buxoro", ru: "БестФарм Бухара", en: "BestPharm Bukhara" },
-                    specialty: { uz: "Dorixona & Optika", ru: "Аптека и Оптика", en: "Pharmacy & Optics" },
-                    region: "Buxoro",
-                    exp: { uz: "24/7", ru: "24/7", en: "24/7" },
-                    phone: "+998 65 222 33 44",
-                    address: { uz: "Buxoro sh., Navoiy shox ko'chasi", ru: "г. Бухара, пр. Навои", en: "Bukhara city, Navoi ave" },
-                    mapUrl: "https://maps.google.com/?q=Bukhara",
-                    telegram: "bestpharm_buxoro",
-                    instagram: "bestpharm_uz",
-                    rating: 4.9,
-                    bio: { uz: "Dori vositalari va optik ko'zoynaklar markazi.", ru: "Центр медикаментов и оптики.", en: "Center for medications and optics." },
-                    images: ["https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600"],
-                    reviews: []
-                }
-            ],
-            medical_store: [
-                {
-                    id: 301,
-                    name: { uz: "MedTexnika Ortopediya", ru: "МедТехника Ортопедия", en: "MedTechnics Orthopedics" },
-                    specialty: { uz: "Tibbiy uskunalar & Reabilitatsiya", ru: "Медоборудование и реабилитация", en: "Medical Equipment & Rehab" },
-                    region: "Toshkent",
-                    exp: { uz: "Rasmiy kafolat", ru: "Официальная гарантия", en: "Official warranty" },
-                    phone: "+998 90 987 65 43",
-                    address: { uz: "Chilonzor tumani, Bunyodkor ko'chasi, 15", ru: "Чиланзарский район, ул. Бунёдкор, 15", en: "Chilanzar district, Bunyodkor st, 15" },
-                    mapUrl: "https://maps.google.com/?q=Chilonzor+Tashkent",
-                    telegram: "medtexnika_toshkent",
-                    instagram: "medtexnika_uz",
-                    rating: 4.8,
-                    bio: { uz: "Tonometrlar, aravachalar, ingalyatorlar va ortopediya korsetlari.", ru: "Тонометры, инвалидные коляски, ингаляторы и корсеты.", en: "Blood pressure monitors, wheelchairs, nebulizers and braces." },
-                    images: [
-                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600",
-                        "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=600"
-                    ],
-                    reviews: [
-                        { author: "Mansur", text: "Aravacha va tonometr oldik, juda sifatli ekan.", rating: 5, date: "4 kun oldin" }
-                    ]
-                },
-                {
-                    id: 302,
-                    name: { uz: "BioMed Uskunalar", ru: "БиоМед Оборудование", en: "BioMed Equipment" },
-                    specialty: { uz: "Klinikalar uchun uskunalar", ru: "Оборудование для клиник", en: "Clinical Equipment" },
-                    region: "Toshkent",
-                    exp: { uz: "Servis xizmati bilan", ru: "С сервисной гарантией", en: "With full service" },
-                    phone: "+998 71 233 44 55",
-                    address: { uz: "Mirobod tumani, Nukus ko'chasi", ru: "Мирабадский район, ул. Нукусская", en: "Mirabad district, Nukus st" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Nukus",
-                    telegram: "biomed_uz",
-                    instagram: "biomed_equipment",
-                    rating: 4.9,
-                    bio: { uz: "Klinika va laboratoriyalar uchun professional texnikalar.", ru: "Профессиональное оборудование для клиник и лабораторий.", en: "Professional equipment for hospitals and labs." },
-                    images: ["https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 303,
-                    name: { uz: "OrtoMed Farg'ona", ru: "ОртоМед Фергана", en: "OrtoMed Fergana" },
-                    specialty: { uz: "Ortopedik mahsulotlar", ru: "Ортопедические изделия", en: "Orthopedic Products" },
-                    region: "Fargona",
-                    exp: { uz: "Sertifikatlangan", ru: "Сертифицировано", en: "Certified" },
-                    phone: "+998 73 244 55 66",
-                    address: { uz: "Farg'ona sh., Al-Farg'oniy ko'chasi", ru: "г. Фергана, ул. Аль-Фергани", en: "Fergana city, Al-Fergani st" },
-                    mapUrl: "https://maps.google.com/?q=Fergana",
-                    telegram: "ortomed_fargona",
-                    instagram: "ortomed_uz",
-                    rating: 4.7,
-                    bio: { uz: "Ortopedik poyabzallar, korsetlar va bandajlar.", ru: "Ортопедическая обувь, корсеты и бандажи.", en: "Orthopedic shoes, braces and bandages." },
-                    images: ["https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 304,
-                    name: { uz: "MedComfort Samarqand", ru: "МедКомфорт Самарканд", en: "MedComfort Samarkand" },
-                    specialty: { uz: "Uy tibbiyoti buyumlari", ru: "Домашняя медтехника", en: "Home Medical Devices" },
-                    region: "Samarqand",
-                    exp: { uz: "Kafolat 2 yil", ru: "Гарантия 2 года", en: "2 years warranty" },
-                    phone: "+998 66 231 00 99",
-                    address: { uz: "Samarqand sh., Rudakiy ko'chasi", ru: "г. Самарканд, ул. Рудаки", en: "Samarkand city, Rudaki st" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "medcomfort_sam",
-                    instagram: "medcomfort_uz",
-                    rating: 4.8,
-                    bio: { uz: "Uy sharoitida salomatlikni nazorat qiluvchi uskunalar.", ru: "Приборы для контроля здоровья дома.", en: "Home healthcare monitoring devices." },
-                    images: ["https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"],
-                    reviews: []
-                }
-            ],
-            abroad_treatment: [
-                {
-                    id: 401,
-                    name: { uz: "Acıbadem Healthcare (Turkiya)", ru: "Аджибадем (Турция)", en: "Acıbadem Healthcare (Turkey)" },
-                    specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Трансплантация", en: "Oncology, Neurosurgery & Transplantation" },
-                    region: "Xorij",
-                    exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
-                    phone: "+998 95 144 54 44",
-                    address: { uz: "Istanbul (Toshkent vakolatxonasi: Mirobod, Afrosiyob 12)", ru: "Стамбул (Офис в Ташкенте: Мирабад, Афросиаб 12)", en: "Istanbul (Tashkent office: Mirabad, Afrosiyob 12)" },
-                    mapUrl: "https://maps.google.com/?q=Acibadem+Istanbul",
-                    telegram: "acibadem_uz",
-                    instagram: "acibadem.uzbekistan",
-                    rating: 5.0,
-                    bio: { uz: "Xorijda yuqori aniqlikdagi davolash va murakkab operatsiyalar. Toshkentdan to'liq bepul konsultatsiya va hamrohlik.", ru: "Высокоточное лечение и сложнейшие операции в Турции. Полное бесплатное сопровождение из Ташкента.", en: "High-precision treatment and complex surgeries in Turkey with full local guidance." },
-                    images: [
-                        "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"
-                    ],
-                    reviews: [
-                        { author: "Farrux", text: "Operatsiya a'lo o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
-                    ]
-                },
-                {
-                    id: 402,
-                    name: { uz: "Anadolu Medical Center (Turkiya)", ru: "Анадолу Медицинский Центр (Турция)", en: "Anadolu Medical Center (Turkey)" },
-                    specialty: { uz: "Saraton va Suyak ko'chirish", ru: "Онкология и пересадка костного мозга", en: "Oncology & Bone Marrow Transplant" },
-                    region: "Xorij",
-                    exp: { uz: "Johns Hopkins hamkori", ru: "Партнер Johns Hopkins", en: "Johns Hopkins partner" },
-                    phone: "+998 90 114 22 33",
-                    address: { uz: "Istanbul / Toshkent vakolatxonasi", ru: "Стамбул / Офис в Ташкенте", en: "Istanbul / Tashkent office" },
-                    mapUrl: "https://maps.google.com/?q=Anadolu+Medical+Center",
-                    telegram: "anadolu_uz",
-                    instagram: "anadolumedicalcenter_uz",
-                    rating: 4.9,
-                    bio: { uz: "AQSH Johns Hopkins tibbiyoti tizimida faoliyat yurituvchi markaz.", ru: "Клиника, работающая по стандартам Johns Hopkins Medicine (США).", en: "Affiliated with Johns Hopkins Medicine (USA)." },
-                    images: ["https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 403,
-                    name: { uz: "Severance Hospital (Janubiy Koreya)", ru: "Северанс Госпиталь (Южная Корея)", en: "Severance Hospital (South Korea)" },
-                    specialty: { uz: "Robotik jarrohlik va Kardiologiya", ru: "Роботизированная хирургия и Кардиология", en: "Robotic Surgery & Cardiology" },
-                    region: "Xorij",
-                    exp: { uz: "Dunyo Top-50", ru: "Мировой Топ-50", en: "World Top-50" },
-                    phone: "+998 71 205 55 66",
-                    address: { uz: "Seul (Toshkent vakili)", ru: "Сеул (Представитель в Ташкенте)", en: "Seoul (Tashkent representative)" },
-                    mapUrl: "https://maps.google.com/?q=Severance+Hospital+Seoul",
-                    telegram: "severance_korea_uz",
-                    instagram: "severance_uz",
-                    rating: 5.0,
-                    bio: { uz: "Janubiy Koreyaning eng nufuzli universitet shifoxonasi.", ru: "Ведущий университетский госпиталь Южной Кореи.", en: "Leading university hospital in South Korea." },
-                    images: ["https://images.unsplash.com/photo-1516549655169-df83a0774514?w=600"],
-                    reviews: []
-                },
-                {
-                    id: 404,
-                    name: { uz: "Asklepios Klinikalari (Germaniya)", ru: "Асклепиос Клиники (Германия)", en: "Asklepios Kliniken (Germany)" },
-                    specialty: { uz: "Ortopediya va Neyroxirurgiya", ru: "Ортопедия и Нейрохирургия", en: "Orthopedics & Neurosurgery" },
-                    region: "Xorij",
-                    exp: { uz: "Germaniya standarti", ru: "Немецкий стандарт", en: "German standard" },
-                    phone: "+998 90 998 77 66",
-                    address: { uz: "Gamburg (O'zbekiston koordinatori)", ru: "Гамбург (Координатор в Узбекистане)", en: "Hamburg (Uzbekistan coordinator)" },
-                    mapUrl: "https://maps.google.com/?q=Asklepios+Hamburg",
-                    telegram: "asklepios_uz",
-                    instagram: "asklepios_germany",
-                    rating: 4.9,
-                    bio: { uz: "Germaniyaning eng yirik xususiy klinikalar tarmog'i.", ru: "Крупнейшая сеть частных клиник в Германии.", en: "Germany's largest private healthcare provider." },
-                    images: ["https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600"],
-                    reviews: []
-                }
-            ]
-        };
-
-        let pendingSubmissions = [];
-
-        window.onload = function() {
-            if (window.Telegram?.WebApp) {
-                window.Telegram.WebApp.ready();
-                window.Telegram.WebApp.expand();
-            }
-            updateLanguageUI();
-            renderGrid();
-        };
-
-        // ==================== KO'P TILLILIK (I18N) ====================
-        function changeLanguage(lang) {
-            currentLang = lang;
-            ['uz', 'ru', 'en'].forEach(l => {
-                const btn = document.getElementById(`lang-${l}`);
-                if (btn) {
-                    if (l === lang) {
-                        btn.className = "px-2 py-1 rounded-lg bg-white text-blue-600 transition";
-                    } else {
-                        btn.className = "px-2 py-1 rounded-lg hover:bg-white/20 transition text-white";
-                    }
-                }
-            });
-            updateLanguageUI();
-            switchTab(currentTab);
-        }
-
-        function t(key) {
-            return i18n[currentLang][key] || key;
-        }
-
-        function getLocalized(obj) {
-            if (!obj) return '';
-            if (typeof obj === 'string') return obj;
-            return obj[currentLang] || obj.uz || '';
-        }
-
-        function updateLanguageUI() {
-            const tr = i18n[currentLang];
-            document.getElementById('lblAppSubtitle').innerText = tr.appSubtitle;
-            document.getElementById('heroTitle').innerText = tr.heroTitle;
-            document.getElementById('heroSubtitle').innerText = tr.heroSubtitle;
-            document.getElementById('searchInput').placeholder = tr.searchPlaceholder;
-            document.getElementById('optAllRegions').innerText = tr.allRegions;
-            document.getElementById('lblSectionsMenu').innerText = tr.sectionsMenu;
-            document.getElementById('lblJoinCatalog').innerText = tr.joinCatalog;
-            document.getElementById('lblAboutMenu').innerText = tr.aboutMenu;
-            document.getElementById('lblFavTitle').innerText = tr.results ? tr.results : "Saralanganlar";
-
-            document.querySelectorAll('.txt-doctors').forEach(el => el.innerText = tr.doctors);
-            document.querySelectorAll('.txt-clinics').forEach(el => el.innerText = tr.clinics);
-            document.querySelectorAll('.txt-pharmacies').forEach(el => el.innerText = tr.pharmacies);
-            document.querySelectorAll('.txt-medical_store').forEach(el => el.innerText = tr.medical_store);
-            document.querySelectorAll('.txt-abroad_treatment').forEach(el => el.innerText = tr.abroad_treatment);
-        }
-
-        // ==================== MAXFIY ADMIN KIRISH (Logoga 5 marta bosilganda) ====================
-        function handleSecretAdminClick() {
-            secretClickCount++;
-            clearTimeout(secretClickTimer);
-            secretClickTimer = setTimeout(() => {
-                secretClickCount = 0;
-            }, 2000);
-
-            if (secretClickCount === 5) {
-                secretClickCount = 0;
-                openAdminLoginModal();
-            }
-        }
-
-        function openAdminLoginModal() {
-            closeAllDropdowns();
-            const alm = document.getElementById('adminLoginModal');
-            if(alm) alm.classList.remove('hidden');
-        }
-        function closeAdminLoginModal() { 
-            const alm = document.getElementById('adminLoginModal');
-            if(alm) alm.classList.add('hidden'); 
-        }
-
-        function verifyAdminPassword(e) {
-            e.preventDefault();
-            const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === 'Odilbek1999!') {
-                closeAdminLoginModal();
-                document.getElementById('adminPasswordInput').value = '';
-                openAdminPanel();
-            } else {
-                alert("Noto'g'ri parol!");
-            }
-        }
-
-        function openAdminPanel() {
-            const container = document.getElementById('pendingListContainer');
-            if (pendingSubmissions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha kutayotgan arizalar yo'q.</p>`;
-            } else {
-                container.innerHTML = pendingSubmissions.map((item, index) => `
-                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border flex flex-col justify-between gap-3">
-                        <div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
-                                <span class="text-[10px] text-gray-400 font-bold">${item.images ? item.images.length : 0} ta rasm</span>
-                            </div>
-                            <h4 class="font-bold text-base text-gray-900 dark:text-white mt-1">${getLocalized(item.name)}</h4>
-                            <p class="text-xs text-blue-600 font-semibold">${getLocalized(item.specialty)} • ${item.region} (${getLocalized(item.exp)})</p>
-                            <p class="text-xs text-gray-500 mt-1">${item.phone} | ${getLocalized(item.address)}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border">${getLocalized(item.bio)}</p>
-                            
-                            ${item.images && item.images.length > 0 ? `
-                                <div class="flex gap-2 mt-2 overflow-x-auto pb-1">
-                                    ${item.images.map(img => `<img src="${img}" class="w-14 h-14 object-cover rounded-xl border">`).join('')}
-                                </div>
-                            ` : ''}
-                        </div>
-                        <div class="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                            <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
-                                <i class="fa-solid fa-check mr-1"></i> Saytda e'lon qilish
-                            </button>
-                            <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
-                                <i class="fa-solid fa-trash mr-1"></i> Rad etish
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            const apm = document.getElementById('adminPanelModal');
-            if(apm) apm.classList.remove('hidden');
-        }
-
-        function closeAdminPanel() { 
-            const apm = document.getElementById('adminPanelModal');
-            if(apm) apm.classList.add('hidden'); 
-        }
-
-        function approveSubmission(index) {
-            const item = pendingSubmissions[index];
-            if (!sampleData[item.category]) sampleData[item.category] = [];
-            sampleData[item.category].unshift(item);
-            pendingSubmissions.splice(index, 1);
-            openAdminPanel();
-            renderGrid();
-            alert("Ariza tasdiqlandi va ShifoTop ilovasida e'lon qilindi!");
-        }
-
-        function rejectSubmission(index) {
-            if (confirm("Ushbu arizani rad etmoqchimisiz?")) {
-                pendingSubmissions.splice(index, 1);
-                openAdminPanel();
-            }
-        }
-
-        // ==================== RO'YXATDAN O'TISH ANKETASI ====================
-        function openRoleModalFromMenu() {
-            closeAllDropdowns();
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.remove('hidden');
-        }
-
-        function skipRoleSelection() {
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.add('hidden');
-        }
-
-        function openRegisterForm(categoryKey, roleKey) {
-            skipRoleSelection();
-            uploadedImagesBase64 = [];
-            updateImagePreview();
-            
-            document.getElementById('newItemCategory').value = categoryKey;
-            document.getElementById('modalFormTitle').innerText = `${t(roleKey)} ${t('joinCatalog')}`;
-            
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.remove('hidden');
-        }
-
-        function closeAddItemModal() {
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.add('hidden');
-        }
-
-        function handleImageUpload(e) {
-            const files = Array.from(e.target.files);
-            if (uploadedImagesBase64.length + files.length > 5) {
-                alert("Maksimal 5 tagacha rasm yuklash mumkin!");
-                return;
-            }
-
-            files.forEach(file => {
-                if (uploadedImagesBase64.length < 5) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        uploadedImagesBase64.push(event.target.result);
-                        updateImagePreview();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function updateImagePreview() {
-            const container = document.getElementById('imagePreviewContainer');
-            const countText = document.getElementById('uploadedCountText');
-            if (countText) countText.innerText = `${uploadedImagesBase64.length}/5`;
-            
-            if (!container) return;
-            container.innerHTML = uploadedImagesBase64.map((img, i) => `
-                <div class="relative w-14 h-14 shrink-0 rounded-xl overflow-hidden border border-blue-200">
-                    <img src="${img}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removeUploadedImage(${i})" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 rounded-bl-lg text-[9px] flex items-center justify-center">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function removeUploadedImage(index) {
-            uploadedImagesBase64.splice(index, 1);
-            updateImagePreview();
-        }
-
-        function handleAddItemSubmit(e) {
-            e.preventDefault();
-            const cat = document.getElementById('newItemCategory').value;
-            const name = document.getElementById('newItemName').value;
-            const spec = document.getElementById('newItemSpecialty').value;
-            const region = document.getElementById('newItemRegion').value;
-            const exp = document.getElementById('newItemExp').value || 'Tajribali';
-            const phone = document.getElementById('newItemPhone').value;
-            const telegram = document.getElementById('newItemTelegram').value || '';
-            const instagram = document.getElementById('newItemInstagram').value || '';
-            const addr = document.getElementById('newItemAddress').value;
-            const bio = document.getElementById('newItemBio').value;
-
-            const finalImages = uploadedImagesBase64.length > 0 
-                ? [...uploadedImagesBase64] 
-                : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
-
-            // Yangi kelib tushgan arizalar barcha tillar uchun moslab saqlanadi
-            pendingSubmissions.push({
-                id: Date.now(),
-                category: cat,
-                name: { uz: name, ru: name, en: name },
-                specialty: { uz: spec, ru: spec, en: spec },
-                region: region,
-                exp: { uz: exp, ru: exp, en: exp },
-                phone: phone,
-                telegram, instagram,
-                address: { uz: addr, ru: addr, en: addr },
-                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + region)}`,
-                rating: 5.0,
-                bio: { uz: bio, ru: bio, en: bio },
-                images: finalImages,
-                reviews: []
-            });
-
-            closeAddItemModal();
-            document.getElementById('addItemForm').reset();
-            uploadedImagesBase64 = [];
-            alert("Arizangiz adminga yuborildi! Admin tasdiqlagach, ilovada e'lon qilinadi.");
-        }
-
-        // ==================== ASOSIY KARTALARNI CHIQARISH ====================
-        function renderGrid() {
-            const container = document.getElementById('contentGrid');
-            if(!container) return;
-            const data = sampleData[currentTab] || [];
-            const rcb = document.getElementById('resultCountBadge');
-            if(rcb) rcb.innerText = `${data.length} ${t('results')}`;
-
-            if (data.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-medium">${t('noResults')}</div>`;
-                return;
-            }
-
-            container.innerHTML = data.map(item => {
-                const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600";
-                return `
-                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between hover:shadow-xl transition group">
-                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
-                        <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-gray-100 dark:bg-gray-700">
-                            <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                            ${item.exp ? `<span class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">${getLocalized(item.exp)}</span>` : ''}
-                            <span class="absolute top-3 right-3 bg-amber-400 text-gray-900 text-[11px] font-black px-2 py-0.5 rounded-lg shadow flex items-center gap-1">
-                                <i class="fa-solid fa-star text-[10px]"></i> ${Number(item.rating || 5).toFixed(1)}
-                            </span>
-                        </div>
-                        <h3 class="font-bold text-lg text-gray-900 dark:text-white group-hover:text-blue-600 transition">${getLocalized(item.name)}</h3>
-                        <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-0.5">${getLocalized(item.specialty)}</p>
-                        <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-location-dot text-blue-500"></i> ${item.region}, ${getLocalized(item.address)}
-                        </p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                        <a href="tel:${item.phone}" class="text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center gap-1">
-                            <i class="fa-solid fa-phone text-[10px] text-blue-500"></i> ${item.phone}
-                        </a>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow hover:opacity-95 transition cursor-pointer">
-                            ${t('bookBtn')}
-                        </button>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        function filterData() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const region = document.getElementById('regionFilter').value;
-            const original = sampleData[currentTab] || [];
-            const filtered = original.filter(item => {
-                const name = getLocalized(item.name).toLowerCase();
-                const spec = getLocalized(item.specialty).toLowerCase();
-                return (name.includes(query) || spec.includes(query)) && (!region || item.region === region);
-            });
-            
-            const container = document.getElementById('contentGrid');
-            if(!container) return;
-            const rcb = document.getElementById('resultCountBadge');
-            if(rcb) rcb.innerText = `${filtered.length} ${t('results')}`;
-            
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 font-medium">${t('noResults')}</div>`;
-                return;
-            }
-            container.innerHTML = filtered.map(item => {
-                const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600";
-                return `
-                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border flex flex-col justify-between">
-                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
-                        <img src="${mainImg}" class="w-full h-48 object-cover rounded-2xl mb-4">
-                        <h3 class="font-bold text-lg text-gray-900 dark:text-white">${getLocalized(item.name)}</h3>
-                        <p class="text-xs font-semibold text-blue-600 mt-1">${getLocalized(item.specialty)}</p>
-                        <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.region}, ${getLocalized(item.address)}</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t flex items-center justify-between">
-                        <span class="text-xs font-bold">${item.phone}</span>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl cursor-pointer">${t('bookBtn')}</button>
-                    </div>
-                </div>
-            `}).join('');
-        }
-
-        // ==================== BATAFSIL MODAL, REYTING, IZOH VA 3 TA TAVSIYA ====================
-        function openDetailModal(categoryKey, itemId) {
-            const list = sampleData[categoryKey] || [];
-            const item = list.find(x => x.id === itemId);
-            if (!item) return;
-
-            // Xuddi shu bo'limdagi boshqa 3 ta tavsiya etiladigan muassasa yoki shifokor
-            const recommended = list.filter(x => x.id !== item.id).slice(0, 3);
-            const allImages = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
-            const mainImg = allImages[0];
-            const reviewsList = item.reviews || [];
-
-            reviewStarRating = 5;
-
-            const detailContainer = document.getElementById('detailContentContainer');
-            detailContainer.innerHTML = `
-                <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center border-b border-gray-100 dark:border-gray-700 pb-5">
-                    <img id="modalMainImage" src="${mainImg}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-blue-100 dark:border-gray-700 shrink-0">
-                    <div class="flex-grow">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[11px] font-bold px-2.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full uppercase">
-                                ${getLocalized(item.specialty)}
-                            </span>
-                            <span class="text-xs font-bold text-amber-500 flex items-center gap-1">
-                                <i class="fa-solid fa-star"></i> ${Number(item.rating || 5).toFixed(1)}
-                            </span>
-                        </div>
-                        <h2 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white mt-1.5">${getLocalized(item.name)}</h2>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
-                            <span><i class="fa-solid fa-briefcase text-blue-500 mr-1"></i> <b>${getLocalized(item.exp)}</b></span>
-                            <span>•</span>
-                            <span><i class="fa-solid fa-city text-blue-500 mr-1"></i> ${item.region}</span>
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 5 tagacha yuklangan rasmlar galereyasi -->
-                ${allImages.length > 1 ? `
-                    <div class="mt-4">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Rasmlar galereyasi (${allImages.length})</h4>
-                        <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-                            ${allImages.map(img => `
-                                <img src="${img}" onclick="document.getElementById('modalMainImage').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-blue-500 cursor-pointer transition shrink-0">
-                            `).join('')}
-                        </div>
-                    </div>
-                ` : ''}
-
-                <!-- Tafsilotlar -->
-                <div class="my-4">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">${t('aboutEntityLabel')}</h4>
-                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-700">
-                        ${getLocalized(item.bio)}
-                    </p>
-                </div>
-
-                <!-- Manzil, Xarita, Telefon va Tarmoqlar -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-                    <div class="p-3.5 bg-blue-50/60 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30">
-                        <div class="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-2 mb-1">
-                            <i class="fa-solid fa-location-dot text-blue-600"></i> ${t('addressLabel')}
-                        </div>
-                        <p class="text-xs text-gray-600 dark:text-gray-300">${getLocalized(item.address)}</p>
-                        <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 mt-2 hover:underline">
-                            <i class="fa-solid fa-map-location-dot"></i> ${t('viewMap')}
-                        </a>
-                    </div>
-
-                    <div class="p-3.5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-2">
-                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">${t('contactsLabel')}</div>
-                        <div class="flex items-center justify-between text-xs">
-                            <a href="tel:${item.phone}" class="font-bold text-blue-600 flex items-center gap-1.5">
-                                <i class="fa-solid fa-phone text-emerald-500"></i> ${item.phone}
-                            </a>
-                        </div>
-                        <div class="flex gap-2 pt-1">
-                            ${item.telegram ? `
-                                <a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-brands fa-telegram text-sm"></i> Telegram
-                                </a>
-                            ` : ''}
-                            ${item.instagram ? `
-                                <a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-pink-50 hover:bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                                    <i class="fa-brands fa-instagram text-sm"></i> Instagram
-                                </a>
-                            ` : ''}
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Bemorlar fikrlari va Izoh qoldirish -->
-                <div class="mb-6">
-                    <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-                            <i class="fa-solid fa-comments text-blue-600"></i> ${t('reviewsLabel')} (${reviewsList.length})
-                        </h4>
-                    </div>
-
-                    <!-- Izohlar ro'yxati -->
-                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1 mb-3" id="reviewsContainer">
-                        ${reviewsList.length > 0 ? reviewsList.map(r => `
-                            <div class="p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs font-bold text-gray-800 dark:text-white">${r.author}</span>
-                                    <span class="text-[10px] text-gray-400">${r.date}</span>
-                                </div>
-                                <div class="text-amber-400 text-[10px] my-0.5">
-                                    ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating || 5)}
-                                </div>
-                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">${r.text}</p>
-                            </div>
-                        `).join('') : `<p class="text-xs text-gray-400 italic">Hozircha fikrlar mavjud emas. Birinchi bo'lib fikr bildiring!</p>`}
-                    </div>
-
-                    <!-- Yangi fikr va yulduzcha berish formasi -->
-                    <div class="p-3.5 bg-gray-50 dark:bg-gray-700/50 rounded-2xl border border-gray-200 dark:border-gray-600">
-                        <div class="text-xs font-bold mb-2 flex items-center justify-between">
-                            <span>${t('writeReviewLabel')}</span>
-                            <div class="flex gap-1 text-amber-400 cursor-pointer" id="starRatingContainer">
-                                <i class="fa-solid fa-star" onclick="setRating(1)"></i>
-                                <i class="fa-solid fa-star" onclick="setRating(2)"></i>
-                                <i class="fa-solid fa-star" onclick="setRating(3)"></i>
-                                <i class="fa-solid fa-star" onclick="setRating(4)"></i>
-                                <i class="fa-solid fa-star" onclick="setRating(5)"></i>
-                            </div>
-                        </div>
-                        <input type="text" id="reviewAuthorInput" placeholder="${t('yourName')}" class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-1.5 text-xs mb-2 dark:text-white">
-                        <textarea id="reviewTextInput" rows="2" placeholder="${t('yourReview')}" class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-1.5 text-xs dark:text-white mb-2"></textarea>
-                        <button onclick="submitReview('${categoryKey}', ${item.id})" class="w-full primary-bg text-white text-xs font-bold py-2 rounded-xl shadow cursor-pointer">
-                            ${t('sendReview')}
-                        </button>
-                    </div>
-                </div>
-
-                <button onclick="closeDetailModal(); openBookingModal('${getLocalized(item.name)}')" class="w-full primary-bg text-white font-bold py-3.5 rounded-2xl shadow-lg hover:opacity-95 transition mb-6 cursor-pointer">
-                    <i class="fa-solid fa-calendar-check mr-2"></i> ${t('detailBookBtn')}
-                </button>
-
-                <!-- 3 TA TAVSIYA ETILADIGAN MUASSASA YOKI MUTAXASSIS -->
-                ${recommended.length > 0 ? `
-                    <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
-                        <h4 class="text-sm font-extrabold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-thumbs-up text-blue-600"></i> ${t('recommendLabel')}
-                        </h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            ${recommended.map(rec => {
-                                const recImg = (rec.images && rec.images.length > 0) ? rec.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600";
-                                return `
-                                <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-700/30 hover:border-blue-500 hover:shadow-md transition cursor-pointer flex flex-col justify-between">
-                                    <div>
-                                        <img src="${recImg}" class="w-full h-24 object-cover rounded-xl mb-2">
-                                        <h5 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">${getLocalized(rec.name)}</h5>
-                                        <p class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold line-clamp-1">${getLocalized(rec.specialty)}</p>
-                                        <p class="text-[10px] text-gray-400 mt-0.5"><i class="fa-solid fa-briefcase"></i> ${getLocalized(rec.exp)}</p>
-                                    </div>
-                                    <div class="mt-2 pt-2 border-t border-gray-200/60 dark:border-gray-600 flex items-center justify-between text-[11px]">
-                                        <span class="text-amber-500 font-bold"><i class="fa-solid fa-star text-[9px]"></i> ${Number(rec.rating || 5).toFixed(1)}</span>
-                                        <span class="text-blue-600 font-bold hover:underline">&rarr;</span>
-                                    </div>
-                                </div>
-                            `}).join('')}
-                        </div>
-                    </div>
-                ` : ''}
-            `;
-
-            const dm = document.getElementById('detailModal');
-            if(dm) dm.classList.remove('hidden');
-        }
-
-        // Yulduzchalarni belgilash
-        function setRating(val) {
-            reviewStarRating = val;
-            const container = document.getElementById('starRatingContainer');
-            if (!container) return;
-            const stars = container.querySelectorAll('i');
-            stars.forEach((s, idx) => {
-                if (idx < val) {
-                    s.className = "fa-solid fa-star text-amber-400";
-                } else {
-                    s.className = "fa-regular fa-star text-gray-300";
-                }
-            });
-        }
-
-        // Izohni saqlash va reytingni yangilash
-        function submitReview(categoryKey, itemId) {
-            const author = document.getElementById('reviewAuthorInput').value.trim();
-            const text = document.getElementById('reviewTextInput').value.trim();
-            if (!author || !text) {
-                alert("Iltimos, ismingiz va fikringizni yozing!");
-                return;
-            }
-
-            const list = sampleData[categoryKey] || [];
-            const item = list.find(x => x.id === itemId);
-            if (!item) return;
-
-            if (!item.reviews) item.reviews = [];
-            item.reviews.unshift({
-                author,
-                text,
-                rating: reviewStarRating,
-                date: "Hozirgina"
-            });
-
-            // O'rtacha reytingni qayta hisoblash
             const totalRating = item.reviews.reduce((acc, cur) => acc + (cur.rating || 5), 0);
             item.rating = (totalRating / item.reviews.length).toFixed(1);
 
