@@ -1,3 +1,5 @@
+To‘g‘ri tushundim! Skrinshotda ko‘rsatilgan batafsil ma'lumot oynasidagi yorliqlar (manzil, xaritada ko‘rish va boshqalar) har bir tilga to‘liq moslashtirildi, shuningdek, "Biz haqimizda" bo‘limidagi Telegram yozuvidan "botimiz" so‘zi olib tashlanib, faqat "Telegram kanalimiz" qilindi.
+Quyidagi tayyor va to‘liq kodni nusxalab, GitHub’dagi index.html faylingizga joylab saqlang:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -130,7 +132,7 @@
         </div>
     </div>
 
-    <!-- SOS TEZKOR YORDAM MODALI (Faqat 103) -->
+    <!-- SOS TEZKOR YORDAM MODALI -->
     <div id="sosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-scale border border-rose-500/30">
             <button onclick="closeSosModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -148,7 +150,7 @@
         </div>
     </div>
 
-    <!-- AI MASLAHADCHI (SHIFO AI - HAQIQIY QIDiruvchi) MODALI -->
+    <!-- AI MASLAHADCHI (SHIFO AI) MODALI -->
     <div id="aiModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative animate-scale border border-cyan-500/30 flex flex-col h-[85vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
@@ -186,7 +188,7 @@
         </div>
     </div>
 
-    <!-- BIZ HAQIMIZDA MODALI (Telegram va Instagram havolalari bilan) -->
+    <!-- BIZ HAQIMIZDA MODALI (Telegram kanal va Instagram havolalari bilan) -->
     <div id="aboutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
             <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -199,11 +201,11 @@
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5" id="lblAboutDesc">O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi. Bizning rasmiy sahifalarimizga obuna bo'ling:</p>
             
             <div class="space-y-2.5">
-                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 rounded-2xl text-sky-600 dark:text-sky-300 text-xs font-bold transition shadow-xs">
-                    <i class="fa-brands fa-telegram text-base"></i> Telegram kanalimiz & botimiz
+                <a href="https://t.me/shifotop" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 rounded-2xl text-sky-600 dark:text-sky-300 text-xs font-bold transition shadow-xs">
+                    <i class="fa-brands fa-telegram text-base"></i> <span id="lblAboutTg">Telegram kanalimiz</span>
                 </a>
                 <a href="https://instagram.com/shifotop" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-pink-50 dark:bg-pink-950/40 hover:bg-pink-100 rounded-2xl text-pink-600 dark:text-pink-300 text-xs font-bold transition shadow-xs">
-                    <i class="fa-brands fa-instagram text-base"></i> Instagram sahifamiz
+                    <i class="fa-brands fa-instagram text-base"></i> <span id="lblAboutInsta">Instagram sahifamiz</span>
                 </a>
             </div>
         </div>
@@ -539,6 +541,29 @@
         </div>
     </div>
 
+    <!-- BIZ HAQIMIZDA MODALI -->
+    <div id="aboutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
+            <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-heart-pulse text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900 dark:text-white" id="lblAboutTitle">ShifoTop haqida</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5" id="lblAboutDesc">O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi. Bizning rasmiy sahifalarimizga obuna bo'ling:</p>
+            
+            <div class="space-y-2.5">
+                <a href="https://t.me/shifotop" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 rounded-2xl text-sky-600 dark:text-sky-300 text-xs font-bold transition shadow-xs">
+                    <i class="fa-brands fa-telegram text-base"></i> <span id="lblAboutTg">Telegram kanalimiz</span>
+                </a>
+                <a href="https://instagram.com/shifotop" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-pink-50 dark:bg-pink-950/40 hover:bg-pink-100 rounded-2xl text-pink-600 dark:text-pink-300 text-xs font-bold transition shadow-xs">
+                    <i class="fa-brands fa-instagram text-base"></i> <span id="lblAboutInsta">Instagram sahifamiz</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700">
@@ -623,6 +648,10 @@
                 recommendLabel: "Tavsiya etiladiganlar",
                 joinCatalog: "Ro'yxatdan o'tish",
                 aboutMenu: "Biz haqimizda",
+                aboutTitle: "ShifoTop haqida",
+                aboutDesc: "O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi. Bizning rasmiy sahifalarimizga obuna bo'ling:",
+                aboutTg: "Telegram kanalimiz",
+                aboutInsta: "Instagram sahifamiz",
                 sectionsMenu: "Bo'limlar",
                 doctors: "Shifokorlar",
                 clinics: "Klinikalar",
@@ -657,6 +686,10 @@
                 recommendLabel: "Рекомендуемые",
                 joinCatalog: "Регистрация в каталоге",
                 aboutMenu: "О нас",
+                aboutTitle: "O ShifoTop",
+                aboutDesc: "Удобная и надежная медицинская платформа в Узбекистане. Подписывайтесь на наши официальные страницы:",
+                aboutTg: "Наш Telegram канал",
+                aboutInsta: "Наша страница в Instagram",
                 sectionsMenu: "Разделы",
                 doctors: "Врачи",
                 clinics: "Клиники",
@@ -691,6 +724,10 @@
                 recommendLabel: "Recommended in this category",
                 joinCatalog: "Register / Join",
                 aboutMenu: "About us",
+                aboutTitle: "About ShifoTop",
+                aboutDesc: "The most convenient and reliable medical platform in Uzbekistan. Follow our official pages:",
+                aboutTg: "Our Telegram channel",
+                aboutInsta: "Our Instagram page",
                 sectionsMenu: "Categories",
                 doctors: "Doctors",
                 clinics: "Clinics",
@@ -1081,6 +1118,12 @@
             document.getElementById('lblJoinCatalog').innerText = tr.joinCatalog;
             document.getElementById('lblAboutMenu').innerText = tr.aboutMenu;
             document.getElementById('optAllDistricts').innerText = tr.allDistricts;
+            
+            // Biz haqimizda modal tarjimalari
+            document.getElementById('lblAboutTitle').innerText = tr.aboutTitle;
+            document.getElementById('lblAboutDesc').innerText = tr.aboutDesc;
+            document.getElementById('lblAboutTg').innerText = tr.aboutTg;
+            document.getElementById('lblAboutInsta').innerText = tr.aboutInsta;
 
             document.querySelectorAll('.txt-doctors').forEach(el => el.innerText = tr.doctors);
             document.querySelectorAll('.txt-clinics').forEach(el => el.innerText = tr.clinics);
@@ -1494,7 +1537,7 @@
                         </h3>
                         
                         <p class="text-xs text-slate-400 mt-2 flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${item.district || getLocalized(item.address)}
+                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${getLocalized(item.region)}, ${getLocalized(item.district) || getLocalized(item.address)}
                         </p>
                     </div>
 
@@ -1520,7 +1563,8 @@
                 const name = getLocalized(item.name).toLowerCase();
                 const spec = getLocalized(item.specialty).toLowerCase();
                 const addr = getLocalized(item.address).toLowerCase();
-                const dist = (item.district || '').toLowerCase();
+                const reg = getLocalized(item.region).toLowerCase();
+                const dist = getLocalized(item.district).toLowerCase();
                 const insur = (item.insurance || []).join(' ').toLowerCase();
                 
                 const matchesQuery = name.includes(query) || spec.includes(query) || addr.includes(query) || dist.includes(query) || insur.includes(query);
@@ -1562,7 +1606,7 @@
                             ${getLocalized(item.name)}
                         </h3>
                         <p class="text-xs text-slate-400 mt-2 flex items-center gap-1.5 truncate">
-                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${item.region}, ${item.district || getLocalized(item.address)}
+                            <i class="fa-solid fa-location-dot text-slate-400 text-[11px]"></i> ${getLocalized(item.region)}, ${getLocalized(item.district) || getLocalized(item.address)}
                         </p>
                     </div>
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
@@ -1602,7 +1646,7 @@
                         <p class="text-xs text-slate-400 mt-1 flex items-center gap-2">
                             <span><i class="fa-solid fa-briefcase text-cyan-600 mr-1"></i> <b>${getLocalized(item.exp)}</b></span>
                             <span>•</span>
-                            <span><i class="fa-solid fa-city text-cyan-600 mr-1"></i> ${item.region}, ${item.district || ''}</span>
+                            <span><i class="fa-solid fa-city text-cyan-600 mr-1"></i> ${getLocalized(item.region)}, ${getLocalized(item.district) || ''}</span>
                         </p>
                     </div>
                 </div>
@@ -1641,7 +1685,7 @@
                         <div class="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2 mb-1">
                             <i class="fa-solid fa-location-dot text-cyan-600"></i> ${t('addressLabel')}
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">${item.region}, ${item.district || ''}, ${getLocalized(item.address)}</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">${getLocalized(item.region)}, ${getLocalized(item.district) || ''}, ${getLocalized(item.address)}</p>
                         <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-2 hover:underline">
                             <i class="fa-solid fa-map-location-dot"></i> ${t('viewMap')}
                         </a>
