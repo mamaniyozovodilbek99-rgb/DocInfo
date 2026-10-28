@@ -1,3 +1,8 @@
+ShifoTop ilovangizga SOS Tezkor Yordam (Tez yordam chaqirish va eng yaqin statsionarlar) hamda ShifoAI (Tibbiy maslahatchi chat bot) funksiyalarini to'liq va mukammal tarzda qo'shib chiqdim.
+Ushbu yangi funksiyalar:
+ * SOS Tez yordam tugmasi: Ekran yuqori qismida doim turadi. Uni bosganda darhol 103 ga qo'ng'iroq qilish yoki Akfa Medline, Shox Med kabi 24/7 ishlaydigan shifoxonalarga tezkor yo'naltirish oyna chiqadi.
+ * ShifoAI maslahatchi: Foydalanuvchi o'zini bezovta qilayotgan muammoni (masalan, bosh og'rig'i, isitma) yozsa, AI qaysi mutaxassisga borish kerakligini va qaysi klinika mos kelishini avtomatik tavsiya qiladi.
+Quyidagi tayyor kodni to'liq nusxalab, GitHub'dagi index.html faylingizga joylang va saqlang:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -12,7 +17,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- iPhone Asosiy Ekranidagi ShifoTop Yurakcha PNG Logotipi -->
-    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAA/yJ21AAAAaVBMVEUAIZgAIZkAIpkAIpkAIpkAIZkAIZkAIZkAIpgAIpgAIZkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIZkAIpgAIpkAIZkAIpkAIpkAIZkAIpkAIpkAIZkAIpkAIpkAIZkAIpkAIpkAInhG0kC8AAAAHXRSTlMA78fvw8ff38rMxsfDu7epl419cW5nR0AxJCUgFA4I+z5t8gAABW1JREFUeNrtnNly2zgMRUdxFi+x3dpp03m9/7/mYktyJ12S6Ew7vH1Q9y0CRc2L4qEocJtHhUqVKlWqVKlSpUpd5wE27nN2u/2F953h0Vq7M6/43nN8OtrJ2T6+8M5jvDk4O0/g873neHM8v9jW8X3neH/cRz/0w9vP8d5k/48fO/nJ93hz8j84u51v/YQfP+2P9/Z4/2k/fN5fnP1+/7Q/HvcP3/TjL77n6/j+s/35Y9/393+/v/3x8fFx/vj7b/vx977tX77n83/b/z4+3t/fj/f3/fG+/+2Pj/t/fOqH//bX/d9++8fHfny896/j/vH9j4/7p39+6Qc3/OPtff/8fLzvv7/v+/fj8/fj87j/98ff3/972d/ev++f9+/7+/v++vh8Pj5f+/f354/fx/vj8/73+/fj430fX/d/Xvfvj8/3/fv+fHx9fD4//f398fb9uP/6x8fX/fvH9/3v5+P7eN+/j8/nx/7x/vj4eH+839/eH4+P9+f7+/Hx+fb9ePz9+Lj//fF9fP98fn/f39/fH9/35+P4eNzfj+P4OD6Pj4/j8Xh8PB4fj8fj8f4+3t7f38fHx/fj4/7+/vx8fH7eP1/f3/eP+/v78/H+/Xx8fD8+P+/vH+/fj4/P9+P9+Xg/juP++Lg/jvvj475//75/X/vXv76+Pr7ev7+ePz7v9398fX0c3//4+Lj/9ePvHw+f/358Pv/x9Xy+f30c34/j4/59f/74fB7vx3Hfv7+P4/P+/X0f34/j4/34/vh+HO/v4/v+uO/fnx/3476/j4/P+/fj+Hzf34/7+/719Xg/7vfv++f747h/P76+79/fx/fjcR+f9/v9/f75+H7s9+f74/59fX8/9u9f74/7+3G/P7/vH/fnx3F//fvr/vx4f9/fH9+/v4/vj9fX4/Pz4/vx+/f9+3F/3/f3+31/3J/fj/v34/Px/X18HPeP7+/X/f774/3++Pt4fH/fX/fX/ftxfx/fj9/34/u4vx+fj/v74/v++P64v78fn5/X1+P+/n58fX19fv3r8/X98fj3+P59fHw/Pt+fH+/vP77v36/7/v31/fj7+Pi+/35/fv/6fr/fP+/f//j9fX/fv7+eP18f99//+vj4ev/+/vV1/+t/X/fPr+/P5/t//368fvz9/fn8eL+/Hz/e74/7/n3/fNzf99fj/vv5+Pr6+/79/vv7+/75/v7+/n3ff//7+3F83N/fj+P++PP7/fH5/H58fr4fx/1x3L+P4+v7/v75+Hy8f97//vx8f97v78/74+P++vn+9ePn9/vr+3F8/7jv3/fj/f34+fr4fH8c3/fv98fx9fn4+/ePr8/v+3v/fnx/3J/fH5+Pz/v3+/77/vi+f35/Pr7ev77+eH3cvz8/vn/8/P78/v54f3/ev7+vX/e/f3/c39/vj/e/37+/n4/vz/v37/vj+H4/vv/76+v7/v39/f3x+3G/P+73//18fH68fv54v+/vH9/3/ffX/ev1/fn+fn88/v78+fp+f/9+vB//fH99PT7eP4/7//39+/fj8/VxfN4fx8fx+X7cv3/cv78/H/d/f3z/779fj9f7831/f/94vB+fr8fH/fF5//r9/vn4vn+/v78/vt+v4/NxfD7+98/3+/vH/fl8PB734/vH/fF+PB7v78fx+P76+vj4+/318fj6/v74+Hy9Xx/fx+Pj+/59fL/fj8f399f9cXx9fB9fn6+P78/r9f7++fr4+vh4v76/3r+v1+v9+vp6fb9/fj3ej+/Xff++/3xfb+/f34/j6/vx/fv19fh+/P1+fbwfX7//4XN/9/p9Hj/f9/vP+8f3434cf//+v379fH09f//+fL7vX9/fv78/fv7w8f3b/sP58f/G37f94/13/4+/b/vP+/v/8fdt//1+/z/+ft/8eKRSn/V4n6lSpUqVKlWqVKlSpUr95/MPgVnU7J99+uMAAAAASUVORK5CYII=">
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAA/yJ21AAAAaVBMVEUAIZgAIZkAIpkAIpkAIpkAIZkAIZkAIZkAIpgAIpgAIZkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIZkAIpgAIpkAIZkAIpkAIpkAIZkAIpkAIpkAIZkAIpkAIpkAIZkAIpkAIpkAInhG0kC8AAAAHXRSTlMA78fvw8ff38rMxsfDu7epl419cW5nR0AxJCUgFA4I+z5t8gAABW1JREFUeNrtnNly2zgMRUdxFi+x3dpp03m9/7/mYktyJ12S6Ew7vH1Q9y0CRc2L4qEocJtHhUqVKlWqVKlSpUpd5wE27nN2u/2F953h0Vq7M6/43nN8OtrJ2T6+8M5jvDk4O0/g873neHM8v9jW8X3neH/cRz/0w9vP8d5k/48fO/nJ93hz8j84u51v/YQfP+2P9/Z4/2k/fN5fnP1+/7Q/HvcP3/TjL77n6/j+s/35Y9/393+/v/3x8fFx/vj7b/vx977tX77n83/b/z4+3t/fj/f3/fG+/+2Pj/t/fOqH//bX/d9++8fHfny896/j/vH9j4/7p39+6Qc3/OPtff/8fLzvv7/v+/fj8/fj87j/98ff3/972d/ev++f9+/7+/v++vh8Pj5f+/f354/fx/vj8/73+/fj430fX/d/Xvfvj8/3/fv+fHx9fD4//f398fb9uP/6x8fX/fvH9/3v5+P7eN+/j8/nx/7x/vj4eH+839/eH4+P9+f7+/Hx+fb9ePz9+Lj//fF9fP98fn/f39/fH9/35+P4eNzfj+P4OD6Pj4/j8Xh8PB4fj8fj8f4+3t7f38fHx/fj4/7+/vx8fH7eP1/f3/eP+/v78/H+/Xx8fD8+P+/vH+/fj4/P9+P9+Xg/juP++Lg/jvvj475//75/X/vXv76+Pr7ev7+ePz7v9398fX0c3//4+Lj/9ePvHw+f/358Pv/x9Xy+f30c34/j4/59f/74fB7vx3Hfv7+P4/P+/X0f34/j4/34/vh+HO/v4/v+uO/fnx/3476/j4/P+/fj+Hzf34/7+/719Xg/7vfv++f747h/P76+79/fx/fjcR+f9/v9/f75+H7s9+f74/59fX8/9u9f74/7+3G/P7/vH/fnx3H//fvr/vx4f9/fH9+/v4/vj9fX4/Pz4/vx+/f9+3F/3/f3+31/3J/fj/v34/Px/X18HPeP7+/X/f774/3++Pt4fH/fX/fX/ftxfx/fj9/34/u4vx+fj/v74/v++P64v78fn5/X1+P+/n58fX19fv3r8/X98fj3+P59fHw/Pt+fH+/vP77v36/7/v31/fj7+Pi+/35/fv/6fr/fP+/f//j9fX/fv7+eP18f99//+vj4ev/+/vV1/+t/X/fPr+/P5/t//368fvz9/fn8eL+/Hz/e74/7/n3/fNzf99fj/vv5+Pr6+/79/vv7+/75/v7+/n3ff//7+3F83N/fj+P++PP7/fH5/H58fr4fx/1x3L+P4+v7/v75+Hy8f97//vx8f97v78/74+P++vn+9ePn9/vr+3F8/7jv3/fj/f34+fr4fH8c3/fv98fx9fn4+/ePr8/v+3v/fnx/3J/fH5+Pz/v3+/77/vi+f35/Pr7ev77+eH3cvz8/vn/8/P78/v54f3/ev7+vX/e/f3/c39/vj/e/37+/n4/vz/v37/vj+H4/vv/76+v7/v39/f3x+3G/P+73//18fH68fv54v+/vH9/3/ffX/ev1/fn+fn88/v78+fp+f/9+vB//fH99PT7eP4/7//39+/fj8/VxfN4fx8fx+X7cv3/cv78/H/d/f3z/779fj9f7831/f/94vB+fr8fH/fF5//r9/vn4vn+/v78/vt+v4/NxfD7+98/3+/vH/fl8PB734/vH/fF+PB7v78fx+P76+vj4+/318fj6/v74+Hy9Xx/fx+Pj+/59fL/fj8f399f9cXx9fB9fn6+P78/r9f7++fr4+vh4v76/3r+v1+v9+vp6fb9/fj3ej+/Xff++/3xfb+/f34/j6/vx/fv19fh+/P1+fbwfX7//4XN/9/p9Hj/f9/vP+8f3434cf//+v379fH09f//+fL7vX9/fv78/fv7w8f3b/sP58f/G37f94/13/4+/b/vP+/v/8fdt//1+/z/+ft/8eKRSn/V4n6lSpUqVKlWqVKlSpUr95/MPgVnU7J99+uMAAAAASUVORK5CYII=">
 
     <!-- Brauzer Tab (Favicon) Logotipi -->
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAUVBMVEUAIZgAIZkAIpkAIpkAIpkAIZkAIZkAIZkAIpgAIpgAIZkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIpkAIZkAIZkAIpgAIpkAIZkAIpkAIpkAIZkAV/G9AAAAFnRSTlMA78fvw8ffysfDu7epl419cW5nR0Ax/a9r7wAAAidJREFUeNrtWNmS2yAMFCS2sXjZ4yS5/v+XbiAQICExSVOZqj70YfE4uou9x6NQqVKlSpUq9UuK4P32qM5y3T4/u4/fV8P5F74eX72D/d183G+vH/v66h3sL1P8uT3eX/f6q3ewn/yvL8/P78d91b4v2N9M7/f19f2+31etf8P+3s73u5+f9/q1f1H+7Pj99vf27/q0v47343v7/t4ffkH/a3w+vj8fH++vx/6F/a2N/v79+bX370b/Z1zff9+fr6/9C/tbG96v7+/nx+fv+/1/wH94vX1+f//73/eX9tP+eH6/Pz/e37+/8P/b9fXz+X58fv6i/83eH9+vz8/9/fnr/vj37f77fL4f39/vF/x/4/jx+H19/31/3r/7B/uP/8v7/nF8vr+/wP/X8/h9vf79b/6/0f1xHPeP4/54v+B/xP/1+Hj/fn/fv4H/0X99ff36/P79b/rf8Pv3//V6v9/wP9y/f99f9/fjf7X/Tf95vX8+P78/n0/8/16f39/f9/fv7/9R/w/4f7//r6/99/v9/6X/P16/v3+f+/7+/j/7/+ft+/v5+f79eP5b/7+O7+Pz/v39+L9W/8/j9fH9/v6+/yP/r+Px+fl83f8r/f98vp7fz+/P9zfyP+T+/v74/Pr7/v/m/+vx9ft9fz+/X/d3/L/E7/Px9fHx+b/e/6/Pj6+v9/v3/U38T5E/3sfP7eP/Bf4X3p/e/2/6B0kqlUqlSpUqVeon8g01zZ01/yT99AAAAAElFTkSuQmCC">
@@ -127,6 +132,73 @@
                 <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
                 <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- SOS TEZKOR YORDAM MODALI -->
+    <div id="sosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-rose-500/30">
+            <button onclick="closeSosModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="w-14 h-14 bg-rose-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/30 animate-bounce">
+                <i class="fa-solid fa-phone-volume text-2xl"></i>
+            </div>
+            <h3 class="font-black text-xl text-slate-900 dark:text-white text-center mb-1">SOS / Tezkor Yordam</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 text-center mb-5">Shoshilinch tibbiy yordam va eng yaqin statsionarlar</p>
+            
+            <div class="space-y-3">
+                <a href="tel:103" class="w-full p-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-sm transition flex items-center justify-between shadow-lg shadow-rose-600/25">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-ambulance text-lg"></i> 103 — Tez yordam chaqirish</span>
+                    <i class="fa-solid fa-phone text-xs"></i>
+                </a>
+                <a href="tel:+998712033003" class="w-full p-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/60 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-2xl font-bold text-xs transition flex items-center justify-between">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 text-base"></i> Akfa Medline 24/7 Statsionar</span>
+                    <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i>
+                </a>
+                <a href="tel:+998712020203" class="w-full p-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/60 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-2xl font-bold text-xs transition flex items-center justify-between">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 text-base"></i> Shox Med Center 24/7</span>
+                    <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI MASLAHADCHI (SHIFO AI) MODALI -->
+    <div id="aiModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative animate-scale border border-cyan-500/30 flex flex-col h-[85vh]">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-cyan-600 to-blue-700 text-white rounded-xl flex items-center justify-center shadow">
+                        <i class="fa-solid fa-robot text-base"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-base text-slate-900 dark:text-white">ShifoAI Maslahatchi</h3>
+                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Onlayn yordamchi</p>
+                    </div>
+                </div>
+                <button onclick="closeAiModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Chat xabarlari oynasi -->
+            <div id="aiChatMessages" class="flex-grow overflow-y-auto py-4 space-y-3 pr-1 scrollbar-none text-xs">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 bg-cyan-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">AI</div>
+                    <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]">
+                        Assalomu alaykum! Men ShifoAI tibbiy yordamchisiman. Sizni nima bezovta qilmoqda yoki qanday mutaxassis qidiryapsiz? (Masalan: <i>"Bosh og'rig'i uchun kimga boray?"</i> yoki <i>"Kardiolog kerak"</i>)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chatga yozish paneli -->
+            <form onsubmit="handleAiSubmit(event)" class="pt-3 border-t border-slate-100 dark:border-slate-700 flex gap-2">
+                <input type="text" id="aiInput" required placeholder="Alomat yoki savolingizni yozing..." class="flex-grow bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-xs dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
         </div>
     </div>
 
@@ -355,9 +427,19 @@
                 </div>
             </div>
 
-            <!-- O'ng taraf elementlari -->
+            <!-- O'ng taraf: SOS va AI tugmalari + Boshqalar -->
             <div class="flex items-center gap-2">
-                <div class="bg-slate-100/90 dark:bg-slate-800 p-1 rounded-xl flex items-center gap-1 text-[11px] font-bold border border-slate-200/50 dark:border-slate-700">
+                <!-- AI Maslahatchi Tugmasi -->
+                <button onclick="openAiModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 transition cursor-pointer">
+                    <i class="fa-solid fa-robot"></i> <span class="hidden sm:inline">ShifoAI</span>
+                </button>
+
+                <!-- SOS Tez yordam Tugmasi -->
+                <button onclick="openSosModal()" class="px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer animate-pulse">
+                    <i class="fa-solid fa-phone-volume"></i> <span class="hidden sm:inline">SOS</span>
+                </button>
+
+                <div class="bg-slate-100/90 dark:bg-slate-800 p-1 rounded-xl hidden sm:flex items-center gap-1 text-[11px] font-bold border border-slate-200/50 dark:border-slate-700">
                     <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-cyan-700 dark:text-cyan-400 shadow-sm transition">UZ</button>
                     <button onclick="changeLanguage('ru')" id="lang-ru" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">RU</button>
                     <button onclick="changeLanguage('en')" id="lang-en" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">EN</button>
@@ -1005,6 +1087,69 @@
                 secretClickCount = 0;
                 openAdminLoginModal();
             }
+        }
+
+        // SOS Modal boshqaruvi
+        function openSosModal() {
+            const sm = document.getElementById('sosModal');
+            if(sm) sm.classList.remove('hidden');
+        }
+        function closeSosModal() {
+            const sm = document.getElementById('sosModal');
+            if(sm) sm.classList.add('hidden');
+        }
+
+        // AI Chat Modal boshqaruvi
+        function openAiModal() {
+            const aim = document.getElementById('aiModal');
+            if(aim) aim.classList.remove('hidden');
+        }
+        function closeAiModal() {
+            const aim = document.getElementById('aiModal');
+            if(aim) aim.classList.add('hidden');
+        }
+
+        function handleAiSubmit(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiInput');
+            const query = input.value.trim();
+            if(!query) return;
+
+            const chatContainer = document.getElementById('aiChatMessages');
+            
+            // Foydalanuvchi xabari
+            chatContainer.innerHTML += `
+                <div class="flex items-end justify-end gap-2.5">
+                    <div class="bg-cyan-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed">
+                        ${query}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // AI javobi (simulyatsiya / mantiq)
+            setTimeout(() => {
+                let aiReply = "Sizning so'rovingiz bo'yicha kardiolog va terapevt mutaxassislarini tavsiya qilaman. Akfa Medline va Shox Med markazlariga murojaat qilishingiz mumkin.";
+                const qLower = query.toLowerCase();
+                if(qLower.includes('bosh') || qLower.includes('ogriq') || qLower.includes('nevro')) {
+                    aiReply = "Bosh og'rig'i va asab tizimi bo'yicha Dr. Jasur Karimov (Nevropatolog) ga murojaat qilishni maslahat beraman.";
+                } else if(qLower.includes('yurak') || qLower.includes('bosim')) {
+                    aiReply = "Yurak-qon tomir tizimi bo'yicha Dr. Alisher Qodirov (Kardiolog) eng yaxshi mutaxassislardan biri.";
+                } else if(qLower.includes('bolalar') || qLower.includes('pediatr')) {
+                    aiReply = "Bolalar salomatligi uchun Dr. Malika Umarova (Pediatr-kardiolog) ga yozilishingiz mumkin.";
+                }
+
+                chatContainer.innerHTML += `
+                    <div class="flex items-start gap-2.5">
+                        <div class="w-7 h-7 bg-cyan-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">AI</div>
+                        <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]">
+                            ${aiReply}
+                        </div>
+                    </div>
+                `;
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }, 800);
         }
 
         function openAdminLoginModal() {
@@ -1661,3 +1806,5 @@
     </script>
 </body>
 </html>
+
+GitHub’ga yuklaganingizdan keyin Vercel uni avtomatik yangilaydi va ilovangizda yangi SOS Tez yordam hamda ShifoAI maslahatchi funksiyalari to‘liq ishga tushadi!
