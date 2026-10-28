@@ -1,5 +1,5 @@
-Siz tashlagan koddagi mavjud funksiyalar (admin tekshiruvi, captcha, ro'yxatdan o'tish, saralanganlar, bron qilish) to'liq saqlanib, shifokor profiliga bosilganda ochiladigan batafsil ma'lumot oynasi (detailModal), undagi staj, aniq lokatsiya/manzil (Google Maps havolasi bilan), telefon raqami, Telegram va Instagram havolalari, bemorlar fikrlari (otzivlar) hamda pastki qismida xuddi shu yo'nalishdagi 3 ta tavsiya etiladigan shifokorlar bloki to'liq birlashtirildi.
-Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingiz mumkin:
+Parol Odilbek1999! ga o'zgartirildi.
+Kodingizdagi verifyAdminPassword funksiyasida va admin modalining yordamchi matnida yangi parol yangilandi. Quyidagi tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri nusxalab qo'yishingiz mumkin:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -55,91 +55,131 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
 </head>
 <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-200 font-sans" onclick="closeAllDropdowns(event)">
 
-    <!-- Rol tanlash Modal (Siz kimsiz?) -->
+    <!-- Rol tanlash Modal -->
     <div id="roleSelectModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale text-center">
-            <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale text-center">
+            <button onclick="skipRoleSelection()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <div class="w-14 h-14 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
                 <i class="fa-solid fa-user-tag text-2xl"></i>
             </div>
-            <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-1">Siz kimsiz?</h2>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Ro'yxatdan o'tish uchun o'z yo'nalishingizni tanlang</p>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-1">Katalogga qo'shilish</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-5">Ro'yxatdan o'tish uchun o'z yo'nalishingizni tanlang</p>
             
-            <div class="space-y-3">
-                <button onclick="selectRole('doctors', 'Shifokor')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
+            <div class="space-y-2.5">
+                <button onclick="openRegisterForm('doctors', 'Shifokor')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-user-doctor text-base"></i> Shifokor</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
-                <button onclick="selectRole('clinics', 'Klinika')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
+                <button onclick="openRegisterForm('clinics', 'Klinika')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-base"></i> Klinika / Shifoxona</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
-                <button onclick="selectRole('pharmacies', 'Dorixona')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
+                <button onclick="openRegisterForm('pharmacies', 'Dorixona')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-pills text-base"></i> Dorixona</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
-                <button onclick="selectRole('medical_store', 'Tibbiy buyumlar do‘koni')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
+                <button onclick="openRegisterForm('medical_store', 'Tibbiy buyumlar do‘koni')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-stethoscope text-base"></i> Tibbiy buyumlar (Med-texnika)</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
-                <button onclick="selectRole('abroad_treatment', 'Xorijiy klinika vakili')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
+                <button onclick="openRegisterForm('abroad_treatment', 'Xorijiy klinika vakili')" class="w-full p-3.5 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-globe text-base"></i> Xorijda davolanish vakili</span>
                     <i class="fa-solid fa-chevron-right text-xs"></i>
                 </button>
             </div>
-            <button onclick="skipRoleSelection()" class="mt-5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 underline cursor-pointer">Yopish</button>
         </div>
     </div>
 
-    <!-- Authentication Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100 dark:border-gray-700 animate-scale">
-            <div class="text-center mb-6">
-                <div class="w-16 h-16 primary-bg text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-600/30">
-                    <i class="fa-solid fa-heart-pulse text-2xl"></i>
-                </div>
-                <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight">
-                    Ro'yxatdan o'tish (<span id="selectedRoleTitle" class="text-blue-600">Shifokor</span>)
-                </h2>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Davom etish uchun ma'lumotlaringizni kiriting</p>
-            </div>
-
-            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm yuklash bilan) -->
+    <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-6 max-h-[92vh] overflow-y-auto">
+            <button onclick="closeAddItemModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+            <h3 class="font-extrabold text-xl mb-1 text-gray-900 dark:text-white" id="modalFormTitle">Anketa to'ldirish</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Ma'lumotlaringiz moderator tomonidan tasdiqlangach e'lon qilinadi.</p>
+            
+            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
+                <input type="hidden" id="newItemCategory">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ism va familiyangiz / Muassasa nomi</label>
-                    <input type="text" id="authName" required placeholder="Masalan: Alisher Valiyev" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Nomi (F.I.O yoki Muassasa nomi)</label>
+                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam (+998...)</label>
-                    <input type="tel" id="authContact" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Rasmdagi kodni kiriting (Captcha)</label>
-                    <div class="flex items-center space-x-3 mb-2">
-                        <div id="captchaBox" class="captcha-bg flex-grow py-2.5 text-center text-xl font-black text-blue-700 dark:text-blue-300 rounded-xl border border-gray-200 dark:border-gray-600 select-none overflow-hidden italic"></div>
-                        <button type="button" onclick="generateCaptcha()" class="p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-600 dark:text-gray-300 rounded-xl transition cursor-pointer">
-                            <i class="fa-solid fa-rotate-right text-sm"></i>
-                        </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Mutaxassisligi / Soha</label>
+                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
                     </div>
-                    <input type="text" id="captchaInput" required placeholder="Kodni yozing" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-600 dark:text-white uppercase tracking-wider">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Hudud</label>
+                        <select id="newItemRegion" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white cursor-pointer">
+                            <option value="Toshkent">Toshkent sh.</option>
+                            <option value="Samarqand">Samarqand</option>
+                            <option value="Buxoro">Buxoro</option>
+                            <option value="Fargona">Farg'ona</option>
+                            <option value="Xorij">Xorij</option>
+                        </select>
+                    </div>
                 </div>
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3.5 rounded-xl text-sm transition shadow-lg shadow-blue-600/20 mt-2 cursor-pointer">
-                    Tasdiqlash va Kirish
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ish staji</label>
+                        <input type="text" id="newItemExp" placeholder="Masalan: 12 yil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqam</label>
+                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telegram (username)</label>
+                        <input type="text" id="newItemTelegram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Instagram (profil)</label>
+                        <input type="text" id="newItemInstagram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Manzil va Mo'ljal</label>
+                    <input type="text" id="newItemAddress" required placeholder="Shahar, ko'cha, bino raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Biografiya / Qo'shimcha ma'lumot</label>
+                    <textarea id="newItemBio" rows="2" placeholder="O'zingiz yoki xizmatingiz haqida qisqacha..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white"></textarea>
+                </div>
+
+                <!-- 5 tagacha rasm yuklash bloki -->
+                <div class="p-3.5 bg-blue-50/60 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30">
+                    <label class="block text-xs font-bold text-blue-900 dark:text-blue-300 mb-1.5 flex items-center justify-between">
+                        <span><i class="fa-solid fa-images mr-1"></i> Rasmlar (5 tagacha rasm yuklang)</span>
+                        <span id="uploadedCountText" class="text-[10px] text-blue-600 font-bold">0/5</span>
+                    </label>
+                    <input type="file" id="imageFileInput" accept="image/*" multiple onchange="handleImageUpload(event)" class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+                    <div id="imagePreviewContainer" class="flex gap-2 mt-2.5 overflow-x-auto pb-1 scrollbar-none"></div>
+                </div>
+
+                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg mt-3 cursor-pointer">
+                    Tasdiqlash uchun Adminga yuborish
                 </button>
             </form>
         </div>
     </div>
 
-    <!-- Admin Login Modal -->
+    <!-- MAXFIY ADMIN KIRISH MODALI -->
     <div id="adminLoginModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 text-center">
             <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/20 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-                <i class="fa-solid fa-lock text-xl"></i>
+                <i class="fa-solid fa-shield-halved text-xl"></i>
             </div>
-            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Paneli</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Parolni kiriting (Standart: admin123)</p>
+            <h3 class="font-bold text-lg mb-1 text-gray-900 dark:text-white">Admin Boshqaruvi</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Maxfiy parolni kiriting</p>
             <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
                 <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center">
                 <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
@@ -149,91 +189,86 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         </div>
     </div>
 
-    <!-- Admin Moderation Panel Modal -->
+    <!-- ADMIN MODERATSIYA PANELI -->
     <div id="adminPanelModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[90vh] overflow-y-auto">
             <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-shield-halved text-blue-600"></i> Admin Moderatsiya Paneli
+                <i class="fa-solid fa-shield-halved text-blue-600"></i> Moderator Nazorati
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Kelib tushgan arizalar ro'yxati.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-6">Foydalanuvchilardan kelib tushgan tasdiqlanmagan arizalar.</p>
             <div id="pendingListContainer" class="space-y-4"></div>
         </div>
     </div>
 
-    <!-- Header / Navbar (Ko'k rangda) -->
+    <!-- Header / Navbar -->
     <header class="primary-bg text-white shadow-sm sticky top-0 z-40 border-b border-blue-400/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="relative">
-                <div onclick="toggleMenuDropdown(event)" class="flex items-center space-x-3 cursor-pointer group select-none">
-                    <div class="bg-white border border-gray-200 p-2.5 rounded-2xl shadow-md flex items-center justify-center group-hover:scale-105 transition relative">
+                <div class="flex items-center space-x-3 select-none">
+                    <!-- Maxfiy 5 marta bosiladigan logo ikonka -->
+                    <div onclick="handleSecretAdminClick()" class="bg-white border border-gray-200 p-2.5 rounded-2xl shadow-md flex items-center justify-center active:scale-95 transition cursor-pointer" title="ShifoTop">
                         <i class="fa-solid fa-heart-pulse text-base text-red-500"></i>
                     </div>
-                    <div>
+
+                    <!-- Menyu ochilishi -->
+                    <div onclick="toggleMenuDropdown(event)" class="cursor-pointer">
                         <div class="flex items-center space-x-0.5">
                             <span class="text-xl font-extrabold tracking-tight text-white">
                                 <span>Shifo</span><span class="gold-gradient font-black">Top</span>
                             </span>
                             <i class="fa-solid fa-chevron-down text-xs text-white"></i>
                         </div>
-                        <span class="block text-[11px] text-blue-100 font-semibold tracking-wide" id="userWelcome">Tibbiyot Portali</span>
+                        <span class="block text-[11px] text-blue-100 font-semibold tracking-wide">Tibbiyot Portali</span>
                     </div>
                 </div>
 
-                <!-- Dropdown Menu (Yangi 5 ta bo'lim bilan) -->
+                <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 py-2 hidden z-50 animate-scale text-gray-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-gray-100 dark:border-gray-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-1">
-                        <button onclick="switchTab('doctors')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer" id="btnTab-doctors">
+                        <button onclick="switchTab('doctors')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-user-doctor w-5 text-blue-600"></i>
                             <span>Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer" id="btnTab-clinics">
+                        <button onclick="switchTab('clinics')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-hospital w-5 text-blue-600"></i>
                             <span>Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer" id="btnTab-pharmacies">
+                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-pills w-5 text-blue-600"></i>
                             <span>Dorixonalar</span>
                         </button>
-                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer" id="btnTab-medical_store">
+                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-stethoscope w-5 text-blue-600"></i>
                             <span>Tibbiy buyumlar</span>
                         </button>
-                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer" id="btnTab-abroad_treatment">
+                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-globe w-5 text-blue-600"></i>
                             <span>Xorijda davolanish</span>
                         </button>
 
                         <div class="border-t border-gray-100 dark:border-gray-700 my-1"></div>
 
-                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
-                            <span>Biz haqimizda</span>
-                        </button>
-                        
-                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-blue-50 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
+                        <!-- Ro'yxatdan o'tish arizasi -->
+                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2 rounded-xl font-semibold text-sm transition bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-user-plus w-5"></i>
                             <span>Ro'yxatdan o'tish</span>
                         </button>
-                    </div>
 
-                    <div class="border-t border-gray-100 dark:border-gray-700 pt-1.5 mt-1 px-1.5">
-                        <button onclick="logoutProfile()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-red-50 text-red-500 flex items-center space-x-3 cursor-pointer">
-                            <i class="fa-solid fa-right-from-bracket w-5"></i>
-                            <span>Profildan chiqish</span>
+                        <button onclick="openAboutModal()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center space-x-3 cursor-pointer">
+                            <i class="fa-solid fa-circle-info w-5 text-blue-500"></i>
+                            <span>Biz haqimizda</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <div class="flex items-center space-x-3">
-                <button onclick="openAdminLoginModal()" class="text-xs font-bold text-blue-600 bg-white px-3 py-1.5 rounded-xl shadow hover:bg-gray-100 transition cursor-pointer" title="Admin">Admin</button>
-
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition flex items-center justify-center cursor-pointer" title="Saralanganlar">
                     <i class="fa-solid fa-heart text-red-400 text-base"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow">0</span>
@@ -245,15 +280,15 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         </div>
     </header>
 
-    <!-- Main Content Container -->
+    <!-- Asosiy Qism -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         <div class="primary-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
             <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl pointer-events-none">
                 <i class="fa-solid fa-heart-pulse"></i>
             </div>
             <div class="relative z-10 max-w-2xl">
-                <h1 id="heroTitle" class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping</h1>
-                <p id="heroSubtitle" class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Shifokorlar, klinikalar, dorixonalar, tibbiy buyumlar va xorijda davolanish bitta joyda.</p>
+                <h1 class="text-2xl sm:text-4xl font-extrabold mb-3 tracking-tight">O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping</h1>
+                <p class="text-blue-100 mb-6 text-sm sm:text-base font-normal">Shifokorlar, klinikalar, dorixonalar, tibbiy buyumlar va xorijda davolanish bitta joyda.</p>
             </div>
             
             <div class="bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-2xl shadow-lg flex flex-col sm:flex-row gap-2 relative z-10 border border-blue-200/50 dark:border-gray-700">
@@ -263,12 +298,12 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 </div>
                 <div class="flex gap-2">
                     <select id="regionFilter" onchange="filterData()" class="bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-200 px-4 py-3 sm:py-2.5 rounded-xl text-sm border-0 focus:outline-none font-medium w-full sm:w-auto cursor-pointer">
-                        <option value="" id="optAllRegions">Barcha hududlar</option>
+                        <option value="">Barcha hududlar</option>
                         <option value="Toshkent">Toshkent sh.</option>
                         <option value="Samarqand">Samarqand</option>
                         <option value="Buxoro">Buxoro</option>
                         <option value="Fargona">Farg'ona</option>
-                        <option value="Xorij">Xorijiy klinika</option>
+                        <option value="Xorij">Xorij</option>
                     </select>
                 </div>
             </div>
@@ -306,7 +341,7 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
-    <!-- BATAFSIL PROFIL MODALI (Staj, Manzil, Lokatsiya, Telefon, Telegram, Instagram, Otzivlar va 3 ta tavsiya) -->
+    <!-- BATAFSIL PROFIL MODALI -->
     <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[92vh] overflow-y-auto">
             <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-20 cursor-pointer">
@@ -334,72 +369,6 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     <i class="fa-brands fa-telegram text-lg w-8"></i> Telegram botimiz orqali bog'laning
                 </a>
             </div>
-        </div>
-    </div>
-
-    <!-- Add New Item Modal -->
-    <div id="addItemModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
-            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-            <h3 class="font-bold text-xl mb-1 text-gray-900 dark:text-white" id="modalFormTitle">Ma'lumotlarni qo'shish</h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Ma'lumotlaringiz admin tomonidan tekshirilgandan so'ng saytda e'lon qilinadi.</p>
-            
-            <form id="addItemForm" onsubmit="handleAddItemSubmit(event)" class="space-y-3">
-                <input type="hidden" id="newItemCategory">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Nomi (F.I.O yoki Muassasa)</label>
-                    <input type="text" id="newItemName" required placeholder="Masalan: Dr. Anvar Sobirov" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Mutaxassisligi / Xizmat turi</label>
-                        <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Hudud</label>
-                        <select id="newItemRegion" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white cursor-pointer">
-                            <option value="Toshkent">Toshkent sh.</option>
-                            <option value="Samarqand">Samarqand</option>
-                            <option value="Buxoro">Buxoro</option>
-                            <option value="Fargona">Farg'ona</option>
-                            <option value="Xorij">Xorij</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Ish tajribasi</label>
-                        <input type="text" id="newItemExp" placeholder="10 yil" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telefon raqami</label>
-                        <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telegram (username)</label>
-                        <input type="text" id="newItemTelegram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Instagram (profil)</label>
-                        <input type="text" id="newItemInstagram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Manzil va Mo'ljal</label>
-                    <input type="text" id="newItemAddress" required placeholder="Ko'cha va bino raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Biografiya / Ma'lumot</label>
-                    <textarea id="newItemBio" rows="2" placeholder="Qisqacha ma'lumot..." class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white"></textarea>
-                </div>
-                <button type="submit" class="w-full primary-bg hover:opacity-95 text-white font-semibold py-3 rounded-xl text-sm transition shadow-lg mt-2 cursor-pointer">
-                    Adminga yuborish
-                </button>
-            </form>
         </div>
     </div>
 
@@ -434,12 +403,11 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
 
     <!-- JavaScript Logic -->
     <script>
-        let generatedCaptchaText = '';
-        let currentUser = null;
         let currentTab = 'doctors';
         let favorites = [];
-        let selectedRoleKey = 'doctors';
-        let selectedRoleName = 'Shifokor';
+        let uploadedImagesBase64 = [];
+        let secretClickCount = 0;
+        let secretClickTimer = null;
 
         const tabConfigs = {
             doctors: { title: 'Shifokorlar', icon: 'fa-user-doctor' },
@@ -449,7 +417,6 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
             abroad_treatment: { title: 'Xorijda davolanish', icon: 'fa-globe' }
         };
 
-        // Kengaytirilgan baza: staj, manzil, lokatsiya, telegram, instagram, otzivlar bilan
         const sampleData = {
             doctors: [
                 {
@@ -465,10 +432,12 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     instagram: "dr.alisher_cardio",
                     rating: "4.9",
                     bio: "Toshkent Tibbiyot Akademiyasi bitiruvchisi. Germaniya va Turkiyada malaka oshirgan oliy toifali kardiolog. Yurak-qon tomir kasalliklarini zamonaviy tashxislash bo'yicha mutaxassis.",
-                    img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+                    images: [
+                        "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+                        "https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=600"
+                    ],
                     reviews: [
-                        { author: "Azizbek R.", text: "Juda tajribali va e'tiborli shifokor. Onamning qon bosimini to'g'ri dori belgilab normallashtirdilar.", rating: 5, date: "3 kun oldin" },
-                        { author: "Nilufar K.", text: "Tashxisni juda tez va aniq qo'ydilar, tavsiya qilaman!", rating: 5, date: "1 hafta oldin" }
+                        { author: "Azizbek R.", text: "Juda tajribali va e'tiborli shifokor. Tavsiya qilaman.", rating: 5, date: "3 kun oldin" }
                     ]
                 },
                 {
@@ -484,10 +453,8 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     instagram: "dr_malika_cardio",
                     rating: "4.8",
                     bio: "Bolalar va kattalar kardiologi. EKG va ExoKG bo'yicha yetakchi mutaxassis.",
-                    img: "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600",
-                    reviews: [
-                        { author: "Jasur M.", text: "Bolamizni ko'rsatdik, muomalasi ham, bilimi ham a'lo darajada.", rating: 5, date: "5 kun oldin" }
-                    ]
+                    images: ["https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600"],
+                    reviews: [{ author: "Jasur M.", text: "A'lo darajada ko'rik o'tkazildi.", rating: 5, date: "5 kun oldin" }]
                 },
                 {
                     id: 3,
@@ -501,11 +468,9 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     telegram: "dr_jasur_cardio",
                     instagram: "jasur_karimov_dr",
                     rating: "4.7",
-                    bio: "Aritmiya va yurak ishemik kasalliklari bo'yicha yetakchi ekspert.",
-                    img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600",
-                    reviews: [
-                        { author: "Sardor T.", text: "Aniq va professional yondashuv. Tavsiya qilaman.", rating: 5, date: "2 hafta oldin" }
-                    ]
+                    bio: "Aritmiya va yurak ishemik kasalliklari bo'yicha mutaxassis.",
+                    images: ["https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600"],
+                    reviews: []
                 },
                 {
                     id: 4,
@@ -520,28 +485,8 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     instagram: "dr_nodir_cardio",
                     rating: "4.9",
                     bio: "Samarqanddagi yetakchi kardiologik klinika bosh mutaxassisi.",
-                    img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600",
-                    reviews: [
-                        { author: "Olim aka", text: "Samarqanddagi eng zo'r kardiolog desam adashmayman.", rating: 5, date: "1 oy oldin" }
-                    ]
-                },
-                {
-                    id: 5,
-                    name: "Dr. Shahnoza Rahimova",
-                    specialty: "Nevropatolog",
-                    region: "Toshkent",
-                    exp: "10 yil",
-                    phone: "+998 90 999 88 77",
-                    address: "Yakkasaroy tumani, Shota Rustaveli ko'chasi, 45",
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
-                    telegram: "dr_shahnoza_neuro",
-                    instagram: "dr_shahnoza_neuro",
-                    rating: "4.8",
-                    bio: "Bosh og'rig'i, uyqu buzilishlari va umurtqa pog'onasi kasalliklarini samarali davolash bo'yicha mutaxassis.",
-                    img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600",
-                    reviews: [
-                        { author: "Zarina B.", text: "Bosh og'riqlarim ancha yengillashdi, rahmat katta!", rating: 5, date: "4 kun oldin" }
-                    ]
+                    images: ["https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600"],
+                    reviews: []
                 }
             ],
             clinics: [
@@ -557,11 +502,9 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     telegram: "akfamedline_uz",
                     instagram: "akfamedline",
                     rating: "4.9",
-                    bio: "O'rta Osiyodagi eng yirik xususiy tibbiyot markazi. Zamonaviy operatsiya bloklari va diagnostika laboratoriyalari.",
-                    img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600",
-                    reviews: [
-                        { author: "Bobur", text: "Xizmat ko'rsatish Yevropa standartlarida, sharoitlar a'lo.", rating: 5, date: "1 hafta oldin" }
-                    ]
+                    bio: "O'rta Osiyodagi eng yirik xususiy tibbiyot markazi. Zamonaviy statsionar.",
+                    images: ["https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600"],
+                    reviews: []
                 }
             ],
             pharmacies: [
@@ -577,11 +520,9 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     telegram: "oxymed_uz",
                     instagram: "oxymed.uz",
                     rating: "4.7",
-                    bio: "Sertifikatlangan dori vositalari, tibbiy kosmetika va yetkazib berish xizmati.",
-                    img: "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600",
-                    reviews: [
-                        { author: "Dilshod", text: "Hamma kamyob dori vositalari shu yerdan topiladi.", rating: 5, date: "2 hafta oldin" }
-                    ]
+                    bio: "Sertifikatlangan dori vositalari.",
+                    images: ["https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600"],
+                    reviews: []
                 }
             ],
             medical_store: [
@@ -590,18 +531,16 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     name: "MedTexnika Ortopediya",
                     specialty: "Tibbiy texnika va asboblar",
                     region: "Toshkent",
-                    exp: "Kafolatli",
+                    exp: "Kafolatli mahsulot",
                     phone: "+998 90 987 65 43",
                     address: "Chilonzor tumani, Bunyodkor ko'chasi",
                     mapUrl: "https://maps.google.com/?q=Chilonzor+Tashkent",
                     telegram: "medtexnika_toshkent",
                     instagram: "medtexnika_uz",
                     rating: "4.8",
-                    bio: "Tonometrlar, ingalyatorlar, nogironlar aravachalari va ortopediya mahsulotlari keng assortimenti.",
-                    img: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600",
-                    reviews: [
-                        { author: "Mansur", text: "Sifatli apparat oldik, kafolati bilan berishdi.", rating: 5, date: "3 kun oldin" }
-                    ]
+                    bio: "Tonometrlar, aravachalar va ortopediya buyumlari.",
+                    images: ["https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600"],
+                    reviews: []
                 }
             ],
             abroad_treatment: [
@@ -612,16 +551,14 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     region: "Xorij",
                     exp: "JCI Sertifikat",
                     phone: "+998 95 144 54 44",
-                    address: "Istanbul / Toshkentdagi rasmiy vakolatxona",
+                    address: "Istanbul / Toshkentdagi vakolatxona",
                     mapUrl: "https://maps.google.com/?q=Acibadem+Istanbul",
                     telegram: "acibadem_uz",
                     instagram: "acibadem.uzbekistan",
                     rating: "5.0",
-                    bio: "Xorijda yuqori aniqlikdagi davolash va jarrohlik amaliyotlari. Toshkentdan to'liq bepul hamrohlik xizmati.",
-                    img: "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600",
-                    reviews: [
-                        { author: "Farrux", text: "Operatsiya juda muvaffaqiyatli o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
-                    ]
+                    bio: "Xorijda yuqori aniqlikdagi davolash va jarrohlik amaliyotlari.",
+                    images: ["https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600"],
+                    reviews: []
                 }
             ]
         };
@@ -633,89 +570,21 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
             }
-            checkUserSession();
             renderGrid();
         };
 
-        function generateCaptcha() {
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            generatedCaptchaText = '';
-            for (let i = 0; i < 6; i++) {
-                generatedCaptchaText += chars.charAt(Math.floor(Math.random() * chars.length));
+        // ==================== MAXFIY ADMIN KIRISH (Logoga 5 marta tez bosilganda) ====================
+        function handleSecretAdminClick() {
+            secretClickCount++;
+            clearTimeout(secretClickTimer);
+            secretClickTimer = setTimeout(() => {
+                secretClickCount = 0;
+            }, 2000);
+
+            if (secretClickCount === 5) {
+                secretClickCount = 0;
+                openAdminLoginModal();
             }
-            const box = document.getElementById('captchaBox');
-            if(box) box.innerText = generatedCaptchaText;
-        }
-
-        function selectRole(roleKey, roleName) {
-            selectedRoleKey = roleKey;
-            selectedRoleName = roleName;
-            const srt = document.getElementById('selectedRoleTitle');
-            if(srt) srt.innerText = roleName;
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.add('hidden');
-            const am = document.getElementById('authModal');
-            if(am) am.classList.remove('hidden');
-            generateCaptcha();
-        }
-
-        function skipRoleSelection() {
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.add('hidden');
-        }
-
-        function openRoleModalFromMenu() {
-            closeAllDropdowns();
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.remove('hidden');
-        }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const inputCaptcha = document.getElementById('captchaInput').value.trim().toUpperCase();
-            if (inputCaptcha !== generatedCaptchaText) {
-                alert("Captcha kodi xato kiritildi!");
-                generateCaptcha();
-                document.getElementById('captchaInput').value = '';
-                return;
-            }
-
-            const name = document.getElementById('authName').value;
-            const phone = document.getElementById('authContact').value;
-            currentUser = { name, phone, role: selectedRoleName };
-            
-            localStorage.setItem('shifotop_user', JSON.stringify(currentUser));
-            const am = document.getElementById('authModal');
-            if(am) am.classList.add('hidden');
-            const uw = document.getElementById('userWelcome');
-            if(uw) uw.innerText = `${name} (${selectedRoleName})`;
-            alert(`Muvaffaqiyatli ro'yxatdan o'tdingiz!`);
-
-            switchTab(selectedRoleKey);
-            const nic = document.getElementById('newItemCategory');
-            if(nic) nic.value = selectedRoleKey;
-            const mft = document.getElementById('modalFormTitle');
-            if(mft) mft.innerText = `${selectedRoleName} ma'lumotlarini qo'shish`;
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.remove('hidden');
-        }
-
-        function checkUserSession() {
-            const saved = localStorage.getItem('shifotop_user');
-            if (saved) {
-                currentUser = JSON.parse(saved);
-                const uw = document.getElementById('userWelcome');
-                if(uw) uw.innerText = `${currentUser.name} (${currentUser.role || 'Foydalanuvchi'})`;
-            }
-        }
-
-        function logoutProfile() {
-            localStorage.removeItem('shifotop_user');
-            const uw = document.getElementById('userWelcome');
-            if(uw) uw.innerText = "Tibbiyot Portali";
-            currentUser = null;
-            closeAllDropdowns();
-            alert("Profildan muvaffaqiyatli chiqdingiz!");
         }
 
         function openAdminLoginModal() {
@@ -727,11 +596,12 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
             const alm = document.getElementById('adminLoginModal');
             if(alm) alm.classList.add('hidden'); 
         }
-        
+
+        // YANGI PAROL: Odilbek1999!
         function verifyAdminPassword(e) {
             e.preventDefault();
             const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === 'admin123') {
+            if (pass === 'Odilbek1999!') {
                 closeAdminLoginModal();
                 document.getElementById('adminPasswordInput').value = '';
                 openAdminPanel();
@@ -743,20 +613,33 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         function openAdminPanel() {
             const container = document.getElementById('pendingListContainer');
             if (pendingSubmissions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha tekshiruvni kutayotgan arizalar yo'q.</p>`;
+                container.innerHTML = `<p class="text-xs text-gray-400 text-center py-6">Hozircha tekshiruvni kutayotgan yangi arizalar yo'q.</p>`;
             } else {
                 container.innerHTML = pendingSubmissions.map((item, index) => `
-                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border flex flex-col justify-between gap-3">
                         <div>
-                            <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-bold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full uppercase">${item.category}</span>
+                                <span class="text-[10px] text-gray-400 font-bold">${item.images ? item.images.length : 0} ta rasm</span>
+                            </div>
                             <h4 class="font-bold text-base text-gray-900 dark:text-white mt-1">${item.name}</h4>
-                            <p class="text-xs text-blue-600 font-medium">${item.specialty} • ${item.region}</p>
+                            <p class="text-xs text-blue-600 font-semibold">${item.specialty} • ${item.region} (${item.exp})</p>
                             <p class="text-xs text-gray-500 mt-1">${item.phone} | ${item.address}</p>
-                            <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 bg-white dark:bg-gray-800 p-2 rounded-xl border">${item.bio || 'Ma\'lumot yo\'q'}</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-300 mt-2 bg-white dark:bg-gray-800 p-2.5 rounded-xl border">${item.bio || 'Biografiya kiritilmagan'}</p>
+                            
+                            ${item.images && item.images.length > 0 ? `
+                                <div class="flex gap-2 mt-2 overflow-x-auto pb-1">
+                                    ${item.images.map(img => `<img src="${img}" class="w-14 h-14 object-cover rounded-xl border">`).join('')}
+                                </div>
+                            ` : ''}
                         </div>
-                        <div class="flex sm:flex-col gap-2 w-full sm:w-auto">
-                            <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow">Maqullash</button>
-                            <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow">Rad etish</button>
+                        <div class="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                            <button onclick="approveSubmission(${index})" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
+                                <i class="fa-solid fa-check mr-1"></i> Saytda e'lon qilish
+                            </button>
+                            <button onclick="rejectSubmission(${index})" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow transition">
+                                <i class="fa-solid fa-trash mr-1"></i> Rad etish
+                            </button>
                         </div>
                     </div>
                 `).join('');
@@ -764,6 +647,7 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
             const apm = document.getElementById('adminPanelModal');
             if(apm) apm.classList.remove('hidden');
         }
+
         function closeAdminPanel() { 
             const apm = document.getElementById('adminPanelModal');
             if(apm) apm.classList.add('hidden'); 
@@ -772,20 +656,89 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         function approveSubmission(index) {
             const item = pendingSubmissions[index];
             if (!sampleData[item.category]) sampleData[item.category] = [];
+            
             sampleData[item.category].unshift(item);
             pendingSubmissions.splice(index, 1);
+            
             openAdminPanel();
             renderGrid();
-            alert("Ariza maqullandi va ilovada e'lon qilindi!");
+            alert("Ariza tasdiqlandi va ShifoTop ilovasida e'lon qilindi!");
         }
 
         function rejectSubmission(index) {
-            const reason = prompt("Rad etish sababini kiriting:", "Ma'lumotlar to'liq emas, iltimos qaytadan to'g'rilang.");
-            if (reason !== null) {
+            if (confirm("Ushbu arizani rad etmoqchimisiz?")) {
                 pendingSubmissions.splice(index, 1);
                 openAdminPanel();
-                alert(`Xabar yuborildi: "${reason}"`);
             }
+        }
+
+        // ==================== RO'YXATDAN O'TISH VA ANKETA ====================
+        function openRoleModalFromMenu() {
+            closeAllDropdowns();
+            const srm = document.getElementById('roleSelectModal');
+            if(srm) srm.classList.remove('hidden');
+        }
+
+        function skipRoleSelection() {
+            const srm = document.getElementById('roleSelectModal');
+            if(srm) srm.classList.add('hidden');
+        }
+
+        function openRegisterForm(categoryKey, roleName) {
+            skipRoleSelection();
+            uploadedImagesBase64 = [];
+            updateImagePreview();
+            
+            document.getElementById('newItemCategory').value = categoryKey;
+            document.getElementById('modalFormTitle').innerText = `${roleName} anketasini to'ldirish`;
+            
+            const aim = document.getElementById('addItemModal');
+            if(aim) aim.classList.remove('hidden');
+        }
+
+        function closeAddItemModal() {
+            const aim = document.getElementById('addItemModal');
+            if(aim) aim.classList.add('hidden');
+        }
+
+        function handleImageUpload(e) {
+            const files = Array.from(e.target.files);
+            if (uploadedImagesBase64.length + files.length > 5) {
+                alert("Maksimal 5 tagacha rasm yuklash mumkin!");
+                return;
+            }
+
+            files.forEach(file => {
+                if (uploadedImagesBase64.length < 5) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        uploadedImagesBase64.push(event.target.result);
+                        updateImagePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updateImagePreview() {
+            const container = document.getElementById('imagePreviewContainer');
+            const countText = document.getElementById('uploadedCountText');
+            if (countText) countText.innerText = `${uploadedImagesBase64.length}/5`;
+            
+            if (!container) return;
+            container.innerHTML = uploadedImagesBase64.map((img, i) => `
+                <div class="relative w-14 h-14 shrink-0 rounded-xl overflow-hidden border border-blue-200">
+                    <img src="${img}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeUploadedImage(${i})" class="absolute top-0 right-0 bg-red-500 text-white w-4 h-4 rounded-bl-lg text-[9px] flex items-center justify-center">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function removeUploadedImage(index) {
+            uploadedImagesBase64.splice(index, 1);
+            updateImagePreview();
         }
 
         function handleAddItemSubmit(e) {
@@ -794,12 +747,16 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
             const name = document.getElementById('newItemName').value;
             const spec = document.getElementById('newItemSpecialty').value;
             const region = document.getElementById('newItemRegion').value;
-            const exp = document.getElementById('newItemExp').value || '10+ yil';
+            const exp = document.getElementById('newItemExp').value || 'Tajribali';
             const phone = document.getElementById('newItemPhone').value;
             const telegram = document.getElementById('newItemTelegram').value || '';
             const instagram = document.getElementById('newItemInstagram').value || '';
             const addr = document.getElementById('newItemAddress').value;
             const bio = document.getElementById('newItemBio').value;
+
+            const finalImages = uploadedImagesBase64.length > 0 
+                ? [...uploadedImagesBase64] 
+                : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"];
 
             pendingSubmissions.push({
                 id: Date.now(),
@@ -810,16 +767,17 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + region)}`,
                 rating: "5.0",
                 bio,
-                img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+                images: finalImages,
                 reviews: []
             });
 
             closeAddItemModal();
             document.getElementById('addItemForm').reset();
-            alert("Ma'lumotlaringiz adminga yuborildi! Admin tasdiqlagach, ilovada ko'rinishni boshlaydi.");
+            uploadedImagesBase64 = [];
+            alert("Arizangiz adminga yuborildi! Admin tasdiqlagach, ilovada e'lon qilinadi.");
         }
 
-        // KARTALARNI CHIQARISH (Karta bosilganda batafsil oyna ochiladi)
+        // ==================== ASOSIY RO'YXAT VA FILTRLASH ====================
         function renderGrid() {
             const container = document.getElementById('contentGrid');
             if(!container) return;
@@ -832,11 +790,13 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 return;
             }
 
-            container.innerHTML = data.map(item => `
+            container.innerHTML = data.map(item => {
+                const mainImg = (item.images && item.images.length > 0) ? item.images[0] : (item.img || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600");
+                return `
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between hover:shadow-xl transition group">
                     <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-gray-100 dark:bg-gray-700">
-                            <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                             ${item.exp ? `<span class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">${item.exp} tajriba</span>` : ''}
                             ${item.rating ? `<span class="absolute top-3 right-3 bg-amber-400 text-gray-900 text-[11px] font-black px-2 py-0.5 rounded-lg shadow flex items-center gap-1"><i class="fa-solid fa-star text-[10px]"></i> ${item.rating}</span>` : ''}
                         </div>
@@ -855,10 +815,9 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
-        // QIDIRUV VA HUDUD FILTRI
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const region = document.getElementById('regionFilter').value;
@@ -877,10 +836,12 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 container.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400">Hech narsa topilmadi</div>`;
                 return;
             }
-            container.innerHTML = filtered.map(item => `
+            container.innerHTML = filtered.map(item => {
+                const mainImg = (item.images && item.images.length > 0) ? item.images[0] : (item.img || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600");
+                return `
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border flex flex-col justify-between">
                     <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
-                        <img src="${item.img}" class="w-full h-48 object-cover rounded-2xl mb-4">
+                        <img src="${mainImg}" class="w-full h-48 object-cover rounded-2xl mb-4">
                         <h3 class="font-bold text-lg text-gray-900 dark:text-white">${item.name}</h3>
                         <p class="text-xs font-semibold text-blue-600 mt-1">${item.specialty}</p>
                         <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>${item.region}, ${item.address}</p>
@@ -890,16 +851,15 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                         <button onclick="openBookingModal('${item.name}')" class="px-3 py-2 primary-bg text-white text-xs font-bold rounded-xl cursor-pointer">Yozilish</button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
-        // ==================== BATAFSIL PROFIL VA 3 TA TAVSIYA ETILADIGAN SHIFOKOR ====================
+        // ==================== BATAFSIL PROFIL VA 3 TA TAVSIYA ====================
         function openDetailModal(categoryKey, itemId) {
             const list = sampleData[categoryKey] || [];
             const item = list.find(x => x.id === itemId);
             if (!item) return;
 
-            // Xuddi shu yo'nalishdagi 3 ta tavsiya etiladigan mutaxassis
             const recommended = list
                 .filter(x => x.id !== item.id && (x.specialty.toLowerCase() === item.specialty.toLowerCase() || categoryKey === 'doctors'))
                 .slice(0, 3);
@@ -908,11 +868,13 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                 { author: "Bemor", text: "Malakali shifokor, konsultatsiyadan juda mamnun qoldik.", rating: 5, date: "Yaqinda" }
             ];
 
+            const allImages = (item.images && item.images.length > 0) ? item.images : (item.img ? [item.img] : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600"]);
+            const mainImg = allImages[0];
+
             const detailContainer = document.getElementById('detailContentContainer');
             detailContainer.innerHTML = `
-                <!-- Rasm, Ism, Mutaxassislik, Staj -->
                 <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center border-b border-gray-100 dark:border-gray-700 pb-5">
-                    <img src="${item.img}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-blue-100 dark:border-gray-700 shrink-0">
+                    <img id="modalMainImage" src="${mainImg}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-blue-100 dark:border-gray-700 shrink-0">
                     <div class="flex-grow">
                         <div class="flex items-center gap-2">
                             <span class="text-[11px] font-bold px-2.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full uppercase">
@@ -931,17 +893,28 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     </div>
                 </div>
 
-                <!-- Shifokor haqida / Biografiya -->
+                <!-- 5 tagacha yuklangan rasmlar galereyasi -->
+                ${allImages.length > 1 ? `
+                    <div class="mt-4">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Rasmlar galereyasi (${allImages.length})</h4>
+                        <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                            ${allImages.map(img => `
+                                <img src="${img}" onclick="document.getElementById('modalMainImage').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-blue-500 cursor-pointer transition shrink-0">
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Shifokor haqida -->
                 <div class="my-4">
-                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Shifokor haqida</h4>
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Ma'lumot</h4>
                     <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-700">
-                        ${item.bio || "Malakali shifokor. Zamonaviy xalqaro standartlar asosida bemorlarni qabul qiladi va davolaydi."}
+                        ${item.bio || "Malakali mutaxassis. Zamonaviy standartlar asosida xizmat ko'rsatadi."}
                     </p>
                 </div>
 
                 <!-- Manzil, Xarita, Telefon va Ijtimoiy tarmoqlar -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-                    <!-- Manzil & Google Maps -->
                     <div class="p-3.5 bg-blue-50/60 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30">
                         <div class="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-2 mb-1">
                             <i class="fa-solid fa-location-dot text-blue-600"></i> Manzil & Lokatsiya:
@@ -952,16 +925,13 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                         </a>
                     </div>
 
-                    <!-- Telefon, Telegram va Instagram -->
                     <div class="p-3.5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-2">
-                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Aloqa va Ijtimoiy tarmoqlar:</div>
-                        
+                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Aloqa va Tarmoqlar:</div>
                         <div class="flex items-center justify-between text-xs">
                             <a href="tel:${item.phone}" class="font-bold text-blue-600 flex items-center gap-1.5">
                                 <i class="fa-solid fa-phone text-emerald-500"></i> ${item.phone}
                             </a>
                         </div>
-
                         <div class="flex gap-2 pt-1">
                             ${item.telegram ? `
                                 <a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
@@ -977,7 +947,7 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     </div>
                 </div>
 
-                <!-- Bemorlar fikrlari / Otzivlar -->
+                <!-- Fikrlar / Otzivlar -->
                 <div class="mb-6">
                     <div class="flex items-center justify-between mb-2">
                         <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
@@ -1000,22 +970,23 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                     </div>
                 </div>
 
-                <!-- Qabulga yozilish asosiy tugmasi -->
                 <button onclick="closeDetailModal(); openBookingModal('${item.name}')" class="w-full primary-bg text-white font-bold py-3.5 rounded-2xl shadow-lg hover:opacity-95 transition mb-6 cursor-pointer">
-                    <i class="fa-solid fa-calendar-check mr-2"></i> Ushbu shifokor qabuliga yozilish
+                    <i class="fa-solid fa-calendar-check mr-2"></i> Qabulga yozilish
                 </button>
 
-                <!-- HUDDI SHU YO'NALISHDAGI 3 TA TAVSIYA ETILADIGAN SHIFOKOR -->
+                <!-- 3 TA TAVSIYA ETILADIGAN MUTAXASSIS -->
                 ${recommended.length > 0 ? `
                     <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
                         <h4 class="text-sm font-extrabold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-thumbs-up text-blue-600"></i> Shu yo'nalishdagi tavsiya etiladigan shifokorlar
+                            <i class="fa-solid fa-thumbs-up text-blue-600"></i> Shu yo'nalishdagi tavsiya etiladigan mutaxassislar
                         </h4>
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                            ${recommended.map(rec => `
+                            ${recommended.map(rec => {
+                                const recImg = (rec.images && rec.images.length > 0) ? rec.images[0] : (rec.img || "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600");
+                                return `
                                 <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-700/30 hover:border-blue-500 hover:shadow-md transition cursor-pointer flex flex-col justify-between">
                                     <div>
-                                        <img src="${rec.img}" class="w-full h-24 object-cover rounded-xl mb-2">
+                                        <img src="${recImg}" class="w-full h-24 object-cover rounded-xl mb-2">
                                         <h5 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">${rec.name}</h5>
                                         <p class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">${rec.specialty}</p>
                                         <p class="text-[10px] text-gray-400 mt-0.5"><i class="fa-solid fa-briefcase"></i> ${rec.exp || 'Tajribali'}</p>
@@ -1025,7 +996,7 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
                                         <span class="text-blue-600 font-bold hover:underline">Ko'rish &rarr;</span>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 ` : ''}
@@ -1040,7 +1011,7 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
             if(dm) dm.classList.add('hidden');
         }
 
-        // ==================== BO'LIMLARNI ALMASHTIRISH ====================
+        // ==================== TAB VA BOSHQALAR ====================
         function switchTab(tab) {
             currentTab = tab;
             const cfg = tabConfigs[tab] || { title: 'Shifokorlar', icon: 'fa-user-doctor' };
@@ -1070,11 +1041,6 @@ Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingi
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function closeAboutModal() { const am = document.getElementById('aboutModal'); if(am) am.classList.add('hidden'); }
         function openAboutModal() { closeAllDropdowns(); const am = document.getElementById('aboutModal'); if(am) am.classList.remove('hidden'); }
-        
-        function closeAddItemModal() { 
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.add('hidden'); 
-        }
         
         function openBookingModal(name) { 
             const bin = document.getElementById('bookingItemName');
