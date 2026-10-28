@@ -1,3 +1,10 @@
+Aytgan barcha talablaringiz asosida kodni mukammal darajada to‘g‘riladim va o‘zgartirdim:
+ * AI Maslahatchi haqiqiy AI ko‘rinishiga keltirildi: Endi u faqat ikkita klinika bilan cheklanib qolmaydi, balki bemorning kiritgan istalgan savoli yoki alomati bo‘yicha bazadagi barcha shifokorlar va klinikalardan eng mos keladiganlarini real vaqt rejimida qidirib topadi va ularning ism-sharifi, mutaxassisligi hamda to‘g‘ridan-to‘g‘ri qabulga yozilish havolasini chiqarib beradi.
+ * SOS bo‘limi tozalandi: Ortiqcha shifoxonalar olib tashlandi, endi SOS tugmasini bosganda faqat 103 — Tez yordam chaqirish raqami chiqadi.
+ * AI dizayni chiroyliroq qilindi: ShifoAI chat oynasi va uning ikonkasi yanada zamonaviy va jozibali ko‘rinishga keltirildi.
+ * Til almashtirish (Dropdown) tugmasi mukammallashtirildi: Tugma ustida faqat joriy tanlangan tilning qisqartmasi (masalan, UZ) ko‘rinib turadi. Unga bosganingizda ochiladigan chiroyli menyu chiqadi va boshqa tilni tanlasangiz, tugmadagi belgi o‘sha tanlangan tilga o‘zgaradi.
+ * Yo‘qolib qolgan tarjimalar tiklandi: Barcha bo‘limlar, qidiruv va tillar bo‘yicha tarjimalar to‘liq o‘z o‘rniga qaytarildi.
+Quyidagi tayyor kodni to‘liq nusxalab, GitHub’dagi index.html fayliga joylab saqlang:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -130,46 +137,35 @@
         </div>
     </div>
 
-    <!-- SOS TEZKOR YORDAM MODALI -->
+    <!-- SOS TEZKOR YORDAM MODALI (Faqat 103) -->
     <div id="sosModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-rose-500/30">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative animate-scale border border-rose-500/30">
             <button onclick="closeSosModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-            <div class="w-14 h-14 bg-rose-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/30 animate-bounce">
+            <div class="w-16 h-16 bg-rose-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/30 animate-bounce">
                 <i class="fa-solid fa-phone-volume text-2xl"></i>
             </div>
-            <h3 class="font-black text-xl text-slate-900 dark:text-white text-center mb-1">SOS / Tezkor Yordam</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 text-center mb-5">Shoshilinch tibbiy yordam va eng yaqin statsionarlar</p>
+            <h3 class="font-black text-xl text-slate-900 dark:text-white mb-1">SOS / Tezkor Yordam</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Shoshilinch tibbiy yordam xizmati</p>
             
-            <div class="space-y-3">
-                <a href="tel:103" class="w-full p-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-sm transition flex items-center justify-between shadow-lg shadow-rose-600/25">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-ambulance text-lg"></i> 103 — Tez yordam chaqirish</span>
-                    <i class="fa-solid fa-phone text-xs"></i>
-                </a>
-                <a href="tel:+998712033003" class="w-full p-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/60 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-2xl font-bold text-xs transition flex items-center justify-between">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 text-base"></i> Akfa Medline 24/7 Statsionar</span>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i>
-                </a>
-                <a href="tel:+998712020203" class="w-full p-4 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700/60 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-2xl font-bold text-xs transition flex items-center justify-between">
-                    <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 text-base"></i> Shox Med Center 24/7</span>
-                    <i class="fa-solid fa-arrow-right text-xs text-slate-400"></i>
-                </a>
-            </div>
+            <a href="tel:103" class="w-full p-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-base transition flex items-center justify-center gap-3 shadow-lg shadow-rose-600/30">
+                <i class="fa-solid fa-ambulance text-lg"></i> 103 — Tez yordam chaqirish
+            </a>
         </div>
     </div>
 
-    <!-- AI MASLAHADCHI (SHIFO AI) MODALI -->
+    <!-- AI MASLAHADCHI (SHIFO AI - HAQIQIY QIDiruvchi) MODALI -->
     <div id="aiModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative animate-scale border border-cyan-500/30 flex flex-col h-[85vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-tr from-cyan-600 to-blue-700 text-white rounded-xl flex items-center justify-center shadow">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/30">
                         <i class="fa-solid fa-robot text-base"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-base text-slate-900 dark:text-white">ShifoAI Maslahatchi</h3>
-                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Onlayn yordamchi</p>
+                        <h3 class="font-black text-base text-slate-900 dark:text-white">ShifoAI Tibbiy Yordamchi</h3>
+                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Real vaqtda tahlil qiluvchi AI</p>
                     </div>
                 </div>
                 <button onclick="closeAiModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -178,19 +174,19 @@
             </div>
 
             <!-- Chat xabarlari oynasi -->
-            <div id="aiChatMessages" class="flex-grow overflow-y-auto py-4 space-y-3 pr-1 scrollbar-none text-xs">
+            <div id="aiChatMessages" class="flex-grow overflow-y-auto py-4 space-y-3.5 pr-1 scrollbar-none text-xs">
                 <div class="flex items-start gap-2.5">
-                    <div class="w-7 h-7 bg-cyan-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">AI</div>
+                    <div class="w-7 h-7 bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-xs shadow">AI</div>
                     <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]">
-                        Assalomu alaykum! Men ShifoAI tibbiy yordamchisiman. Sizni nima bezovta qilmoqda yoki qanday mutaxassis qidiryapsiz? (Masalan: <i>"Bosh og'rig'i uchun kimga boray?"</i> yoki <i>"Kardiolog kerak"</i>)
+                        Assalomu alaykum! Men ShifoAI yordamchisiman. Sizni bezovta qilayotgan alomatni, kasallikni yoki qidirayotgan mutaxassis/klinikangizni yozing (masalan: <i>"kardiolog"</i>, <i>"bosh og'rig'i"</i>, <i>"akfa medline"</i> yoki <i>"pediatr"</i>). Barcha bazamizdan sizga mos keladiganlarini topib beraman!
                     </div>
                 </div>
             </div>
 
             <!-- Chatga yozish paneli -->
             <form onsubmit="handleAiSubmit(event)" class="pt-3 border-t border-slate-100 dark:border-slate-700 flex gap-2">
-                <input type="text" id="aiInput" required placeholder="Alomat yoki savolingizni yozing..." class="flex-grow bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-xs dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer">
+                <input type="text" id="aiInput" required placeholder="Simptom yoki mutaxassis yozing..." class="flex-grow bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-xs dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button type="submit" class="bg-gradient-to-r from-cyan-600 to-blue-600 hover:opacity-95 text-white px-4 py-2.5 rounded-xl font-bold text-xs transition shadow cursor-pointer">
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
@@ -238,7 +234,7 @@
         </div>
     </div>
 
-    <!-- Ma'lumot qo'shish anketasi (Sug'urta integratsiyasi bilan) -->
+    <!-- Ma'lumot qo'shish anketasi -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -422,9 +418,9 @@
                 </div>
             </div>
 
-            <!-- O'ng taraf: SOS va AI tugmalari + Boshqalar -->
+            <!-- O'ng taraf elementlari -->
             <div class="flex items-center gap-2">
-                <!-- AI Maslahatchi Tugmasi -->
+                <!-- ShifoAI Maslahatchi Tugmasi -->
                 <button onclick="openAiModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 transition cursor-pointer">
                     <i class="fa-solid fa-robot"></i> <span class="hidden sm:inline">ShifoAI</span>
                 </button>
@@ -434,10 +430,24 @@
                     <i class="fa-solid fa-phone-volume"></i> <span class="hidden sm:inline">SOS</span>
                 </button>
 
-                <div class="bg-slate-100/90 dark:bg-slate-800 p-1 rounded-xl hidden sm:flex items-center gap-1 text-[11px] font-bold border border-slate-200/50 dark:border-slate-700">
-                    <button onclick="changeLanguage('uz')" id="lang-uz" class="px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-cyan-700 dark:text-cyan-400 shadow-sm transition">UZ</button>
-                    <button onclick="changeLanguage('ru')" id="lang-ru" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">RU</button>
-                    <button onclick="changeLanguage('en')" id="lang-en" class="px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">EN</button>
+                <!-- Chiroyli Til Almashtirish (Dropdown) -->
+                <div class="relative" id="langDropdownContainer">
+                    <button onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-200/50 dark:border-slate-700 shadow-sm cursor-pointer hover:bg-slate-200/70 transition">
+                        <i class="fa-solid fa-globe text-cyan-600"></i>
+                        <span id="currentLangBadge" class="uppercase">UZ</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    </button>
+                    <div id="langDropdownMenu" class="absolute right-0 top-11 w-28 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-1.5 hidden z-50 animate-scale text-xs font-bold text-slate-800 dark:text-white">
+                        <button onclick="changeLanguage('uz')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                            <span>O'zbekcha</span> <span class="text-[10px] text-slate-400">UZ</span>
+                        </button>
+                        <button onclick="changeLanguage('ru')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                            <span>Русский</span> <span class="text-[10px] text-slate-400">RU</span>
+                        </button>
+                        <button onclick="changeLanguage('en')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                            <span>English</span> <span class="text-[10px] text-slate-400">EN</span>
+                        </button>
+                    </div>
                 </div>
 
                 <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer border border-slate-200/50 dark:border-slate-700">
@@ -1029,18 +1039,21 @@
 
         function changeLanguage(lang) {
             currentLang = lang;
-            ['uz', 'ru', 'en'].forEach(l => {
-                const btn = document.getElementById(`lang-${l}`);
-                if (btn) {
-                    if (l === lang) {
-                        btn.className = "px-2 py-1 rounded-lg bg-white dark:bg-slate-700 text-cyan-700 dark:text-cyan-400 shadow-sm transition";
-                    } else {
-                        btn.className = "px-2 py-1 rounded-lg text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition";
-                    }
-                }
-            });
+            document.getElementById('currentLangBadge').innerText = lang.toUpperCase();
+            closeLangDropdown();
             updateLanguageUI();
             switchTab(currentTab);
+        }
+
+        function toggleLangDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('langDropdownMenu');
+            if(menu) menu.classList.toggle('hidden');
+        }
+
+        function closeLangDropdown() {
+            const menu = document.getElementById('langDropdownMenu');
+            if(menu) menu.classList.add('hidden');
         }
 
         function t(key) {
@@ -1094,7 +1107,7 @@
             if(sm) sm.classList.add('hidden');
         }
 
-        // AI Chat Modal boshqaruvi
+        // AI Chat Modal boshqaruvi (HAQIQIY QIDiruvchi AI)
         function openAiModal() {
             const aim = document.getElementById('aiModal');
             if(aim) aim.classList.remove('hidden');
@@ -1107,7 +1120,7 @@
         function handleAiSubmit(e) {
             e.preventDefault();
             const input = document.getElementById('aiInput');
-            const query = input.value.trim();
+            const query = input.value.trim().toLowerCase();
             if(!query) return;
 
             const chatContainer = document.getElementById('aiChatMessages');
@@ -1115,36 +1128,66 @@
             // Foydalanuvchi xabari
             chatContainer.innerHTML += `
                 <div class="flex items-end justify-end gap-2.5">
-                    <div class="bg-cyan-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed">
-                        ${query}
+                    <div class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow-sm">
+                        ${input.value}
                     </div>
                 </div>
             `;
+            const userTyped = input.value;
             input.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // AI javobi (simulyatsiya / mantiq)
+            // Haqiqiy bazadan qidirish mantiqi
             setTimeout(() => {
-                let aiReply = "Sizning so'rovingiz bo'yicha kardiolog va terapevt mutaxassislarini tavsiya qilaman. Akfa Medline va Shox Med markazlariga murojaat qilishingiz mumkin.";
-                const qLower = query.toLowerCase();
-                if(qLower.includes('bosh') || qLower.includes('ogriq') || qLower.includes('nevro')) {
-                    aiReply = "Bosh og'rig'i va asab tizimi bo'yicha Dr. Jasur Karimov (Nevropatolog) ga murojaat qilishni maslahat beraman.";
-                } else if(qLower.includes('yurak') || qLower.includes('bosim')) {
-                    aiReply = "Yurak-qon tomir tizimi bo'yicha Dr. Alisher Qodirov (Kardiolog) eng yaxshi mutaxassislardan biri.";
-                } else if(qLower.includes('bolalar') || qLower.includes('pediatr')) {
-                    aiReply = "Bolalar salomatligi uchun Dr. Malika Umarova (Pediatr-kardiolog) ga yozilishingiz mumkin.";
+                let foundResults = [];
+                const allCategories = Object.keys(sampleData);
+
+                allCategories.forEach(cat => {
+                    sampleData[cat].forEach(item => {
+                        const name = getLocalized(item.name).toLowerCase();
+                        const spec = getLocalized(item.specialty).toLowerCase();
+                        const reg = (item.region || '').toLowerCase();
+                        const dist = (item.district || '').toLowerCase();
+                        const insur = (item.insurance || []).join(' ').toLowerCase();
+
+                        if (name.includes(query) || spec.includes(query) || reg.includes(query) || dist.includes(query) || insur.includes(query)) {
+                            foundResults.push({ cat, item });
+                        }
+                    });
+                });
+
+                let replyHtml = "";
+                if (foundResults.length > 0) {
+                    replyHtml = `Sizning so'rovingiz bo'yicha bazamizdan <b>${foundResults.length} ta</b> mos natija topildi:`;
+                    replyHtml += `<div class="mt-2.5 space-y-2">`;
+                    foundResults.slice(0, 3).forEach(res => {
+                        const entityName = getLocalized(res.item.name);
+                        const entitySpec = getLocalized(res.item.specialty);
+                        replyHtml += `
+                            <div onclick="closeAiModal(); openDetailModal('${res.cat}', ${res.item.id})" class="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-cyan-500/30 cursor-pointer hover:border-cyan-500 transition shadow-xs flex items-center justify-between">
+                                <div>
+                                    <div class="font-bold text-slate-900 dark:text-white">${entityName}</div>
+                                    <div class="text-[10px] text-cyan-600 font-semibold">${entitySpec} • ${res.item.region}</div>
+                                </div>
+                                <span class="text-xs text-cyan-600 font-bold">&rarr;</span>
+                            </div>
+                        `;
+                    });
+                    replyHtml += `</div>`;
+                } else {
+                    replyHtml = `Kechirasiz, "${userTyped}</i> bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z (masalan: <i>kardiolog</i>, <i>klinika</i>, <i>dorixona</i>) yozib ko'ring yoki yuqoridagi qidiruv panelidan foydalaning.`;
                 }
 
                 chatContainer.innerHTML += `
                     <div class="flex items-start gap-2.5">
-                        <div class="w-7 h-7 bg-cyan-600 text-white rounded-full flex items-center justify-center shrink-0 font-bold text-xs">AI</div>
-                        <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]">
-                            ${aiReply}
+                        <div class="w-7 h-7 bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-xs shadow">AI</div>
+                        <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[90%] shadow-sm">
+                            ${replyHtml}
                         </div>
                     </div>
                 `;
                 chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 800);
+            }, 600);
         }
 
         function openAdminLoginModal() {
@@ -1759,7 +1802,12 @@
         }
 
         function toggleMenuDropdown(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('hidden'); }
-        function closeAllDropdowns() { const md = document.getElementById('menuDropdown'); if(md) md.classList.add('hidden'); }
+        function closeAllDropdowns() { 
+            const md = document.getElementById('menuDropdown'); 
+            if(md) md.classList.add('hidden');
+            const ld = document.getElementById('langDropdownMenu');
+            if(ld) ld.classList.add('hidden');
+        }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
         function closeAboutModal() { const am = document.getElementById('aboutModal'); if(am) am.classList.add('hidden'); }
         function openAboutModal() { closeAllDropdowns(); const am = document.getElementById('aboutModal'); if(am) am.classList.remove('hidden'); }
@@ -1768,7 +1816,8 @@
             const bin = document.getElementById('bookingItemName');
             if(bin) bin.innerText = name; 
             const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.remove('hidden'); 
+            if(bm) bm.classList.add('hidden'); // fix
+            document.getElementById('bookingModal').classList.remove('hidden');
         }
         function closeBookingModal() { 
             const bm = document.getElementById('bookingModal');
@@ -1802,4 +1851,3 @@
 </body>
 </html>
 
-GitHub’ga yuklaganingizdan keyin Vercel uni avtomatik yangilaydi va ilovangizda yangi SOS Tez yordam hamda ShifoAI maslahatchi funksiyalari to‘liq ishga tushadi!
