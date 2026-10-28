@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShifoTop — Milliy Tibbiyot Platformasi</title>
-    <!-- ShifoTop Yurakcha Logotipi (Favicon) -->
+    <!-- ShifoTop Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3.5 7.5 3.5c1.722 0 3.3.784 4.5 2.052 1.2-1.268 2.778-2.052 4.5-2.052 2.786 0 5.25 1.822 5.25 4.75 0 3.924-2.438 7.11-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z'/></svg>">
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,7 +126,7 @@
         </div>
     </div>
 
-    <!-- Ma'lumot qo'shish anketasi (5 tagacha rasm bilan) -->
+    <!-- Ma'lumot qo'shish anketasi (Tumanlar va 5 tagacha rasm bilan) -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -148,26 +148,32 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormRegion">Viloyat / Hudud</label>
-                        <select id="newItemRegion" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white cursor-pointer"></select>
+                        <select id="newItemRegion" onchange="updateFormDistricts()" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white cursor-pointer"></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Tuman / Shaxar</label>
+                        <select id="newItemDistrict" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white cursor-pointer"></select>
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormExp">Ish staji / Vaqti</label>
                         <input type="text" id="newItemExp" placeholder="10 yil / 24/7" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormPhone">Telefon raqam</label>
                         <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram / Instagram</label>
+                        <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram / Instagram</label>
-                    <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormAddress">Aniq manzil, tuman va mo'ljal</label>
-                    <input type="text" id="newItemAddress" required placeholder="Tuman, ko'cha, bino raqami" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormAddress">Aniq manzil va mo'ljal</label>
+                    <input type="text" id="newItemAddress" required placeholder="Ko'cha, bino raqami" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormBio">Batafsil ma'lumot</label>
@@ -214,7 +220,7 @@
     <!-- ADMIN MODERATSIYA PANELI -->
     <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
@@ -244,7 +250,7 @@
                     <i class="fa-solid fa-heart-pulse text-lg"></i>
                 </div>
 
-                <!-- Menyu ochilishi (Bo'limlar shu yerdan tanlanadi) -->
+                <!-- Menyu ochilishi (Bo'limlar) -->
                 <div onclick="toggleMenuDropdown(event)" class="cursor-pointer select-none">
                     <div class="flex items-center gap-1">
                         <span class="text-2xl font-black tracking-tight flex items-center">
@@ -256,7 +262,7 @@
                     <span class="block text-[11px] text-slate-400 font-medium tracking-wide" id="lblAppSubtitle">Milliy Tibbiyot Platformasi</span>
                 </div>
 
-                <!-- Dropdown Menu (Barcha bo'limlar shu yerda) -->
+                <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 top-14 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 hidden z-50 animate-scale text-slate-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700 text-[11px] font-bold text-slate-400 uppercase tracking-wider" id="lblSectionsMenu">
                         Bo'limlar
@@ -320,7 +326,7 @@
     <!-- Asosiy Qism -->
     <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         
-        <!-- Premium Hero Qidiruv Bloki (Tumanlar va keraksiz tagliklarsiz) -->
+        <!-- Premium Hero Qidiruv Bloki -->
         <div class="relative overflow-hidden premium-hero-bg rounded-3xl p-6 sm:p-10 text-white shadow-xl shadow-slate-900/15 border border-cyan-800/40">
             <div class="absolute -right-12 -bottom-12 opacity-10 text-[230px] pointer-events-none text-cyan-200">
                 <i class="fa-solid fa-heart-pulse"></i>
@@ -334,18 +340,24 @@
                     O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping
                 </h1>
                 <p id="heroSubtitle" class="text-cyan-100/80 text-xs sm:text-sm font-medium mb-6">
-                    Barcha hududlar bo'yicha saralangan mutaxassislar bitta platformada.
+                    Barcha hududlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.
                 </p>
             </div>
             
-            <!-- Ixcham Qidiruv va Hudud Paneli -->
-            <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-2 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-2 relative z-10 border border-slate-100 dark:border-slate-700">
+            <!-- Qidiruv va Avtomatik Tumanlar Chiqadigan Panel -->
+            <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-2.5 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-2 relative z-10 border border-slate-100 dark:border-slate-700">
                 <div class="flex items-center px-4 flex-grow bg-slate-50 dark:bg-slate-700/50 rounded-xl py-3 sm:py-0">
                     <i class="fa-solid fa-search text-slate-400 mr-3 text-sm"></i>
                     <input type="text" id="searchInput" oninput="filterData()" placeholder="Qidirish (ism, tuman, kasallik)..." class="w-full bg-transparent border-0 focus:outline-none text-slate-800 dark:text-slate-100 text-xs sm:text-sm placeholder-slate-400 font-medium">
                 </div>
-                <div>
-                    <select id="regionFilter" onchange="filterData()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-4 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
+                <div class="flex flex-col sm:flex-row gap-2">
+                    <!-- 1. Viloyat Tanlash -->
+                    <select id="regionFilter" onchange="onRegionSelected()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
+                    </select>
+
+                    <!-- 2. Viloyat bosilganda avtomat ochiladigan Tumanlar -->
+                    <select id="districtFilter" onchange="filterData()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer hidden">
+                        <option value="">Barcha tumanlar</option>
                     </select>
                 </div>
             </div>
@@ -432,32 +444,33 @@
         let secretClickTimer = null;
         let reviewStarRating = 5;
 
-        // O'zbekistonning barcha 14 ta hududi
-        const regionsData = [
-            "Toshkent sh.",
-            "Toshkent vil.",
-            "Samarqand",
-            "Buxoro",
-            "Farg'ona",
-            "Andijon",
-            "Namangan",
-            "Qashqadaryo",
-            "Surxondaryo",
-            "Xorazm",
-            "Navoiy",
-            "Jizzax",
-            "Sirdaryo",
-            "Qoraqalpog'iston",
-            "Xorij"
-        ];
+        // O'zbekistonning barcha viloyatlari va ularning tumanlari
+        const regionsHierarchy = {
+            "Toshkent sh.": ["Shayxontohur", "Yunusobod", "Mirzo Ulug'bek", "Chilonzor", "Yakkasaroy", "Mirobod", "Yashnobod", "Olmazor", "Uchtepa", "Sergeli", "Bektemir", "Yangihayot"],
+            "Toshkent vil.": ["Nurafshon", "Chirchiq", "Olmaliq", "Angren", "Yangiyo'l", "Bekobod", "Bo'stonliq", "Qibray", "Zangiota", "Toshkent tumani"],
+            "Samarqand": ["Samarqand sh.", "Urgut", "Pastdarg'om", "Ishtixon", "Bulung'ur", "Jomboy", "Kattaqo'rg'on", "Payariq", "Toyloq"],
+            "Buxoro": ["Buxoro sh.", "G'ijduvon", "Kogon", "Jondor", "Shofirkon", "Vobkent", "Qorako'l", "Romitan"],
+            "Farg'ona": ["Farg'ona sh.", "Marg'ilon", "Qo'qon", "Quva", "Oltiariq", "Rishton", "Bag'dod", "Uchko'prik", "Beshariq"],
+            "Andijon": ["Andijon sh.", "Asaka", "Shahrixon", "Xo'jaobod", "Baliqchi", "Marhamat", "Buloqboshi", "Paxtaobod"],
+            "Namangan": ["Namangan sh.", "Chust", "Pop", "Kosonsoy", "Uychi", "To'raqo'rg'on", "Uchqo'rg'on", "Chortoq"],
+            "Qashqadaryo": ["Qarshi sh.", "Shahrisabz", "Kitob", "Koson", "Nishon", "Muborak", "Yakkabog'", "G'uzor", "Chiroqchi"],
+            "Surxondaryo": ["Termiz sh.", "Denov", "Sherobod", "Sho'rchi", "Boysun", "Jarqo'rg'on", "Qumqo'rg'on", "Sariosiyo"],
+            "Xorazm": ["Urganch sh.", "Xiva", "Xonqa", "Shovot", "Gurlan", "Bog'ot", "Qo'shko'pir", "Yangiariq"],
+            "Navoiy": ["Navoiy sh.", "Zarafshon", "Karmana", "Qiziltepa", "Xatirchi", "Nurota", "Uchquduq"],
+            "Jizzax": ["Jizzax sh.", "G'allaorol", "Zomin", "Sharof Rashidov", "Do'stlik", "Zarbdor", "Paxtakor"],
+            "Sirdaryo": ["Guliston sh.", "Shirin", "Yangiyer", "Boyovut", "Sayxunobod", "Sardoba", "Oqoltin"],
+            "Qoraqalpog'iston": ["Nukus sh.", "Beruniy", "To'rtko'l", "Qo'ng'irot", "Amudaryo", "Chimboy", "Xo'jayli", "Mo'ynoq"],
+            "Xorij": ["Turkiya", "Germaniya", "Janubiy Koreya", "Hindiston", "Tailand"]
+        };
 
         const i18n = {
             uz: {
                 appSubtitle: "Milliy Tibbiyot Platformasi",
                 heroTitle: "O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping",
-                heroSubtitle: "Barcha hududlar bo'yicha saralangan mutaxassislar bitta platformada.",
+                heroSubtitle: "Barcha hududlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.",
                 searchPlaceholder: "Qidirish (ism, tuman, kasallik)...",
                 allRegions: "Barcha hududlar",
+                allDistricts: "Barcha tumanlar",
                 results: "ta natija",
                 noResults: "Hech qanday ma'lumot topilmadi",
                 bookBtn: "Qabulga yozilish",
@@ -488,6 +501,7 @@
                 heroSubtitle: "Специалисты и клиники по всем регионам на единой платформе.",
                 searchPlaceholder: "Поиск (имя, район, заболевание)...",
                 allRegions: "Все регионы",
+                allDistricts: "Все районы",
                 results: "результатов",
                 noResults: "Ничего не найдено",
                 bookBtn: "Записаться",
@@ -518,6 +532,7 @@
                 heroSubtitle: "Verified doctors and medical centers across all regions on one platform.",
                 searchPlaceholder: "Search (name, district, illness)...",
                 allRegions: "All regions",
+                allDistricts: "All districts",
                 results: "results",
                 noResults: "No results found",
                 bookBtn: "Book appointment",
@@ -552,6 +567,7 @@
             abroad_treatment: { icon: 'fa-globe' }
         };
 
+        // Barcha 5 ta bo'lim uchun to'liq bazalar (Har birida 5 tagacha rasm va tavsiyalar)
         const sampleData = {
             doctors: [
                 {
@@ -559,7 +575,7 @@
                     name: { uz: "Dr. Alisher Qodirov", ru: "Др. Алишер Кадыров", en: "Dr. Alisher Kadirov" },
                     specialty: { uz: "Kardiolog-Aritmolog", ru: "Кардиолог-Аритмолог", en: "Cardiologist" },
                     region: "Toshkent sh.",
-                    district: "Shayxontohur tumani",
+                    district: "Shayxontohur",
                     exp: { uz: "15 yil", ru: "15 лет", en: "15 years" },
                     phone: "+998 90 123 45 67",
                     address: { uz: "Navoiy ko'chasi, 21-uy", ru: "ул. Навои, 21", en: "Navoi st, 21" },
@@ -586,7 +602,7 @@
                     name: { uz: "Dr. Malika Umarova", ru: "Др. Малика Умарова", en: "Dr. Malika Umarova" },
                     specialty: { uz: "Pediatr & Bolalar kardiologi", ru: "Педиатр и детский кардиолог", en: "Pediatric Cardiologist" },
                     region: "Toshkent sh.",
-                    district: "Yunusobod tumani",
+                    district: "Yunusobod",
                     exp: { uz: "11 yil", ru: "11 лет", en: "11 years" },
                     phone: "+998 93 456 78 90",
                     address: { uz: "Amir Temur shox ko'chasi, 12", ru: "пр. Амира Темура, 12", en: "Amir Temur ave, 12" },
@@ -595,7 +611,7 @@
                     instagram: "dr_malika_cardio",
                     rating: 4.8,
                     bio: {
-                        uz: "Bolalar salomatligi, EKG va ExoKG bo'yicha yetakchi mutaxassis.",
+                        uz: "Bolalar salomatligi, EKG va ExoKG bo'yicha yetakchi mutaxassis. Xalqaro anjumanlar ma'ruzachisi.",
                         ru: "Ведущий специалист по детской кардиологии, ЭКГ и ЭхоКГ.",
                         en: "Leading expert in pediatric cardiology, ECG, and echocardiography."
                     },
@@ -610,7 +626,7 @@
                     name: { uz: "Dr. Jasur Karimov", ru: "Др. Жасур Каримов", en: "Dr. Jasur Karimov" },
                     specialty: { uz: "Nevropatolog-Vertebrolog", ru: "Невропатолог-Вертебролог", en: "Neurologist" },
                     region: "Toshkent sh.",
-                    district: "Mirzo Ulug'bek tumani",
+                    district: "Mirzo Ulug'bek",
                     exp: { uz: "9 yil", ru: "9 лет", en: "9 years" },
                     phone: "+998 97 765 43 21",
                     address: { uz: "Mustaqillik shox ko'chasi, 88", ru: "пр. Мустакиллик, 88", en: "Mustaqillik ave, 88" },
@@ -630,7 +646,7 @@
                     name: { uz: "Dr. Nodir Zokirov", ru: "Др. Нодир Закиров", en: "Dr. Nodir Zokirov" },
                     specialty: { uz: "Travmatolog-Ortoped", ru: "Травматолог-Ортопед", en: "Orthopedic Surgeon" },
                     region: "Samarqand",
-                    district: "Samarqand shahar",
+                    district: "Samarqand sh.",
                     exp: { uz: "14 yil", ru: "14 лет", en: "14 years" },
                     phone: "+998 91 333 22 11",
                     address: { uz: "Registon ko'chasi, 15", ru: "ул. Регистан, 15", en: "Registan st, 15" },
@@ -644,6 +660,26 @@
                         "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"
                     ],
                     reviews: []
+                },
+                {
+                    id: 5,
+                    name: { uz: "Dr. Shahnoza Rahimova", ru: "Др. Шахноза Рахимова", en: "Dr. Shahnoza Rahimova" },
+                    specialty: { uz: "Endokrinolog", ru: "Эндокринолог", en: "Endocrinologist" },
+                    region: "Buxoro",
+                    district: "Buxoro sh.",
+                    exp: { uz: "12 yil", ru: "12 лет", en: "12 years" },
+                    phone: "+998 90 444 55 66",
+                    address: { uz: "Bahouddin Naqshband ko'chasi, 40", ru: "ул. Бахоуддина Накшбанда, 40", en: "B.Naqshband st, 40" },
+                    mapUrl: "https://maps.google.com/?q=Bukhara",
+                    telegram: "dr_shahnoza_endo",
+                    instagram: "shahnoza_endo_dr",
+                    rating: 4.8,
+                    bio: { uz: "Qalqonsimon bez kasalliklari va qandli diabetni zamonaviy davolash.", ru: "Лечение заболеваний щитовидной железы и сахарного диабета.", en: "Modern management of thyroid diseases and diabetes." },
+                    images: [
+                        "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=700",
+                        "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=700"
+                    ],
+                    reviews: []
                 }
             ],
             clinics: [
@@ -652,7 +688,7 @@
                     name: { uz: "Akfa Medline", ru: "Акфа Медлайн", en: "Akfa Medline" },
                     specialty: { uz: "Ko'p tarmoqli tibbiyot markazi", ru: "Многопрофильный медицинский центр", en: "Multidisciplinary Medical Center" },
                     region: "Toshkent sh.",
-                    district: "Olmazor tumani",
+                    district: "Olmazor",
                     exp: { uz: "Statsionar 24/7", ru: "Стационар 24/7", en: "Inpatient 24/7" },
                     phone: "+998 71 203 30 03",
                     address: { uz: "Kichik halqa yo'li, 5A", ru: "Малая кольцевая, 5А", en: "Little Ring Road, 5A" },
@@ -663,16 +699,19 @@
                     bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
                     images: [
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
+                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
+                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700"
                     ],
-                    reviews: []
+                    reviews: [
+                        { author: "Bobur", text: "Xizmat ko'rsatish Yevropa standartlarida, sharoitlar a'lo.", rating: 5, date: "1 hafta oldin" }
+                    ]
                 },
                 {
                     id: 102,
                     name: { uz: "Shox Med Center", ru: "Шох Мед Центр", en: "Shox Med Center" },
                     specialty: { uz: "Diagnostika va jarrohlik statsionari", ru: "Диагностика и хирургический стационар", en: "Diagnostic & Surgical Inpatient" },
                     region: "Toshkent sh.",
-                    district: "Yakkasaroy tumani",
+                    district: "Yakkasaroy",
                     exp: { uz: "24/7 Statsionar", ru: "24/7 Стационар", en: "24/7 Inpatient" },
                     phone: "+998 71 202 02 03",
                     address: { uz: "Shota Rustaveli ko'chasi, 32", ru: "ул. Шота Руставели, 32", en: "Shota Rustaveli st, 32" },
@@ -686,6 +725,46 @@
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700"
                     ],
                     reviews: []
+                },
+                {
+                    id: 103,
+                    name: { uz: "Era Med Klinika", ru: "Эра Мед Клиника", en: "Era Med Clinic" },
+                    specialty: { uz: "Plastik jarrohlik va LOR markazi", ru: "Пластическая хирургия и ЛОР-центр", en: "Plastic Surgery & ENT Center" },
+                    region: "Toshkent sh.",
+                    district: "Shayxontohur",
+                    exp: { uz: "12 yil tajriba", ru: "12 лет опыта", en: "12 years experience" },
+                    phone: "+998 71 200 11 22",
+                    address: { uz: "Qoratosh ko'chasi, 2A", ru: "ул. Караташ, 2А", en: "Karatash st, 2A" },
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Karatash",
+                    telegram: "eramed_clinic",
+                    instagram: "eramed_uz",
+                    rating: 4.7,
+                    bio: { uz: "Zamonaviy lazer jarrohligi va yuqori darajadagi LOR muolajalari.", ru: "Современная лазерная хирургия и передовой ЛОР-центр.", en: "Modern laser surgery and advanced ENT center." },
+                    images: [
+                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700",
+                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700"
+                    ],
+                    reviews: []
+                },
+                {
+                    id: 104,
+                    name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
+                    specialty: { uz: "Kardiologiya va Nevrologiya", ru: "Кардиология и Неврология", en: "Cardiology & Neurology" },
+                    region: "Samarqand",
+                    district: "Samarqand sh.",
+                    exp: { uz: "24/7 Xizmat", ru: "24/7 Сервис", en: "24/7 Service" },
+                    phone: "+998 66 230 40 50",
+                    address: { uz: "Beruniy ko'chasi, 4", ru: "ул. Беруни, 4", en: "Beruni st, 4" },
+                    mapUrl: "https://maps.google.com/?q=Samarkand",
+                    telegram: "citymed_sam",
+                    instagram: "citymed_samarkand",
+                    rating: 4.9,
+                    bio: { uz: "Samarqanddagi yetakchi xususiy tibbiyot markazi.", ru: "Ведущий частный медицинский центр в Самарканде.", en: "Leading private medical clinic in Samarkand." },
+                    images: [
+                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
+                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
+                    ],
+                    reviews: []
                 }
             ],
             pharmacies: [
@@ -694,7 +773,7 @@
                     name: { uz: "OxyMed Markaziy Dorixona", ru: "ОксиМед Центральная Аптека", en: "OxyMed Central Pharmacy" },
                     specialty: { uz: "Dori vositalari & Yetkazib berish", ru: "Лекарства и доставка", en: "Medicines & Delivery" },
                     region: "Toshkent sh.",
-                    district: "Mirobod tumani",
+                    district: "Mirobod",
                     exp: { uz: "24/7 ochiq", ru: "Круглосуточно 24/7", en: "Open 24/7" },
                     phone: "+998 71 200 03 03",
                     address: { uz: "Oybek ko'chasi, 28", ru: "ул. Ойбека, 28", en: "Oybek st, 28" },
@@ -703,6 +782,48 @@
                     instagram: "oxymed.uz",
                     rating: 4.8,
                     bio: { uz: "10 000 dan ortiq sertifikatlangan dori-darmonlar va ekspress yetkazib berish.", ru: "Более 10 000 сертифицированных лекарств и экспресс-доставка.", en: "Over 10,000 certified medicines and express delivery." },
+                    images: [
+                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700",
+                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
+                    ],
+                    reviews: [
+                        { author: "Dilshod", text: "Barcha kamyob dorilar shu yerdan topiladi.", rating: 5, date: "2 hafta oldin" }
+                    ]
+                },
+                {
+                    id: 202,
+                    name: { uz: "Grand Pharm Dorixona", ru: "Гранд Фарм Аптека", en: "Grand Pharm Pharmacy" },
+                    specialty: { uz: "Sertifikatlangan dorilar & Optika", ru: "Сертифицированные лекарства и оптика", en: "Certified Medicines & Optics" },
+                    region: "Toshkent sh.",
+                    district: "Chilonzor",
+                    exp: { uz: "24/7 Ochiq", ru: "24/7 Открыто", en: "Open 24/7" },
+                    phone: "+998 71 202 99 99",
+                    address: { uz: "Bunyodkor shox ko'chasi, 4", ru: "пр. Бунёдкор, 4", en: "Bunyodkor ave, 4" },
+                    mapUrl: "https://maps.google.com/?q=Chilanzar+Tashkent",
+                    telegram: "grandpharm_uz",
+                    instagram: "grandpharm.uz",
+                    rating: 4.7,
+                    bio: { uz: "Sifatli farmatsevtika mahsulotlari va malakali provizorlar.", ru: "Качественные фармацевтические товары и опытные провизоры.", en: "Quality pharmaceuticals and expert pharmacists." },
+                    images: [
+                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700",
+                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700"
+                    ],
+                    reviews: []
+                },
+                {
+                    id: 203,
+                    name: { uz: "Dori-Darmon Samarqand", ru: "Дори-Дармон Самарканд", en: "Dori-Darmon Samarkand" },
+                    specialty: { uz: "Ijtimoiy dorixona", ru: "Социальная аптека", en: "Social Pharmacy" },
+                    region: "Samarqand",
+                    district: "Samarqand sh.",
+                    exp: { uz: "Har kuni 08:00 - 23:00", ru: "Ежедневно 08:00 - 23:00", en: "Daily 08:00 - 23:00" },
+                    phone: "+998 66 233 11 22",
+                    address: { uz: "Mirzo Ulug'bek ko'chasi, 18", ru: "ул. Мирзо Улугбека, 18", en: "Mirzo Ulugbek st, 18" },
+                    mapUrl: "https://maps.google.com/?q=Samarkand",
+                    telegram: "doridarmon_sam",
+                    instagram: "doridarmon_uz",
+                    rating: 4.6,
+                    bio: { uz: "Hamyonbop narxlardagi barcha turdagi dori vositalari.", ru: "Доступные цены на широкий ассортимент медикаментов.", en: "Affordable prices on a wide range of medications." },
                     images: [
                         "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700",
                         "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
@@ -716,7 +837,7 @@
                     name: { uz: "MedTexnika Ortopediya", ru: "МедТехника Ортопедия", en: "MedTechnics Orthopedics" },
                     specialty: { uz: "Tibbiy uskunalar & Reabilitatsiya", ru: "Медоборудование и реабилитация", en: "Medical Equipment & Rehab" },
                     region: "Toshkent sh.",
-                    district: "Chilonzor tumani",
+                    district: "Chilonzor",
                     exp: { uz: "Rasmiy kafolat", ru: "Официальная гарантия", en: "Official warranty" },
                     phone: "+998 90 987 65 43",
                     address: { uz: "Bunyodkor ko'chasi, 15", ru: "ул. Бунёдкор, 15", en: "Bunyodkor st, 15" },
@@ -729,6 +850,28 @@
                         "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=700",
                         "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=700"
                     ],
+                    reviews: [
+                        { author: "Mansur", text: "Aravacha va tonometr oldik, juda sifatli ekan.", rating: 5, date: "4 kun oldin" }
+                    ]
+                },
+                {
+                    id: 302,
+                    name: { uz: "BioMed Uskunalar", ru: "БиоМед Оборудование", en: "BioMed Equipment" },
+                    specialty: { uz: "Klinikalar uchun uskunalar", ru: "Оборудование для клиник", en: "Clinical Equipment" },
+                    region: "Toshkent sh.",
+                    district: "Mirobod",
+                    exp: { uz: "Servis xizmati bilan", ru: "С сервисной гарантией", en: "With full service" },
+                    phone: "+998 71 233 44 55",
+                    address: { uz: "Nukus ko'chasi, 12", ru: "ул. Нукусская, 12", en: "Nukus st, 12" },
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Nukus",
+                    telegram: "biomed_uz",
+                    instagram: "biomed_equipment",
+                    rating: 4.9,
+                    bio: { uz: "Klinika va laboratoriyalar uchun professional uskunalar.", ru: "Профессиональное оборудование для клиник и лабораторий.", en: "Professional equipment for hospitals and labs." },
+                    images: [
+                        "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=700",
+                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=700"
+                    ],
                     reviews: []
                 }
             ],
@@ -738,7 +881,7 @@
                     name: { uz: "Acıbadem Healthcare (Turkiya)", ru: "Аджибадем (Турция)", en: "Acıbadem Healthcare (Turkey)" },
                     specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Трансплантация", en: "Oncology, Neurosurgery & Transplantation" },
                     region: "Xorij",
-                    district: "Turkiya (Istanbul)",
+                    district: "Turkiya",
                     exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
                     phone: "+998 95 144 54 44",
                     address: { uz: "Istanbul (Toshkent vakolatxonasi: Afrosiyob 12)", ru: "Стамбул (Офис в Ташкенте: Афросиаб 12)", en: "Istanbul (Tashkent office: Afrosiyob 12)" },
@@ -750,6 +893,28 @@
                     images: [
                         "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=700",
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
+                    ],
+                    reviews: [
+                        { author: "Farrux", text: "Operatsiya a'lo o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
+                    ]
+                },
+                {
+                    id: 402,
+                    name: { uz: "Severance Hospital (Janubiy Koreya)", ru: "Северанс Госпиталь (Южная Корея)", en: "Severance Hospital (South Korea)" },
+                    specialty: { uz: "Robotik jarrohlik va Kardiologiya", ru: "Роботизированная хирургия и Кардиология", en: "Robotic Surgery & Cardiology" },
+                    region: "Xorij",
+                    district: "Janubiy Koreya",
+                    exp: { uz: "Dunyo Top-50", ru: "Мировой Топ-50", en: "World Top-50" },
+                    phone: "+998 71 205 55 66",
+                    address: { uz: "Seul (Toshkent vakili)", ru: "Сеул (Представитель в Ташкенте)", en: "Seoul (Tashkent representative)" },
+                    mapUrl: "https://maps.google.com/?q=Severance+Hospital+Seoul",
+                    telegram: "severance_korea_uz",
+                    instagram: "severance_uz",
+                    rating: 5.0,
+                    bio: { uz: "Janubiy Koreyaning eng nufuzli universitet shifoxonasi.", ru: "Ведущий университетский госпиталь Южной Кореи.", en: "Leading university hospital in South Korea." },
+                    images: [
+                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700",
+                        "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=700"
                     ],
                     reviews: []
                 }
@@ -775,13 +940,45 @@
             let optionsHtml = `<option value="">${t('allRegions')}</option>`;
             let formOptionsHtml = '';
             
-            regionsData.forEach(reg => {
+            Object.keys(regionsHierarchy).forEach(reg => {
                 optionsHtml += `<option value="${reg}">${reg}</option>`;
                 formOptionsHtml += `<option value="${reg}">${reg}</option>`;
             });
 
             if (regionSelect) regionSelect.innerHTML = optionsHtml;
-            if (formRegionSelect) formRegionSelect.innerHTML = formOptionsHtml;
+            if (formRegionSelect) {
+                formRegionSelect.innerHTML = formOptionsHtml;
+                updateFormDistricts();
+            }
+        }
+
+        // Viloyat tanlanganda avtomat tumanlarni chiqarish
+        function onRegionSelected() {
+            const reg = document.getElementById('regionFilter').value;
+            const distSelect = document.getElementById('districtFilter');
+            
+            if (!reg || !regionsHierarchy[reg] || regionsHierarchy[reg].length === 0) {
+                distSelect.classList.add('hidden');
+                distSelect.innerHTML = `<option value="">${t('allDistricts')}</option>`;
+            } else {
+                distSelect.classList.remove('hidden');
+                let html = `<option value="">${t('allDistricts')}</option>`;
+                regionsHierarchy[reg].forEach(d => {
+                    html += `<option value="${d}">${d}</option>`;
+                });
+                distSelect.innerHTML = html;
+            }
+            filterData();
+        }
+
+        function updateFormDistricts() {
+            const reg = document.getElementById('newItemRegion').value;
+            const distSelect = document.getElementById('newItemDistrict');
+            if (!distSelect) return;
+
+            if (regionsHierarchy[reg]) {
+                distSelect.innerHTML = regionsHierarchy[reg].map(d => `<option value="${d}">${d}</option>`).join('');
+            }
         }
 
         function changeLanguage(lang) {
@@ -925,7 +1122,7 @@
                     <div>
                         <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">${getLocalized(item.name)}</h3>
                         <p class="text-xs font-bold text-cyan-600 mt-0.5">${getLocalized(item.specialty)}</p>
-                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-cyan-600"></i> ${item.region} • <b>${getLocalized(item.exp)}</b></p>
+                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-cyan-600"></i> ${item.region}, ${item.district || ''} • <b>${getLocalized(item.exp)}</b></p>
                     </div>
                 </div>
 
@@ -940,8 +1137,8 @@
 
                 <div class="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-600 mb-5">
                     <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-cyan-600 font-bold ml-1">${item.phone}</a></div>
-                    <div><b>Hudud:</b> <span class="ml-1">${item.region}</span></div>
-                    <div><b>Manzil va mo'ljal:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
+                    <div><b>Hudud va tuman:</b> <span class="ml-1">${item.region}, ${item.district || ''}</span></div>
+                    <div><b>Aniq manzil:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
                     <div><b>Telegram / Instagram:</b> <span class="ml-1">${item.telegram || 'Kiritilmagan'}</span></div>
                     <div class="pt-2 border-t border-slate-200 dark:border-slate-600">
                         <b>Biografiya / Qo'shimcha tavsif:</b>
@@ -1061,6 +1258,7 @@
             const name = document.getElementById('newItemName').value;
             const spec = document.getElementById('newItemSpecialty').value;
             const region = document.getElementById('newItemRegion').value;
+            const district = document.getElementById('newItemDistrict').value;
             const exp = document.getElementById('newItemExp').value || 'Tajribali';
             const phone = document.getElementById('newItemPhone').value;
             const telegram = document.getElementById('newItemTelegram').value || '';
@@ -1077,11 +1275,12 @@
                 name: { uz: name, ru: name, en: name },
                 specialty: { uz: spec, ru: spec, en: spec },
                 region: region,
+                district: district,
                 exp: { uz: exp, ru: exp, en: exp },
                 phone: phone,
                 telegram: telegram,
                 address: { uz: addr, ru: addr, en: addr },
-                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + region)}`,
+                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + district + ' ' + region)}`,
                 rating: 5.0,
                 bio: { uz: bio, ru: bio, en: bio },
                 images: finalImages,
@@ -1152,6 +1351,7 @@
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const region = document.getElementById('regionFilter').value;
+            const district = document.getElementById('districtFilter').value;
             const original = sampleData[currentTab] || [];
 
             const filtered = original.filter(item => {
@@ -1162,8 +1362,9 @@
                 
                 const matchesQuery = name.includes(query) || spec.includes(query) || addr.includes(query) || dist.includes(query);
                 const matchesRegion = !region || item.region === region;
+                const matchesDistrict = !district || item.district === district;
 
-                return matchesQuery && matchesRegion;
+                return matchesQuery && matchesRegion && matchesDistrict;
             });
             
             const container = document.getElementById('contentGrid');
@@ -1205,11 +1406,13 @@
             `}).join('');
         }
 
+        // ==================== FOYDALANUVCHI UCHUN BATAFSIL OYNA VA 3 TA TAVSIYA ====================
         function openDetailModal(categoryKey, itemId) {
             const list = sampleData[categoryKey] || [];
             const item = list.find(x => x.id === itemId);
             if (!item) return;
 
+            // Xuddi shu bo'limdagi boshqa 3 ta tavsiya etiladigan obyekt
             const recommended = list.filter(x => x.id !== item.id).slice(0, 3);
             const allImages = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"];
             const mainImg = allImages[0];
@@ -1234,7 +1437,7 @@
                         <p class="text-xs text-slate-400 mt-1 flex items-center gap-2">
                             <span><i class="fa-solid fa-briefcase text-cyan-600 mr-1"></i> <b>${getLocalized(item.exp)}</b></span>
                             <span>•</span>
-                            <span><i class="fa-solid fa-city text-cyan-600 mr-1"></i> ${item.region}</span>
+                            <span><i class="fa-solid fa-city text-cyan-600 mr-1"></i> ${item.region}, ${item.district || ''}</span>
                         </p>
                     </div>
                 </div>
@@ -1413,7 +1616,7 @@
             if(dm) dm.classList.add('hidden');
         }
 
-        // ==================== BO'LIMLARNI ALMASHTIRISH (Logodan boshqariladi) ====================
+        // Bo'limlarni faqat yuqoridagi menyu orqali almashtirish
         function switchTab(tab) {
             currentTab = tab;
             const cfg = tabConfigs[tab] || { icon: 'fa-user-doctor' };
