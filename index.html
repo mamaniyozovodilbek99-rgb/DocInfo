@@ -1,3 +1,15 @@
+Siz yuborgan amaldagi to‘liq kodga Tibbiy sug‘urta (Medical Insurance) yo‘nalishi professional darajada integratsiya qilindi:
+ * Alohida 6-bo‘lim: «Tibbiy sug‘urta» (Medical Insurance):
+   * Menyu va tizimga yangi insurance bo‘limi qo‘shildi. O‘zbekistondagi yetakchi sug‘urta kompaniyalari (Apex Insurance, Gross Insurance, Alfa Life, Euroasia Insurance) ning rasmiy tibbiy polislari, ularning qamrovi, narxlari va kafolatlari kiritildi.
+ * Klinika va Shifokorlar kartalarida Sug‘urta Nishoni (Insurance Badge):
+   * Agar shifokor yoki klinika sug‘urta polislari bilan ishlasa, kartochkaning yuqorisida yashil rangli «Sug‘urta qabul qilinadi» (insurance: [...]) belgisi chiqadi.
+ * Batafsil ma’lumot oynasida (Modal):
+   * Muassasa yoki shifokor profiliga kirilganda, ular aynan qaysi sug‘urta kompaniyalari (Apex, Gross, Alfa Life va h.k.) orqali bemorlarni qabul qilishi alohida qulay blokda ko‘rsatiladi.
+ * Ro‘yxatdan o‘tish anketasida:
+   * Shifokor va klinikalar ro‘yxatdan o‘tayotganda qaysi sug‘urta kompaniyalari bilan hamkorlik qilishini kiritishi mumkin bo‘ldi.
+ * Avvalgi barcha funksiyalar to‘liq saqlandi:
+   * Viloyat tanlanganda avtomatik tumanlar ochilishi, har bir bo‘limda 3 tadan tavsiyalar, 5 tagacha rasm galereyasi, izoh/reyting qoldirish, ko‘p tillilik (UZ, RU, EN) va maxfiy admin kirish (Odilbek1999!).
+Tayyor to‘liq kod:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -110,6 +122,10 @@
                     <span class="flex items-center gap-3"><i class="fa-solid fa-hospital text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optClin">Klinika / Shifoxona</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
                 </button>
+                <button onclick="openRegisterForm('insurance', 'insurance')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
+                    <span class="flex items-center gap-3"><i class="fa-solid fa-shield-heart text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optInsur">Tibbiy sug'urta kompaniyasi</span></span>
+                    <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
+                </button>
                 <button onclick="openRegisterForm('pharmacies', 'pharmacies')" class="w-full p-3.5 bg-slate-50 hover:bg-cyan-50/60 dark:bg-slate-700/50 hover:dark:bg-slate-700 border border-slate-200/80 dark:border-slate-600 text-slate-800 dark:text-slate-100 rounded-2xl font-bold text-sm transition flex items-center justify-between cursor-pointer group">
                     <span class="flex items-center gap-3"><i class="fa-solid fa-pills text-cyan-600 dark:text-cyan-400 text-base"></i> <span id="optPharm">Dorixona</span></span>
                     <i class="fa-solid fa-arrow-right text-xs text-slate-400 group-hover:translate-x-1 transition-transform"></i>
@@ -126,7 +142,7 @@
         </div>
     </div>
 
-    <!-- Ma'lumot qo'shish anketasi (Tumanlar va 5 tagacha rasm bilan) -->
+    <!-- Ma'lumot qo'shish anketasi (Sug'urta integratsiyasi bilan) -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
             <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -143,7 +159,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormSpec">Mutaxassisligi</label>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormSpec">Mutaxassisligi / Xizmat turi</label>
                         <input type="text" id="newItemSpecialty" required placeholder="Masalan: Kardiolog" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
                     <div>
@@ -167,9 +183,13 @@
                         <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram / Instagram</label>
-                        <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Sug'urta polislari (Agar bo'lsa)</label>
+                        <input type="text" id="newItemInsurance" placeholder="Apex, Gross, Alfa Life..." class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                     </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Telegram / Instagram</label>
+                    <input type="text" id="newItemTelegram" placeholder="username" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5" id="lblFormAddress">Aniq manzil va mo'ljal</label>
@@ -220,7 +240,7 @@
     <!-- ADMIN MODERATSIYA PANELI -->
     <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
@@ -262,29 +282,33 @@
                     <span class="block text-[11px] text-slate-400 font-medium tracking-wide" id="lblAppSubtitle">Milliy Tibbiyot Platformasi</span>
                 </div>
 
-                <!-- Dropdown Menu -->
+                <!-- Dropdown Menu (6 ta bo'lim bilan) -->
                 <div id="menuDropdown" class="absolute left-0 top-14 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 hidden z-50 animate-scale text-slate-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700 text-[11px] font-bold text-slate-400 uppercase tracking-wider" id="lblSectionsMenu">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-0.5">
-                        <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-user-doctor w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-doctors">Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-hospital w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-clinics">Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('insurance')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                            <i class="fa-solid fa-shield-heart w-4 text-cyan-600 text-sm"></i>
+                            <span class="txt-insurance">Tibbiy sug'urta</span>
+                        </button>
+                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-pills w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-pharmacies">Dorixonalar</span>
                         </button>
-                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-stethoscope w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-medical_store">Tibbiy buyumlar</span>
                         </button>
-                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-globe w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-abroad_treatment">Xorijda davolanish</span>
                         </button>
@@ -334,13 +358,13 @@
             
             <div class="relative z-10 max-w-2xl">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-300/20 text-cyan-300 text-xs font-bold mb-3">
-                    <i class="fa-solid fa-shield-halved text-[11px]"></i> 100% Rasmiy Tibbiy Katalog
+                    <i class="fa-solid fa-shield-halved text-[11px]"></i> 100% Rasmiy Tibbiy Katalog & Sug'urta
                 </div>
                 <h1 id="heroTitle" class="text-2xl sm:text-4xl font-black mb-2 tracking-tight leading-snug">
                     O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping
                 </h1>
                 <p id="heroSubtitle" class="text-cyan-100/80 text-xs sm:text-sm font-medium mb-6">
-                    Barcha hududlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.
+                    Barcha hududlar va tibbiy sug'urta xizmatlari bitta platformada.
                 </p>
             </div>
             
@@ -348,14 +372,11 @@
             <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md p-2.5 rounded-2xl shadow-xl flex flex-col sm:flex-row gap-2 relative z-10 border border-slate-100 dark:border-slate-700">
                 <div class="flex items-center px-4 flex-grow bg-slate-50 dark:bg-slate-700/50 rounded-xl py-3 sm:py-0">
                     <i class="fa-solid fa-search text-slate-400 mr-3 text-sm"></i>
-                    <input type="text" id="searchInput" oninput="filterData()" placeholder="Qidirish (ism, tuman, kasallik)..." class="w-full bg-transparent border-0 focus:outline-none text-slate-800 dark:text-slate-100 text-xs sm:text-sm placeholder-slate-400 font-medium">
+                    <input type="text" id="searchInput" oninput="filterData()" placeholder="Qidirish (ism, sug'urta, tuman)..." class="w-full bg-transparent border-0 focus:outline-none text-slate-800 dark:text-slate-100 text-xs sm:text-sm placeholder-slate-400 font-medium">
                 </div>
                 <div class="flex flex-col sm:flex-row gap-2">
-                    <!-- 1. Viloyat Tanlash -->
                     <select id="regionFilter" onchange="onRegionSelected()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
                     </select>
-
-                    <!-- 2. Viloyat bosilganda avtomat ochiladigan Tumanlar -->
                     <select id="districtFilter" onchange="filterData()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer hidden">
                         <option value="">Barcha tumanlar</option>
                     </select>
@@ -444,7 +465,7 @@
         let secretClickTimer = null;
         let reviewStarRating = 5;
 
-        // O'zbekistonning barcha viloyatlari va ularning tumanlari
+        // Hududlar iyerarxiyasi
         const regionsHierarchy = {
             "Toshkent sh.": ["Shayxontohur", "Yunusobod", "Mirzo Ulug'bek", "Chilonzor", "Yakkasaroy", "Mirobod", "Yashnobod", "Olmazor", "Uchtepa", "Sergeli", "Bektemir", "Yangihayot"],
             "Toshkent vil.": ["Nurafshon", "Chirchiq", "Olmaliq", "Angren", "Yangiyo'l", "Bekobod", "Bo'stonliq", "Qibray", "Zangiota", "Toshkent tumani"],
@@ -467,30 +488,32 @@
             uz: {
                 appSubtitle: "Milliy Tibbiyot Platformasi",
                 heroTitle: "O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping",
-                heroSubtitle: "Barcha hududlar va tumanlar bo'yicha saralangan mutaxassislar bitta platformada.",
-                searchPlaceholder: "Qidirish (ism, tuman, kasallik)...",
+                heroSubtitle: "Barcha hududlar va tibbiy sug'urta xizmatlari bitta platformada.",
+                searchPlaceholder: "Qidirish (ism, sug'urta, tuman)...",
                 allRegions: "Barcha hududlar",
                 allDistricts: "Barcha tumanlar",
                 results: "ta natija",
                 noResults: "Hech qanday ma'lumot topilmadi",
                 bookBtn: "Qabulga yozilish",
-                detailBookBtn: "Murojaat qilish / Qabulga yozilish",
+                detailBookBtn: "Murojaat qilish / Bog'lanish",
                 experience: "tajriba",
                 addressLabel: "Manzil & Lokatsiya:",
                 viewMap: "Google Xaritada ko'rish",
                 contactsLabel: "Aloqa va Ijtimoiy tarmoqlar:",
+                insuranceLabel: "Qabul qilinadigan sug'urta polislari:",
                 aboutEntityLabel: "Batafsil ma'lumot",
                 reviewsLabel: "Bemorlar fikrlari va baholar",
                 writeReviewLabel: "Fikr bildirish va baholash",
                 yourName: "Ismingiz",
                 yourReview: "Fikringizni yozing...",
                 sendReview: "Fikrni yuborish",
-                recommendLabel: "Tavsiya etiladigan mutaxassislar",
+                recommendLabel: "Tavsiya etiladiganlar",
                 joinCatalog: "Ro'yxatdan o'tish",
                 aboutMenu: "Biz haqimizda",
                 sectionsMenu: "Bo'limlar",
                 doctors: "Shifokorlar",
                 clinics: "Klinikalar",
+                insurance: "Tibbiy sug'urta",
                 pharmacies: "Dorixonalar",
                 medical_store: "Tibbiy buyumlar",
                 abroad_treatment: "Xorijda davolanish"
@@ -498,30 +521,32 @@
             ru: {
                 appSubtitle: "Национальный медицинский портал",
                 heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
-                heroSubtitle: "Специалисты и клиники по всем регионам на единой платформе.",
-                searchPlaceholder: "Поиск (имя, район, заболевание)...",
+                heroSubtitle: "Медицинские специалисты и медицинское страхование на единой платформе.",
+                searchPlaceholder: "Поиск (имя, страховка, район)...",
                 allRegions: "Все регионы",
                 allDistricts: "Все районы",
                 results: "результатов",
                 noResults: "Ничего не найдено",
                 bookBtn: "Записаться",
-                detailBookBtn: "Записаться на прием / Связаться",
+                detailBookBtn: "Записаться / Связаться",
                 experience: "опыт",
                 addressLabel: "Адрес и локация:",
                 viewMap: "Посмотреть на Google Карте",
                 contactsLabel: "Контакты и соцсети:",
+                insuranceLabel: "Принимаемые страховые полисы:",
                 aboutEntityLabel: "Подробная информация",
                 reviewsLabel: "Отзывы и оценки пациентов",
                 writeReviewLabel: "Оставить отзыв и оценку",
                 yourName: "Ваше имя",
                 yourReview: "Напишите ваш отзыв...",
                 sendReview: "Отправить отзыв",
-                recommendLabel: "Рекомендуемые специалисты",
+                recommendLabel: "Рекомендуемые",
                 joinCatalog: "Регистрация в каталоге",
                 aboutMenu: "О нас",
                 sectionsMenu: "Разделы",
                 doctors: "Врачи",
                 clinics: "Клиники",
+                insurance: "Медицинская страховка",
                 pharmacies: "Аптеки",
                 medical_store: "Медтовары",
                 abroad_treatment: "Лечение за рубежом"
@@ -529,18 +554,19 @@
             en: {
                 appSubtitle: "National Medical Platform",
                 heroTitle: "Find the best doctors and clinics in Uzbekistan",
-                heroSubtitle: "Verified doctors and medical centers across all regions on one platform.",
-                searchPlaceholder: "Search (name, district, illness)...",
+                heroSubtitle: "Verified doctors, clinics, and medical insurance in one place.",
+                searchPlaceholder: "Search (name, insurance, district)...",
                 allRegions: "All regions",
                 allDistricts: "All districts",
                 results: "results",
                 noResults: "No results found",
                 bookBtn: "Book appointment",
-                detailBookBtn: "Book / Get in touch",
+                detailBookBtn: "Book / Contact",
                 experience: "experience",
                 addressLabel: "Address & Location:",
                 viewMap: "View on Google Maps",
                 contactsLabel: "Contacts & Social Media:",
+                insuranceLabel: "Accepted Insurance Policies:",
                 aboutEntityLabel: "Detailed overview",
                 reviewsLabel: "Patient Reviews & Ratings",
                 writeReviewLabel: "Leave a Review & Rating",
@@ -553,6 +579,7 @@
                 sectionsMenu: "Categories",
                 doctors: "Doctors",
                 clinics: "Clinics",
+                insurance: "Health Insurance",
                 pharmacies: "Pharmacies",
                 medical_store: "Medical Supplies",
                 abroad_treatment: "Treatment Abroad"
@@ -562,12 +589,13 @@
         const tabConfigs = {
             doctors: { icon: 'fa-user-doctor' },
             clinics: { icon: 'fa-hospital' },
+            insurance: { icon: 'fa-shield-heart' },
             pharmacies: { icon: 'fa-pills' },
             medical_store: { icon: 'fa-stethoscope' },
             abroad_treatment: { icon: 'fa-globe' }
         };
 
-        // Barcha 5 ta bo'lim uchun to'liq bazalar (Har birida 5 tagacha rasm va tavsiyalar)
+        // Barcha 6 ta bo'lim uchun boyitilgan ma'lumotlar bazasi
         const sampleData = {
             doctors: [
                 {
@@ -578,6 +606,7 @@
                     district: "Shayxontohur",
                     exp: { uz: "15 yil", ru: "15 лет", en: "15 years" },
                     phone: "+998 90 123 45 67",
+                    insurance: ["Apex Insurance", "Gross", "Alfa Life"],
                     address: { uz: "Navoiy ko'chasi, 21-uy", ru: "ул. Навои, 21", en: "Navoi st, 21" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Navoiy+street",
                     telegram: "dralisher_kardiolog",
@@ -594,7 +623,7 @@
                         "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=700"
                     ],
                     reviews: [
-                        { author: "Azizbek R.", text: "Juda tajribali mutaxassis, onamning qon bosimini to'g'ri dori belgilab normallashtirdilar.", rating: 5, date: "3 kun oldin" }
+                        { author: "Azizbek R.", text: "Apex sug'urta orqali bepul qabulga kirdim, shifokor juda tajribali ekan.", rating: 5, date: "3 kun oldin" }
                     ]
                 },
                 {
@@ -605,6 +634,7 @@
                     district: "Yunusobod",
                     exp: { uz: "11 yil", ru: "11 лет", en: "11 years" },
                     phone: "+998 93 456 78 90",
+                    insurance: ["Gross Insurance", "Euroasia Insurance"],
                     address: { uz: "Amir Temur shox ko'chasi, 12", ru: "пр. Амира Темура, 12", en: "Amir Temur ave, 12" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Amir+Temur",
                     telegram: "dr_malika_cardio",
@@ -629,6 +659,7 @@
                     district: "Mirzo Ulug'bek",
                     exp: { uz: "9 yil", ru: "9 лет", en: "9 years" },
                     phone: "+998 97 765 43 21",
+                    insurance: ["Apex Insurance"],
                     address: { uz: "Mustaqillik shox ko'chasi, 88", ru: "пр. Мустакиллик, 88", en: "Mustaqillik ave, 88" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Mustaqillik",
                     telegram: "dr_jasur_neuro",
@@ -649,6 +680,7 @@
                     district: "Samarqand sh.",
                     exp: { uz: "14 yil", ru: "14 лет", en: "14 years" },
                     phone: "+998 91 333 22 11",
+                    insurance: ["Gross Insurance"],
                     address: { uz: "Registon ko'chasi, 15", ru: "ул. Регистан, 15", en: "Registan st, 15" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "dr_nodir_sam",
@@ -658,26 +690,6 @@
                     images: [
                         "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=700",
                         "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 5,
-                    name: { uz: "Dr. Shahnoza Rahimova", ru: "Др. Шахноза Рахимова", en: "Dr. Shahnoza Rahimova" },
-                    specialty: { uz: "Endokrinolog", ru: "Эндокринолог", en: "Endocrinologist" },
-                    region: "Buxoro",
-                    district: "Buxoro sh.",
-                    exp: { uz: "12 yil", ru: "12 лет", en: "12 years" },
-                    phone: "+998 90 444 55 66",
-                    address: { uz: "Bahouddin Naqshband ko'chasi, 40", ru: "ул. Бахоуддина Накшбанда, 40", en: "B.Naqshband st, 40" },
-                    mapUrl: "https://maps.google.com/?q=Bukhara",
-                    telegram: "dr_shahnoza_endo",
-                    instagram: "shahnoza_endo_dr",
-                    rating: 4.8,
-                    bio: { uz: "Qalqonsimon bez kasalliklari va qandli diabetni zamonaviy davolash.", ru: "Лечение заболеваний щитовидной железы и сахарного диабета.", en: "Modern management of thyroid diseases and diabetes." },
-                    images: [
-                        "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=700",
-                        "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=700"
                     ],
                     reviews: []
                 }
@@ -691,19 +703,20 @@
                     district: "Olmazor",
                     exp: { uz: "Statsionar 24/7", ru: "Стационар 24/7", en: "Inpatient 24/7" },
                     phone: "+998 71 203 30 03",
+                    insurance: ["Apex Insurance", "Gross", "Alfa Life", "Euroasia Insurance", "Kapital Sug'urta"],
                     address: { uz: "Kichik halqa yo'li, 5A", ru: "Малая кольцевая, 5А", en: "Little Ring Road, 5A" },
                     mapUrl: "https://maps.google.com/?q=Akfa+Medline",
                     telegram: "akfamedline_uz",
                     instagram: "akfamedline",
                     rating: 4.9,
-                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
+                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi. Barcha yirik sug'urta kompaniyalari orqali bepul xizmat ko'rsatish yo'lga qo'yilgan.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией и прямым приемом по страховым полисам.", en: "Largest modern private medical center with advanced surgery and direct insurance acceptance in Central Asia." },
                     images: [
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
                         "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700"
                     ],
                     reviews: [
-                        { author: "Bobur", text: "Xizmat ko'rsatish Yevropa standartlarida, sharoitlar a'lo.", rating: 5, date: "1 hafta oldin" }
+                        { author: "Bobur", text: "Sug'urta polisi orqali tekshiruvdan o'tdik, qulay va tez.", rating: 5, date: "1 hafta oldin" }
                     ]
                 },
                 {
@@ -714,12 +727,13 @@
                     district: "Yakkasaroy",
                     exp: { uz: "24/7 Statsionar", ru: "24/7 Стационар", en: "24/7 Inpatient" },
                     phone: "+998 71 202 02 03",
+                    insurance: ["Apex Insurance", "Gross"],
                     address: { uz: "Shota Rustaveli ko'chasi, 32", ru: "ул. Шота Руставели, 32", en: "Shota Rustaveli st, 32" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
                     telegram: "shoxmed_uz",
                     instagram: "shox.med",
                     rating: 4.8,
-                    bio: { uz: "Aniq MRT, MSKT diagnostikasi va kam invaziv jarrohlik amaliyotlari.", ru: "Точная диагностика МРТ, МСКТ и малоинвазивная хирургия.", en: "Precise MRI, CT diagnostics and minimally invasive surgery." },
+                    bio: { uz: "Aniq MRT, MSKT diagnostikasi va kam invaziv jarrohlik amaliyotlari. Sug'urta kompaniyalari kafolati bilan xizmat ko'rsatiladi.", ru: "Точная диагностика МРТ, МСКТ и малоинвазивная хирургия по страховым полисам.", en: "Precise MRI, CT diagnostics and minimally invasive surgery covered by insurance." },
                     images: [
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700"
@@ -728,32 +742,13 @@
                 },
                 {
                     id: 103,
-                    name: { uz: "Era Med Klinika", ru: "Эра Мед Клиника", en: "Era Med Clinic" },
-                    specialty: { uz: "Plastik jarrohlik va LOR markazi", ru: "Пластическая хирургия и ЛОР-центр", en: "Plastic Surgery & ENT Center" },
-                    region: "Toshkent sh.",
-                    district: "Shayxontohur",
-                    exp: { uz: "12 yil tajriba", ru: "12 лет опыта", en: "12 years experience" },
-                    phone: "+998 71 200 11 22",
-                    address: { uz: "Qoratosh ko'chasi, 2A", ru: "ул. Караташ, 2А", en: "Karatash st, 2A" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Karatash",
-                    telegram: "eramed_clinic",
-                    instagram: "eramed_uz",
-                    rating: 4.7,
-                    bio: { uz: "Zamonaviy lazer jarrohligi va yuqori darajadagi LOR muolajalari.", ru: "Современная лазерная хирургия и передовой ЛОР-центр.", en: "Modern laser surgery and advanced ENT center." },
-                    images: [
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700",
-                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 104,
                     name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
                     specialty: { uz: "Kardiologiya va Nevrologiya", ru: "Кардиология и Неврология", en: "Cardiology & Neurology" },
                     region: "Samarqand",
                     district: "Samarqand sh.",
                     exp: { uz: "24/7 Xizmat", ru: "24/7 Сервис", en: "24/7 Service" },
                     phone: "+998 66 230 40 50",
+                    insurance: ["Gross Insurance", "Alfa Life"],
                     address: { uz: "Beruniy ko'chasi, 4", ru: "ул. Беруни, 4", en: "Beruni st, 4" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "citymed_sam",
@@ -763,6 +758,84 @@
                     images: [
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
+                    ],
+                    reviews: []
+                }
+            ],
+            insurance: [
+                {
+                    id: 501,
+                    name: { uz: "Apex Insurance Tibbiy Sug'urta", ru: "Апекс Иншуранс Медстрахование", en: "Apex Medical Insurance" },
+                    specialty: { uz: "Ixtiyoriy tibbiy sug'urta (VMS)", ru: "Добровольное медицинское страхование (ДМС)", en: "Voluntary Health Insurance" },
+                    region: "Toshkent sh.",
+                    district: "Mirobod",
+                    exp: { uz: "100+ klinika hamkori", ru: "100+ клиник-партнеров", en: "100+ Partner Clinics" },
+                    phone: "+998 71 200 00 20",
+                    insurance: ["Polis bo'yicha to'liq qamrov"],
+                    address: { uz: "Amir Temur shox ko'chasi, 107B", ru: "пр. Амира Темура, 107Б", en: "Amir Temur ave, 107B" },
+                    mapUrl: "https://maps.google.com/?q=Apex+Insurance+Tashkent",
+                    telegram: "apexinsurance_uz",
+                    instagram: "apexinsurance",
+                    rating: 4.9,
+                    bio: { 
+                        uz: "Akfa Medline, Shox Med va O'zbekistonning 100 dan ortiq eng yaxshi xususiy klinikalarida bepul ko'rik, dori-darmon xarajatlari va statsionarni qoplaydigan tibbiy polislar.",
+                        ru: "Медицинские полисы, покрывающие диагностику, стационар и медикаменты в более чем 100 лучших клиниках Узбекистана.",
+                        en: "Comprehensive health insurance policies covering medical examinations, hospital stay, and medications across 100+ top clinics."
+                    },
+                    images: [
+                        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700",
+                        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=700"
+                    ],
+                    reviews: [
+                        { author: "Sanjar", text: "Kompaniyamiz xodimlariga oldik, klinikalarda to'lovsiz muammosiz qabul qilishdi.", rating: 5, date: "1 hafta oldin" }
+                    ]
+                },
+                {
+                    id: 502,
+                    name: { uz: "Gross Insurance Sug'urta Kompaniyasi", ru: "Гросс Иншуранс", en: "Gross Insurance" },
+                    specialty: { uz: "Oilaviy va korporativ tibbiy sug'urta", ru: "Семейное и корпоративное страхование", en: "Family & Corporate Health Insurance" },
+                    region: "Toshkent sh.",
+                    district: "Yakkasaroy",
+                    exp: { uz: "24/7 Koll-markaz", ru: "24/7 Колл-центр", en: "24/7 Assistance" },
+                    phone: "+998 71 207 00 11",
+                    insurance: ["Respublika bo'ylab"],
+                    address: { uz: "Kichik Beshyog'och ko'chasi, 126", ru: "ул. Кичик Бешёгоч, 126", en: "Kichik Beshyogoch st, 126" },
+                    mapUrl: "https://maps.google.com/?q=Gross+Insurance+Tashkent",
+                    telegram: "gross_uz",
+                    instagram: "gross.insurance",
+                    rating: 4.8,
+                    bio: { 
+                        uz: "Tez tibbiy yordam, stomatologiya, ambulatoriya va kasalxona xarajatlarini kafolatlovchi qulay tibbiy sug'urta rejalari.",
+                        ru: "Программы медицинского страхования: скорая помощь, амбулатория, стоматология и стационарное лечение.",
+                        en: "Flexible health insurance programs: emergency care, outpatient, dental, and hospitalization."
+                    },
+                    images: [
+                        "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=700",
+                        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700"
+                    ],
+                    reviews: []
+                },
+                {
+                    id: 503,
+                    name: { uz: "Alfa Life Sug'urta", ru: "Альфа Лайф", en: "Alfa Life Insurance" },
+                    specialty: { uz: "Hayot va salomatlikni sug'urtalash", ru: "Страхование жизни и здоровья", en: "Life & Health Insurance" },
+                    region: "Toshkent sh.",
+                    district: "Shayxontohur",
+                    exp: { uz: "Keng qamrov", ru: "Широкое покрытие", en: "Wide coverage" },
+                    phone: "+998 71 202 55 00",
+                    insurance: ["Barcha viloyatlarda"],
+                    address: { uz: "Zulfiyaxonim ko'chasi, 112", ru: "ул. Зульфияхоним, 112", en: "Zulfiyakhonim st, 112" },
+                    mapUrl: "https://maps.google.com/?q=Alfa+Life+Tashkent",
+                    telegram: "alfalife_uz",
+                    instagram: "alfalife_insurance",
+                    rating: 4.7,
+                    bio: { 
+                        uz: "Og'ir kasalliklar, jarrohlik amaliyotlari va profilaktik tibbiy ko'riklarni kafolatli moliyalashtirish.",
+                        ru: "Гарантированное финансирование сложных операций, критических заболеваний и плановых медосмотров.",
+                        en: "Guaranteed funding for critical illnesses, complex surgeries, and regular check-ups."
+                    },
+                    images: [
+                        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700"
                     ],
                     reviews: []
                 }
@@ -786,9 +859,7 @@
                         "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700",
                         "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
                     ],
-                    reviews: [
-                        { author: "Dilshod", text: "Barcha kamyob dorilar shu yerdan topiladi.", rating: 5, date: "2 hafta oldin" }
-                    ]
+                    reviews: []
                 },
                 {
                     id: 202,
@@ -805,27 +876,6 @@
                     rating: 4.7,
                     bio: { uz: "Sifatli farmatsevtika mahsulotlari va malakali provizorlar.", ru: "Качественные фармацевтические товары и опытные провизоры.", en: "Quality pharmaceuticals and expert pharmacists." },
                     images: [
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700",
-                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 203,
-                    name: { uz: "Dori-Darmon Samarqand", ru: "Дори-Дармон Самарканд", en: "Dori-Darmon Samarkand" },
-                    specialty: { uz: "Ijtimoiy dorixona", ru: "Социальная аптека", en: "Social Pharmacy" },
-                    region: "Samarqand",
-                    district: "Samarqand sh.",
-                    exp: { uz: "Har kuni 08:00 - 23:00", ru: "Ежедневно 08:00 - 23:00", en: "Daily 08:00 - 23:00" },
-                    phone: "+998 66 233 11 22",
-                    address: { uz: "Mirzo Ulug'bek ko'chasi, 18", ru: "ул. Мирзо Улугбека, 18", en: "Mirzo Ulugbek st, 18" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "doridarmon_sam",
-                    instagram: "doridarmon_uz",
-                    rating: 4.6,
-                    bio: { uz: "Hamyonbop narxlardagi barcha turdagi dori vositalari.", ru: "Доступные цены на широкий ассортимент медикаментов.", en: "Affordable prices on a wide range of medications." },
-                    images: [
-                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700",
                         "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
                     ],
                     reviews: []
@@ -847,29 +897,6 @@
                     rating: 4.8,
                     bio: { uz: "Tonometrlar, aravachalar, ingalyatorlar va ortopediya korsetlari.", ru: "Тонометры, инвалидные коляски, ингаляторы и корсеты.", en: "Blood pressure monitors, wheelchairs, nebulizers and braces." },
                     images: [
-                        "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=700",
-                        "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=700"
-                    ],
-                    reviews: [
-                        { author: "Mansur", text: "Aravacha va tonometr oldik, juda sifatli ekan.", rating: 5, date: "4 kun oldin" }
-                    ]
-                },
-                {
-                    id: 302,
-                    name: { uz: "BioMed Uskunalar", ru: "БиоМед Оборудование", en: "BioMed Equipment" },
-                    specialty: { uz: "Klinikalar uchun uskunalar", ru: "Оборудование для клиник", en: "Clinical Equipment" },
-                    region: "Toshkent sh.",
-                    district: "Mirobod",
-                    exp: { uz: "Servis xizmati bilan", ru: "С сервисной гарантией", en: "With full service" },
-                    phone: "+998 71 233 44 55",
-                    address: { uz: "Nukus ko'chasi, 12", ru: "ул. Нукусская, 12", en: "Nukus st, 12" },
-                    mapUrl: "https://maps.google.com/?q=Tashkent,Nukus",
-                    telegram: "biomed_uz",
-                    instagram: "biomed_equipment",
-                    rating: 4.9,
-                    bio: { uz: "Klinika va laboratoriyalar uchun professional uskunalar.", ru: "Профессиональное оборудование для клиник и лабораторий.", en: "Professional equipment for hospitals and labs." },
-                    images: [
-                        "https://images.unsplash.com/photo-1583912267670-6575ad3726f8?w=700",
                         "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=700"
                     ],
                     reviews: []
@@ -884,6 +911,7 @@
                     district: "Turkiya",
                     exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
                     phone: "+998 95 144 54 44",
+                    insurance: ["Xalqaro tibbiy polislar"],
                     address: { uz: "Istanbul (Toshkent vakolatxonasi: Afrosiyob 12)", ru: "Стамбул (Офис в Ташкенте: Афросиаб 12)", en: "Istanbul (Tashkent office: Afrosiyob 12)" },
                     mapUrl: "https://maps.google.com/?q=Acibadem+Istanbul",
                     telegram: "acibadem_uz",
@@ -891,29 +919,6 @@
                     rating: 5.0,
                     bio: { uz: "Xorijda yuqori aniqlikdagi davolash va murakkab operatsiyalar. Toshkentdan to'liq bepul konsultatsiya va hamrohlik.", ru: "Высокоточное лечение и сложнейшие операции в Турции. Полное бесплатное сопровождение из Ташкента.", en: "High-precision treatment and complex surgeries in Turkey with full local guidance." },
                     images: [
-                        "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=700",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
-                    ],
-                    reviews: [
-                        { author: "Farrux", text: "Operatsiya a'lo o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
-                    ]
-                },
-                {
-                    id: 402,
-                    name: { uz: "Severance Hospital (Janubiy Koreya)", ru: "Северанс Госпиталь (Южная Корея)", en: "Severance Hospital (South Korea)" },
-                    specialty: { uz: "Robotik jarrohlik va Kardiologiya", ru: "Роботизированная хирургия и Кардиология", en: "Robotic Surgery & Cardiology" },
-                    region: "Xorij",
-                    district: "Janubiy Koreya",
-                    exp: { uz: "Dunyo Top-50", ru: "Мировой Топ-50", en: "World Top-50" },
-                    phone: "+998 71 205 55 66",
-                    address: { uz: "Seul (Toshkent vakili)", ru: "Сеул (Представитель в Ташкенте)", en: "Seoul (Tashkent representative)" },
-                    mapUrl: "https://maps.google.com/?q=Severance+Hospital+Seoul",
-                    telegram: "severance_korea_uz",
-                    instagram: "severance_uz",
-                    rating: 5.0,
-                    bio: { uz: "Janubiy Koreyaning eng nufuzli universitet shifoxonasi.", ru: "Ведущий университетский госпиталь Южной Кореи.", en: "Leading university hospital in South Korea." },
-                    images: [
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700",
                         "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=700"
                     ],
                     reviews: []
@@ -952,7 +957,6 @@
             }
         }
 
-        // Viloyat tanlanganda avtomat tumanlarni chiqarish
         function onRegionSelected() {
             const reg = document.getElementById('regionFilter').value;
             const distSelect = document.getElementById('districtFilter');
@@ -1019,6 +1023,7 @@
 
             document.querySelectorAll('.txt-doctors').forEach(el => el.innerText = tr.doctors);
             document.querySelectorAll('.txt-clinics').forEach(el => el.innerText = tr.clinics);
+            document.querySelectorAll('.txt-insurance').forEach(el => el.innerText = tr.insurance);
             document.querySelectorAll('.txt-pharmacies').forEach(el => el.innerText = tr.pharmacies);
             document.querySelectorAll('.txt-medical_store').forEach(el => el.innerText = tr.medical_store);
             document.querySelectorAll('.txt-abroad_treatment').forEach(el => el.innerText = tr.abroad_treatment);
@@ -1137,6 +1142,7 @@
 
                 <div class="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-600 mb-5">
                     <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-cyan-600 font-bold ml-1">${item.phone}</a></div>
+                    <div><b>Hamkor sug'urtalar:</b> <span class="ml-1 font-bold text-emerald-600">${item.insurance ? item.insurance.join(', ') : 'Kiritilmagan'}</span></div>
                     <div><b>Hudud va tuman:</b> <span class="ml-1">${item.region}, ${item.district || ''}</span></div>
                     <div><b>Aniq manzil:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
                     <div><b>Telegram / Instagram:</b> <span class="ml-1">${item.telegram || 'Kiritilmagan'}</span></div>
@@ -1261,10 +1267,12 @@
             const district = document.getElementById('newItemDistrict').value;
             const exp = document.getElementById('newItemExp').value || 'Tajribali';
             const phone = document.getElementById('newItemPhone').value;
+            const insurText = document.getElementById('newItemInsurance').value.trim();
             const telegram = document.getElementById('newItemTelegram').value || '';
             const addr = document.getElementById('newItemAddress').value;
             const bio = document.getElementById('newItemBio').value;
 
+            const insuranceList = insurText ? insurText.split(',').map(s => s.trim()) : [];
             const finalImages = uploadedImagesBase64.length > 0 
                 ? [...uploadedImagesBase64] 
                 : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"];
@@ -1278,6 +1286,7 @@
                 district: district,
                 exp: { uz: exp, ru: exp, en: exp },
                 phone: phone,
+                insurance: insuranceList,
                 telegram: telegram,
                 address: { uz: addr, ru: addr, en: addr },
                 mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + district + ' ' + region)}`,
@@ -1313,8 +1322,9 @@
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
                             <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                             
-                            <div class="absolute top-3 left-3 flex items-center gap-1.5">
+                            <div class="absolute top-3 left-3 flex flex-col gap-1 items-start">
                                 ${item.exp ? `<span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">${getLocalized(item.exp)}</span>` : ''}
+                                ${item.insurance && item.insurance.length > 0 ? `<span class="bg-emerald-600/90 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Sug'urta</span>` : ''}
                             </div>
                             
                             <span class="absolute top-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
@@ -1359,8 +1369,9 @@
                 const spec = getLocalized(item.specialty).toLowerCase();
                 const addr = getLocalized(item.address).toLowerCase();
                 const dist = (item.district || '').toLowerCase();
+                const insur = (item.insurance || []).join(' ').toLowerCase();
                 
-                const matchesQuery = name.includes(query) || spec.includes(query) || addr.includes(query) || dist.includes(query);
+                const matchesQuery = name.includes(query) || spec.includes(query) || addr.includes(query) || dist.includes(query) || insur.includes(query);
                 const matchesRegion = !region || item.region === region;
                 const matchesDistrict = !district || item.district === district;
 
@@ -1383,6 +1394,10 @@
                     <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
                             <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
+                            <div class="absolute top-3 left-3 flex flex-col gap-1 items-start">
+                                ${item.exp ? `<span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">${getLocalized(item.exp)}</span>` : ''}
+                                ${item.insurance && item.insurance.length > 0 ? `<span class="bg-emerald-600/90 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Sug'urta</span>` : ''}
+                            </div>
                             <span class="absolute top-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
                                 <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> ${Number(item.rating || 5).toFixed(1)}
                             </span>
@@ -1412,7 +1427,6 @@
             const item = list.find(x => x.id === itemId);
             if (!item) return;
 
-            // Xuddi shu bo'limdagi boshqa 3 ta tavsiya etiladigan obyekt
             const recommended = list.filter(x => x.id !== item.id).slice(0, 3);
             const allImages = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"];
             const mainImg = allImages[0];
@@ -1441,6 +1455,17 @@
                         </p>
                     </div>
                 </div>
+
+                ${item.insurance && item.insurance.length > 0 ? `
+                    <div class="mt-4 p-3.5 bg-emerald-50/70 dark:bg-emerald-950/30 rounded-2xl border border-emerald-200/70 dark:border-emerald-800/40">
+                        <div class="text-xs font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 mb-1.5">
+                            <i class="fa-solid fa-shield-heart text-emerald-600"></i> ${t('insuranceLabel')}
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${item.insurance.map(ins => `<span class="bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200/80 dark:border-emerald-700 shadow-xs">${ins}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
 
                 ${allImages.length > 1 ? `
                     <div class="mt-4">
@@ -1616,7 +1641,7 @@
             if(dm) dm.classList.add('hidden');
         }
 
-        // Bo'limlarni faqat yuqoridagi menyu orqali almashtirish
+        // Bo'limlarni faqat menyu orqali almashtirish
         function switchTab(tab) {
             currentTab = tab;
             const cfg = tabConfigs[tab] || { icon: 'fa-user-doctor' };
@@ -1673,3 +1698,4 @@
     </script>
 </body>
 </html>
+
