@@ -1,3 +1,5 @@
+Siz tashlagan koddagi mavjud funksiyalar (admin tekshiruvi, captcha, ro'yxatdan o'tish, saralanganlar, bron qilish) to'liq saqlanib, shifokor profiliga bosilganda ochiladigan batafsil ma'lumot oynasi (detailModal), undagi staj, aniq lokatsiya/manzil (Google Maps havolasi bilan), telefon raqami, Telegram va Instagram havolalari, bemorlar fikrlari (otzivlar) hamda pastki qismida xuddi shu yo'nalishdagi 3 ta tavsiya etiladigan shifokorlar bloki to'liq birlashtirildi.
+Ushbu tayyor to'liq kodni faylingizga to'g'ridan-to'g'ri almashtirib qo'yishingiz mumkin:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -214,7 +216,6 @@
                             <span>Biz haqimizda</span>
                         </button>
                         
-                        <!-- Ro'yxatdan o'tish -->
                         <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3.5 py-2 rounded-xl font-medium text-sm transition hover:bg-blue-50 text-blue-600 dark:text-blue-400 flex items-center space-x-3 cursor-pointer">
                             <i class="fa-solid fa-user-plus w-5"></i>
                             <span>Ro'yxatdan o'tish</span>
@@ -305,6 +306,16 @@
         <div id="contentGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
+    <!-- BATAFSIL PROFIL MODALI (Staj, Manzil, Lokatsiya, Telefon, Telegram, Instagram, Otzivlar va 3 ta tavsiya) -->
+    <div id="detailModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8 max-h-[92vh] overflow-y-auto">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center transition z-20 cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div id="detailContentContainer"></div>
+        </div>
+    </div>
+
     <!-- BIZ HAQIMIZDA MODALI -->
     <div id="aboutModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-gray-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-gray-100 dark:border-gray-700 my-8">
@@ -367,8 +378,18 @@
                         <input type="tel" id="newItemPhone" required placeholder="+998 90 123 45 67" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
                     </div>
                 </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Telegram (username)</label>
+                        <input type="text" id="newItemTelegram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Instagram (profil)</label>
+                        <input type="text" id="newItemInstagram" placeholder="masalan: dr_alisher" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
+                    </div>
+                </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Manzil</label>
+                    <label class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-1">Manzil va Mo'ljal</label>
                     <input type="text" id="newItemAddress" required placeholder="Ko'cha va bino raqami" class="w-full bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm dark:text-white">
                 </div>
                 <div>
@@ -420,7 +441,6 @@
         let selectedRoleKey = 'doctors';
         let selectedRoleName = 'Shifokor';
 
-        // Bo'limlar konfiguratsiyasi (Nom va ikonkalari)
         const tabConfigs = {
             doctors: { title: 'Shifokorlar', icon: 'fa-user-doctor' },
             clinics: { title: 'Klinikalar', icon: 'fa-hospital' },
@@ -429,22 +449,180 @@
             abroad_treatment: { title: 'Xorijda davolanish', icon: 'fa-globe' }
         };
 
-        // 5 ta bo'lim uchun dastlabki ma'lumotlar
+        // Kengaytirilgan baza: staj, manzil, lokatsiya, telegram, instagram, otzivlar bilan
         const sampleData = {
             doctors: [
-                { id: 1, name: "Dr. Alisher Qodirov", specialty: "Kardiolog", region: "Toshkent", exp: "12 yil", phone: "+998 90 123 45 67", address: "Shayxontohur tumani", bio: "Oliy toifali kardiolog mutaxassis.", img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=400" }
+                {
+                    id: 1,
+                    name: "Dr. Alisher Qodirov",
+                    specialty: "Kardiolog",
+                    region: "Toshkent",
+                    exp: "15 yil",
+                    phone: "+998 90 123 45 67",
+                    address: "Shayxontohur tumani, Navoiy ko'chasi, 21-uy",
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Navoiy+street",
+                    telegram: "dralisher_kardiolog",
+                    instagram: "dr.alisher_cardio",
+                    rating: "4.9",
+                    bio: "Toshkent Tibbiyot Akademiyasi bitiruvchisi. Germaniya va Turkiyada malaka oshirgan oliy toifali kardiolog. Yurak-qon tomir kasalliklarini zamonaviy tashxislash bo'yicha mutaxassis.",
+                    img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+                    reviews: [
+                        { author: "Azizbek R.", text: "Juda tajribali va e'tiborli shifokor. Onamning qon bosimini to'g'ri dori belgilab normallashtirdilar.", rating: 5, date: "3 kun oldin" },
+                        { author: "Nilufar K.", text: "Tashxisni juda tez va aniq qo'ydilar, tavsiya qilaman!", rating: 5, date: "1 hafta oldin" }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Dr. Malika Umarova",
+                    specialty: "Kardiolog",
+                    region: "Toshkent",
+                    exp: "11 yil",
+                    phone: "+998 93 456 78 90",
+                    address: "Yunusobod tumani, Amir Temur shox ko'chasi, 12",
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Amir+Temur",
+                    telegram: "dr_malika_cardio",
+                    instagram: "dr_malika_cardio",
+                    rating: "4.8",
+                    bio: "Bolalar va kattalar kardiologi. EKG va ExoKG bo'yicha yetakchi mutaxassis.",
+                    img: "https://images.unsplash.com/photo-1594824813627-8488e14674d8?w=600",
+                    reviews: [
+                        { author: "Jasur M.", text: "Bolamizni ko'rsatdik, muomalasi ham, bilimi ham a'lo darajada.", rating: 5, date: "5 kun oldin" }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Dr. Jasur Karimov",
+                    specialty: "Kardiolog",
+                    region: "Toshkent",
+                    exp: "9 yil",
+                    phone: "+998 97 765 43 21",
+                    address: "Mirzo Ulug'bek tumani, Mustaqillik shox ko'chasi, 88",
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Mustaqillik",
+                    telegram: "dr_jasur_cardio",
+                    instagram: "jasur_karimov_dr",
+                    rating: "4.7",
+                    bio: "Aritmiya va yurak ishemik kasalliklari bo'yicha yetakchi ekspert.",
+                    img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=600",
+                    reviews: [
+                        { author: "Sardor T.", text: "Aniq va professional yondashuv. Tavsiya qilaman.", rating: 5, date: "2 hafta oldin" }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Dr. Nodir Zokirov",
+                    specialty: "Kardiolog",
+                    region: "Samarqand",
+                    exp: "14 yil",
+                    phone: "+998 91 333 22 11",
+                    address: "Samarqand sh., Registon ko'chasi, 15",
+                    mapUrl: "https://maps.google.com/?q=Samarkand",
+                    telegram: "dr_nodir_sam",
+                    instagram: "dr_nodir_cardio",
+                    rating: "4.9",
+                    bio: "Samarqanddagi yetakchi kardiologik klinika bosh mutaxassisi.",
+                    img: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=600",
+                    reviews: [
+                        { author: "Olim aka", text: "Samarqanddagi eng zo'r kardiolog desam adashmayman.", rating: 5, date: "1 oy oldin" }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Dr. Shahnoza Rahimova",
+                    specialty: "Nevropatolog",
+                    region: "Toshkent",
+                    exp: "10 yil",
+                    phone: "+998 90 999 88 77",
+                    address: "Yakkasaroy tumani, Shota Rustaveli ko'chasi, 45",
+                    mapUrl: "https://maps.google.com/?q=Tashkent,Rustaveli",
+                    telegram: "dr_shahnoza_neuro",
+                    instagram: "dr_shahnoza_neuro",
+                    rating: "4.8",
+                    bio: "Bosh og'rig'i, uyqu buzilishlari va umurtqa pog'onasi kasalliklarini samarali davolash bo'yicha mutaxassis.",
+                    img: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=600",
+                    reviews: [
+                        { author: "Zarina B.", text: "Bosh og'riqlarim ancha yengillashdi, rahmat katta!", rating: 5, date: "4 kun oldin" }
+                    ]
+                }
             ],
             clinics: [
-                { id: 101, name: "Akfa Medline", specialty: "Ko'p tarmoqli tibbiyot markazi", region: "Toshkent", phone: "+998 71 203 30 03", address: "Olmazor tumani", bio: "Zamonaviy statsionar va jarrohlik markazi.", img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=400" }
+                {
+                    id: 101,
+                    name: "Akfa Medline",
+                    specialty: "Ko'p tarmoqli tibbiyot markazi",
+                    region: "Toshkent",
+                    exp: "Statsionar 24/7",
+                    phone: "+998 71 203 30 03",
+                    address: "Olmazor tumani, Kichik halqa yo'li, 5A",
+                    mapUrl: "https://maps.google.com/?q=Akfa+Medline",
+                    telegram: "akfamedline_uz",
+                    instagram: "akfamedline",
+                    rating: "4.9",
+                    bio: "O'rta Osiyodagi eng yirik xususiy tibbiyot markazi. Zamonaviy operatsiya bloklari va diagnostika laboratoriyalari.",
+                    img: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=600",
+                    reviews: [
+                        { author: "Bobur", text: "Xizmat ko'rsatish Yevropa standartlarida, sharoitlar a'lo.", rating: 5, date: "1 hafta oldin" }
+                    ]
+                }
             ],
             pharmacies: [
-                { id: 201, name: "OxyMed Markaziy Dorixona", specialty: "Dorixona & Dori-darmon", region: "Toshkent", exp: "24/7", phone: "+998 71 200 03 03", address: "Mirobod tumani", bio: "Sertifikatlangan dori vositalari.", img: "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=400" }
+                {
+                    id: 201,
+                    name: "OxyMed Markaziy Dorixona",
+                    specialty: "Dorixona & Dori-darmon",
+                    region: "Toshkent",
+                    exp: "24/7 ochiq",
+                    phone: "+998 71 200 03 03",
+                    address: "Mirobod tumani, Oybek ko'chasi",
+                    mapUrl: "https://maps.google.com/?q=OxyMed+Tashkent",
+                    telegram: "oxymed_uz",
+                    instagram: "oxymed.uz",
+                    rating: "4.7",
+                    bio: "Sertifikatlangan dori vositalari, tibbiy kosmetika va yetkazib berish xizmati.",
+                    img: "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=600",
+                    reviews: [
+                        { author: "Dilshod", text: "Hamma kamyob dori vositalari shu yerdan topiladi.", rating: 5, date: "2 hafta oldin" }
+                    ]
+                }
             ],
             medical_store: [
-                { id: 301, name: "MedTexnika Ortopediya", specialty: "Tibbiy texnika va asboblar", region: "Toshkent", exp: "Kafolatli", phone: "+998 90 987 65 43", address: "Chilonzor tumani", bio: "Tonometrlar, aravachalar va ortopediya mahsulotlari.", img: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=400" }
+                {
+                    id: 301,
+                    name: "MedTexnika Ortopediya",
+                    specialty: "Tibbiy texnika va asboblar",
+                    region: "Toshkent",
+                    exp: "Kafolatli",
+                    phone: "+998 90 987 65 43",
+                    address: "Chilonzor tumani, Bunyodkor ko'chasi",
+                    mapUrl: "https://maps.google.com/?q=Chilonzor+Tashkent",
+                    telegram: "medtexnika_toshkent",
+                    instagram: "medtexnika_uz",
+                    rating: "4.8",
+                    bio: "Tonometrlar, ingalyatorlar, nogironlar aravachalari va ortopediya mahsulotlari keng assortimenti.",
+                    img: "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?w=600",
+                    reviews: [
+                        { author: "Mansur", text: "Sifatli apparat oldik, kafolati bilan berishdi.", rating: 5, date: "3 kun oldin" }
+                    ]
+                }
             ],
             abroad_treatment: [
-                { id: 401, name: "Acıbadem Healthcare (Turkiya)", specialty: "Onkologiya va Neyroxirurgiya", region: "Xorij", exp: "JCI Sertifikat", phone: "+998 95 144 54 44", address: "Istanbul / Toshkent vakolatxonasi", bio: "Xorijda yuqori aniqlikdagi davolash va jarrohlik amaliyotlari.", img: "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=400" }
+                {
+                    id: 401,
+                    name: "Acıbadem Healthcare (Turkiya)",
+                    specialty: "Onkologiya va Neyroxirurgiya",
+                    region: "Xorij",
+                    exp: "JCI Sertifikat",
+                    phone: "+998 95 144 54 44",
+                    address: "Istanbul / Toshkentdagi rasmiy vakolatxona",
+                    mapUrl: "https://maps.google.com/?q=Acibadem+Istanbul",
+                    telegram: "acibadem_uz",
+                    instagram: "acibadem.uzbekistan",
+                    rating: "5.0",
+                    bio: "Xorijda yuqori aniqlikdagi davolash va jarrohlik amaliyotlari. Toshkentdan to'liq bepul hamrohlik xizmati.",
+                    img: "https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=600",
+                    reviews: [
+                        { author: "Farrux", text: "Operatsiya juda muvaffaqiyatli o'tdi, shifokorlarga minnatdorchilik bildiramiz.", rating: 5, date: "1 oy oldin" }
+                    ]
+                }
             ]
         };
 
@@ -469,7 +647,6 @@
             if(box) box.innerText = generatedCaptchaText;
         }
 
-        // Rol tanlanganda
         function selectRole(roleKey, roleName) {
             selectedRoleKey = roleKey;
             selectedRoleName = roleName;
@@ -594,9 +771,7 @@
 
         function approveSubmission(index) {
             const item = pendingSubmissions[index];
-            if (!sampleData[item.category]) {
-                sampleData[item.category] = [];
-            }
+            if (!sampleData[item.category]) sampleData[item.category] = [];
             sampleData[item.category].unshift(item);
             pendingSubmissions.splice(index, 1);
             openAdminPanel();
@@ -619,15 +794,24 @@
             const name = document.getElementById('newItemName').value;
             const spec = document.getElementById('newItemSpecialty').value;
             const region = document.getElementById('newItemRegion').value;
+            const exp = document.getElementById('newItemExp').value || '10+ yil';
             const phone = document.getElementById('newItemPhone').value;
+            const telegram = document.getElementById('newItemTelegram').value || '';
+            const instagram = document.getElementById('newItemInstagram').value || '';
             const addr = document.getElementById('newItemAddress').value;
             const bio = document.getElementById('newItemBio').value;
 
             pendingSubmissions.push({
                 id: Date.now(),
                 category: cat,
-                name, specialty: spec, region, phone, address: addr, bio,
-                img: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=400"
+                name, specialty: spec, region, exp, phone,
+                telegram, instagram,
+                address: addr,
+                mapUrl: `https://maps.google.com/?q=${encodeURIComponent(addr + ' ' + region)}`,
+                rating: "5.0",
+                bio,
+                img: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=600",
+                reviews: []
             });
 
             closeAddItemModal();
@@ -635,6 +819,7 @@
             alert("Ma'lumotlaringiz adminga yuborildi! Admin tasdiqlagach, ilovada ko'rinishni boshlaydi.");
         }
 
+        // KARTALARNI CHIQARISH (Karta bosilganda batafsil oyna ochiladi)
         function renderGrid() {
             const container = document.getElementById('contentGrid');
             if(!container) return;
@@ -648,21 +833,32 @@
             }
 
             container.innerHTML = data.map(item => `
-                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between hover:shadow-xl transition">
-                    <div>
-                        <img src="${item.img}" class="w-full h-48 object-cover rounded-2xl mb-4">
-                        <h3 class="font-bold text-lg text-gray-900 dark:text-white">${item.name}</h3>
-                        <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-1">${item.specialty}</p>
-                        <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1 text-blue-500"></i>${item.region}, ${item.address}</p>
+                <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border border-gray-100 dark:border-gray-700 flex flex-col justify-between hover:shadow-xl transition group">
+                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
+                        <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-gray-100 dark:bg-gray-700">
+                            <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                            ${item.exp ? `<span class="absolute top-3 left-3 bg-blue-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow">${item.exp} tajriba</span>` : ''}
+                            ${item.rating ? `<span class="absolute top-3 right-3 bg-amber-400 text-gray-900 text-[11px] font-black px-2 py-0.5 rounded-lg shadow flex items-center gap-1"><i class="fa-solid fa-star text-[10px]"></i> ${item.rating}</span>` : ''}
+                        </div>
+                        <h3 class="font-bold text-lg text-gray-900 dark:text-white group-hover:text-blue-600 transition">${item.name}</h3>
+                        <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mt-0.5">${item.specialty}</p>
+                        <p class="text-xs text-gray-500 mt-2 flex items-center gap-1.5 truncate">
+                            <i class="fa-solid fa-location-dot text-blue-500"></i> ${item.region}, ${item.address}
+                        </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between">
-                        <span class="text-xs font-bold text-gray-700 dark:text-gray-300">${item.phone}</span>
-                        <button onclick="openBookingModal('${item.name}')" class="px-3.5 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow hover:opacity-95 transition cursor-pointer">Qabulga yozilish</button>
+                        <a href="tel:${item.phone}" class="text-xs font-bold text-gray-700 dark:text-gray-300 hover:text-blue-600 flex items-center gap-1">
+                            <i class="fa-solid fa-phone text-[10px] text-blue-500"></i> ${item.phone}
+                        </a>
+                        <button onclick="openBookingModal('${item.name}')" class="px-3.5 py-2 primary-bg text-white text-xs font-bold rounded-xl shadow hover:opacity-95 transition cursor-pointer">
+                            Qabulga yozilish
+                        </button>
                     </div>
                 </div>
             `).join('');
         }
 
+        // QIDIRUV VA HUDUD FILTRI
         function filterData() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const region = document.getElementById('regionFilter').value;
@@ -683,7 +879,7 @@
             }
             container.innerHTML = filtered.map(item => `
                 <div class="bg-white dark:bg-gray-800 rounded-3xl p-5 shadow-lg border flex flex-col justify-between">
-                    <div>
+                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
                         <img src="${item.img}" class="w-full h-48 object-cover rounded-2xl mb-4">
                         <h3 class="font-bold text-lg text-gray-900 dark:text-white">${item.name}</h3>
                         <p class="text-xs font-semibold text-blue-600 mt-1">${item.specialty}</p>
@@ -697,18 +893,163 @@
             `).join('');
         }
 
-        // Bo'limlarni almashtirish logikasi
+        // ==================== BATAFSIL PROFIL VA 3 TA TAVSIYA ETILADIGAN SHIFOKOR ====================
+        function openDetailModal(categoryKey, itemId) {
+            const list = sampleData[categoryKey] || [];
+            const item = list.find(x => x.id === itemId);
+            if (!item) return;
+
+            // Xuddi shu yo'nalishdagi 3 ta tavsiya etiladigan mutaxassis
+            const recommended = list
+                .filter(x => x.id !== item.id && (x.specialty.toLowerCase() === item.specialty.toLowerCase() || categoryKey === 'doctors'))
+                .slice(0, 3);
+
+            const reviewsList = (item.reviews && item.reviews.length > 0) ? item.reviews : [
+                { author: "Bemor", text: "Malakali shifokor, konsultatsiyadan juda mamnun qoldik.", rating: 5, date: "Yaqinda" }
+            ];
+
+            const detailContainer = document.getElementById('detailContentContainer');
+            detailContainer.innerHTML = `
+                <!-- Rasm, Ism, Mutaxassislik, Staj -->
+                <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center border-b border-gray-100 dark:border-gray-700 pb-5">
+                    <img src="${item.img}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-blue-100 dark:border-gray-700 shrink-0">
+                    <div class="flex-grow">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[11px] font-bold px-2.5 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-full uppercase">
+                                ${item.specialty}
+                            </span>
+                            <span class="text-xs font-bold text-amber-500 flex items-center gap-1">
+                                <i class="fa-solid fa-star"></i> ${item.rating || '5.0'}
+                            </span>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white mt-1.5">${item.name}</h2>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-2">
+                            <span><i class="fa-solid fa-briefcase text-blue-500 mr-1"></i> <b>${item.exp || '10+ yil'}</b> tajriba</span>
+                            <span>•</span>
+                            <span><i class="fa-solid fa-city text-blue-500 mr-1"></i> ${item.region}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Shifokor haqida / Biografiya -->
+                <div class="my-4">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Shifokor haqida</h4>
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-gray-700/40 p-3.5 rounded-2xl border border-gray-100 dark:border-gray-700">
+                        ${item.bio || "Malakali shifokor. Zamonaviy xalqaro standartlar asosida bemorlarni qabul qiladi va davolaydi."}
+                    </p>
+                </div>
+
+                <!-- Manzil, Xarita, Telefon va Ijtimoiy tarmoqlar -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                    <!-- Manzil & Google Maps -->
+                    <div class="p-3.5 bg-blue-50/60 dark:bg-blue-900/20 rounded-2xl border border-blue-100 dark:border-blue-900/30">
+                        <div class="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-2 mb-1">
+                            <i class="fa-solid fa-location-dot text-blue-600"></i> Manzil & Lokatsiya:
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-300">${item.address}</p>
+                        <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 mt-2 hover:underline">
+                            <i class="fa-solid fa-map-location-dot"></i> Xaritada ko'rish (Google Maps)
+                        </a>
+                    </div>
+
+                    <!-- Telefon, Telegram va Instagram -->
+                    <div class="p-3.5 bg-gray-50 dark:bg-gray-700/40 rounded-2xl border border-gray-100 dark:border-gray-700 space-y-2">
+                        <div class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Aloqa va Ijtimoiy tarmoqlar:</div>
+                        
+                        <div class="flex items-center justify-between text-xs">
+                            <a href="tel:${item.phone}" class="font-bold text-blue-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-emerald-500"></i> ${item.phone}
+                            </a>
+                        </div>
+
+                        <div class="flex gap-2 pt-1">
+                            ${item.telegram ? `
+                                <a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-sky-50 hover:bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                    <i class="fa-brands fa-telegram text-sm"></i> Telegram
+                                </a>
+                            ` : ''}
+                            ${item.instagram ? `
+                                <a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-pink-50 hover:bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                    <i class="fa-brands fa-instagram text-sm"></i> Instagram
+                                </a>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bemorlar fikrlari / Otzivlar -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-comments text-blue-600"></i> Bemorlar fikrlari (${reviewsList.length})
+                        </h4>
+                    </div>
+                    <div class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                        ${reviewsList.map(r => `
+                            <div class="p-3 bg-gray-50 dark:bg-gray-700/30 rounded-xl border border-gray-100 dark:border-gray-700">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs font-bold text-gray-800 dark:text-white">${r.author}</span>
+                                    <span class="text-[10px] text-gray-400">${r.date}</span>
+                                </div>
+                                <div class="text-amber-400 text-[10px] my-0.5">
+                                    ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating || 5)}
+                                </div>
+                                <p class="text-xs text-gray-600 dark:text-gray-300 mt-1">${r.text}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Qabulga yozilish asosiy tugmasi -->
+                <button onclick="closeDetailModal(); openBookingModal('${item.name}')" class="w-full primary-bg text-white font-bold py-3.5 rounded-2xl shadow-lg hover:opacity-95 transition mb-6 cursor-pointer">
+                    <i class="fa-solid fa-calendar-check mr-2"></i> Ushbu shifokor qabuliga yozilish
+                </button>
+
+                <!-- HUDDI SHU YO'NALISHDAGI 3 TA TAVSIYA ETILADIGAN SHIFOKOR -->
+                ${recommended.length > 0 ? `
+                    <div class="border-t border-gray-100 dark:border-gray-700 pt-5">
+                        <h4 class="text-sm font-extrabold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-thumbs-up text-blue-600"></i> Shu yo'nalishdagi tavsiya etiladigan shifokorlar
+                        </h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            ${recommended.map(rec => `
+                                <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-gray-100 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-700/30 hover:border-blue-500 hover:shadow-md transition cursor-pointer flex flex-col justify-between">
+                                    <div>
+                                        <img src="${rec.img}" class="w-full h-24 object-cover rounded-xl mb-2">
+                                        <h5 class="font-bold text-xs text-gray-900 dark:text-white line-clamp-1">${rec.name}</h5>
+                                        <p class="text-[11px] text-blue-600 dark:text-blue-400 font-semibold">${rec.specialty}</p>
+                                        <p class="text-[10px] text-gray-400 mt-0.5"><i class="fa-solid fa-briefcase"></i> ${rec.exp || 'Tajribali'}</p>
+                                    </div>
+                                    <div class="mt-2 pt-2 border-t border-gray-200/60 dark:border-gray-600 flex items-center justify-between text-[11px]">
+                                        <span class="text-amber-500 font-bold"><i class="fa-solid fa-star text-[9px]"></i> ${rec.rating || '4.9'}</span>
+                                        <span class="text-blue-600 font-bold hover:underline">Ko'rish &rarr;</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            const dm = document.getElementById('detailModal');
+            if(dm) dm.classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            const dm = document.getElementById('detailModal');
+            if(dm) dm.classList.add('hidden');
+        }
+
+        // ==================== BO'LIMLARNI ALMASHTIRISH ====================
         function switchTab(tab) {
             currentTab = tab;
             const cfg = tabConfigs[tab] || { title: 'Shifokorlar', icon: 'fa-user-doctor' };
 
-            // Sarlavha va ikonkani o'zgartirish
             const stt = document.getElementById('sectionTitleText');
             if(stt) stt.innerText = cfg.title;
             const sIcon = document.getElementById('sectionIcon');
             if(sIcon) sIcon.className = `fa-solid ${cfg.icon} text-blue-600`;
 
-            // Gorizontal tab tugmalarining faol holatini belgilash
             Object.keys(tabConfigs).forEach(t => {
                 const btn = document.getElementById(`fastTab-${t}`);
                 if (btn) {
@@ -772,3 +1113,4 @@
     </script>
 </body>
 </html>
+
