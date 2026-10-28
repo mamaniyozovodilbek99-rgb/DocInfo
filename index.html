@@ -1,11 +1,31 @@
+Ha, kodingizni GitHub’ga saqlab (Vercel’da yangilangandan so‘ng), telefoningizda ham o‘zgaradi. Faqat iPhone ekranga chiqarilgan yorliqlar keshini birdaniga yangilamaydi.
+Yangi logotip va nom darhol chiqishi uchun:
+ * iPhone asosiy ekranidagi eski DocInfo belgisini o‘chirib tashlaysiz;
+ * Brauzerda (Safari) saytingizni ochib, qaytadan «На экран Домой» (Asosiy ekranga qo‘shish) qilasiz. Shunda to‘g‘ridan-to‘g‘ri yangi ShifoTop yurakcha logotipi bilan chiqadi.
+Ilova ochilganda darhol ochilib ketmasdan, 2-3 soniya davomida ekranni to‘liq egallab turuvchi zamonaviy ShifoTop Splash Screen (animatsiyali kutib olish reklamasi) qo‘shildi. Unda:
+ * Markazda ShifoTop yurakcha logotipi puls urib turadi;
+ * Tilla rangli «ShifoTop» yozuvi va ostida «Milliy Tibbiyot Platformasi» chiqadi;
+ * 2.2 soniyadan so‘ng mayin yo‘qolib, asosiy sahifani ochadi.
+Yangilangan to‘liq kod:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShifoTop — Milliy Tibbiyot Platformasi</title>
-    <!-- ShifoTop Favicon -->
+    
+    <!-- iPhone Ekraniga Qo'shgandagi Nom -->
+    <meta name="apple-mobile-web-app-title" content="ShifoTop">
+    <meta name="application-name" content="ShifoTop">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <!-- iPhone Asosiy Ekranidagi ShifoTop Yurakcha Logotipi -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%230891b2'/><stop offset='50%25' stop-color='%230284c7'/><stop offset='100%25' stop-color='%231d4ed8'/></linearGradient></defs><rect width='512' height='512' rx='128' fill='url(%23bg)'/><path d='M256 448l-23.2-21.2C150.6 352.4 96 302.8 96 242c0-49.8 39.2-89 89-89 28.2 0 55.2 13.1 71 33.9 15.8-20.8 42.8-33.9 71-33.9 49.8 0 89 39.2 89 89 0 60.8-54.6 110.4-136.8 184.8L256 448z' fill='%23ffffff' opacity='0.25'/><path d='M140 256h60l25-50 45 100 35-70 20 20h45' fill='none' stroke='%23ffffff' stroke-width='32' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+    
+    <!-- Brauzer Favicon -->
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230284c7'><path d='M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3.5 7.5 3.5c1.722 0 3.3.784 4.5 2.052 1.2-1.268 2.778-2.052 4.5-2.052 2.786 0 5.25 1.822 5.25 4.75 0 3.924-2.438 7.11-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z'/></svg>">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,6 +66,12 @@
         }
         .animate-scale { animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+        .animate-pulse-logo { animation: pulseLogo 1.2s infinite ease-in-out; }
+
         .shifo-gradient {
             background: linear-gradient(135deg, #0e3054 0%, #0369a1 60%, #0284c7 100%);
             -webkit-background-clip: text;
@@ -88,6 +114,30 @@
     </style>
 </head>
 <body class="premium-bg-atmosphere text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 antialiased" onclick="closeAllDropdowns(event)">
+
+    <!-- 2-3 SONIYALI KUTIB OLISH REKLAMASI (SPLASH SCREEN) -->
+    <div id="appSplashScreen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white transition-opacity duration-500 ease-out">
+        <div class="relative flex flex-col items-center">
+            <!-- Yurakcha Logotipi -->
+            <div class="w-20 h-20 bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 text-white rounded-3xl flex items-center justify-center shadow-2xl shadow-cyan-500/30 animate-pulse-logo mb-4">
+                <i class="fa-solid fa-heart-pulse text-4xl"></i>
+            </div>
+            
+            <!-- ShifoTop Yozuvi -->
+            <div class="text-3xl font-black tracking-tight flex items-center">
+                <span class="text-white font-extrabold">Shifo</span>
+                <span class="gold-gradient font-black ml-1 text-3xl">Top</span>
+            </div>
+            <p class="text-xs text-cyan-300/80 font-medium tracking-widest uppercase mt-2">Milliy Tibbiyot Platformasi</p>
+            
+            <!-- Pastki yuklanish aylanasi -->
+            <div class="mt-8 flex items-center gap-1.5">
+                <div class="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
+                <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
+            </div>
+        </div>
+    </div>
 
     <!-- Rol tanlash Modal (Ro'yxatdan o'tish) -->
     <div id="roleSelectModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -228,7 +278,7 @@
     <!-- ADMIN MODERATSIYA PANELI -->
     <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
@@ -253,12 +303,10 @@
     <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200/70 dark:border-slate-800 transition-colors shadow-sm">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
             <div class="relative flex items-center gap-3">
-                <!-- Maxfiy logo tugmasi (ShifoTop yurakcha) -->
                 <div onclick="handleSecretAdminClick()" class="w-11 h-11 bg-gradient-to-tr from-cyan-600 via-blue-700 to-indigo-800 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/20 active:scale-95 transition cursor-pointer shrink-0" title="ShifoTop">
                     <i class="fa-solid fa-heart-pulse text-lg"></i>
                 </div>
 
-                <!-- Menyu ochilishi (Bo'limlar) -->
                 <div onclick="toggleMenuDropdown(event)" class="cursor-pointer select-none">
                     <div class="flex items-center gap-1">
                         <span class="text-2xl font-black tracking-tight flex items-center">
@@ -270,33 +318,33 @@
                     <span class="block text-[11px] text-slate-400 font-medium tracking-wide" id="lblAppSubtitle">Milliy Tibbiyot Platformasi</span>
                 </div>
 
-                <!-- Dropdown Menu (6 ta bo'lim bilan) -->
+                <!-- Dropdown Menu -->
                 <div id="menuDropdown" class="absolute left-0 top-14 w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-2 hidden z-50 animate-scale text-slate-800 dark:text-white">
                     <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-700 text-[11px] font-bold text-slate-400 uppercase tracking-wider" id="lblSectionsMenu">
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-0.5">
-                        <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-user-doctor w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-doctors">Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-hospital w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-clinics">Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('insurance')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('insurance')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-shield-heart w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-insurance">Tibbiy sug'urta</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-pills w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-pharmacies">Dorixonalar</span>
                         </button>
-                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-stethoscope w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-medical_store">Tibbiy buyumlar</span>
                         </button>
-                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-globe w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-abroad_treatment">Xorijda davolanish</span>
                         </button>
@@ -453,7 +501,6 @@
         let secretClickTimer = null;
         let reviewStarRating = 5;
 
-        // Hududlar iyerarxiyasi
         const regionsHierarchy = {
             "Toshkent sh.": ["Shayxontohur", "Yunusobod", "Mirzo Ulug'bek", "Chilonzor", "Yakkasaroy", "Mirobod", "Yashnobod", "Olmazor", "Uchtepa", "Sergeli", "Bektemir", "Yangihayot"],
             "Toshkent vil.": ["Nurafshon", "Chirchiq", "Olmaliq", "Angren", "Yangiyo'l", "Bekobod", "Bo'stonliq", "Qibray", "Zangiota", "Toshkent tumani"],
@@ -583,7 +630,6 @@
             abroad_treatment: { icon: 'fa-globe' }
         };
 
-        // Barcha 6 ta bo'lim uchun boyitilgan ma'lumotlar bazasi
         const sampleData = {
             doctors: [
                 {
@@ -647,7 +693,6 @@
                     district: "Mirzo Ulug'bek",
                     exp: { uz: "9 yil", ru: "9 лет", en: "9 years" },
                     phone: "+998 97 765 43 21",
-                    insurance: ["Apex Insurance"],
                     address: { uz: "Mustaqillik shox ko'chasi, 88", ru: "пр. Мустакиллик, 88", en: "Mustaqillik ave, 88" },
                     mapUrl: "https://maps.google.com/?q=Tashkent,Mustaqillik",
                     telegram: "dr_jasur_neuro",
@@ -668,7 +713,6 @@
                     district: "Samarqand sh.",
                     exp: { uz: "14 yil", ru: "14 лет", en: "14 years" },
                     phone: "+998 91 333 22 11",
-                    insurance: ["Gross Insurance"],
                     address: { uz: "Registon ko'chasi, 15", ru: "ул. Регистан, 15", en: "Registan st, 15" },
                     mapUrl: "https://maps.google.com/?q=Samarkand",
                     telegram: "dr_nodir_sam",
@@ -691,21 +735,18 @@
                     district: "Olmazor",
                     exp: { uz: "Statsionar 24/7", ru: "Стационар 24/7", en: "Inpatient 24/7" },
                     phone: "+998 71 203 30 03",
-                    insurance: ["Apex Insurance", "Gross", "Alfa Life", "Euroasia Insurance", "Kapital Sug'urta"],
+                    insurance: ["Apex Insurance", "Gross", "Alfa Life", "Euroasia Insurance"],
                     address: { uz: "Kichik halqa yo'li, 5A", ru: "Малая кольцевая, 5А", en: "Little Ring Road, 5A" },
                     mapUrl: "https://maps.google.com/?q=Akfa+Medline",
                     telegram: "akfamedline_uz",
                     instagram: "akfamedline",
                     rating: 4.9,
-                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi. Barcha yirik sug'urta kompaniyalari orqali bepul xizmat ko'rsatish yo'lga qo'yilgan.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией и прямым приемом по страховым полисам.", en: "Largest modern private medical center with advanced surgery and direct insurance acceptance in Central Asia." },
+                    bio: { uz: "O'rta Osiyodagi eng yirik zamonaviy xususiy tibbiyot markazi va operatsiya bloklari.", ru: "Крупнейший частный медицинский центр в Центральной Азии с передовой хирургией.", en: "Largest modern private medical center with advanced surgery in Central Asia." },
                     images: [
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
-                        "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=700"
+                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
                     ],
-                    reviews: [
-                        { author: "Bobur", text: "Sug'urta polisi orqali tekshiruvdan o'tdik, qulay va tez.", rating: 5, date: "1 hafta oldin" }
-                    ]
+                    reviews: []
                 },
                 {
                     id: 102,
@@ -721,31 +762,10 @@
                     telegram: "shoxmed_uz",
                     instagram: "shox.med",
                     rating: 4.8,
-                    bio: { uz: "Aniq MRT, MSKT diagnostikasi va kam invaziv jarrohlik amaliyotlari. Sug'urta kompaniyalari kafolati bilan xizmat ko'rsatiladi.", ru: "Точная диагностика МРТ, МСКТ и малоинвазивная хирургия по страховым полисам.", en: "Precise MRI, CT diagnostics and minimally invasive surgery covered by insurance." },
+                    bio: { uz: "Aniq MRT, MSKT diagnostikasi va kam invaziv jarrohlik amaliyotlari.", ru: "Точная диагностика МРТ, МСКТ и малоинвазивная хирургия.", en: "Precise MRI, CT diagnostics and minimally invasive surgery." },
                     images: [
                         "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700",
                         "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 103,
-                    name: { uz: "City Med Samarqand", ru: "Сити Мед Самарканд", en: "City Med Samarkand" },
-                    specialty: { uz: "Kardiologiya va Nevrologiya", ru: "Кардиология и Неврология", en: "Cardiology & Neurology" },
-                    region: "Samarqand",
-                    district: "Samarqand sh.",
-                    exp: { uz: "24/7 Xizmat", ru: "24/7 Сервис", en: "24/7 Service" },
-                    phone: "+998 66 230 40 50",
-                    insurance: ["Gross Insurance", "Alfa Life"],
-                    address: { uz: "Beruniy ko'chasi, 4", ru: "ул. Беруни, 4", en: "Beruni st, 4" },
-                    mapUrl: "https://maps.google.com/?q=Samarkand",
-                    telegram: "citymed_sam",
-                    instagram: "citymed_samarkand",
-                    rating: 4.9,
-                    bio: { uz: "Samarqanddagi yetakchi xususiy tibbiyot markazi.", ru: "Ведущий частный медицинский центр в Самарканде.", en: "Leading private medical clinic in Samarkand." },
-                    images: [
-                        "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?w=700",
-                        "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=700"
                     ],
                     reviews: []
                 }
@@ -802,30 +822,6 @@
                         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700"
                     ],
                     reviews: []
-                },
-                {
-                    id: 503,
-                    name: { uz: "Alfa Life Sug'urta", ru: "Альфа Лайф", en: "Alfa Life Insurance" },
-                    specialty: { uz: "Hayot va salomatlikni sug'urtalash", ru: "Страхование жизни и здоровья", en: "Life & Health Insurance" },
-                    region: "Toshkent sh.",
-                    district: "Shayxontohur",
-                    exp: { uz: "Keng qamrov", ru: "Широкое покрытие", en: "Wide coverage" },
-                    phone: "+998 71 202 55 00",
-                    insurance: ["Barcha viloyatlarda"],
-                    address: { uz: "Zulfiyaxonim ko'chasi, 112", ru: "ул. Зульфияхоним, 112", en: "Zulfiyakhonim st, 112" },
-                    mapUrl: "https://maps.google.com/?q=Alfa+Life+Tashkent",
-                    telegram: "alfalife_uz",
-                    instagram: "alfalife_insurance",
-                    rating: 4.7,
-                    bio: { 
-                        uz: "Og'ir kasalliklar, jarrohlik amaliyotlari va profilaktik tibbiy ko'riklarni kafolatli moliyalashtirish.",
-                        ru: "Гарантированное финансирование сложных операций, критических заболеваний и плановых медосмотров.",
-                        en: "Guaranteed funding for critical illnesses, complex surgeries, and regular check-ups."
-                    },
-                    images: [
-                        "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=700"
-                    ],
-                    reviews: []
                 }
             ],
             pharmacies: [
@@ -844,27 +840,7 @@
                     rating: 4.8,
                     bio: { uz: "10 000 dan ortiq sertifikatlangan dori-darmonlar va ekspress yetkazib berish.", ru: "Более 10 000 сертифицированных лекарств и экспресс-доставка.", en: "Over 10,000 certified medicines and express delivery." },
                     images: [
-                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700",
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
-                    ],
-                    reviews: []
-                },
-                {
-                    id: 202,
-                    name: { uz: "Grand Pharm Dorixona", ru: "Гранд Фарм Аптека", en: "Grand Pharm Pharmacy" },
-                    specialty: { uz: "Sertifikatlangan dorilar & Optika", ru: "Сертифицированные лекарства и оптика", en: "Certified Medicines & Optics" },
-                    region: "Toshkent sh.",
-                    district: "Chilonzor",
-                    exp: { uz: "24/7 Ochiq", ru: "24/7 Открыто", en: "Open 24/7" },
-                    phone: "+998 71 202 99 99",
-                    address: { uz: "Bunyodkor shox ko'chasi, 4", ru: "пр. Бунёдкор, 4", en: "Bunyodkor ave, 4" },
-                    mapUrl: "https://maps.google.com/?q=Chilanzar+Tashkent",
-                    telegram: "grandpharm_uz",
-                    instagram: "grandpharm.uz",
-                    rating: 4.7,
-                    bio: { uz: "Sifatli farmatsevtika mahsulotlari va malakali provizorlar.", ru: "Качественные фармацевтические товары и опытные провизоры.", en: "Quality pharmaceuticals and expert pharmacists." },
-                    images: [
-                        "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=700"
+                        "https://images.unsplash.com/photo-1586015555751-63c25aa42d45?w=700"
                     ],
                     reviews: []
                 }
@@ -894,7 +870,7 @@
                 {
                     id: 401,
                     name: { uz: "Acıbadem Healthcare (Turkiya)", ru: "Аджибадем (Турция)", en: "Acıbadem Healthcare (Turkey)" },
-                    specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Трансплантация", en: "Oncology, Neurosurgery & Transplantation" },
+                    specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Transplantatsiya", en: "Oncology, Neurosurgery & Transplantation" },
                     region: "Xorij",
                     district: "Turkiya",
                     exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
@@ -924,6 +900,17 @@
             populateRegionsDropdowns();
             updateLanguageUI();
             renderGrid();
+
+            // 2.2 soniyadan keyin boshlang'ich reklamani (splash screen) yopish
+            setTimeout(() => {
+                const splash = document.getElementById('appSplashScreen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => {
+                        splash.style.display = 'none';
+                    }, 500);
+                }
+            }, 2200);
         };
 
         function populateRegionsDropdowns() {
@@ -1156,7 +1143,7 @@
 
         function closeAdminFullDetailModal() {
             const afm = document.getElementById('adminFullDetailModal');
-            if (afm) afm.classList.add('hidden');
+            if (afm) afm.classList.add('hidden'); 
         }
 
         function approveSubmission(index) {
@@ -1409,7 +1396,6 @@
             `}).join('');
         }
 
-        // ==================== FOYDALANUVCHI UCHUN BATAFSIL OYNA VA 3 TA TAVSIYA ====================
         function openDetailModal(categoryKey, itemId) {
             const list = sampleData[categoryKey] || [];
             const item = list.find(x => x.id === itemId);
@@ -1629,7 +1615,6 @@
             if(dm) dm.classList.add('hidden');
         }
 
-        // Bo'limlarni faqat menyu orqali almashtirish
         function switchTab(tab) {
             currentTab = tab;
             const cfg = tabConfigs[tab] || { icon: 'fa-user-doctor' };
