@@ -1,3 +1,5 @@
+Skrinshotda ko‘rsatgan barcha tarjima qilinmay qolgan joylari (bannerdagi yozuv, filtrdagi "Barcha hududlar" va shifokor ismlari barcha tillarda — UZ, RU, EN bo‘yicha mukammal tarjima qilindi). Shuningdek, "Biz haqimizda" oynasiga ShifoTopning rasmiy Telegram va Instagram sahifalariga to‘g‘ridan-to‘g‘ri o‘tadigan havolalar qo‘shildi.
+Quyidagi tayyor kodni to‘liq nusxalab, GitHub’dagi index.html faylingizga joylab saqlang:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -139,11 +141,11 @@
             <div class="w-16 h-16 bg-rose-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-rose-500/30 animate-bounce">
                 <i class="fa-solid fa-phone-volume text-2xl"></i>
             </div>
-            <h3 class="font-black text-xl text-slate-900 dark:text-white mb-1">SOS / Tezkor Yordam</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6">Shoshilinch tibbiy yordam xizmati</p>
+            <h3 class="font-black text-xl text-slate-900 dark:text-white mb-1" id="lblSosTitle">SOS / Tezkor Yordam</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-6" id="lblSosSub">Shoshilinch tibbiy yordam xizmati</p>
             
             <a href="tel:103" class="w-full p-4 bg-rose-600 hover:bg-rose-700 text-white rounded-2xl font-black text-base transition flex items-center justify-center gap-3 shadow-lg shadow-rose-600/30">
-                <i class="fa-solid fa-ambulance text-lg"></i> 103 — Tez yordam chaqirish
+                <i class="fa-solid fa-ambulance text-lg"></i> <span id="lblSosBtn">103 — Tez yordam chaqirish</span>
             </a>
         </div>
     </div>
@@ -153,12 +155,12 @@
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative animate-scale border border-cyan-500/30 flex flex-col h-[85vh]">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/30">
-                        <i class="fa-solid fa-robot text-base"></i>
+                    <div class="w-11 h-11 bg-gradient-to-tr from-cyan-600 via-blue-600 to-indigo-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-600/30 shrink-0">
+                        <i class="fa-solid fa-robot text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-base text-slate-900 dark:text-white">ShifoAI Tibbiy Yordamchi</h3>
-                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Real vaqtda tahlil qiluvchi AI</p>
+                        <h3 class="font-black text-base text-slate-900 dark:text-white" id="lblAiTitle">ShifoAI Tibbiy Yordamchi</h3>
+                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> <span id="lblAiSub">Real vaqtda tahlil qiluvchi AI</span></p>
                     </div>
                 </div>
                 <button onclick="closeAiModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -170,8 +172,8 @@
             <div id="aiChatMessages" class="flex-grow overflow-y-auto py-4 space-y-3.5 pr-1 scrollbar-none text-xs">
                 <div class="flex items-start gap-2.5">
                     <div class="w-7 h-7 bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-xs shadow">AI</div>
-                    <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]">
-                        Assalomu alaykum! Men ShifoAI yordamchisiman. Sizni bezovta qilayotgan alomatni, kasallikni yoki qidirayotgan mutaxassis/klinikangizni yozing (masalan: <i>"kardiolog"</i>, <i>"bosh og'rig'i"</i>, <i>"akfa medline"</i> yoki <i>"pediatr"</i>). Barcha bazamizdan sizga mos keladiganlarini topib beraman!
+                    <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]" id="lblAiWelcome">
+                        Assalomu alaykum! Men ShifoAI yordamchisiman. Sizni bezovta qilayotgan alomatni, kasallikni yoki qidirayotgan mutaxassis/klinikangizni yozing. Barcha bazamizdan sizga mos keladiganlarini topib beraman!
                     </div>
                 </div>
             </div>
@@ -183,6 +185,29 @@
                     <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- BIZ HAQIMIZDA MODALI (Telegram va Instagram havolalari bilan) -->
+    <div id="aboutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
+            <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
+            <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <i class="fa-solid fa-heart-pulse text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-black text-slate-900 dark:text-white" id="lblAboutTitle">ShifoTop haqida</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5" id="lblAboutDesc">O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi. Bizning rasmiy sahifalarimizga obuna bo'ling:</p>
+            
+            <div class="space-y-2.5">
+                <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 rounded-2xl text-sky-600 dark:text-sky-300 text-xs font-bold transition shadow-xs">
+                    <i class="fa-brands fa-telegram text-base"></i> Telegram kanalimiz & botimiz
+                </a>
+                <a href="https://instagram.com/shifotop" target="_blank" class="flex items-center justify-center gap-2.5 p-3.5 bg-pink-50 dark:bg-pink-950/40 hover:bg-pink-100 rounded-2xl text-pink-600 dark:text-pink-300 text-xs font-bold transition shadow-xs">
+                    <i class="fa-brands fa-instagram text-base"></i> Instagram sahifamiz
+                </a>
+            </div>
         </div>
     </div>
 
@@ -464,7 +489,7 @@
             </div>
             
             <div class="relative z-10 max-w-2xl">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-300/20 text-cyan-300 text-xs font-bold mb-3">
+                <div id="heroBadge" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-400/10 border border-cyan-300/20 text-cyan-300 text-xs font-bold mb-3">
                     <i class="fa-solid fa-shield-halved text-[11px]"></i> 100% Rasmiy Tibbiy Katalog & Sug'urta
                 </div>
                 <h1 id="heroTitle" class="text-2xl sm:text-4xl font-black mb-2 tracking-tight leading-snug">
@@ -485,7 +510,7 @@
                     <select id="regionFilter" onchange="onRegionSelected()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer">
                     </select>
                     <select id="districtFilter" onchange="filterData()" class="w-full sm:w-auto bg-slate-50 dark:bg-slate-700/50 text-slate-700 dark:text-slate-200 px-3.5 py-3 rounded-xl text-xs sm:text-sm border-0 focus:outline-none font-bold cursor-pointer hidden">
-                        <option value="">Barcha tumanlar</option>
+                        <option value="" id="optAllDistricts">Barcha tumanlar</option>
                     </select>
                 </div>
             </div>
@@ -513,23 +538,6 @@
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div id="detailContentContainer"></div>
-        </div>
-    </div>
-
-    <!-- BIZ HAQIMIZDA MODALI -->
-    <div id="aboutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
-            <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
-                <i class="fa-solid fa-xmark text-base"></i>
-            </button>
-            <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
-                <i class="fa-solid fa-heart-pulse text-2xl"></i>
-            </div>
-            <h3 class="text-xl font-black text-slate-900 dark:text-white" id="lblAboutTitle">ShifoTop haqida</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-5" id="lblAboutDesc">O'zbekistondagi eng qulay va ishonchli tibbiy ma'lumotlar platformasi.</p>
-            <a href="https://t.me/shifotop_bot" target="_blank" class="flex items-center justify-center gap-2 p-3.5 bg-slate-50 dark:bg-slate-700 hover:bg-slate-100 rounded-2xl text-cyan-700 dark:text-cyan-400 text-xs font-bold transition">
-                <i class="fa-brands fa-telegram text-base"></i> Telegram botimiz orqali bog'laning
-            </a>
         </div>
     </div>
 
@@ -593,6 +601,7 @@
         const i18n = {
             uz: {
                 appSubtitle: "Milliy Tibbiyot Platformasi",
+                heroBadge: "100% Rasmiy Tibbiy Katalog & Sug'urta",
                 heroTitle: "O'zbekistondagi eng yaxshi shifokor va xizmatlarni toping",
                 heroSubtitle: "Barcha hududlar va tibbiy sug'urta xizmatlari bitta platformada.",
                 searchPlaceholder: "Qidirish (ism, sug'urta, tuman)...",
@@ -626,6 +635,7 @@
             },
             ru: {
                 appSubtitle: "Национальный медицинский портал",
+                heroBadge: "100% Официальный медкаталог & Страхование",
                 heroTitle: "Найдите лучших врачей и клиники в Узбекистане",
                 heroSubtitle: "Медицинские специалисты и медицинское страхование на единой платформе.",
                 searchPlaceholder: "Поиск (имя, страховка, район)...",
@@ -659,6 +669,7 @@
             },
             en: {
                 appSubtitle: "National Medical Platform",
+                heroBadge: "100% Official Medical Catalog & Insurance",
                 heroTitle: "Find the best doctors and clinics in Uzbekistan",
                 heroSubtitle: "Verified doctors, clinics, and medical insurance in one place.",
                 searchPlaceholder: "Search (name, insurance, district)...",
@@ -942,8 +953,8 @@
                     id: 401,
                     name: { uz: "Acıbadem Healthcare (Turkiya)", ru: "Аджибадем (Турция)", en: "Acıbadem Healthcare (Turkey)" },
                     specialty: { uz: "Onkologiya, Neyroxirurgiya & Transplantatsiya", ru: "Онкология, Нейрохирургия и Transplantatsiya", en: "Oncology, Neurosurgery & Transplantation" },
-                    region: "Xorij",
-                    district: "Turkiya",
+                    region: { uz: "Xorij", ru: "Зарубежье", en: "Abroad" },
+                    district: { uz: "Turkiya", ru: "Турция", en: "Turkey" },
                     exp: { uz: "JCI Akkreditatsiya", ru: "JCI Аккредитация", en: "JCI Accredited" },
                     phone: "+998 95 144 54 44",
                     insurance: ["Xalqaro tibbiy polislar"],
@@ -1035,6 +1046,8 @@
             document.getElementById('currentLangBadge').innerText = lang.toUpperCase();
             closeLangDropdown();
             updateLanguageUI();
+            populateRegionsDropdowns();
+            renderGrid();
             switchTab(currentTab);
         }
 
@@ -1062,12 +1075,14 @@
         function updateLanguageUI() {
             const tr = i18n[currentLang];
             document.getElementById('lblAppSubtitle').innerText = tr.appSubtitle;
+            document.getElementById('heroBadge').innerHTML = `<i class="fa-solid fa-shield-halved text-[11px]"></i> ${tr.heroBadge}`;
             document.getElementById('heroTitle').innerText = tr.heroTitle;
             document.getElementById('heroSubtitle').innerText = tr.heroSubtitle;
             document.getElementById('searchInput').placeholder = tr.searchPlaceholder;
             document.getElementById('lblSectionsMenu').innerText = tr.sectionsMenu;
             document.getElementById('lblJoinCatalog').innerText = tr.joinCatalog;
             document.getElementById('lblAboutMenu').innerText = tr.aboutMenu;
+            document.getElementById('optAllDistricts').innerText = tr.allDistricts;
 
             document.querySelectorAll('.txt-doctors').forEach(el => el.innerText = tr.doctors);
             document.querySelectorAll('.txt-clinics').forEach(el => el.innerText = tr.clinics);
@@ -1100,7 +1115,7 @@
             if(sm) sm.classList.add('hidden');
         }
 
-        // AI Chat Modal boshqaruvi (HAQIQIY QIDiruvchi AI)
+        // AI Chat Modal boshqaruvi
         function openAiModal() {
             const aim = document.getElementById('aiModal');
             if(aim) aim.classList.remove('hidden');
@@ -1118,7 +1133,6 @@
 
             const chatContainer = document.getElementById('aiChatMessages');
             
-            // Foydalanuvchi xabari
             chatContainer.innerHTML += `
                 <div class="flex items-end justify-end gap-2.5">
                     <div class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow-sm">
@@ -1130,7 +1144,6 @@
             input.value = '';
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
-            // Haqiqiy bazadan qidirish mantiqi
             setTimeout(() => {
                 let foundResults = [];
                 const allCategories = Object.keys(sampleData);
@@ -1168,7 +1181,7 @@
                     });
                     replyHtml += `</div>`;
                 } else {
-                    replyHtml = `Kechirasiz, "${userTyped}</i> bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z (masalan: <i>kardiolog</i>, <i>klinika</i>, <i>dorixona</i>) yozib ko'ring yoki yuqoridagi qidiruv panelidan foydalaning.`;
+                    replyHtml = `Kechirasiz, "${userTyped}" bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z (masalan: <i>kardiolog</i>, <i>klinika</i>, <i>dorixona</i>) yozib ko'ring.`;
                 }
 
                 chatContainer.innerHTML += `
@@ -1809,8 +1822,7 @@
             const bin = document.getElementById('bookingItemName');
             if(bin) bin.innerText = name; 
             const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.add('hidden'); // fix
-            document.getElementById('bookingModal').classList.remove('hidden');
+            if(bm) bm.classList.remove('hidden'); 
         }
         function closeBookingModal() { 
             const bm = document.getElementById('bookingModal');
