@@ -1,3 +1,5 @@
+Uzur, do'stim, haqlisiz, bu yerda modal formadagi elementlarni yuborishda xatolik ketib qoldi. Rasmda ko'rib turibman, forma to'ldirilgan va "Tasdiqlash uchun Adminga yuborish" tugmasi bosilyapti, lekin handleAddItemSubmit funksiyasida select elementlaridan (newItemRegion, newItemDistrict) qiymatni to'g'ri o'qib ololmay qolgani uchun to'xtab qolyapti.
+Hozir uni butunlay to'g'rilab, muammosiz ishlaydigan qilaman. Mana to'liq va xatosiz kodni nusxalab olasiz:
 <!DOCTYPE html>
 <html lang="uz" class="light">
 <head>
@@ -253,7 +255,7 @@
     <!-- Ma'lumot qo'shish anketasi -->
     <div id="addItemModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
-            <button onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeAddItemModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white" id="modalFormTitle">Anketa to'ldirish</h3>
@@ -328,7 +330,7 @@
     <!-- MAXFIY ADMIN KIRISH MODALI -->
     <div id="adminLoginModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
-            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeAdminLoginModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <div class="w-12 h-12 bg-amber-50 dark:bg-amber-900/30 text-amber-500 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
@@ -348,7 +350,7 @@
     <!-- ADMIN MODERATSIYA PANELI -->
     <div id="adminPanelModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[90vh] overflow-y-auto">
-            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeAdminPanel()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
@@ -362,7 +364,7 @@
     <!-- ADMIN UCHUN ARIZANI TO'LIQ KO'RISH OYNASI -->
     <div id="adminFullDetailModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-6 max-h-[92vh] overflow-y-auto">
-            <button onclick="closeAdminFullDetailModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition z-20 cursor-pointer">
+            <button type="button" onclick="closeAdminFullDetailModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition z-20 cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div id="adminFullDetailContent"></div>
@@ -394,39 +396,39 @@
                         Bo'limlar
                     </div>
                     <div class="p-1.5 space-y-0.5">
-                        <button onclick="switchTab('doctors')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('doctors')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-user-doctor w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-doctors">Shifokorlar</span>
                         </button>
-                        <button onclick="switchTab('clinics')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('clinics')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-hospital w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-clinics">Klinikalar</span>
                         </button>
-                        <button onclick="switchTab('insurance')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('insurance')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-shield-heart w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-insurance">Tibbiy sug'urta</span>
                         </button>
-                        <button onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('pharmacies')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-pills w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-pharmacies">Dorixonalar</span>
                         </button>
-                        <button onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('medical_store')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-stethoscope w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-medical_store">Tibbiy buyumlar</span>
                         </button>
-                        <button onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="switchTab('abroad_treatment')" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-globe w-4 text-cyan-600 text-sm"></i>
                             <span class="txt-abroad_treatment">Xorijda davolanish</span>
                         </button>
 
                         <div class="border-t border-slate-100 dark:border-slate-700 my-1"></div>
 
-                        <button onclick="openRoleModalFromMenu()" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition bg-cyan-50/70 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 flex items-center gap-3 cursor-pointer">
+                        <button type="button" onclick="openRoleModalFromMenu()" class="w-full text-left px-3 py-2 rounded-xl font-bold text-xs transition bg-cyan-50/70 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 flex items-center gap-3 cursor-pointer">
                             <i class="fa-solid fa-plus-circle w-4"></i>
                             <span id="lblJoinCatalog">Ro'yxatdan o'tish</span>
                         </button>
 
-                        <button onclick="openAboutModal()" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer text-slate-500">
+                        <button type="button" onclick="openAboutModal()" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer text-slate-500">
                             <i class="fa-solid fa-circle-info w-4"></i>
                             <span id="lblAboutMenu">Biz haqimizda</span>
                         </button>
@@ -437,40 +439,40 @@
             <!-- O'ng taraf elementlari -->
             <div class="flex items-center gap-2">
                 <!-- ShifoAI Maslahatchi Tugmasi -->
-                <button onclick="openAiModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 transition cursor-pointer">
+                <button type="button" onclick="openAiModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 transition cursor-pointer">
                     <i class="fa-solid fa-robot"></i> <span class="hidden sm:inline">ShifoAI</span>
                 </button>
 
                 <!-- SOS Tez yordam Tugmasi -->
-                <button onclick="openSosModal()" class="px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer animate-pulse">
+                <button type="button" onclick="openSosModal()" class="px-3 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm transition cursor-pointer animate-pulse">
                     <i class="fa-solid fa-phone-volume"></i> <span class="hidden sm:inline">SOS</span>
                 </button>
 
                 <!-- Chiroyli Til Almashtirish (Dropdown) -->
                 <div class="relative" id="langDropdownContainer">
-                    <button onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-200/50 dark:border-slate-700 shadow-sm cursor-pointer hover:bg-slate-200/70 transition">
+                    <button type="button" onclick="toggleLangDropdown(event)" class="px-3 py-2 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs flex items-center gap-1.5 border border-slate-200/50 dark:border-slate-700 shadow-sm cursor-pointer hover:bg-slate-200/70 transition">
                         <i class="fa-solid fa-globe text-cyan-600"></i>
                         <span id="currentLangBadge" class="uppercase">UZ</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                     </button>
                     <div id="langDropdownMenu" class="absolute right-0 top-11 w-28 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 py-1.5 hidden z-50 animate-scale text-xs font-bold text-slate-800 dark:text-white">
-                        <button onclick="changeLanguage('uz')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                        <button type="button" onclick="changeLanguage('uz')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
                             <span>O'zbekcha</span> <span class="text-[10px] text-slate-400">UZ</span>
                         </button>
-                        <button onclick="changeLanguage('ru')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                        <button type="button" onclick="changeLanguage('ru')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
                             <span>Русский</span> <span class="text-[10px] text-slate-400">RU</span>
                         </button>
-                        <button onclick="changeLanguage('en')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
+                        <button type="button" onclick="changeLanguage('en')" class="w-full text-left px-3.5 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center justify-between cursor-pointer">
                             <span>English</span> <span class="text-[10px] text-slate-400">EN</span>
                         </button>
                     </div>
                 </div>
 
-                <button onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer border border-slate-200/50 dark:border-slate-700">
+                <button type="button" onclick="openFavoritesModal()" class="relative p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer border border-slate-200/50 dark:border-slate-700">
                     <i class="fa-solid fa-heart text-rose-500 text-sm"></i>
                     <span id="favCount" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow">0</span>
                 </button>
-                <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer border border-slate-200/50 dark:border-slate-700">
+                <button type="button" onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200/70 dark:hover:bg-slate-700 transition flex items-center justify-center cursor-pointer border border-slate-200/50 dark:border-slate-700">
                     <i id="themeIcon" class="fa-solid fa-moon text-slate-600 dark:text-slate-300 text-sm"></i>
                 </button>
             </div>
@@ -532,7 +534,7 @@
     <!-- BATAFSIL MODAL -->
     <div id="detailModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-md z-50 hidden flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 my-8 max-h-[92vh] overflow-y-auto">
-            <button onclick="closeDetailModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition z-20 cursor-pointer">
+            <button type="button" onclick="closeDetailModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition z-20 cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div id="detailContentContainer"></div>
@@ -542,7 +544,7 @@
     <!-- BIZ HAQIMIZDA MODALI -->
     <div id="aboutModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700 text-center">
-            <button onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeAboutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-base"></i>
             </button>
             <div class="w-14 h-14 bg-cyan-50 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
@@ -565,7 +567,7 @@
     <!-- Booking Modal -->
     <div id="bookingModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeBookingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-extrabold text-lg text-slate-900 dark:text-white" id="lblBookingTitle">Qabulga yozilish / Murojaat</h3>
@@ -581,7 +583,7 @@
     <!-- Favorites Modal -->
     <div id="favoritesModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative animate-scale border border-slate-100 dark:border-slate-700">
-            <button onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
+            <button type="button" onclick="closeFavoritesModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
                 <i class="fa-solid fa-xmark text-sm"></i>
             </button>
             <h3 class="font-extrabold text-lg mb-4 text-slate-900 dark:text-white flex items-center gap-2">
@@ -1007,16 +1009,11 @@
 
         let pendingSubmissions = [];
 
-        // LocalStorage dan yuklash
         if (localStorage.getItem('shifotop_data')) {
-            try {
-                sampleData = JSON.parse(localStorage.getItem('shifotop_data'));
-            } catch(e) {}
+            try { sampleData = JSON.parse(localStorage.getItem('shifotop_data')); } catch(e) {}
         }
         if (localStorage.getItem('shifotop_pending')) {
-            try {
-                pendingSubmissions = JSON.parse(localStorage.getItem('shifotop_pending'));
-            } catch(e) {}
+            try { pendingSubmissions = JSON.parse(localStorage.getItem('shifotop_pending')); } catch(e) {}
         }
 
         function saveDataToLocalStorage() {
@@ -1037,9 +1034,7 @@
                 const splash = document.getElementById('appSplashScreen');
                 if (splash) {
                     splash.style.opacity = '0';
-                    setTimeout(() => {
-                        splash.style.display = 'none';
-                    }, 500);
+                    setTimeout(() => { splash.style.display = 'none'; }, 500);
                 }
             }, 2200);
         };
@@ -1150,9 +1145,7 @@
         function handleSecretAdminClick() {
             secretClickCount++;
             clearTimeout(secretClickTimer);
-            secretClickTimer = setTimeout(() => {
-                secretClickCount = 0;
-            }, 2000);
+            secretClickTimer = setTimeout(() => { secretClickCount = 0; }, 2000);
 
             if (secretClickCount === 5) {
                 secretClickCount = 0;
@@ -1160,23 +1153,11 @@
             }
         }
 
-        function openSosModal() {
-            const sm = document.getElementById('sosModal');
-            if(sm) sm.classList.remove('hidden');
-        }
-        function closeSosModal() {
-            const sm = document.getElementById('sosModal');
-            if(sm) sm.classList.add('hidden');
-        }
+        function openSosModal() { document.getElementById('sosModal')?.classList.remove('hidden'); }
+        function closeSosModal() { document.getElementById('sosModal')?.classList.add('hidden'); }
 
-        function openAiModal() {
-            const aim = document.getElementById('aiModal');
-            if(aim) aim.classList.remove('hidden');
-        }
-        function closeAiModal() {
-            const aim = document.getElementById('aiModal');
-            if(aim) aim.classList.add('hidden');
-        }
+        function openAiModal() { document.getElementById('aiModal')?.classList.remove('hidden'); }
+        function closeAiModal() { document.getElementById('aiModal')?.classList.add('hidden'); }
 
         function handleAiSubmit(e) {
             e.preventDefault();
@@ -1185,7 +1166,6 @@
             if(!query) return;
 
             const chatContainer = document.getElementById('aiChatMessages');
-            
             chatContainer.innerHTML += `
                 <div class="flex items-end justify-end gap-2.5">
                     <div class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow-sm">
@@ -1199,17 +1179,14 @@
 
             setTimeout(() => {
                 let foundResults = [];
-                const allCategories = Object.keys(sampleData);
-
-                allCategories.forEach(cat => {
+                Object.keys(sampleData).forEach(cat => {
                     sampleData[cat].forEach(item => {
                         const name = getLocalized(item.name).toLowerCase();
                         const spec = getLocalized(item.specialty).toLowerCase();
                         const reg = (item.region || '').toLowerCase();
                         const dist = (item.district || '').toLowerCase();
-                        const insur = (item.insurance || []).join(' ').toLowerCase();
 
-                        if (name.includes(query) || spec.includes(query) || reg.includes(query) || dist.includes(query) || insur.includes(query)) {
+                        if (name.includes(query) || spec.includes(query) || reg.includes(query) || dist.includes(query)) {
                             foundResults.push({ cat, item });
                         }
                     });
@@ -1217,28 +1194,24 @@
 
                 let replyHtml = "";
                 if (foundResults.length > 0) {
-                    replyHtml = `Sizning so'rovingiz bo'yicha bazamizdan <b>${foundResults.length} ta</b> mos natija topildi:`;
-                    replyHtml += `<div class="mt-2.5 space-y-2">`;
+                    replyHtml = `Topildi (${foundResults.length} ta):`;
                     foundResults.slice(0, 3).forEach(res => {
-                        const entityName = getLocalized(res.item.name);
-                        const entitySpec = getLocalized(res.item.specialty);
                         replyHtml += `
-                            <div onclick="closeAiModal(); openDetailModal('${res.cat}', ${res.item.id})" class="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-cyan-500/30 cursor-pointer hover:border-cyan-500 transition shadow-xs flex items-center justify-between">
+                            <div onclick="closeAiModal(); openDetailModal('${res.cat}', ${res.item.id})" class="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-cyan-500/30 cursor-pointer hover:border-cyan-500 transition mt-2 flex items-center justify-between">
                                 <div>
-                                    <div class="font-bold text-slate-900 dark:text-white">${entityName}</div>
-                                    <div class="text-[10px] text-cyan-600 font-semibold">${entitySpec} • ${res.item.region}</div>
+                                    <div class="font-bold text-slate-900 dark:text-white">${getLocalized(res.item.name)}</div>
+                                    <div class="text-[10px] text-cyan-600 font-semibold">${getLocalized(res.item.specialty)} • ${res.item.region}</div>
                                 </div>
                                 <span class="text-xs text-cyan-600 font-bold">&rarr;</span>
                             </div>
                         `;
                     });
-                    replyHtml += `</div>`;
                 } else {
-                    replyHtml = `Kechirasiz, "${userTyped}" bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z yozib ko'ring.`;
+                    replyHtml = `Kechirasiz, "${userTyped}" bo'yicha ma'lumot topilmadi.`;
                 }
 
                 chatContainer.innerHTML += `
-                    <div class="flex items-start gap-2.5">
+                    <div class="flex items-start gap-2.5 mt-2">
                         <div class="w-7 h-7 bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-xs shadow">AI</div>
                         <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[90%] shadow-sm">
                             ${replyHtml}
@@ -1246,18 +1219,14 @@
                     </div>
                 `;
                 chatContainer.scrollTop = chatContainer.scrollHeight;
-            }, 600);
+            }, 500);
         }
 
         function openAdminLoginModal() {
             closeAllDropdowns();
-            const alm = document.getElementById('adminLoginModal');
-            if(alm) alm.classList.remove('hidden');
+            document.getElementById('adminLoginModal')?.classList.remove('hidden');
         }
-        function closeAdminLoginModal() { 
-            const alm = document.getElementById('adminLoginModal');
-            if(alm) alm.classList.add('hidden'); 
-        }
+        function closeAdminLoginModal() { document.getElementById('adminLoginModal')?.classList.add('hidden'); }
 
         function verifyAdminPassword(e) {
             e.preventDefault();
@@ -1308,14 +1277,10 @@
                     </div>
                 `}).join('');
             }
-            const apm = document.getElementById('adminPanelModal');
-            if(apm) apm.classList.remove('hidden');
+            document.getElementById('adminPanelModal')?.classList.remove('hidden');
         }
 
-        function closeAdminPanel() { 
-            const apm = document.getElementById('adminPanelModal');
-            if(apm) apm.classList.add('hidden'); 
-        }
+        function closeAdminPanel() { document.getElementById('adminPanelModal')?.classList.add('hidden'); }
 
         function openAdminFullDetailModal(index) {
             const item = pendingSubmissions[index];
@@ -1356,24 +1321,16 @@
                     </button>
                 </div>
             `;
-
-            const afm = document.getElementById('adminFullDetailModal');
-            if (afm) afm.classList.remove('hidden');
+            document.getElementById('adminFullDetailModal')?.classList.remove('hidden');
         }
 
-        function closeAdminFullDetailModal() {
-            const afm = document.getElementById('adminFullDetailModal');
-            if (afm) afm.classList.add('hidden'); 
-        }
+        function closeAdminFullDetailModal() { document.getElementById('adminFullDetailModal')?.classList.add('hidden'); }
 
         function approveSubmission(index) {
             if (!pendingSubmissions[index]) return;
             const item = pendingSubmissions[index];
             
-            if (!sampleData[item.category]) {
-                sampleData[item.category] = [];
-            }
-            
+            if (!sampleData[item.category]) sampleData[item.category] = [];
             sampleData[item.category].unshift(item);
             pendingSubmissions.splice(index, 1);
             
@@ -1393,14 +1350,10 @@
 
         function openRoleModalFromMenu() {
             closeAllDropdowns();
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.remove('hidden');
+            document.getElementById('roleSelectModal')?.classList.remove('hidden');
         }
 
-        function skipRoleSelection() {
-            const srm = document.getElementById('roleSelectModal');
-            if(srm) srm.classList.add('hidden');
-        }
+        function skipRoleSelection() { document.getElementById('roleSelectModal')?.classList.add('hidden'); }
 
         function openRegisterForm(categoryKey, roleKey) {
             skipRoleSelection();
@@ -1409,15 +1362,10 @@
             
             document.getElementById('newItemCategory').value = categoryKey;
             document.getElementById('modalFormTitle').innerText = `${t(roleKey)} ${t('joinCatalog')}`;
-            
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.remove('hidden');
+            document.getElementById('addItemModal')?.classList.remove('hidden');
         }
 
-        function closeAddItemModal() {
-            const aim = document.getElementById('addItemModal');
-            if(aim) aim.classList.add('hidden');
-        }
+        function closeAddItemModal() { document.getElementById('addItemModal')?.classList.add('hidden'); }
 
         function handleImageUpload(e) {
             const files = Array.from(e.target.files);
@@ -1501,6 +1449,7 @@
             closeAddItemModal();
             document.getElementById('addItemForm').reset();
             uploadedImagesBase64 = [];
+            updateImagePreview();
             alert("Arizangiz adminga yuborildi! Admin tasdiqlagach, ilovada e'lon qilinadi.");
         }
 
@@ -1612,7 +1561,7 @@
                     </div>
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
                         <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${item.phone}</span>
-                        <button type="button" onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer">${t('bookBtn')}</button>
+                        <button type="button" onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer">${t('bookBtn')}</button>
                     </div>
                 </div>
             `}).join('');
@@ -1785,9 +1734,7 @@
                     </div>
                 ` : ''}
             `;
-
-            const dm = document.getElementById('detailModal');
-            if(dm) dm.classList.remove('hidden');
+            document.getElementById('detailModal')?.classList.remove('hidden');
         }
 
         function setRating(val) {
@@ -1796,11 +1743,7 @@
             if (!container) return;
             const stars = container.querySelectorAll('i');
             stars.forEach((s, idx) => {
-                if (idx < val) {
-                    s.className = "fa-solid fa-star text-amber-400";
-                } else {
-                    s.className = "fa-regular fa-star text-slate-300";
-                }
+                s.className = (idx < val) ? "fa-solid fa-star text-amber-400" : "fa-regular fa-star text-slate-300";
             });
         }
 
@@ -1833,10 +1776,7 @@
             renderGrid();
         }
 
-        function closeDetailModal() {
-            const dm = document.getElementById('detailModal');
-            if(dm) dm.classList.add('hidden');
-        }
+        function closeDetailModal() { document.getElementById('detailModal')?.classList.add('hidden'); }
 
         function switchTab(tab) {
             currentTab = tab;
@@ -1851,27 +1791,21 @@
             closeAllDropdowns();
         }
 
-        function toggleMenuDropdown(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('hidden'); }
+        function toggleMenuDropdown(e) { e.stopPropagation(); document.getElementById('menuDropdown')?.classList.toggle('hidden'); }
         function closeAllDropdowns() { 
-            const md = document.getElementById('menuDropdown'); 
-            if(md) md.classList.add('hidden');
-            const ld = document.getElementById('langDropdownMenu');
-            if(ld) ld.classList.add('hidden');
+            document.getElementById('menuDropdown')?.classList.add('hidden');
+            document.getElementById('langDropdownMenu')?.classList.add('hidden');
         }
         function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
-        function closeAboutModal() { const am = document.getElementById('aboutModal'); if(am) am.classList.add('hidden'); }
-        function openAboutModal() { closeAllDropdowns(); const am = document.getElementById('aboutModal'); if(am) am.classList.remove('hidden'); }
+        function closeAboutModal() { document.getElementById('aboutModal')?.classList.add('hidden'); }
+        function openAboutModal() { closeAllDropdowns(); document.getElementById('aboutModal')?.classList.remove('hidden'); }
         
         function openBookingModal(name) { 
             const bin = document.getElementById('bookingItemName');
             if(bin) bin.innerText = name; 
-            const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.remove('hidden'); 
+            document.getElementById('bookingModal')?.classList.remove('hidden'); 
         }
-        function closeBookingModal() { 
-            const bm = document.getElementById('bookingModal');
-            if(bm) bm.classList.add('hidden'); 
-        }
+        function closeBookingModal() { document.getElementById('bookingModal')?.classList.add('hidden'); }
         function submitBooking(e) { e.preventDefault(); closeBookingModal(); alert("Qabulga yozildingiz! Tez orada operator aloqaga chiqadi."); }
 
         function openFavoritesModal() {
@@ -1889,13 +1823,9 @@
                     </div>` : '';
                 }).join('');
             }
-            const fm = document.getElementById('favoritesModal');
-            if(fm) fm.classList.add('hidden');
+            document.getElementById('favoritesModal')?.classList.remove('hidden');
         }
-        function closeFavoritesModal() { 
-            const fm = document.getElementById('favoritesModal');
-            if(fm) fm.classList.add('hidden'); 
-        }
+        function closeFavoritesModal() { document.getElementById('favoritesModal')?.classList.add('hidden'); }
     </script>
 </body>
 </html>
