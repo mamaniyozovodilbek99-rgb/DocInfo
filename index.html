@@ -167,8 +167,8 @@
                         <i class="fa-solid fa-robot text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-base text-slate-900 dark:text-white" id="lblAiTitle">ShifoAI Tibbiy Yordamchi</h3>
-                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> <span id="lblAiSub">Real vaqtda tahlil qiluvchi AI</span></p>
+                        <h3 class="font-black text-base text-slate-900 dark:text-white" id="lblAiTitle">ShifoTop Katalog Yordamchisi</h3>
+                        <p class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> <span id="lblAiSub">Katalog bo‘yicha qidiruv</span></p>
                     </div>
                 </div>
                 <button onclick="closeAiModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center transition cursor-pointer">
@@ -181,7 +181,7 @@
                 <div class="flex items-start gap-2.5">
                     <div class="w-7 h-7 bg-gradient-to-tr from-cyan-600 to-blue-600 text-white rounded-xl flex items-center justify-center shrink-0 font-bold text-xs shadow">AI</div>
                     <div class="bg-slate-100 dark:bg-slate-700/70 p-3.5 rounded-2xl rounded-tl-none text-slate-800 dark:text-slate-200 leading-relaxed max-w-[85%]" id="lblAiWelcome">
-                        Assalomu alaykum! Men ShifoAI yordamchisiman. Sizni bezovta qilayotgan alomatni, kasallikni yoki qidirayotgan mutaxassis/klinikangizni yozing. Barcha bazamizdan sizga mos keladiganlarini topib beraman!
+                        Assalomu alaykum! Men ShifoTop katalog yordamchisiman. Mutaxassis, klinika, dorixona yoki hudud nomini yozing. Men katalogdan mos natijalarni qidiraman; bu tibbiy tashxis yoki davolash maslahati emas.
                     </div>
                 </div>
             </div>
@@ -345,9 +345,10 @@
                 <i class="fa-solid fa-shield-halved text-xl"></i>
             </div>
             <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Admin Boshqaruvi</h3>
-            <p class="text-xs text-slate-400 mb-4">Maxfiy parolni kiriting</p>
+            <p class="text-xs text-slate-400 mb-4">Admin email va paroli bilan kiring</p>
             <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
-                <input type="password" id="adminPasswordInput" required placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <input type="email" id="adminEmailInput" required autocomplete="username" placeholder="Admin email" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <input type="password" id="adminPasswordInput" required autocomplete="current-password" placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
                 <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-800 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
                     Kirish
                 </button>
@@ -364,8 +365,11 @@
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-shield-halved text-cyan-600"></i> Moderator Nazorati
             </h3>
+            <button onclick="adminSignOut()" class="text-xs font-bold text-rose-600 mt-2 mb-3">Admin hisobidan chiqish</button>
             <p class="text-xs text-slate-400 mb-4 mt-1">Yangi kelib tushgan arizalar. To'liq ko'rish uchun arizaga bosing.</p>
             <div id="pendingListContainer" class="space-y-3"></div>
+            <h4 class="font-bold text-sm text-slate-900 dark:text-white mt-6 mb-2">Qabulga yozilishlar</h4>
+            <div id="adminBookingsContainer" class="space-y-2"></div>
         </div>
     </div>
 
@@ -448,7 +452,7 @@
             <div class="flex items-center gap-2">
                 <!-- ShifoAI Maslahatchi Tugmasi -->
                 <button onclick="openAiModal()" class="px-3 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:opacity-95 transition cursor-pointer">
-                    <i class="fa-solid fa-robot"></i> <span class="hidden sm:inline">ShifoAI</span>
+                    <i class="fa-solid fa-robot"></i> <span class="hidden sm:inline">Katalog</span>
                 </button>
 
                 <!-- SOS Tez yordam Tugmasi -->
@@ -602,10 +606,15 @@
     </div>
 
     <!-- JavaScript Mantiq -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
+        const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+        const SUPABASE_PUBLISHABLE_KEY = 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+        const supabaseClient = (window.supabase && !SUPABASE_URL.includes('YOUR_PROJECT') && !SUPABASE_PUBLISHABLE_KEY.startsWith('YOUR_'))
+            ? window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
         let currentLang = 'uz';
         let currentTab = 'doctors';
-        let favorites = [];
+        let favorites = (() => { try { const value = JSON.parse(localStorage.getItem('shifotop:favorites') || '[]'); return Array.isArray(value) ? value : []; } catch { return []; } })();
         let uploadedImagesBase64 = [];
         let secretClickCount = 0;
         let secretClickTimer = null;
@@ -1016,14 +1025,28 @@
         };
 
         let pendingSubmissions = [];
+        let currentBookingTarget = null;
 
-        window.onload = function() {
+        async function loadApprovedSubmissions() {
+            if (!supabaseClient) return;
+            const { data, error } = await supabaseClient.from('submissions').select('id,category,payload').eq('status', 'approved');
+            if (error) { console.error('Approved listings load failed:', error.message); return; }
+            (data || []).forEach(row => {
+                if (!sampleData[row.category]) sampleData[row.category] = [];
+                if (!sampleData[row.category].some(x => String(x.id) === String(row.id)))
+                    sampleData[row.category].push({ ...row.payload, id: row.id, category: row.category, reviews: row.payload.reviews || [] });
+            });
+        }
+
+        window.onload = async function() {
+            if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('./sw.js').catch(err => console.warn('Service worker unavailable:', err));
             if (window.Telegram?.WebApp) {
                 window.Telegram.WebApp.ready();
                 window.Telegram.WebApp.expand();
             }
             populateRegionsDropdowns();
             updateLanguageUI();
+            await loadApprovedSubmissions();
             renderGrid();
 
             setTimeout(() => {
@@ -1110,9 +1133,41 @@
         }
 
         function getLocalized(obj) {
+            return escapeHtml(getLocalizedText(obj));
+        }
+        function getLocalizedText(obj) {
             if (!obj) return '';
-            if (typeof obj === 'string') return obj;
-            return obj[currentLang] || obj.uz || '';
+            return typeof obj === 'string' ? obj : (obj[currentLang] || obj.uz || '');
+        }
+        function safePhone(value) { return String(value || '').replace(/[^0-9+().\- ]/g, ''); }
+        function safeHandle(value) { return String(value || '').replace(/^@/, '').replace(/[^a-zA-Z0-9._]/g, ''); }
+        function toggleFav(id) {
+            const key = String(id);
+            favorites = favorites.some(x => String(x) === key) ? favorites.filter(x => String(x) !== key) : [...favorites, key];
+            try { localStorage.setItem('shifotop:favorites', JSON.stringify(favorites)); } catch (error) { console.warn('Favorites could not be saved:', error); }
+        }
+        function onFavoriteButton(event, id) {
+            event.stopPropagation();
+            toggleFav(id);
+            const query = document.getElementById('searchInput')?.value.trim();
+            const region = document.getElementById('regionFilter')?.value;
+            const district = document.getElementById('districtFilter')?.value;
+            if (query || region || district) filterData(); else renderGrid();
+        }
+        function setAdminImage(src) { const img = document.getElementById('adminModalMainImg'); if (img) img.src = src; }
+        function setDetailImage(src) { const img = document.getElementById('modalMainImage'); if (img) img.src = src; }
+        function safeMapUrl(value) {
+            try { const url = new URL(value || 'https://maps.google.com'); return ['https://maps.google.com','https://www.google.com','https://maps.app.goo.gl'].includes(url.origin) ? url.href : 'https://maps.google.com'; }
+            catch { return 'https://maps.google.com'; }
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+        }
+        function requireSupabase() {
+            if (supabaseClient) return true;
+            alert('Supabase sozlanmagan. README-SUPABASE.md dagi ko\'rsatma bo\'yicha URL va anon key kiriting.');
+            return false;
         }
 
         function updateLanguageUI() {
@@ -1185,7 +1240,7 @@
             chatContainer.innerHTML += `
                 <div class="flex items-end justify-end gap-2.5">
                     <div class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white p-3.5 rounded-2xl rounded-tr-none max-w-[85%] leading-relaxed shadow-sm">
-                        ${input.value}
+                        ${escapeHtml(input.value)}
                     </div>
                 </div>
             `;
@@ -1199,8 +1254,8 @@
 
                 allCategories.forEach(cat => {
                     sampleData[cat].forEach(item => {
-                        const name = getLocalized(item.name).toLowerCase();
-                        const spec = getLocalized(item.specialty).toLowerCase();
+                        const name = getLocalizedText(item.name).toLowerCase();
+                        const spec = getLocalizedText(item.specialty).toLowerCase();
                         const reg = (item.region || '').toLowerCase();
                         const dist = (item.district || '').toLowerCase();
                         const insur = (item.insurance || []).join(' ').toLowerCase();
@@ -1219,10 +1274,10 @@
                         const entityName = getLocalized(res.item.name);
                         const entitySpec = getLocalized(res.item.specialty);
                         replyHtml += `
-                            <div onclick="closeAiModal(); openDetailModal('${res.cat}', ${res.item.id})" class="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-cyan-500/30 cursor-pointer hover:border-cyan-500 transition shadow-xs flex items-center justify-between">
+                            <div onclick="closeAiModal(); openDetailModal('${res.cat}', '${res.item.id}')" class="p-2.5 bg-white dark:bg-slate-800 rounded-xl border border-cyan-500/30 cursor-pointer hover:border-cyan-500 transition shadow-xs flex items-center justify-between">
                                 <div>
                                     <div class="font-bold text-slate-900 dark:text-white">${entityName}</div>
-                                    <div class="text-[10px] text-cyan-600 font-semibold">${entitySpec} • ${res.item.region}</div>
+                                    <div class="text-[10px] text-cyan-600 font-semibold">${entitySpec} • ${escapeHtml(res.item.region)}</div>
                                 </div>
                                 <span class="text-xs text-cyan-600 font-bold">&rarr;</span>
                             </div>
@@ -1230,7 +1285,7 @@
                     });
                     replyHtml += `</div>`;
                 } else {
-                    replyHtml = `Kechirasiz, "${userTyped}" bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z (masalan: <i>kardiolog</i>, <i>klinika</i>, <i>dorixona</i>) yozib ko'ring.`;
+                    replyHtml = `Kechirasiz, "${escapeHtml(userTyped)}" bo'yicha aniq natija topilmadi. Iltimos, boshqa kalit so'z (masalan: <i>kardiolog</i>, <i>klinika</i>, <i>dorixona</i>) yozib ko'ring.`;
                 }
 
                 chatContainer.innerHTML += `
@@ -1255,19 +1310,32 @@
             if(alm) alm.classList.add('hidden'); 
         }
 
-        function verifyAdminPassword(e) {
+        async function verifyAdminPassword(e) {
             e.preventDefault();
+            if (!requireSupabase()) return;
+            const email = document.getElementById('adminEmailInput').value.trim();
             const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === 'Odilbek1999!') {
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
+            if (!error && data.user) {
+                const { data: admin, error: adminError } = await supabaseClient.from('app_admins').select('user_id').eq('user_id', data.user.id).maybeSingle();
+                if (adminError || !admin) {
+                    await supabaseClient.auth.signOut();
+                    alert('Bu hisob admin sifatida ro‘yxatdan o‘tmagan.');
+                    return;
+                }
                 closeAdminLoginModal();
                 document.getElementById('adminPasswordInput').value = '';
-                openAdminPanel();
+                await openAdminPanel();
             } else {
-                alert("Noto'g'ri parol!");
+                alert('Email yoki parol noto‘g‘ri.');
             }
         }
 
-        function openAdminPanel() {
+        async function openAdminPanel() {
+            if (!supabaseClient) return;
+            const { data: rows, error } = await supabaseClient.from('submissions').select('id,category,payload,created_at').eq('status', 'pending').order('created_at', { ascending: false });
+            if (error) { alert('Arizalarni yuklab bo‘lmadi: ' + error.message); return; }
+            pendingSubmissions = (rows || []).map(row => ({ ...row.payload, id: row.id, category: row.category }));
             const container = document.getElementById('pendingListContainer');
             if (pendingSubmissions.length === 0) {
                 container.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Hozircha tekshiruvni kutayotgan arizalar yo'q.</p>`;
@@ -1278,15 +1346,15 @@
                     <div class="bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-600 flex flex-col justify-between gap-3">
                         <div onclick="openAdminFullDetailModal(${index})" class="cursor-pointer">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-[10px] font-black px-2.5 py-0.5 bg-cyan-100 text-cyan-800 rounded-md uppercase tracking-wider">${item.category}</span>
+                                <span class="text-[10px] font-black px-2.5 py-0.5 bg-cyan-100 text-cyan-800 rounded-md uppercase tracking-wider">${escapeHtml(item.category)}</span>
                                 <span class="text-[11px] text-cyan-600 font-bold hover:underline"><i class="fa-solid fa-expand mr-1"></i> To'liq ko'rish (${item.images ? item.images.length : 0} rasm)</span>
                             </div>
                             <div class="flex gap-3 items-center">
                                 <img src="${previewImg}" class="w-13 h-13 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-600">
                                 <div class="overflow-hidden">
                                     <h4 class="font-bold text-sm text-slate-900 dark:text-white truncate">${getLocalized(item.name)}</h4>
-                                    <p class="text-xs text-cyan-600 font-semibold truncate">${getLocalized(item.specialty)} • ${item.region}</p>
-                                    <p class="text-[11px] text-slate-400 truncate mt-0.5">${item.phone}</p>
+                                    <p class="text-xs text-cyan-600 font-semibold truncate">${getLocalized(item.specialty)} • ${escapeHtml(item.region)}</p>
+                                    <p class="text-[11px] text-slate-400 truncate mt-0.5">${escapeHtml(item.phone)}</p>
                                 </div>
                             </div>
                         </div>
@@ -1302,6 +1370,15 @@
                     </div>
                 `}).join('');
             }
+            const bookingsContainer = document.getElementById('adminBookingsContainer');
+            const { data: bookings, error: bookingError } = await supabaseClient.from('bookings').select('patient_name,phone,item_name,created_at').order('created_at', { ascending: false }).limit(50);
+            if (bookingsContainer) {
+                bookingsContainer.innerHTML = bookingError
+                    ? `<p class="text-xs text-rose-500">Bronlarni yuklab bo‘lmadi.</p>`
+                    : (bookings || []).length
+                        ? bookings.map(b => `<div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-700/40 text-xs"><b>${escapeHtml(b.patient_name)}</b> · ${escapeHtml(b.phone)}<div class="text-slate-500 mt-1">${escapeHtml(b.item_name)} · ${escapeHtml(new Date(b.created_at).toLocaleString())}</div></div>`).join('')
+                        : `<p class="text-xs text-slate-400">Hozircha murojaatlar yo‘q.</p>`;
+            }
             const apm = document.getElementById('adminPanelModal');
             if(apm) apm.classList.remove('hidden');
         }
@@ -1309,6 +1386,10 @@
         function closeAdminPanel() { 
             const apm = document.getElementById('adminPanelModal');
             if(apm) apm.classList.add('hidden'); 
+        }
+        async function adminSignOut() {
+            if (supabaseClient) await supabaseClient.auth.signOut();
+            closeAdminPanel();
         }
 
         function openAdminFullDetailModal(index) {
@@ -1321,16 +1402,16 @@
             const container = document.getElementById('adminFullDetailContent');
             container.innerHTML = `
                 <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-700">
-                    <span class="text-xs font-black px-3 py-1 bg-cyan-100 text-cyan-800 rounded-lg uppercase tracking-wider">${item.category}</span>
+                    <span class="text-xs font-black px-3 py-1 bg-cyan-100 text-cyan-800 rounded-lg uppercase tracking-wider">${escapeHtml(item.category)}</span>
                     <span class="text-xs font-semibold text-slate-400">Moderatsiya arizasi</span>
                 </div>
 
                 <div class="flex gap-4 items-center my-4">
-                    <img id="adminModalMainImg" src="${mainImg}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-cyan-600 shrink-0 shadow-md">
+                    <img id="adminModalMainImg" src="${escapeHtml(mainImg)}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-cyan-600 shrink-0 shadow-md">
                     <div>
                         <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">${getLocalized(item.name)}</h3>
                         <p class="text-xs font-bold text-cyan-600 mt-0.5">${getLocalized(item.specialty)}</p>
-                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-cyan-600"></i> ${item.region}, ${item.district || ''} • <b>${getLocalized(item.exp)}</b></p>
+                        <p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-location-dot mr-1 text-cyan-600"></i> ${escapeHtml(item.region)}, ${escapeHtml(item.district || '')} • <b>${getLocalized(item.exp)}</b></p>
                     </div>
                 </div>
 
@@ -1338,17 +1419,17 @@
                     <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Yuklangan rasmlar (${allImgs.length}/5)</h5>
                     <div class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none">
                         ${allImgs.map(img => `
-                            <img src="${img}" onclick="document.getElementById('adminModalMainImg').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-cyan-600 cursor-pointer transition shrink-0">
+                            <img src="${escapeHtml(img)}" onclick="setAdminImage(this.src)" class="w-16 h-16 rounded-xl object-cover border-2 border-slate-200 hover:border-cyan-600 cursor-pointer transition shrink-0">
                         `).join('')}
                     </div>
                 </div>
 
                 <div class="space-y-2.5 text-xs text-slate-700 dark:text-slate-300 bg-slate-50 dark:bg-slate-700/40 p-4 rounded-2xl border border-slate-200/60 dark:border-slate-600 mb-5">
-                    <div><b>Telefon raqam:</b> <a href="tel:${item.phone}" class="text-cyan-600 font-bold ml-1">${item.phone}</a></div>
-                    <div><b>Hamkor sug'urtalar:</b> <span class="ml-1 font-bold text-emerald-600">${item.insurance ? item.insurance.join(', ') : 'Kiritilmagan'}</span></div>
-                    <div><b>Hudud va tuman:</b> <span class="ml-1">${item.region}, ${item.district || ''}</span></div>
+                    <div><b>Telefon raqam:</b> <a href="tel:${safePhone(item.phone)}" class="text-cyan-600 font-bold ml-1">${escapeHtml(item.phone)}</a></div>
+                    <div><b>Hamkor sug'urtalar:</b> <span class="ml-1 font-bold text-emerald-600">${item.insurance ? item.insurance.map(escapeHtml).join(', ') : 'Kiritilmagan'}</span></div>
+                    <div><b>Hudud va tuman:</b> <span class="ml-1">${escapeHtml(item.region)}, ${escapeHtml(item.district || '')}</span></div>
                     <div><b>Aniq manzil:</b> <span class="ml-1">${getLocalized(item.address)}</span></div>
-                    <div><b>Telegram / Instagram:</b> <span class="ml-1">${item.telegram || 'Kiritilmagan'}</span></div>
+                    <div><b>Telegram / Instagram:</b> <span class="ml-1">${escapeHtml(item.telegram || 'Kiritilmagan')}</span></div>
                     <div class="pt-2 border-t border-slate-200 dark:border-slate-600">
                         <b>Biografiya / Qo'shimcha tavsif:</b>
                         <p class="mt-1 text-slate-600 dark:text-slate-300 leading-relaxed bg-white dark:bg-slate-800 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">${getLocalized(item.bio) || "Ma'lumot kiritilmagan"}</p>
@@ -1374,22 +1455,25 @@
             if (afm) afm.classList.add('hidden'); 
         }
 
-        function approveSubmission(index) {
+        async function approveSubmission(index) {
             const item = pendingSubmissions[index];
+            if (!item || !supabaseClient) return;
+            const { error } = await supabaseClient.from('submissions').update({ status: 'approved' }).eq('id', item.id);
+            if (error) { alert('Tasdiqlash amalga oshmadi: ' + error.message); return; }
             if (!sampleData[item.category]) sampleData[item.category] = [];
-            
             sampleData[item.category].unshift(item);
-            pendingSubmissions.splice(index, 1);
-            
-            openAdminPanel();
+            await openAdminPanel();
             renderGrid();
             alert("Ariza tasdiqlandi va ShifoTop ilovasida e'lon qilindi!");
         }
 
-        function rejectSubmission(index) {
+        async function rejectSubmission(index) {
             if (confirm("Ushbu arizani rad etmoqchimisiz?")) {
-                pendingSubmissions.splice(index, 1);
-                openAdminPanel();
+                const item = pendingSubmissions[index];
+                if (!item || !supabaseClient) return;
+                const { error } = await supabaseClient.from('submissions').update({ status: 'rejected' }).eq('id', item.id);
+                if (error) { alert('Rad etish amalga oshmadi: ' + error.message); return; }
+                await openAdminPanel();
             }
         }
 
@@ -1421,23 +1505,34 @@
             if(aim) aim.classList.add('hidden');
         }
 
-        function handleImageUpload(e) {
+        async function handleImageUpload(e) {
             const files = Array.from(e.target.files);
             if (uploadedImagesBase64.length + files.length > 5) {
                 alert("Maksimal 5 tagacha rasm yuklash mumkin!");
+                e.target.value = '';
                 return;
             }
-
-            files.forEach(file => {
-                if (uploadedImagesBase64.length < 5) {
-                    const reader = new FileReader();
-                    reader.onload = function(event) {
-                        uploadedImagesBase64.push(event.target.result);
-                        updateImagePreview();
-                    };
-                    reader.readAsDataURL(file);
+            for (const file of files) {
+                if (!file.type.startsWith('image/') || file.size > 10 * 1024 * 1024) {
+                    alert('Faqat 10 MB gacha bo‘lgan rasm fayllarini tanlang.');
+                    continue;
                 }
-            });
+                try {
+                    const objectUrl = URL.createObjectURL(file);
+                    const image = new Image();
+                    image.src = objectUrl;
+                    await new Promise((resolve, reject) => { image.onload = resolve; image.onerror = reject; });
+                    const scale = Math.min(1, 1200 / Math.max(image.naturalWidth, image.naturalHeight));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+                    canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+                    URL.revokeObjectURL(objectUrl);
+                    uploadedImagesBase64.push(canvas.toDataURL('image/jpeg', 0.78));
+                    updateImagePreview();
+                } catch (error) { alert('Rasmni o‘qib bo‘lmadi. Boshqa rasm tanlang.'); }
+            }
+            e.target.value = '';
         }
 
         function updateImagePreview() {
@@ -1461,8 +1556,9 @@
             updateImagePreview();
         }
 
-        function handleAddItemSubmit(e) {
+        async function handleAddItemSubmit(e) {
             e.preventDefault();
+            if (!requireSupabase()) return;
             const cat = document.getElementById('newItemCategory').value;
             const name = document.getElementById('newItemName').value;
             const spec = document.getElementById('newItemSpecialty').value;
@@ -1480,9 +1576,7 @@
                 ? [...uploadedImagesBase64] 
                 : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"];
 
-            pendingSubmissions.push({
-                id: Date.now(),
-                category: cat,
+            const payload = {
                 name: { uz: name, ru: name, en: name },
                 specialty: { uz: spec, ru: spec, en: spec },
                 region: region,
@@ -1497,7 +1591,9 @@
                 bio: { uz: bio, ru: bio, en: bio },
                 images: finalImages,
                 reviews: []
-            });
+            };
+            const { error } = await supabaseClient.from('submissions').insert({ category: cat, payload });
+            if (error) { alert('Ariza yuborilmadi: ' + error.message); return; }
 
             closeAddItemModal();
             document.getElementById('addItemForm').reset();
@@ -1521,16 +1617,17 @@
                 const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                 return `
                 <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between group">
-                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
+                    <div onclick="openDetailModal('${currentTab}', '${item.id}')" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
-                            <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
+                            <img src="${escapeHtml(mainImg)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                             
                             <div class="absolute top-3 left-3 flex flex-col gap-1 items-start">
                                 ${item.exp ? `<span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">${getLocalized(item.exp)}</span>` : ''}
                                 ${item.insurance && item.insurance.length > 0 ? `<span class="bg-emerald-600/90 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Sug'urta</span>` : ''}
                             </div>
                             
-                            <span class="absolute top-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
+                            <button type="button" onclick="onFavoriteButton(event, '${item.id}')" aria-label="Saralanganlarga qo‘shish yoki olib tashlash" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-xl bg-white/95 dark:bg-slate-900/90 flex items-center justify-center shadow-sm border border-slate-100/30"><i class="${favorites.some(fav => String(fav) === String(item.id)) ? 'fa-solid text-rose-500' : 'fa-regular text-slate-500'} fa-heart"></i></button>
+                            <span class="absolute bottom-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
                                 <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> ${Number(item.rating || 5).toFixed(1)}
                             </span>
                         </div>
@@ -1550,10 +1647,10 @@
                     </div>
 
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
-                        <a href="tel:${item.phone}" class="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 flex items-center gap-1.5">
-                            <i class="fa-solid fa-phone text-slate-400 text-[11px]"></i> ${item.phone}
+                        <a href="tel:${safePhone(item.phone)}" class="text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-cyan-600 flex items-center gap-1.5">
+                            <i class="fa-solid fa-phone text-slate-400 text-[11px]"></i> ${escapeHtml(item.phone)}
                         </a>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer">
+                        <button onclick="openBookingModalById('${currentTab}', '${item.id}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm transition cursor-pointer">
                             ${t('bookBtn')}
                         </button>
                     </div>
@@ -1568,8 +1665,8 @@
             const original = sampleData[currentTab] || [];
 
             const filtered = original.filter(item => {
-                const name = getLocalized(item.name).toLowerCase();
-                const spec = getLocalized(item.specialty).toLowerCase();
+                const name = getLocalizedText(item.name).toLowerCase();
+                const spec = getLocalizedText(item.specialty).toLowerCase();
                 const addr = getLocalized(item.address).toLowerCase();
                 const reg = getLocalized(item.region).toLowerCase();
                 const dist = getLocalized(item.district).toLowerCase();
@@ -1595,14 +1692,15 @@
                 const mainImg = (item.images && item.images.length > 0) ? item.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                 return `
                 <div class="bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-3xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/80 dark:border-slate-700/80 flex flex-col justify-between group">
-                    <div onclick="openDetailModal('${currentTab}', ${item.id})" class="cursor-pointer">
+                    <div onclick="openDetailModal('${currentTab}', '${item.id}')" class="cursor-pointer">
                         <div class="relative overflow-hidden rounded-2xl mb-4 h-48 bg-slate-100 dark:bg-slate-700">
-                            <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
+                            <img src="${escapeHtml(mainImg)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out">
                             <div class="absolute top-3 left-3 flex flex-col gap-1 items-start">
                                 ${item.exp ? `<span class="bg-slate-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg shadow-sm">${getLocalized(item.exp)}</span>` : ''}
                                 ${item.insurance && item.insurance.length > 0 ? `<span class="bg-emerald-600/90 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1"><i class="fa-solid fa-shield-halved"></i> Sug'urta</span>` : ''}
                             </div>
-                            <span class="absolute top-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
+                            <button type="button" onclick="onFavoriteButton(event, '${item.id}')" aria-label="Saralanganlarga qo‘shish yoki olib tashlash" class="absolute top-3 right-3 z-10 w-9 h-9 rounded-xl bg-white/95 dark:bg-slate-900/90 flex items-center justify-center shadow-sm border border-slate-100/30"><i class="${favorites.some(fav => String(fav) === String(item.id)) ? 'fa-solid text-rose-500' : 'fa-regular text-slate-500'} fa-heart"></i></button>
+                            <span class="absolute bottom-3 right-3 bg-white/95 dark:bg-slate-900/90 backdrop-blur-md text-slate-900 dark:text-white text-[11px] font-black px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1 border border-slate-100/30">
                                 <i class="fa-solid fa-star text-amber-400 text-[10px]"></i> ${Number(item.rating || 5).toFixed(1)}
                             </span>
                         </div>
@@ -1618,17 +1716,23 @@
                         </p>
                     </div>
                     <div class="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between gap-2">
-                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${item.phone}</span>
-                        <button onclick="openBookingModal('${getLocalized(item.name)}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer">${t('bookBtn')}</button>
+                        <span class="text-xs font-bold text-slate-600 dark:text-slate-300">${escapeHtml(item.phone)}</span>
+                        <button onclick="openBookingModalById('${currentTab}', '${item.id}')" class="px-3.5 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white text-xs font-bold rounded-xl shadow-sm cursor-pointer">${t('bookBtn')}</button>
                     </div>
                 </div>
             `}).join('');
         }
 
-        function openDetailModal(categoryKey, itemId) {
+        async function openDetailModal(categoryKey, itemId) {
             const list = sampleData[categoryKey] || [];
-            const item = list.find(x => x.id === itemId);
+            const item = list.find(x => String(x.id) === String(itemId));
             if (!item) return;
+
+            if (supabaseClient) {
+                const { data: remoteReviews, error } = await supabaseClient.from('reviews').select('author,body,rating,created_at').eq('item_id', String(itemId)).eq('category', categoryKey).order('created_at', { ascending: false });
+                if (error) console.error('Reviews load failed:', error.message);
+                else item.reviews = (remoteReviews || []).map(r => ({ author: r.author, text: r.body, rating: r.rating, date: new Date(r.created_at).toLocaleDateString() }));
+            }
 
             const recommended = list.filter(x => x.id !== item.id).slice(0, 3);
             const allImages = (item.images && item.images.length > 0) ? item.images : ["https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700"];
@@ -1640,7 +1744,7 @@
             const detailContainer = document.getElementById('detailContentContainer');
             detailContainer.innerHTML = `
                 <div class="flex flex-col sm:flex-row gap-5 items-start sm:items-center border-b border-slate-100 dark:border-slate-700 pb-6">
-                    <img id="modalMainImage" src="${mainImg}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-slate-100 dark:border-slate-700 shrink-0">
+                    <img id="modalMainImage" src="${escapeHtml(mainImg)}" class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md border-2 border-slate-100 dark:border-slate-700 shrink-0">
                     <div class="flex-grow">
                         <div class="flex items-center gap-2">
                             <span class="text-[11px] font-black px-2.5 py-0.5 bg-cyan-50 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 rounded-lg uppercase tracking-wide">
@@ -1665,7 +1769,7 @@
                             <i class="fa-solid fa-shield-heart text-emerald-600"></i> ${t('insuranceLabel')}
                         </div>
                         <div class="flex flex-wrap gap-1.5">
-                            ${item.insurance.map(ins => `<span class="bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200/80 dark:border-emerald-700 shadow-xs">${ins}</span>`).join('')}
+                            ${item.insurance.map(ins => `<span class="bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-emerald-200/80 dark:border-emerald-700 shadow-xs">${escapeHtml(ins)}</span>`).join('')}
                         </div>
                     </div>
                 ` : ''}
@@ -1675,7 +1779,7 @@
                         <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Rasmlar galereyasi (${allImages.length})</h4>
                         <div class="flex gap-2.5 overflow-x-auto pb-1 scrollbar-none">
                             ${allImages.map(img => `
-                                <img src="${img}" onclick="document.getElementById('modalMainImage').src='${img}'" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-cyan-600 cursor-pointer transition shrink-0 shadow-sm">
+                                <img src="${escapeHtml(img)}" onclick="setDetailImage(this.src)" class="w-16 h-16 rounded-xl object-cover border-2 border-transparent hover:border-cyan-600 cursor-pointer transition shrink-0 shadow-sm">
                             `).join('')}
                         </div>
                     </div>
@@ -1694,7 +1798,7 @@
                             <i class="fa-solid fa-location-dot text-cyan-600"></i> ${t('addressLabel')}
                         </div>
                         <p class="text-xs text-slate-500 dark:text-slate-400">${getLocalized(item.region)}, ${getLocalized(item.district) || ''}, ${getLocalized(item.address)}</p>
-                        <a href="${item.mapUrl || 'https://maps.google.com'}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-2 hover:underline">
+                        <a href="${safeMapUrl(item.mapUrl)}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-2 hover:underline">
                             <i class="fa-solid fa-map-location-dot"></i> ${t('viewMap')}
                         </a>
                     </div>
@@ -1702,18 +1806,18 @@
                     <div class="p-4 bg-slate-50 dark:bg-slate-700/30 rounded-2xl border border-slate-100 dark:border-slate-700 space-y-2">
                         <div class="text-xs font-bold text-slate-900 dark:text-white mb-1">${t('contactsLabel')}</div>
                         <div class="flex items-center justify-between text-xs">
-                            <a href="tel:${item.phone}" class="font-bold text-cyan-600 flex items-center gap-1.5">
-                                <i class="fa-solid fa-phone text-emerald-500"></i> ${item.phone}
+                            <a href="tel:${safePhone(item.phone)}" class="font-bold text-cyan-600 flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-emerald-500"></i> ${escapeHtml(item.phone)}
                             </a>
                         </div>
                         <div class="flex gap-2 pt-1">
                             ${item.telegram ? `
-                                <a href="https://t.me/${item.telegram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                <a href="https://t.me/${safeHandle(item.telegram)}" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
                                     <i class="fa-brands fa-telegram text-sm"></i> Telegram
                                 </a>
                             ` : ''}
                             ${item.instagram ? `
-                                <a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" class="flex-1 py-1.5 px-3 bg-pink-50 dark:pink-950/40 text-pink-600 dark:text-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
+                                <a href="https://instagram.com/${safeHandle(item.instagram)}" target="_blank" rel="noopener noreferrer" class="flex-1 py-1.5 px-3 bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-300 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
                                     <i class="fa-brands fa-instagram text-sm"></i> Instagram
                                 </a>
                             ` : ''}
@@ -1732,13 +1836,13 @@
                         ${reviewsList.length > 0 ? reviewsList.map(r => `
                             <div class="p-3 bg-slate-50 dark:bg-slate-700/30 rounded-xl border border-slate-100 dark:border-slate-700">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-bold text-slate-800 dark:text-white">${r.author}</span>
-                                    <span class="text-[10px] text-slate-400">${r.date}</span>
+                                    <span class="text-xs font-bold text-slate-800 dark:text-white">${escapeHtml(r.author)}</span>
+                                    <span class="text-[10px] text-slate-400">${escapeHtml(r.date)}</span>
                                 </div>
                                 <div class="text-amber-400 text-[10px] my-0.5">
                                     ${'<i class="fa-solid fa-star"></i>'.repeat(r.rating || 5)}
                                 </div>
-                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">${r.text}</p>
+                                <p class="text-xs text-slate-600 dark:text-slate-300 mt-1">${escapeHtml(r.text)}</p>
                             </div>
                         `).join('') : `<p class="text-xs text-slate-400 italic">Hozircha fikrlar mavjud emas.</p>`}
                     </div>
@@ -1756,13 +1860,13 @@
                         </div>
                         <input type="text" id="reviewAuthorInput" placeholder="${t('yourName')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs mb-2 dark:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500">
                         <textarea id="reviewTextInput" rows="2" placeholder="${t('yourReview')}" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-3 py-2 text-xs dark:text-white mb-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"></textarea>
-                        <button onclick="submitReview('${categoryKey}', ${item.id})" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-xs font-bold py-2.5 rounded-xl shadow cursor-pointer transition">
+                        <button onclick="submitReview('${categoryKey}', '${item.id}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 text-white text-xs font-bold py-2.5 rounded-xl shadow cursor-pointer transition">
                             ${t('sendReview')}
                         </button>
                     </div>
                 </div>
 
-                <button onclick="closeDetailModal(); openBookingModal('${getLocalized(item.name)}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-cyan-600/25 transition mb-6 cursor-pointer">
+                <button onclick="closeDetailModal(); openBookingModalById('${categoryKey}', '${item.id}')" class="w-full bg-gradient-to-r from-cyan-600 to-blue-700 hover:opacity-95 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-cyan-600/25 transition mb-6 cursor-pointer">
                     <i class="fa-solid fa-calendar-check mr-2"></i> ${t('detailBookBtn')}
                 </button>
 
@@ -1775,7 +1879,7 @@
                             ${recommended.map(rec => {
                                 const recImg = (rec.images && rec.images.length > 0) ? rec.images[0] : "https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=700";
                                 return `
-                                <div onclick="openDetailModal('${categoryKey}', ${rec.id})" class="p-3 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-700/30 hover:border-cyan-500 transition cursor-pointer flex flex-col justify-between">
+                                <div onclick="openDetailModal('${categoryKey}', '${rec.id}')" class="p-3 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-700/30 hover:border-cyan-500 transition cursor-pointer flex flex-col justify-between">
                                     <div>
                                         <img src="${recImg}" class="w-full h-24 object-cover rounded-xl mb-2">
                                         <h5 class="font-bold text-xs text-slate-900 dark:text-white line-clamp-1">${getLocalized(rec.name)}</h5>
@@ -1811,7 +1915,7 @@
             });
         }
 
-        function submitReview(categoryKey, itemId) {
+        async function submitReview(categoryKey, itemId) {
             const author = document.getElementById('reviewAuthorInput').value.trim();
             const text = document.getElementById('reviewTextInput').value.trim();
             if (!author || !text) {
@@ -1820,8 +1924,13 @@
             }
 
             const list = sampleData[categoryKey] || [];
-            const item = list.find(x => x.id === itemId);
+            const item = list.find(x => String(x.id) === String(itemId));
             if (!item) return;
+
+            if (supabaseClient) {
+                const { error } = await supabaseClient.from('reviews').insert({ item_id: String(itemId), category: categoryKey, author, body: text, rating: reviewStarRating });
+                if (error) { alert('Fikr yuborilmadi: ' + error.message); return; }
+            } else if (!requireSupabase()) return;
 
             if (!item.reviews) item.reviews = [];
             item.reviews.unshift({
@@ -1868,7 +1977,8 @@
         function closeAboutModal() { const am = document.getElementById('aboutModal'); if(am) am.classList.add('hidden'); }
         function openAboutModal() { closeAllDropdowns(); const am = document.getElementById('aboutModal'); if(am) am.classList.remove('hidden'); }
         
-        function openBookingModal(name) { 
+        function openBookingModal(name, itemId = null) { 
+            currentBookingTarget = itemId ? String(itemId) : null;
             const bin = document.getElementById('bookingItemName');
             if(bin) bin.innerText = name; 
             const bm = document.getElementById('bookingModal');
@@ -1878,7 +1988,21 @@
             const bm = document.getElementById('bookingModal');
             if(bm) bm.classList.add('hidden'); 
         }
-        function submitBooking(e) { e.preventDefault(); closeBookingModal(); alert("Qabulga yozildingiz! Tez orada operator aloqaga chiqadi."); }
+        async function submitBooking(e) {
+            e.preventDefault();
+            if (!requireSupabase()) return;
+            const name = document.getElementById('bookingInputName').value.trim();
+            const phone = document.getElementById('bookingInputPhone').value.trim();
+            const { error } = await supabaseClient.from('bookings').insert({ patient_name: name, phone, item_id: currentBookingTarget, item_name: document.getElementById('bookingItemName').innerText });
+            if (error) { alert('Bron yuborilmadi: ' + error.message); return; }
+            closeBookingModal();
+            document.querySelector('#bookingModal form').reset();
+            alert('Murojaatingiz qabul qilindi.');
+        }
+        function openBookingModalById(category, id) {
+            const item = (sampleData[category] || []).find(x => String(x.id) === String(id));
+            if (item) openBookingModal(getLocalizedText(item.name), item.id);
+        }
 
         function openFavoritesModal() {
             const list = document.getElementById('favoritesList');
@@ -1888,10 +2012,10 @@
             } else {
                 const allItems = [].concat(...Object.values(sampleData));
                 list.innerHTML = favorites.map(id => {
-                    const item = allItems.find(x => x.id === id);
+                    const item = allItems.find(x => String(x.id) === String(id));
                     return item ? `<div class="p-3 bg-white dark:bg-slate-700 rounded-xl text-xs font-bold flex justify-between items-center border border-slate-200 dark:border-slate-600 shadow-sm">
                         <span>${getLocalized(item.name)}</span>
-                        <button onclick="toggleFav(${item.id}); openFavoritesModal();" class="text-rose-500 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="toggleFav('${item.id}'); openFavoritesModal();" class="text-rose-500 cursor-pointer"><i class="fa-solid fa-trash"></i></button>
                     </div>` : '';
                 }).join('');
             }
