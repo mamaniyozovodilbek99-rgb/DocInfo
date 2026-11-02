@@ -1,13 +1,13 @@
 {
-  "name": "DocInfo Uzbekistan",
-  "short_name": "DocInfo",
-  "start_url": "./",
+  "name": "ShifoTop Tibbiyot Platformasi",
+  "short_name": "ShifoTop",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f8fafc",
-  "theme_color": "#0284c7",
+  "theme_color": "#0d9488",
   "icons": [
     {
-      "src": "https://img.icons8.com/color/512/document.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
