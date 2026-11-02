@@ -348,10 +348,31 @@
             <p class="text-xs text-slate-400 mb-4">Admin email va paroli bilan kiring</p>
             <form onsubmit="verifyAdminPassword(event)" class="space-y-3">
                 <input type="email" id="adminEmailInput" required autocomplete="username" placeholder="Admin email" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
-                <input type="password" id="adminPasswordInput" required autocomplete="current-password" placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <div class="relative">
+    <input type="password" id="adminPasswordInput" required autocomplete="current-password" placeholder="Parol" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 pr-11 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+    <button type="button" aria-label="Parolni ko‘rsatish" onclick="const p=document.getElementById('adminPasswordInput');const s=p.type==='password';p.type=s?'text':'password';this.querySelector('i').classList.toggle('fa-eye',!s);this.querySelector('i').classList.toggle('fa-eye-slash',s)" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 cursor-pointer">
+        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+    </button>
+</div>
                 <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-800 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">
                     Kirish
                 </button>
+            </form>
+        </div>
+    </div>
+
+        <!-- ADMIN PAROLINI TIKLASH MODALI -->
+    <div id="passwordRecoveryModal" class="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-[60] hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 dark:border-slate-700 text-center">
+            <div class="w-12 h-12 bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <i class="fa-solid fa-lock text-xl"></i>
+            </div>
+            <h3 class="font-bold text-lg mb-1 text-slate-900 dark:text-white">Yangi parol o‘rnating</h3>
+            <p class="text-xs text-slate-400 mb-4">Yangi parolni ikki marta kiriting</p>
+            <form onsubmit="updateRecoveredPassword(event)" class="space-y-3">
+                <input type="password" id="recoveryPasswordInput" required minlength="6" autocomplete="new-password" placeholder="Yangi parol (kamida 6 belgi)" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <input type="password" id="recoveryPasswordConfirmInput" required minlength="6" autocomplete="new-password" placeholder="Yangi parolni takrorlang" class="w-full bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2.5 text-sm dark:text-white text-center focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-800 text-white font-bold py-2.5 rounded-xl text-xs transition cursor-pointer shadow">Parolni saqlash</button>
             </form>
         </div>
     </div>
@@ -1308,6 +1329,36 @@
         function closeAdminLoginModal() { 
             const alm = document.getElementById('adminLoginModal');
             if(alm) alm.classList.add('hidden'); 
+        }
+
+                if (new URLSearchParams(window.location.hash.slice(1)).get('type') === 'recovery') {
+            const modal = document.getElementById('passwordRecoveryModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        async function updateRecoveredPassword(event) {
+            event.preventDefault();
+            if (!requireSupabase()) return;
+
+            const password = document.getElementById('recoveryPasswordInput').value;
+            const confirmation = document.getElementById('recoveryPasswordConfirmInput').value;
+            if (password !== confirmation) {
+                alert('Ikkala parol bir xil emas. Qayta tekshiring.');
+                return;
+            }
+
+            const { error } = await supabaseClient.auth.updateUser({ password });
+            if (error) {
+                alert('Parolni yangilab bo‘lmadi: ' + error.message);
+                return;
+            }
+
+            await supabaseClient.auth.signOut();
+            document.getElementById('recoveryPasswordInput').value = '';
+            document.getElementById('recoveryPasswordConfirmInput').value = '';
+            document.getElementById('passwordRecoveryModal').classList.add('hidden');
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+            alert('Parol yangilandi. Endi admin oynasiga yangi parol bilan kiring.');
         }
 
         async function verifyAdminPassword(e) {
