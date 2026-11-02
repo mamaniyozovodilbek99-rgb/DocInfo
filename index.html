@@ -1347,6 +1347,28 @@
                 return;
             }
 
+                       const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                const recoveryParams = new URLSearchParams(window.location.hash.slice(1));
+                const accessToken = recoveryParams.get('access_token');
+                const refreshToken = recoveryParams.get('refresh_token');
+
+                if (!accessToken || !refreshToken) {
+                    alert('Tiklash havolasi to‘liq emas yoki eskirgan. Yangi xat so‘rang.');
+                    return;
+                }
+
+                const { error: sessionError } = await supabaseClient.auth.setSession({
+                    access_token: accessToken,
+                    refresh_token: refreshToken
+                });
+
+                if (sessionError) {
+                    alert('Tiklash sessiyasi ochilmadi: ' + sessionError.message);
+                    return;
+                }
+            }
+
             const { error } = await supabaseClient.auth.updateUser({ password });
             if (error) {
                 alert('Parolni yangilab bo‘lmadi: ' + error.message);
