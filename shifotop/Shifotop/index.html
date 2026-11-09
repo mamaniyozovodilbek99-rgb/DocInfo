@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0868D9">
+<title>ShifoTop — Tibbiyot Super App</title>
+<style>
+:root{
+  --blue:#0868D9;
+  --deep:#064AAB;
+  --light:#EAF5FF;
+  --ink:#17365C;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#F3F8FF;
+  color:var(--ink);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.splash{
+  position:fixed;inset:0;z-index:100;
+  background:linear-gradient(145deg,#034AAB,#1599F9);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;color:white;
+  transition:opacity .6s,visibility .6s;
+}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-logo{
+  width:110px;height:110px;border-radius:32px;
+  display:grid;place-items:center;
+  background:linear-gradient(145deg,#fff,#CDEAFF);
+  color:var(--blue);font-size:65px;font-weight:900;
+  box-shadow:0 20px 45px #003F8C80;
+  animation:float 2s ease-in-out infinite;
+}
+.splash h1{font-size:35px;margin:24px 0 5px}
+.splash p{opacity:.85}
+@keyframes float{
+  50%{transform:translateY(-10px) scale(1.04)}
+}
+.app{
+  max-width:480px;margin:auto;
+  min-height:100dvh;padding:22px 17px 110px;
+}
+header{display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+  width:44px;height:44px;border-radius:15px;
+  background:linear-gradient(145deg,#2BA8FF,#0753C6);
+  color:white;display:grid;place-items:center;
+  font-size:28px;font-weight:900;
+  box-shadow:0 7px 15px #0873D94D;
+}
+.brand strong{font-size:23px;color:var(--deep)}
+.brand small{display:block;font-size:10px;color:#7B91A9}
+.circle{
+  border:0;background:white;border-radius:15px;
+  width:43px;height:43px;font-size:21px;color:var(--blue);
+}
+.hero{
+  margin-top:25px;padding:24px 20px;border-radius:27px;
+  color:white;position:relative;overflow:hidden;
+  background:linear-gradient(130deg,#0648AC,#0988ED 75%,#65C8FF);
+  box-shadow:0 15px 30px #0868D933;
+}
+.hero:after{
+  content:"✚";position:absolute;right:-9px;top:-34px;
+  font-size:155px;color:#FFFFFF20;
+  transform:rotate(-15deg);
+}
+.hero small{opacity:.85}
+.hero h1{font-size:25px;line-height:1.25;margin:12px 0}
+.hero p{font-size:13px;opacity:.9;max-width:240px}
+.hero button{
+  background:white;border:0;color:var(--deep);
+  padding:11px 17px;border-radius:13px;
+  font-weight:700;margin-top:10px;
+}
+.search{
+  margin:20px 0 24px;background:white;
+  border:1px solid #E1ECF8;border-radius:17px;
+  padding:15px;display:flex;gap:10px;
+  box-shadow:0 5px 18px #135DA90B;
+}
+.search input{border:0;outline:0;min-width:0;flex:1}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:17px;
+}
+.section-head h2{font-size:20px;margin:0}
+.section-head span{color:var(--blue);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.service{
+  min-height:126px;background:white;
+  border:1px solid #E8F1FA;border-radius:23px;
+  padding:14px 5px 11px;
+  display:flex;align-items:center;flex-direction:column;
+  justify-content:center;gap:13px;
+  box-shadow:0 7px 20px #0D65BD0B;
+  transition:transform .2s;
+}
+.service:active{transform:scale(.94)}
+.symbol{
+  width:65px;height:65px;border-radius:21px;
+  background:linear-gradient(145deg,#C7E9FF,#4EAFFF 55%,#0864D5);
+  display:grid;place-items:center;
+  font-size:32px;
+  box-shadow:inset 3px 4px 7px #FFFFFFA8,
+    inset -4px -5px 9px #004EAE45,
+    0 9px 13px #0C78D82B;
+  transform:perspective(120px) rotateX(5deg);
+}
+.service b{text-align:center;font-size:11px;line-height:1.3}
+.service.empty{background:transparent;border:1px dashed #D4E4F5;box-shadow:none}
+.service.empty .symbol{background:#EAF2FC;box-shadow:none;color:#9CB8D5}
+.ai{
+  margin-top:25px;padding:20px;border-radius:24px;
+  background:linear-gradient(115deg,#D9EFFF,#F5FBFF);
+  display:flex;gap:15px;align-items:center;
+  border:1px solid #C6E5FF;
+}
+.ai-icon{
+  width:56px;height:56px;flex-shrink:0;
+  display:grid;place-items:center;border-radius:19px;
+  color:white;font-size:28px;
+  background:linear-gradient(140deg,#0B5BC6,#24B4FF);
+  box-shadow:0 8px 17px #0878D83D;
+}
+.ai h3{margin:0 0 5px;font-size:16px}
+.ai p{margin:0;font-size:12px;color:#617C99}
+.nav{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);
+  width:100%;max-width:480px;
+  padding:11px 5px calc(12px + env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:#FFFFFFF5;backdrop-filter:blur(16px);
+  border-top:1px solid #E4EDF8;z-index:10;
+}
+.nav button{
+  border:0;background:transparent;color:#8B9FB4;
+  display:flex;flex-direction:column;align-items:center;
+  gap:5px;font-size:10px;padding:7px 1px;
+}
+.nav button i{font-style:normal;font-size:24px}
+.nav button.active{color:var(--blue);font-weight:800}
+.page{display:none}
+.page.active{display:block;animation:enter .3s ease}
+@keyframes enter{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.panel{
+  background:white;border-radius:22px;padding:23px;
+  margin-top:24px;border:1px solid #E2ECF7;
+}
+.panel h2{margin-top:0}
+.panel p{line-height:1.6;color:#667F99}
+.action{
+  border:0;border-radius:13px;background:var(--blue);
+  color:white;padding:13px 18px;font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="splash-logo">✚</div>
+  <h1>ShifoTop</h1>
+  <p>Sog‘lig‘ingiz — bizning ustuvorligimiz</p>
+</div>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">✚</div>
+      <div><strong>ShifoTop</strong><small>TIBBIYOT SUPER APP</small></div>
+    </div>
+    <button class="circle" onclick="openPage('profile')">♙</button>
+  </header>
+
+  <main id="home" class="page active">
+    <div class="hero">
+      <small>O‘zbekiston tibbiyot platformasi</small>
+      <h1>Sog‘lig‘ingiz uchun<br>hammasi bir joyda</h1>
+      <p>Shifokorlar, klinikalar va tibbiy xizmatlar yagona ilovada.</p>
+      <button onclick="openPage('services')">Xizmatlarni ko‘rish →</button>
+    </div>
+
+    <label class="search">
+      <span>🔎</span>
+      <input id="search" placeholder="Shifokor, klinika yoki xizmat..." oninput="filterServices(this.value)">
+    </label>
+
+    <div class="section-head">
+      <h2>Asosiy xizmatlar</h2>
+      <span>9 ta bo‘lim</span>
+    </div>
+    <div class="grid" id="homeGrid"></div>
+
+    <div class="ai" onclick="openPage('ai')">
+      <div class="ai-icon">✦</div>
+      <div>
+        <h3>ShifoTop AI yordamchi</h3>
+        <p>Savollaringizga javob beruvchi raqamli yordamchi</p>
+      </div>
+    </div>
+  </main>
+
+  <main id="services" class="page">
+    <div class="panel">
+      <h2>Barcha xizmatlar</h2>
+      <p>ShifoTop tibbiyot xizmatlari katalogi.</p>
+      <div class="grid" id="servicesGrid"></div>
+    </div>
+  </main>
+
+  <main id="ai" class="page">
+    <div class="panel">
+      <h2>✦ AI yordamchi</h2>
+      <p>Kelajakda bu bo‘lim orqali umumiy sog‘liq bo‘yicha ma’lumot va yo‘naltirish olish mumkin bo‘ladi.</p>
+      <p>Hozircha AI xizmati ulanmagan.</p>
+    </div>
+  </main>
+
+  <main id="steps" class="page">
+    <div class="panel">
+      <h2>👟 Shagometr</h2>
+      <p>Kunlik qadamlar monitoringi.</p>
+      <h1>0 qadam</h1>
+      <p>Telefon sensori bilan ulanish keyingi bosqichda qo‘shiladi.</p>
+    </div>
+  </main>
+
+  <main id="profile" class="page">
+    <div class="panel">
+      <h2>👤 Profilim</h2>
+      <p>Shaxsiy kabinet, yozilishlar va tanlangan xizmatlar shu yerda bo‘ladi.</p>
+      <button class="action" onclick="alert('Ro‘yxatdan o‘tish tez orada qo‘shiladi')">Kirish / Ro‘yxatdan o‘tish</button>
+    </div>
+  </main>
+</div>
+
+<nav class="nav">
+  <button class="active" data-page="home" onclick="openPage('home')"><i>⌂</i>Asosiy</button>
+  <button data-page="services" onclick="openPage('services')"><i>▦</i>Xizmatlar</button>
+  <button data-page="ai" onclick="openPage('ai')"><i>✦</i>AI yordamchi</button>
+  <button data-page="steps" onclick="openPage('steps')"><i>👟</i>Shagometr</button>
+  <button data-page="profile" onclick="openPage('profile')"><i>♙</i>Profilim</button>
+</nav>
+
+<script>
+const services=[
+  {name:"Shifokor",icon:"👨‍⚕️"},
+  {name:"Shifoxona",icon:"🏥"},
+  {name:"Apteka",icon:"💊"},
+  {name:"Tibbiy buyumlar",icon:"🩺"},
+  {name:"Xorijda davolanish",icon:"🌍"},
+  {name:"Sug‘urta",icon:"🛡️"},
+  {name:"Biz haqimizda",icon:"ℹ️"},
+  {name:"Sog‘lom hayot",icon:"🌿"}
+];
+function renderServices(target,items,blank=true){
+  const el=document.getElementById(target);
+  el.innerHTML="";
+  items.forEach(s=>{
+    const b=document.createElement("button");
+    b.className="service";
+    const symbol=document.createElement("span");
+    symbol.className="symbol";
+    symbol.textContent=s.icon;
+    const label=document.createElement("b");
+    label.textContent=s.name;
+    b.append(symbol,label);
+    b.onclick=()=>showService(s.name);
+    el.appendChild(b);
+  });
+  if(blank){
+    const b=document.createElement("div");
+    b.className="service empty";
+    b.innerHTML='<span class="symbol">＋</span><b>Tez orada</b>';
+    el.appendChild(b);
+  }
+}
+function filterServices(q){
+  const term=q.toLocaleLowerCase("uz").trim();
+  renderServices("homeGrid",services.filter(s=>
+    s.name.toLocaleLowerCase("uz").includes(term)
+  ),!term);
+}
+function openPage(id){
+  document.querySelectorAll(".page").forEach(p=>
+    p.classList.toggle("active",p.id===id));
+  document.querySelectorAll(".nav button").forEach(b=>
+    b.classList.toggle("active",b.dataset.page===id));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function showService(name){
+  alert(name+" bo‘limi uchun katalog keyingi bosqichda qo‘shiladi.");
+}
+renderServices("homeGrid",services);
+renderServices("servicesGrid",services);
+setTimeout(()=>document.getElementById("splash").classList.add("hide"),2700);
+</script>
+</body>
+</html>
