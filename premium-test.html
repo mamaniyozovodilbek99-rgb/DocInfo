@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0755c8">
+<title>ShifoTop Premium</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#edf5ff;color:#12345b}
+button,input{font:inherit}
+button{cursor:pointer}
+#splash{position:fixed;inset:0;z-index:100;background:linear-gradient(145deg,#071b53,#075ad6,#33b8ef);display:flex;align-items:center;justify-content:center;flex-direction:column;color:white;transition:opacity .5s}
+.splash-logo{font-size:64px;animation:pulse 1.3s infinite alternate}
+#splash h1{font-size:36px;margin:12px 0}
+#splash p{font-size:12px;letter-spacing:2px}
+@keyframes pulse{to{transform:scale(1.15);filter:drop-shadow(0 0 18px #8ce9ff)}}
+header{padding:24px 18px 18px;background:linear-gradient(130deg,#0754c6,#0a9fe4);color:white;border-radius:0 0 30px 30px;box-shadow:0 12px 28px #0754c633}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-icon{width:52px;height:52px;border-radius:17px;background:linear-gradient(145deg,#59c9ff,#0644c0);display:grid;place-items:center;font-size:29px;box-shadow:inset 2px 2px 8px #ffffff88,0 7px 15px #003d8c88}
+.brand h1{font-size:25px;margin:0}
+.brand small{opacity:.85}
+.hero{margin-top:25px}
+.hero h2{font-size:23px;line-height:1.35;margin:0 0 10px}
+.hero p{font-size:13px;opacity:.9}
+.search{width:100%;padding:15px;border:0;border-radius:17px;margin-top:15px;outline:none}
+main{padding:22px 15px 115px;max-width:600px;margin:auto}
+.section-title{font-size:20px;margin:0 0 18px}
+.services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.service{border:1px solid #ffffff;background:linear-gradient(145deg,#fff,#e5f0ff);border-radius:22px;min-height:140px;padding:15px 5px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;box-shadow:7px 9px 18px #9ebce54d,-4px -4px 12px #fff;transition:transform .2s}
+.service:active{transform:scale(.94)}
+.service .symbol{width:65px;height:65px;border-radius:21px;display:grid;place-items:center;font-size:34px;background:linear-gradient(145deg,#76d8ff,#0860d7);box-shadow:inset 3px 3px 7px #ffffff99,inset -4px -5px 9px #0642aa99,0 9px 12px #0755c844}
+.service span{font-size:12px;font-weight:700;text-align:center}
+.empty{visibility:hidden}
+.ai-card{margin-top:25px;padding:20px;border-radius:24px;color:white;background:linear-gradient(130deg,#093caa,#0caee7);box-shadow:0 12px 24px #0866bd40}
+.ai-card h3{margin:0 0 8px}
+.ai-card p{font-size:13px;line-height:1.5}
+.ai-card button{border:0;background:white;color:#0755c8;border-radius:13px;padding:11px 17px;font-weight:bold}
+nav{position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,1fr);background:#fff;box-shadow:0 -5px 25px #0b4b9420;padding:12px 4px calc(12px + env(safe-area-inset-bottom));z-index:10}
+nav button{border:0;background:none;color:#8195b2;font-size:10px;display:flex;align-items:center;flex-direction:column;gap:6px}
+nav button b{font-size:23px}
+nav button.active{color:#0863d8}
+nav button.center b{background:linear-gradient(140deg,#0676e9,#04b5e4);color:white;width:48px;height:48px;border-radius:17px;display:grid;place-items:center;margin-top:-26px;box-shadow:0 8px 16px #006ddc55}
+.page{display:none}
+.page.active{display:block}
+.info{background:white;border-radius:20px;padding:22px;line-height:1.7;box-shadow:0 6px 20px #8daed22b}
+.back{border:0;border-radius:12px;background:#0966d7;color:white;padding:12px 18px;margin-bottom:18px}
+</style>
+</head>
+<body>
+<div id="splash">
+<div class="splash-logo">💙</div>
+<h1>ShifoTop</h1>
+<p>MILLIY TIBBIYOT PLATFORMASI</p>
+</div>
+
+<header>
+<div class="brand">
+<div class="brand-icon">💙</div>
+<div><h1>ShifoTop</h1><small>Sog‘lig‘ingiz — bizning ustuvorligimiz</small></div>
+</div>
+<div class="hero">
+<h2>Salomatligingiz uchun barcha xizmatlar bir joyda</h2>
+<p>O‘zbekiston bo‘ylab tibbiy xizmatlarni kashf eting.</p>
+<input class="search" id="search" placeholder="🔎  Xizmatlarni qidirish..." oninput="filterServices()">
+</div>
+</header>
+
+<main>
+<section id="home" class="page active">
+<h2 class="section-title">Xizmatlarimiz</h2>
+<div class="services" id="services">
+<button class="service" data-name="shifokor" onclick="openPage('Shifokorlar')"><div class="symbol">👨‍⚕️</div><span>Shifokor</span></button>
+<button class="service" data-name="shifoxona" onclick="openPage('Shifoxonalar')"><div class="symbol">🏥</div><span>Shifoxona</span></button>
+<button class="service" data-name="apteka" onclick="openPage('Aptekalar')"><div class="symbol">💊</div><span>Apteka</span></button>
+<button class="service" data-name="tibbiy buyumlar" onclick="openPage('Tibbiy buyumlar')"><div class="symbol">🩺</div><span>Tibbiy buyumlar</span></button>
+<button class="service" data-name="xorijda davolanish" onclick="openPage('Xorijda davolanish')"><div class="symbol">🌍</div><span>Xorijda davolanish</span></button>
+<button class="service" data-name="sug'urta" onclick="openPage('Sug‘urta')"><div class="symbol">🛡️</div><span>Sug‘urta</span></button>
+<button class="service" data-name="biz haqimizda" onclick="openPage('Biz haqimizda')"><div class="symbol">💠</div><span>Biz haqimizda</span></button>
+<button class="service" data-name="sog'lom hayot" onclick="openPage('Sog‘lom hayot')"><div class="symbol">🌿</div><span>Sog‘lom hayot</span></button>
+<div class="empty"></div>
+</div>
+<div class="ai-card">
+<h3>✨ ShifoTop AI yordamchi</h3>
+<p>Salomatlik bo‘yicha umumiy ma’lumot va yo‘nalishlarni oling.</p>
+<button onclick="openPage('AI yordamchi')">Boshlash</button>
+</div>
+</section>
+<section id="detail" class="page">
+<button class="back" onclick="showHome()">← Orqaga</button>
+<div class="info">
+<h2 id="detail-title"></h2>
+<p>Bu bo‘limning sinov interfeysi tayyor. Keyingi bosqichda haqiqiy ma’lumotlar va funksiyalar ulanadi.</p>
+</div>
+</section>
+</main>
+
+<nav>
+<button class="active" onclick="showHome();activate(this)"><b>⌂</b>Asosiy</button>
+<button onclick="showHome();activate(this);document.getElementById('services').scrollIntoView({behavior:'smooth'})"><b>▦</b>Xizmatlar</button>
+<button class="center" onclick="openPage('AI yordamchi');activate(this)"><b>✦</b>AI yordamchi</button>
+<button onclick="openPage('Shagometr');activate(this)"><b>👟</b>Shagometr</button>
+<button onclick="openPage('Profilim');activate(this)"><b>♙</b>Profilim</button>
+</nav>
+
+<script>
+setTimeout(()=>{
+const splash=document.getElementById('splash');
+splash.style.opacity='0';
+setTimeout(()=>splash.remove(),500);
+},2500);
+
+function showHome(){
+document.getElementById('detail').classList.remove('active');
+document.getElementById('home').classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function openPage(name){
+document.getElementById('home').classList.remove('active');
+document.getElementById('detail').classList.add('active');
+document.getElementById('detail-title').textContent=name;
+window.scrollTo({top:0,behavior:'smooth'});
+}
+function activate(button){
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+button.classList.add('active');
+}
+function filterServices(){
+const q=document.getElementById('search').value.toLowerCase().trim();
+document.querySelectorAll('.service').forEach(card=>{
+card.style.display=card.dataset.name.includes(q)?'flex':'none';
+});
+}
+</script>
+</body>
+</html>
