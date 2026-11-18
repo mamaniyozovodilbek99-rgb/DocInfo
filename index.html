@@ -386,6 +386,7 @@
             <h3 class="font-black text-xl text-slate-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-shield-halved text-cyan-600"></i> Moderator Nazorati
             </h3>
+            <button type="button" onclick="closeAdminPanel();stpOpen();" class="text-xs font-bold text-blue-600 mt-2 mb-3 mr-3">Hamkorlarni boshqarish</button>
             <button onclick="adminSignOut()" class="text-xs font-bold text-rose-600 mt-2 mb-3">Admin hisobidan chiqish</button>
             <p class="text-xs text-slate-400 mb-4 mt-1">Yangi kelib tushgan arizalar. To'liq ko'rish uchun arizaga bosing.</p>
             <div id="pendingListContainer" class="space-y-3"></div>
@@ -461,6 +462,7 @@
                             <span id="lblJoinCatalog">Ro'yxatdan o'tish</span>
                         </button>
 
+                        <button type="button" onclick="stpOpen();closeAllDropdowns();" class="w-full text-left px-3 py-2.5 rounded-xl font-bold text-xs transition hover:bg-blue-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer text-blue-700 dark:text-blue-300"><i class="fa-solid fa-id-card-clip w-4"></i>Hamkor kabineti · 1 oy bepul</button>
                         <button onclick="openAboutModal()" class="w-full text-left px-3 py-2 rounded-xl font-semibold text-xs transition hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 cursor-pointer text-slate-500">
                             <i class="fa-solid fa-circle-info w-4"></i>
                             <span id="lblAboutMenu">Biz haqimizda</span>
@@ -2100,6 +2102,147 @@
             if(fm) fm.classList.add('hidden'); 
         }
     </script>
+
+<!-- SHIFOTOP PARTNER INTEGRATION 2026-11-18: same app, same Supabase auth -->
+<style id="shifo-partner-styles">
+#stPartnerBackdrop{position:fixed;inset:0;z-index:1100;background:rgba(8,24,53,.8);backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:12px}
+#stPartnerBackdrop.st-open{display:flex}
+#stPartnerPanel{background:linear-gradient(155deg,#fff,#eff7ff);color:#17375a;max-width:780px;width:100%;max-height:94dvh;overflow:auto;border-radius:24px;border:1px solid #c7dcf5;box-shadow:0 22px 80px #051c405e;font-family:inherit}
+.dark #stPartnerPanel{background:linear-gradient(155deg,#101f37,#152d4e);color:#f5f9ff}
+.stp-head{background:linear-gradient(130deg,#0b315d,#0965b7);padding:22px;color:#fff;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.stp-head strong{font-size:21px;letter-spacing:-.5px}.stp-gold{color:#f0c55c}
+.stp-close{font-size:24px;border:1px solid #ffffff60;border-radius:12px;width:40px;height:40px;cursor:pointer}
+.stp-body{padding:22px}.stp-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:750}.stp-field input,.stp-field select{width:100%;border:1px solid #b9d2f1;color:#153657;padding:12px 13px;border-radius:11px;background:#fff;font-size:14px}
+.stp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.stp-actions{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
+.stp-btn{border-radius:11px;padding:11px 14px;font-weight:800;font-size:13px;background:#0b65b3;color:#fff;cursor:pointer}
+.stp-btn:disabled{opacity:.55;cursor:wait}.stp-btn-secondary{background:#eaf4ff;color:#12518a;border:1px solid #b7d7f8}.stp-note{font-size:12px;line-height:1.7;color:#647d98}.dark .stp-note{color:#b4c9e5}
+.stp-block{border-radius:16px;border:1px solid #cbdff5;padding:15px;margin-top:14px;background:#ffffffa6}.dark .stp-block{background:#ffffff08;border-color:#496182}
+.stp-status{padding:10px 13px;border-radius:11px;margin-top:12px;font-size:13px;white-space:pre-wrap;background:#e9f4ff;color:#164977}
+.stp-status[data-type="error"]{background:#ffeded;color:#a41e39}.stp-status[data-type="ok"]{background:#e6f8ef;color:#155c3c}
+.stp-row{border:1px solid #cbdff5;border-radius:12px;padding:13px;margin-top:9px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px;font-size:13px}
+.stp-chip{padding:5px 10px;border-radius:50px;background:#fff2d5;color:#725110;font-size:11px;font-weight:800}.stp-hidden{display:none!important}
+@media(max-width:560px){.stp-grid{grid-template-columns:1fr}.stp-body{padding:14px}.stp-head{padding:16px}.stp-head strong{font-size:18px}}
+</style>
+<div id="stPartnerBackdrop" role="dialog" aria-modal="true" aria-labelledby="stPartnerTitle">
+  <section id="stPartnerPanel">
+    <div class="stp-head"><div><strong id="stPartnerTitle">Shifo<span class="stp-gold">Top</span> · Hamkor kabineti</strong><p style="font-size:12px;opacity:.8">Haqiqiy akkaunt · Supabase · 1 oy bepul</p></div><button class="stp-close" aria-label="Yopish" onclick="stpClose()">×</button></div>
+    <div class="stp-body">
+      <div class="stp-note">Shifokorlar, klinikalar, dorixonalar va boshqa tashkilotlar uchun. Arizani admin tasdiqlagach 1 kalendar oy bepul muddat boshlanadi. To‘lovlar hozircha faollashtirilmagan.</div>
+      <div id="stpAuth" class="stp-block">
+        <strong>Akkauntga kirish yoki ro‘yxatdan o‘tish</strong>
+        <div class="stp-grid" style="margin-top:10px">
+          <label class="stp-field">Email<input type="email" id="stpEmail" autocomplete="email" placeholder="email@example.com"></label>
+          <label class="stp-field">Parol<input type="password" id="stpPassword" autocomplete="current-password" placeholder="Kamida 8 belgi"></label>
+        </div>
+        <div class="stp-actions"><button class="stp-btn" onclick="stpAuth('login')">Kirish</button><button class="stp-btn stp-btn-secondary" onclick="stpAuth('signup')">Ro‘yxatdan o‘tish</button></div>
+        <p class="stp-note">Email tasdiqlash talab qilinsa, pochtangizdagi havolani ochib, keyin tizimga kiring. Parolni hech kimga yubormang.</p>
+      </div>
+      <div id="stpSigned" class="stp-block stp-hidden"><div class="stp-row"><div><strong id="stpWho"></strong><div class="stp-note">Ushbu ilovaning Supabase akkaunti</div></div><button class="stp-btn stp-btn-secondary" onclick="stpLogout()">Chiqish</button></div></div>
+      <div id="stpPartner" class="stp-block stp-hidden">
+        <strong>Hamkorlik uchun ariza</strong>
+        <div class="stp-grid" style="margin-top:12px">
+          <label class="stp-field">Hamkor turi<select id="stpKind"><option value="doctor">Shifokor</option><option value="clinic">Klinika / Shifoxona</option><option value="pharmacy">Dorixona</option><option value="insurance">Sug‘urta</option><option value="medical_store">Tibbiy buyumlar</option><option value="abroad_treatment">Xorijda davolanish</option><option value="laboratory">Laboratoriya</option></select></label>
+          <label class="stp-field">Ism yoki tashkilot nomi<input id="stpName" maxlength="120" placeholder="F.I.O. yoki tashkilot nomi"></label>
+        </div>
+        <div class="stp-actions"><button class="stp-btn" id="stpApplyBtn" onclick="stpApply()">Arizani yuborish</button><button class="stp-btn stp-btn-secondary" onclick="stpRefresh()">Holatni yangilash</button></div>
+        <div id="stpMyApplication" class="stp-note">Ariza holati yuklanmoqda…</div>
+        <div id="stpMyTrial" class="stp-block stp-hidden"></div>
+        <div class="stp-block"><b>Hamkor Standart · 3 oy · 500 000 so‘m</b><p class="stp-note">To‘lov provayderi bilan shartnoma va server API integratsiyasi tayyor bo‘lgach, to‘lov yoqiladi. Hozir pul olinmaydi.</p><button class="stp-btn" disabled>To‘lash — tez orada</button></div>
+      </div>
+      <div id="stpAdmin" class="stp-block stp-hidden"><strong>Administrator · hamkor arizalari</strong><p class="stp-note">Faqat `app_admins` jadvalida ruxsati mavjud foydalanuvchiga ochiladi.</p><div class="stp-actions"><button class="stp-btn stp-btn-secondary" onclick="stpLoadAdmin()">Arizalarni yangilash</button></div><div id="stpAdminList"></div></div>
+      <div id="stpMsg" class="stp-status" role="status">Tizimga kirish uchun email va parolni kiriting.</div>
+    </div>
+  </section>
+</div>
+
+
+<script id="shifotop-partner-integration-js">
+// Uses the SAME production Supabase client and auth session as the existing ShifoTop app.
+// Production migration SQL must be installed before partner RPCs can work.
+(function(){
+  'use strict';
+  const byId=id=>document.getElementById(id);
+  const status=(message,type='info')=>{ const el=byId('stpMsg'); el.textContent=String(message); el.dataset.type=type; };
+  const visible=(id,show)=>byId(id)?.classList.toggle('stp-hidden',!show);
+  const fmt=date=>{if(!date)return '—';const d=new Date(date);return Number.isNaN(d.valueOf())?'—':d.toLocaleDateString('uz-UZ',{day:'2-digit',month:'2-digit',year:'numeric'});};
+  const safe=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const client=()=>typeof supabaseClient!=='undefined'?supabaseClient:null;
+  async function getCurrent(){ const c=client(); if(!c)throw new Error('Supabase kutubxonasi yuklanmagan.');const {data,error}=await c.auth.getUser();if(error)throw error;return data?.user||null; }
+  window.stpOpen=async function(){byId('stPartnerBackdrop').classList.add('st-open');document.body.style.overflow='hidden';await window.stpRefresh();};
+  window.stpClose=function(){byId('stPartnerBackdrop').classList.remove('st-open');document.body.style.overflow='';};
+  byId('stPartnerBackdrop').addEventListener('click',e=>{if(e.target.id==='stPartnerBackdrop')window.stpClose();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&byId('stPartnerBackdrop').classList.contains('st-open'))window.stpClose();});
+  window.stpAuth=async function(mode){
+    const c=client();if(!c){status('Supabase ulanishi sozlanmagan.','error');return;}
+    const email=byId('stpEmail').value.trim();const password=byId('stpPassword').value;
+    if(!email||password.length<8){status('Email va kamida 8 belgili parol kiriting.','error');return;}
+    try{
+      const result=mode==='signup' ? await c.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}}) : await c.auth.signInWithPassword({email,password});
+      if(result.error)throw result.error;
+      byId('stpPassword').value='';
+      if(mode==='signup'&&!result.data?.session){status('Ro‘yxatdan o‘tildi. Emailga kelgan tasdiqlash havolasini oching.','ok');return;}
+      status('Muvaffaqiyatli kirildi.','ok');await window.stpRefresh();
+    }catch(e){status('Kirish xatosi: '+e.message,'error');}
+  };
+  window.stpLogout=async function(){try{const {error}=await client().auth.signOut();if(error)throw error;status('Akkauntdan chiqildi.','ok');await window.stpRefresh();}catch(e){status(e.message,'error');}};
+  window.stpRefresh=async function(){
+    try{
+      const c=client();const user=await getCurrent();visible('stpAuth',!user);visible('stpSigned',!!user);visible('stpPartner',!!user);visible('stpAdmin',false);
+      if(!user){status('Tizimga kirishingiz kerak.');return;}
+      byId('stpWho').textContent=user.email||user.id;
+      const [{data:application,error:appError},{data:trial,error:trialError},{data:admin,error:adminError}]=await Promise.all([
+        c.from('partner_applications').select('user_id,partner_type,display_name,status,created_at,reviewed_at').eq('user_id',user.id).maybeSingle(),
+        c.from('partner_trials').select('starts_at,expires_at').eq('user_id',user.id).maybeSingle(),
+        c.from('app_admins').select('user_id').eq('user_id',user.id).maybeSingle()
+      ]);
+      if(appError)throw appError;if(trialError)throw trialError;
+      visible('stpAdmin',!!admin&&!adminError);
+      if(application){
+        byId('stpName').value=application.display_name||'';byId('stpKind').value=application.partner_type||'doctor';
+        byId('stpMyApplication').textContent='Ariza: '+(application.display_name||'—')+' · Holat: '+application.status+' · Sana: '+fmt(application.created_at);
+        byId('stpApplyBtn').disabled=application.status==='approved'||application.status==='pending';
+      } else {byId('stpMyApplication').textContent='Siz hali ariza yubormagansiz.';byId('stpApplyBtn').disabled=false;}
+      visible('stpMyTrial',!!trial);
+      if(trial){const remaining=Math.max(0,Math.ceil((new Date(trial.expires_at)-Date.now())/86400000));byId('stpMyTrial').textContent='Bepul muddat: '+fmt(trial.starts_at)+' — '+fmt(trial.expires_at)+' · Qolgan kun: '+remaining;}
+      if(admin&&!adminError)await window.stpLoadAdmin();
+      status('Ma’lumotlar Supabase’dan olindi.','ok');
+    }catch(e){status('Ma’lumotlarni yuklash xatosi: '+e.message+'\nAsosiy Supabase’da hamkorlik SQL migratsiyasi o‘rnatilganini tekshiring.','error');}
+  };
+  window.stpApply=async function(){
+    const btn=byId('stpApplyBtn');const name=byId('stpName').value.trim();const kind=byId('stpKind').value;
+    if(name.length<3){status('Ism yoki tashkilot nomi kamida 3 belgi bo‘lsin.','error');return;}
+    btn.disabled=true;
+    try{const {data,error}=await client().rpc('shifo_partner_apply',{p_type:kind,p_name:name});if(error)throw error;status(data||'Ariza adminga yuborildi.','ok');await window.stpRefresh();}
+    catch(e){btn.disabled=false;status('Ariza yuborilmadi: '+e.message,'error');}
+  };
+  window.stpLoadAdmin=async function(){
+    const wrap=byId('stpAdminList');wrap.textContent='Yuklanmoqda…';
+    const {data,error}=await client().from('partner_applications').select('user_id,partner_type,display_name,status,created_at').order('created_at',{ascending:false}).limit(100);
+    if(error){wrap.textContent='Ruxsat yoki so‘rov xatosi: '+error.message;return;}
+    wrap.replaceChildren();
+    for(const a of data||[]){
+      const row=document.createElement('div');row.className='stp-row';
+      const info=document.createElement('div');
+      const title=document.createElement('b');title.textContent=a.display_name||'Nomsiz';
+      const meta=document.createElement('div');meta.className='stp-note';meta.textContent=(a.partner_type||'—')+' · '+fmt(a.created_at)+' · '+a.status;
+      info.append(title,meta);row.append(info);
+      if(a.status==='pending'){
+        const btn=document.createElement('button');btn.className='stp-btn';btn.textContent='Tasdiqlash';
+        btn.onclick=()=>window.stpApprove(a.user_id,a.display_name,btn);row.append(btn);
+      }else {const chip=document.createElement('span');chip.className='stp-chip';chip.textContent=a.status;row.append(chip);}
+      wrap.append(row);
+    }
+    if(!data?.length)wrap.textContent='Arizalar topilmadi.';
+  };
+  window.stpApprove=async function(uid,name,btn){
+    if(!confirm('“'+name+'” arizasini tasdiqlaysizmi? Bu amal bazada approved holatini va 1 oylik bepul muddatni yaratadi.'))return;
+    btn.disabled=true;
+    try{const {data,error}=await client().rpc('shifo_admin_approve_partner',{p_user_id:uid});if(error)throw error;status(data||'Hamkor tasdiqlandi.','ok');await window.stpLoadAdmin();}
+    catch(e){btn.disabled=false;status('Tasdiqlash xatosi: '+e.message,'error');}
+  };
+})();
+</script>
+
 </body>
 </html>
 
